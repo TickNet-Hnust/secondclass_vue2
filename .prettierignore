@@ -1,0 +1,8 @@
+bin
+buid
+server
+public
+dist
+node_moudels
+*.json
+*.config.js
