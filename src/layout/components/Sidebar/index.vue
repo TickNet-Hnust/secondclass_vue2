@@ -42,7 +42,6 @@
                 <sidebar-item
                     :item="erke"
                     :key="count"
-                    :kk="count"
                     :base-path="erke.path"
                 />
             </el-menu>

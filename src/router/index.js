@@ -69,48 +69,48 @@ export const constantRoutes = [{
                     affix: true
                 }
             },
-            // {
-            //     path: '/application',
-            //     component: rightShow,
-            //     redirect: '/application/erke',
-            //     children: [{
-            //         path: '/application/erke',
-            //         component: erke,
-            //         redirect: '/application/erke/erkePlan',
-            //         children: [{
-            //                 path: '/application/erke/erkePlan',
-            //                 component: erkePlan
-            //             },
-            //             {
-            //                 path: 'erkeStandard',
-            //                 component: erkeStandard
-            //             },
-            //             {
-            //                 path: '/application/erke/detail',
-            //                 component: detail
-            //             }
-            //         ]
-            //     }]
-
-            // }
             {
-                path: '/application/erke',
+                path: '/application',
                 component: rightShow,
-                redirect: '/application/erke/erkePlan',
+                redirect: '/application/erke',
                 children: [{
-                        path: '/application/erke/erkePlan',
-                        component: erkePlan
-                    },
-                    {
-                        path: 'erkeStandard',
-                        component: erkeStandard
-                    },
-                    {
-                        path: '/application/erke/detail',
-                        component: detail
-                    }
-                ]
+                    path: '/application/erke',
+                    component: erke,
+                    redirect: '/application/erke/erkePlan',
+                    children: [{
+                            path: '/application/erke/erkePlan',
+                            component: erkePlan
+                        },
+                        {
+                            path: 'erkeStandard',
+                            component: erkeStandard
+                        },
+                        {
+                            path: '/application/erke/detail',
+                            component: detail
+                        }
+                    ]
+                }]
+
             }
+            // {
+            //     path: '/application/erke',
+            //     component: rightShow,
+            //     redirect: '/application/erke/erkePlan',
+            //     children: [{
+            //             path: '/application/erke/erkePlan',
+            //             component: erkePlan
+            //         },
+            //         {
+            //             path: 'erkeStandard',
+            //             component: erkeStandard
+            //         },
+            //         {
+            //             path: '/application/erke/detail',
+            //             component: detail
+            //         }
+            //     ]
+            // }
         ]
     },
     {
