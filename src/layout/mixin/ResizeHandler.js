@@ -6,9 +6,8 @@ const WIDTH = 992 // refer to Bootstrap's responsive design
 export default {
     watch: {
         $route(route) {
-            if (this.device === 'mobile' && this.sidebar.opened) {
-                store.dispatch('app/closeSideBar', { withoutAnimation: false })
-            }
+            store.dispatch('app/closeSideBar', { withoutAnimation: false })
+            if (this.device === 'mobile' && this.sidebar.opened) {}
         }
     },
     beforeMount() {
@@ -18,6 +17,7 @@ export default {
         window.removeEventListener('resize', this.$_resizeHandler)
     },
     mounted() {
+        store.dispatch('app/closeSideBar', { withoutAnimation: false })
         const isMobile = this.$_isMobile()
         if (isMobile) {
             store.dispatch('app/toggleDevice', 'mobile')

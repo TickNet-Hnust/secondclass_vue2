@@ -9,8 +9,8 @@
             <div :class="{ 'fixed-header': fixedHeader }">
                 <tags-view v-if="needTagsView" />
             </div>
-
             <app-main />
+
         </div>
     </div>
 </template>
@@ -18,11 +18,13 @@
 
 
 <script>
-    import Menubar from './erkeMenubar'
+    import Menubar from './homeMenubar'
     import RightPanel from '@/components/RightPanel'
     import {
         AppMain,
         Navbar,
+
+
         TagsView
     } from '@/layout/components'
     // import ResizeMixin from '../mixin/ResizeHandler'

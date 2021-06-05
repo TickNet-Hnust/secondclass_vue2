@@ -1,19 +1,18 @@
 <template>
     <div class="rightShow">
         <!-- <Menubar /> -->
+        <transition name="fade-transform" mode="out-in">
         <router-view></router-view>
-        
+        </transition>
         
     </div>
 </template>
-
 <script>
     import RightPanel from '@/components/RightPanel'
     import {
         AppMain,
         Navbar,
         Settings,
-        Menubar,
         Sidebar,
         TagsView
     } from '../components'
@@ -30,7 +29,6 @@
             Settings,
             Sidebar,
             TagsView,
-            Menubar
         },
         mixins: [ResizeMixin],
         computed: {

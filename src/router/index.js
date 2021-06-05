@@ -4,7 +4,8 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 /* Layout */
-import Layout from '@/layout/test.vue'
+import Layout from '@/layout/index.vue'
+import rightShow from '@/layout/rightShow/index.vue'
 // import ParentView from '@/components/ParentView'
 
 /**
@@ -24,12 +25,14 @@ import Layout from '@/layout/test.vue'
     breadcrumb: false            // 如果设置为false，则不会在breadcrumb面包屑中显示
   }
  */
+/*erke*/
 import erke from '@/views/application/erke/index.vue'
 import erkeStandard from '@/views/application/erke/erkeStandard/index.vue'
 import erkePlan from '@/views/application/erke/erkePlan/index.vue'
 import detail from '@/views/application/erke/detail/index.vue'
-import rightShow from '@/layout/rightShow/index.vue'
-// 公共路由
+/*home*/
+import home from '@/views/home/index.vue'
+import homeContent from '@/views/home/homeContent/index.vue'
 export const constantRoutes = [{
         path: '/redirect',
         component: Layout,
@@ -91,7 +94,19 @@ export const constantRoutes = [{
                         }
                     ]
                 }]
-
+            },
+            {
+                path: '/',
+                component: rightShow,
+                redirect: '/home',
+                children: [{
+                    path: '/home',
+                    component: home,
+                    children: [{
+                        path: '/home/homeContent',
+                        component: homeContent
+                    }]
+                }]
             }
             // {
             //     path: '/application/erke',

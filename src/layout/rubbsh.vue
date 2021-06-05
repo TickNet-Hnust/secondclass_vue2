@@ -18,22 +18,22 @@
                         : variables.menuLightBg
             }"
         />
+
         
-        <!-- <div
+        <div
             style=" ;"
             :class="{ hasTagsView: needTagsView }"
             class="main-container"
         >
             <div :class="{ 'fixed-header': fixedHeader }">
-                
+                <!-- <navbar /> -->
                 <tags-view v-if="needTagsView" />
             </div>
             <app-main />
             <right-panel v-if="showSettings">
                 <settings />
             </right-panel>
-        </div> -->
-        <router-view></router-view>
+        </div>
     </div>
 </template>
 
@@ -43,11 +43,11 @@
         AppMain,
         Navbar,
         Settings,
-        Menubar,
+       
         Sidebar,
         TagsView
     } from './components'
-    import ResizeMixin from './mixin/ResizeHandler.js'
+    import ResizeMixin from './mixin/ResizeHandler'
     import { mapState } from 'vuex'
     import variables from '@/assets/styles/variables.scss'
 
@@ -60,7 +60,7 @@
             Settings,
             Sidebar,
             TagsView,
-            Menubar
+            
         },
         mixins: [ResizeMixin],
         computed: {

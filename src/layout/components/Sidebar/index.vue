@@ -31,18 +31,23 @@
                 :collapse-transition="false"
                 mode="vertical"
             >
-                <sidebar-item
+                <!-- <sidebar-item
                     v-for="(route, index) in sidebarRouters"
                     :key="route.path + index"
                     :item="route"
                     :kk="route.path + index"
                     :base-path="route.path"
-                />
+                /> -->
                 
                 <sidebar-item
-                    :item="erke"
+                    :item="home"
+                    :key="44646"
+                    :base-path="home.path"
+                />
+                <sidebar-item
+                    :item="app"
                     :key="count"
-                    :base-path="erke.path"
+                    :base-path="app.path"
                 />
             </el-menu>
         </el-scrollbar>
@@ -60,7 +65,18 @@
         data() {
             return {
                 count: "dfgdf",
-                erke: {
+                home: {
+                    name: 'Home',
+                    path: '/home',
+                    hidden: false,
+                    
+                    meta: {
+                        title: '首页',
+                        icon: 'system',
+                        noCache: false
+                    },
+                },
+                app: {
                     name: 'Application',
                     path: '/application',
                     redirect: 'noRedirect',
@@ -82,8 +98,8 @@
                             }
                         },
                         {
-                            name: 'erke',
-                            path: 'erke',
+                            name: 'xsh',
+                            path: 'xsh',
                             hidden: false,
                             meta: {
                                 title: '学生会报名',
@@ -92,8 +108,8 @@
                             }
                         },
                         {
-                            name: 'erke',
-                            path: 'erke',
+                            name: 'js',
+                            path: 'js',
                             hidden: false,
                             meta: {
                                 title: '竞赛报名',
@@ -102,8 +118,8 @@
                             }
                         },
                         {
-                            name: 'erke',
-                            path: 'erke',
+                            name: 'dz',
+                            path: 'dz',
                             hidden: false,
                             meta: {
                                 title: '电子证书',
@@ -135,8 +151,8 @@
                 return variables
             },
             isCollapse() {
-                // return false
-                return !this.sidebar.opened
+                return true
+                // return !this.sidebar.opened
             }
         },
         mounted() {
