@@ -15,8 +15,12 @@
         >
             <el-menu
                 :default-active="activeMenu"
-                :collapse="isCollapse"
-                background-color="#0084d1"
+                :collapse="true"
+                :background-color="
+                    settings.sideTheme === 'theme-dark'
+                        ? variables.menuBg
+                        : variables.menuLightBg
+                "
                 :text-color="
                     settings.sideTheme === 'theme-dark'
                         ? variables.menuText
@@ -31,7 +35,15 @@
                     v-for="(route, index) in sidebarRouters"
                     :key="route.path + index"
                     :item="route"
+                    :kk="route.path + index"
                     :base-path="route.path"
+                />
+                
+                <sidebar-item
+                    :item="erke"
+                    :key="count"
+                    :kk="count"
+                    :base-path="erke.path"
                 />
             </el-menu>
         </el-scrollbar>
@@ -46,6 +58,64 @@
 
     export default {
         components: { SidebarItem, Logo },
+        data() {
+            return {
+                count: "dfgdf",
+                erke: {
+                    name: 'Application',
+                    path: '/application',
+                    redirect: 'noRedirect',
+                    alwaysShow: true,
+                    meta: {
+                        title: '应用',
+                        icon: 'system',
+                        noCache: false
+                    },
+                    children: [
+                        {
+                            name: 'erke',
+                            path: 'erke',
+                            hidden: false,
+                            meta: {
+                                title: '第二课堂成绩单',
+                                icon: 'peoples',
+                                noCache: false
+                            }
+                        },
+                        {
+                            name: 'erke',
+                            path: 'erke',
+                            hidden: false,
+                            meta: {
+                                title: '学生会报名',
+                                icon: 'peoples',
+                                noCache: false
+                            }
+                        },
+                        {
+                            name: 'erke',
+                            path: 'erke',
+                            hidden: false,
+                            meta: {
+                                title: '竞赛报名',
+                                icon: 'peoples',
+                                noCache: false
+                            }
+                        },
+                        {
+                            name: 'erke',
+                            path: 'erke',
+                            hidden: false,
+                            meta: {
+                                title: '电子证书',
+                                icon: 'peoples',
+                                noCache: false
+                            }
+                        },
+                    ]
+                }
+            }
+        },
         computed: {
             ...mapState(['settings']),
             ...mapGetters(['sidebarRouters', 'sidebar']),
@@ -69,6 +139,9 @@
                 // return false
                 return !this.sidebar.opened
             }
+        },
+        mounted() {
+            console.log()
         }
     }
 </script>

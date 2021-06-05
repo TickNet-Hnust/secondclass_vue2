@@ -7,7 +7,7 @@
             <el-col :span="24" :xs="24">
                 <div class="erke-top">
                     <div class="erke-top-head">
-                        <el-button circle icon="el-icon-arrow-left"></el-button>
+                        <router-link to="/application/erke/erkePlan"><el-button circle icon="el-icon-arrow-left"></el-button></router-link>
                         <span> <i>✈</i> 培养方案-详情</span>
                     </div>
                     <div class="erke-top-foot">
