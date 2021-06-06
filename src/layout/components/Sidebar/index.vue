@@ -8,10 +8,10 @@
                     : variables.menuLightBg
         }"
     >
-        <div class="logo" >
-            <img src="../../../assets/sidebar/logo.png" alt="">
+        <div class="logo">
+            <img src="../../../assets/sidebar/logo.png" alt="" />
         </div>
-        
+
         <!-- <logo v-if="showLogo" :collapse="isCollapse" /> -->
         <el-scrollbar
             :class="settings.sideTheme"
@@ -42,17 +42,13 @@
                     :kk="route.path + index"
                     :base-path="route.path"
                 /> -->
-                
+
                 <sidebar-item
                     :item="home"
                     :key="44646"
                     :base-path="home.path"
                 />
-                <sidebar-item
-                    :item="app"
-                    :key="count"
-                    :base-path="app.path"
-                />
+                <sidebar-item :item="app" :key="count" :base-path="app.path" />
             </el-menu>
         </el-scrollbar>
     </div>
@@ -68,17 +64,17 @@
         components: { SidebarItem, Logo },
         data() {
             return {
-                count: "dfgdf",
+                count: 'dfgdf',
                 home: {
                     name: 'Home',
                     path: '/home',
                     hidden: false,
-                    
+
                     meta: {
                         title: '首页',
                         icon: 'system',
                         noCache: false
-                    },
+                    }
                 },
                 app: {
                     name: 'Application',
@@ -130,7 +126,7 @@
                                 icon: 'peoples',
                                 noCache: false
                             }
-                        },
+                        }
                     ]
                 }
             }

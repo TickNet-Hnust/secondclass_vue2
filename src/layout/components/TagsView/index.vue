@@ -10,30 +10,32 @@
             class="tags-view-wrapper"
             @scroll="handleScroll"
         >
-            <router-link
-                v-for="tag in visitedViews"
-                ref="tag"
-                :key="tag.path"
-                :class="isActive(tag) ? 'active' : ''"
-                :to="{
-                    path: tag.path,
-                    query: tag.query,
-                    fullPath: tag.fullPath
-                }"
-                tag="span"
-                class="tags-view-item"
-                @click.middle.native="
-                    !isAffix(tag) ? closeSelectedTag(tag) : ''
-                "
-                @contextmenu.prevent.native="openMenu(tag, $event)"
-            >
-                {{ tag.title }}
-                <span
-                    v-if="!isAffix(tag)"
-                    class="el-icon-close"
-                    @click.prevent.stop="closeSelectedTag(tag)"
-                />
-            </router-link>
+            <transition-group name="breadcrumb">
+                <router-link
+                    v-for="tag in visitedViews"
+                    ref="tag"
+                    :key="tag.path"
+                    :class="isActive(tag) ? 'active' : ''"
+                    :to="{
+                        path: tag.path,
+                        query: tag.query,
+                        fullPath: tag.fullPath
+                    }"
+                    tag="span"
+                    class="tags-view-item"
+                    @click.middle.native="
+                        !isAffix(tag) ? closeSelectedTag(tag) : ''
+                    "
+                    @contextmenu.prevent.native="openMenu(tag, $event)"
+                >
+                    {{ tag.title }}
+                    <span
+                        v-if="!isAffix(tag)"
+                        class="el-icon-close"
+                        @click.prevent.stop="closeSelectedTag(tag)"
+                    />
+                </router-link>
+            </transition-group>
         </scroll-pane>
         <ul
             v-show="visible"

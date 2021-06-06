@@ -1,7 +1,7 @@
 <template>
     <div class="menubar">
         <div class="menubar-title">
-            <img src="../../../assets/home/images/keda.png" alt="">
+            <img src="../../../assets/home/images/keda.png" alt="" />
         </div>
 
         <el-menu
@@ -18,27 +18,19 @@
             <el-submenu index="/application">
                 <template slot="title">
                     <i class="el-icon-menu"></i>
-                <span slot="title">应用</span>
+                    <span slot="title">应用</span>
                 </template>
                 <el-menu-item index="/application/erke">
-                    <template slot="title">
-                        第二课堂成绩单
-                    </template>
+                    <template slot="title"> 第二课堂成绩单 </template>
                 </el-menu-item>
                 <el-menu-item>
-                    <template slot="title">
-                        学生会报名
-                    </template>
+                    <template slot="title"> 学生会报名 </template>
                 </el-menu-item>
                 <el-menu-item>
-                    <template slot="title">
-                        竞赛报名
-                    </template>
+                    <template slot="title"> 竞赛报名 </template>
                 </el-menu-item>
                 <el-menu-item>
-                    <template slot="title">
-                        电子证书
-                    </template>
+                    <template slot="title"> 电子证书 </template>
                 </el-menu-item>
             </el-submenu>
             <el-menu-item>
@@ -81,7 +73,7 @@
     .menubar-title img {
         width: 130px;
     }
-    .el-menu[role="menubar"]> li {
-        padding: 0  !important;
+    .el-menu[role='menubar'] > li {
+        padding: 0 !important;
     }
 </style>

@@ -3,7 +3,8 @@
         <div class="menubar-title">
             <router-link to="/home">
                 <i class="el-icon-arrow-left"></i>
-            </router-link> 第二课堂成绩单
+            </router-link>
+            第二课堂成绩单
         </div>
         <el-menu
             :unique-opened="true"
@@ -12,7 +13,7 @@
             default-active="/application/erke/erkePlan"
             :router="true"
         >
-            <el-submenu index="1" >
+            <el-submenu index="1">
                 <template slot="title">
                     <i class="el-icon-location"></i>
                     <span>课堂</span>
@@ -21,7 +22,7 @@
                     培养方案
                 </el-menu-item>
                 <el-menu-item index="/application/erke/erkeStandard">
-                        积分标准
+                    积分标准
                 </el-menu-item>
             </el-submenu>
             <el-submenu index="2">

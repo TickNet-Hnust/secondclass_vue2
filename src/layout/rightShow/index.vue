@@ -2,20 +2,13 @@
     <div class="rightShow">
         <!-- <Menubar /> -->
         <transition name="fade-transform" mode="out-in">
-        <router-view></router-view>
+            <router-view></router-view>
         </transition>
-        
     </div>
 </template>
 <script>
     import RightPanel from '@/components/RightPanel'
-    import {
-        AppMain,
-        Navbar,
-        Settings,
-        Sidebar,
-        TagsView
-    } from '../components'
+    import { AppMain, Navbar, Settings, Sidebar, TagsView } from '../components'
     import ResizeMixin from '../mixin/ResizeHandler'
     import { mapState } from 'vuex'
     import variables from '@/assets/styles/variables.scss'
@@ -28,7 +21,7 @@
             RightPanel,
             Settings,
             Sidebar,
-            TagsView,
+            TagsView
         },
         mixins: [ResizeMixin],
         computed: {

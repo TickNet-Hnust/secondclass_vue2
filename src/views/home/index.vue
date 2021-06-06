@@ -10,38 +10,26 @@
                 <tags-view v-if="needTagsView" />
             </div>
             <app-main />
-
         </div>
     </div>
 </template>
 
-
-
 <script>
     import Menubar from './homeMenubar'
     import RightPanel from '@/components/RightPanel'
-    import {
-        AppMain,
-        Navbar,
-
-
-        TagsView
-    } from '@/layout/components'
+    import { AppMain, Navbar, TagsView } from '@/layout/components'
     // import ResizeMixin from '../mixin/ResizeHandler'
     import { mapState } from 'vuex'
     import variables from '@/assets/styles/variables.scss'
 
     export default {
-         name: 'erke',
+        name: 'erke',
         components: {
-             Menubar,
+            Menubar,
             AppMain,
             Navbar,
 
-
-
-            TagsView,
-
+            TagsView
         },
         // mixins: [ResizeMixin],
         computed: {

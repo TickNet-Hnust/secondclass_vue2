@@ -1,130 +1,123 @@
 <template>
     <div class="app-container">
         <!-- <el-row :gutter="20"> -->
-            <!--部门数据-->
+        <!--部门数据-->
 
-            <!--用户数据-->
-            <!-- <el-col :span="24" :xs="24"> -->
-                <div class="erke-top">
-                    <div class="erke-top-head">
-                        <span> <i>✈</i> 培养方案</span>
-                    </div>
-                    <div class="erke-top-foot">
-                        学年度：<el-select v-model="value" placeholder="请选择">
-                            <el-option
-                                v-for="item in options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            >
-                            </el-option>
-                        </el-select>
-                        <el-button style="margin-left: 10px">管理</el-button>
-                    </div>
-                </div>
+        <!--用户数据-->
+        <!-- <el-col :span="24" :xs="24"> -->
+        <div class="erke-top">
+            <div class="erke-top-head">
+                <span> <i>✈</i> 培养方案</span>
+            </div>
+            <div class="erke-top-foot">
+                学年度：<el-select v-model="value" placeholder="请选择">
+                    <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    >
+                    </el-option>
+                </el-select>
+                <el-button style="margin-left: 10px" @click="handleManager">管理</el-button>
+            </div>
+        </div>
 
-                <div class="erke-bottom">
-                    <el-row :gutter="10" style="margin-bottom: 20px">
-                        <el-col :span="1.5">
-                            <el-button
-                                type="primary"
-                                plain
-                                icon="el-icon-plus"
-                                size="mini"
-                                @click="handleAdd"
-                                v-hasPermi="['system:user:add']"
-                                >新增</el-button
-                            >
-                        </el-col>
+        <div class="erke-bottom">
+            <el-row :gutter="10" style="margin-bottom: 20px">
+                <el-col :span="1.5">
+                    <el-button
+                        type="primary"
+                        plain
+                        icon="el-icon-plus"
+                        size="mini"
+                        @click="handleAdd"
+                        v-hasPermi="['system:user:add']"
+                        >新增</el-button
+                    >
+                </el-col>
 
-                        <el-col :span="1.5">
-                            <el-button
-                                type="info"
-                                plain
-                                icon="el-icon-upload2"
-                                size="mini"
-                                @click="handleImport"
-                                v-hasPermi="['system:user:import']"
-                                >导入</el-button
-                            >
-                        </el-col>
-                        <el-col :span="1.5">
-                            <el-button
-                                type="warning"
-                                plain
-                                icon="el-icon-download"
-                                size="mini"
-                                :loading="exportLoading"
-                                @click="handleExport"
-                                v-hasPermi="['system:user:export']"
-                                >导出</el-button
-                            >
-                        </el-col>
-                        <el-col :span="1.5">
-                            <el-input
-                                size="mini"
-                                suffix-icon="el-icon-search"
-                            ></el-input>
-                        </el-col>
+                <el-col :span="1.5">
+                    <el-button
+                        type="info"
+                        plain
+                        icon="el-icon-upload2"
+                        size="mini"
+                        @click="handleImport"
+                        v-hasPermi="['system:user:import']"
+                        >导入</el-button
+                    >
+                </el-col>
+                <el-col :span="1.5">
+                    <el-button
+                        type="warning"
+                        plain
+                        icon="el-icon-download"
+                        size="mini"
+                        :loading="exportLoading"
+                        @click="handleExport"
+                        v-hasPermi="['system:user:export']"
+                        >导出</el-button
+                    >
+                </el-col>
+                <el-col :span="1.5">
+                    <el-input
+                        size="mini"
+                        suffix-icon="el-icon-search"
+                    ></el-input>
+                </el-col>
 
-                        <!-- <right-toolbar
+                <!-- <right-toolbar
                         :showSearch.sync="showSearch"
                         @queryTable="getList"
                         :columns="columns"
                     ></right-toolbar> -->
-                    </el-row>
+            </el-row>
 
-                    <!-- table start here -->
-                    <el-table :data="planData" stripe>
-                        <el-table-column prop="pcid" label="批次ID">
-                        </el-table-column>
-                        <el-table-column prop="plan" label="培养方案">
-                        </el-table-column>
-                        <el-table-column prop="xnid" label="学年ID">
-                        </el-table-column>
-                        <el-table-column prop="xn" label="学年">
-                        </el-table-column>
-                        <el-table-column prop="jb" label="级别">
-                        </el-table-column>
-                        <el-table-column prop="classCount" label="课程数">
-                        </el-table-column>
-                        <el-table-column prop="state" label="状态">
-                        </el-table-column>
-                        <el-table-column prop="createTime" label="创建时间">
-                        </el-table-column>
-                        <el-table-column prop="createPerson" label="创建人">
-                        </el-table-column>
-                        <el-table-column prop="modifyTime" label="修改时间">
-                        </el-table-column>
-                        <el-table-column prop="modifyPerson" label="修改人">
-                        </el-table-column>
-                        <el-table-column
-                            fixed="right"
-                            width="150"
-                            prop="oprator"
-                            label="操作"
+            <!-- table start here -->
+            <el-table :data="planData" stripe>
+                <el-table-column prop="pcid" label="批次ID"> </el-table-column>
+                <el-table-column prop="plan" label="培养方案">
+                </el-table-column>
+                <el-table-column prop="xnid" label="学年ID"> </el-table-column>
+                <el-table-column prop="xn" label="学年"> </el-table-column>
+                <el-table-column prop="jb" label="级别"> </el-table-column>
+                <el-table-column prop="classCount" label="课程数">
+                </el-table-column>
+                <el-table-column prop="state" label="状态"> </el-table-column>
+                <el-table-column prop="createTime" label="创建时间">
+                </el-table-column>
+                <el-table-column prop="createPerson" label="创建人">
+                </el-table-column>
+                <el-table-column prop="modifyTime" label="修改时间">
+                </el-table-column>
+                <el-table-column prop="modifyPerson" label="修改人">
+                </el-table-column>
+                <el-table-column
+                    fixed="right"
+                    width="150"
+                    prop="oprator"
+                    label="操作"
+                >
+                    <template slot-scope="scope">
+                        <el-link type="primary">修改</el-link>
+                        <router-link type="info" to="/application/erke/detail"
+                            >详情</router-link
                         >
-                            <template slot-scope="scope">
-                                <el-link type="primary">修改</el-link>
-                                <router-link
-                                    type="info"
-                                    to="/application/erke/detail"
-                                    >详情</router-link
-                                >
-                                <el-link type="info">删除</el-link>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                        <el-link type="info">删除</el-link>
+                    </template>
+                </el-table-column>
+            </el-table>
 
-                    <pagination
-                        v-show="total > 0"
-                        :total="total"
-                        :page.sync="queryParams.pageNum"
-                        :limit.sync="queryParams.pageSize"
-                        @pagination="getList"
-                    />
-                </div>
-            <!-- </el-col> -->
+            <pagination
+                v-show="total > 0"
+                :total="total"
+                :page.sync="queryParams.pageNum"
+                :limit.sync="queryParams.pageSize"
+                @pagination="getList"
+            />
+        </div>
+        <!-- </el-col> -->
         <!-- </el-row> -->
 
         <!-- 添加或修改参数配置对话框 -->
@@ -277,8 +270,65 @@
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="submitForm">确 定</el-button>
+                <el-button type="primary" >确 定</el-button>
                 <el-button @click="cancel">取 消</el-button>
+            </div>
+        </el-dialog>
+<!-- 这里是管理【button】 -->
+        <el-dialog
+            :title="title"
+            :visible.sync="manager.open"
+            width="635px"
+            append-to-body
+            class="managerDialog"
+        >
+            <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+                <el-table
+                    :data="yearOfLeanConfig"
+                    stripe
+                >
+                    <el-table-column
+                        prop="sort"
+                        label="排序"
+                        
+                        width="80"
+                    >
+                    <template slot-scope="scope">
+                        <el-input class="sortInput" v-model="scope.row.sort"></el-input>
+                    </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="nameOflearn"
+                        label="学年名称"
+                        width="300"
+                    >
+                    <template slot-scope="scope">
+                        <el-input v-model="scope.row.nameOflearn">
+
+                        </el-input>
+                    </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="idOfLearnYear"
+                        label="学年ID"
+                        align="center"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                        prop="learnYearNo"
+                        label="当前学年"
+                        align="center"
+                    >
+                    <template slot-scope="scope">
+                        <input type="radio" name="isNow" value="scope.row.learnYearNo">
+                        
+                    </template>
+                    </el-table-column>
+                </el-table>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">关闭</el-button>
+                <el-button type="primary" @click="submitForm">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -353,6 +403,36 @@
         components: { Treeselect },
         data() {
             return {
+                radio: '1',
+                yearOfLeanConfig: [
+                    {
+                        sort: '1',
+                        nameOflearn: '2018-2019学年',
+                        idOfLearnYear: '1',
+                        learnYearNo: '1'
+                    },
+                    {
+                        sort: '2',
+                        nameOflearn: '2019-2020学年',
+                        idOfLearnYear: '2',
+                        learnYearNo: '2'
+                    },
+                    {
+                        sort: '3',
+                        nameOflearn: '2020-2021学年',
+                        idOfLearnYear: '3',
+                        learnYearNo: '3'
+                    },
+                    {
+                        sort: '4',
+                        nameOflearn: '2021-2022学年',
+                        idOfLearnYear: '4',
+                        learnYearNo: '4'
+                    }
+                ],
+                manager: {
+                    open: false
+                },
                 planData: [
                     {
                         pcid: 1,
@@ -588,6 +668,12 @@
             })
         },
         methods: {
+            handleManage() {
+                this.manager.open = true
+            },
+            cancelManager() {
+                this.manager.open = false
+            },
             /** 查询用户列表 */
             getList() {
                 this.loading = true
@@ -638,6 +724,17 @@
                         row.status = row.status === '0' ? '1' : '0'
                     })
             },
+            handleAdd() {
+                this.reset()
+                this.getTreeselect()
+                getUser().then(response => {
+                    this.postOptions = response.posts
+                    this.roleOptions = response.roles
+                    this.open = true
+                    this.title = '新增课程'
+                    this.form.password = this.initPassword
+                })
+            },
             // 取消按钮
             cancel() {
                 this.open = false
@@ -679,14 +776,14 @@
                 this.multiple = !selection.length
             },
             /** 新增按钮操作 */
-            handleAdd() {
+            handleManager() {
                 this.reset()
                 this.getTreeselect()
                 getUser().then(response => {
                     this.postOptions = response.posts
                     this.roleOptions = response.roles
-                    this.open = true
-                    this.title = '添加用户'
+                    this.manager.open = true
+                    this.title = '学年配置'
                     this.form.password = this.initPassword
                 })
             },
@@ -854,4 +951,9 @@
     .app-container {
         /* margin-left: 23px; */
     }
+     .el-dialog {
+        height: 475px !important;
+        overflow: hidden;
+    }
+    
 </style>

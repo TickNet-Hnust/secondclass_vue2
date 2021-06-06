@@ -1,5 +1,17 @@
 .el-dialog {
-    border-radius: 20px;
+    border-radius: 5px;
+    padding: 0 16px;
+}
+
+.el-dialog__footer {
+    border-radius: 5px;
+}
+
+.el-dialog__header {
+    padding-left: 10px;
+    padding-top: 25px;
+    font-weight: 700;
+    height: 64px;
 }
 
 #app {
@@ -40,4 +52,47 @@
     border: 1px solid #ddd;
     width: 185px !important;
     box-shadow: 5px 5px 8px #aaa !important;
+}
+
+.el-form .el-row {
+    line-height: 30px;
+    height: 30px;
+}
+
+.el-input--medium .el-input__inner {
+    height: 30px !important;
+    border: 1px solid #aaa;
+}
+
+.el-input--medium .el-input__icon {
+    line-height: 30px;
+}
+
+.el-dialog {
+    padding: 0;
+}
+
+.el-dialog__header {
+    margin: 0 20px;
+}
+
+.el-dialog__body {
+    margin: 0 16px;
+}
+
+.el-dialog__footer {
+    background-color: #f5f6f9;
+}
+
+.sortInput .el-input__inner {
+    width: 40px !important;
+    /* background-color: red; */
+}
+
+.managerDialog .el-dialog__body {
+    height: 350px;
+}
+
+.managerDialog .el-table__row td {
+    padding: 5px 0;
 }

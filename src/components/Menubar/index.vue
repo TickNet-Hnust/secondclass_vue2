@@ -9,7 +9,7 @@
             default-active="1"
             :router="true"
         >
-            <el-submenu index="1" >
+            <el-submenu index="1">
                 <template slot="title">
                     <i class="el-icon-location"></i>
                     <span>课堂</span>
@@ -18,7 +18,7 @@
                     培养方案
                 </el-menu-item>
                 <el-menu-item index="/application/erke/erkeStandard">
-                        积分标准
+                    积分标准
                 </el-menu-item>
             </el-submenu>
             <el-submenu index="2">

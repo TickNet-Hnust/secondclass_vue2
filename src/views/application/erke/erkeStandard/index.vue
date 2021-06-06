@@ -87,62 +87,43 @@
                                 </el-col>
                             </el-row>
                         </div>
-                        <el-table 
+                        <el-table
                             :data="datadata"
                             row-key="id"
                             default-expand-all
-                            :tree-props="{children: 'children', hasChildren: 'hasChildren'}"    
-                        > 
-                            <el-table-column
-                                prop="id"
-                                label="ID"
-                                
-                            >
-
+                            :tree-props="{
+                                children: 'children',
+                                hasChildren: 'hasChildren'
+                            }"
+                        >
+                            <el-table-column prop="id" label="ID">
                             </el-table-column>
                             <el-table-column
                                 prop="itemName"
                                 label="项目名称"
                                 width="700"
                             >
-
                             </el-table-column>
-                            <el-table-column
-                                prop="type"
-                                label="类型"
-                            >
-
+                            <el-table-column prop="type" label="类型">
                             </el-table-column>
-                            <el-table-column
-                                prop="markType"
-                                label="积分类别"
-                            >
-
+                            <el-table-column prop="markType" label="积分类别">
                             </el-table-column>
-                            <el-table-column
-                                prop="mark"
-                                label="分值"
-                            >
-
+                            <el-table-column prop="mark" label="分值">
                             </el-table-column>
-                            <el-table-column
-                                prop="modifyTime"
-                                label="修订时间"
-                            >
-
+                            <el-table-column prop="modifyTime" label="修订时间">
                             </el-table-column>
                             <el-table-column
                                 prop="id"
                                 label="操作"
                                 fixed="right"
                             >
-                            <template slot-scope="scope">
-                                <el-link type="primary">修改</el-link>
-                                <el-link type="info">排序</el-link>
-                                <el-link type="info">删除</el-link>
-                            </template>
+                                <template slot-scope="scope">
+                                    <el-link type="primary">修改</el-link>
+                                    <el-link type="info">排序</el-link>
+                                    <el-link type="info">删除</el-link>
+                                </template>
                             </el-table-column>
-                            </el-table>
+                        </el-table>
                         <pagination
                             v-show="total > 0"
                             :total="total"
@@ -159,154 +140,317 @@
         <el-dialog
             :title="title"
             :visible.sync="open"
-            width="600px"
+            width="915px"
             append-to-body
+            class="addClassDialog"
         >
             <el-form ref="form" :model="form" :rules="rules" label-width="80px">
                 <el-row>
-                    <el-col :span="12">
-                        <el-form-item label="用户昵称" prop="nickName">
-                            <el-input
-                                v-model="form.nickName"
-                                placeholder="请输入用户昵称"
-                            />
-                        </el-form-item>
+                    <el-col :span="14">
+                        <el-row>
+                            <el-col :span="5">学年：</el-col>
+                            <el-col :span="19">{{ yearOfLean }}</el-col>
+                        </el-row>
                     </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="归属部门" prop="deptId">
-                            <treeselect
-                                v-model="form.deptId"
-                                :options="deptOptions"
-                                :show-count="true"
-                                placeholder="请选择归属部门"
-                            />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="12">
-                        <el-form-item label="手机号码" prop="phonenumber">
-                            <el-input
-                                v-model="form.phonenumber"
-                                placeholder="请输入手机号码"
-                                maxlength="11"
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="邮箱" prop="email">
-                            <el-input
-                                v-model="form.email"
-                                placeholder="请输入邮箱"
-                                maxlength="50"
-                            />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="12">
-                        <el-form-item
-                            v-if="form.userId == undefined"
-                            label="用户名称"
-                            prop="userName"
-                        >
-                            <el-input
-                                v-model="form.userName"
-                                placeholder="请输入用户名称"
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item
-                            v-if="form.userId == undefined"
-                            label="用户密码"
-                            prop="password"
-                        >
-                            <el-input
-                                v-model="form.password"
-                                placeholder="请输入用户密码"
-                                type="password"
-                            />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="12">
-                        <el-form-item label="用户性别">
-                            <el-select v-model="form.sex" placeholder="请选择">
-                                <el-option
-                                    v-for="dict in sexOptions"
-                                    :key="dict.dictValue"
-                                    :label="dict.dictLabel"
-                                    :value="dict.dictValue"
-                                ></el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="状态">
-                            <el-radio-group v-model="form.status">
-                                <el-radio
-                                    v-for="dict in statusOptions"
-                                    :key="dict.dictValue"
-                                    :label="dict.dictValue"
-                                    >{{ dict.dictLabel }}</el-radio
+                    <el-col :span="10">
+                        <el-row>
+                            <el-col :span="6">发布单位：</el-col>
+                            <el-col :span="18">
+                                <el-select
+                                    v-model="unitValue"
+                                    class="unitValue"
                                 >
-                            </el-radio-group>
-                        </el-form-item>
+                                    <el-option
+                                        label="校团委"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="校团委2"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="校团委3"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
+                
                 <el-row>
-                    <el-col :span="12">
-                        <el-form-item label="岗位">
-                            <el-select
-                                v-model="form.postIds"
-                                multiple
-                                placeholder="请选择"
-                            >
-                                <el-option
-                                    v-for="item in postOptions"
-                                    :key="item.postId"
-                                    :label="item.postName"
-                                    :value="item.postId"
-                                    :disabled="item.status == 1"
-                                ></el-option>
-                            </el-select>
-                        </el-form-item>
+                    <el-col :span="14">
+                        <el-row>
+                            <el-col :span="5">培养方案</el-col>
+                            <el-col :span="19">{{ planOfgrain }}</el-col>
+                        </el-row>
                     </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="角色">
-                            <el-select
-                                v-model="form.roleIds"
-                                multiple
-                                placeholder="请选择"
-                            >
-                                <el-option
-                                    v-for="item in roleOptions"
-                                    :key="item.roleId"
-                                    :label="item.roleName"
-                                    :value="item.roleId"
-                                    :disabled="item.status == 1"
-                                ></el-option>
-                            </el-select>
-                        </el-form-item>
+                    <el-col :span="10">
+                        <el-row>
+                            <el-col :span="6">必修课程：</el-col>
+                            <el-col :span="18">
+                                <el-switch
+                                    v-model="isRequire"
+                                    active-text="是"
+                                    active-value="是"
+                                    inactive-text="否"
+                                    class="switchStyle"
+                                >
+                                </el-switch>
+                            </el-col>
+                        </el-row>
                     </el-col>
                 </el-row>
+                
                 <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="备注">
-                            <el-input
-                                v-model="form.remark"
-                                type="textarea"
-                                placeholder="请输入内容"
-                            ></el-input>
-                        </el-form-item>
+                    <el-col :span="14">
+                        <el-row>
+                            <el-col :span="5">课程名称：</el-col>
+                            <el-col :span="19">
+                                <el-input class="className"></el-input>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="10">
+                        <el-row>
+                            <el-col :span="6">加入方式：</el-col>
+                            <el-col :span="18">
+                                <el-select v-model="unitValue" class="shoutInput">
+                                    <el-option
+                                        label="预设"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设2"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设3"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                
+                <el-row>
+                    <el-col :span="14">
+                        <el-row>
+                            <el-col :span="5">分类：</el-col>
+                            <el-col :span="19">
+                                <el-select v-model="sortClass" class="sortClass">
+                                    <el-option
+                                        label="思想政治和人文素养"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="思想政治和人文素养"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="思想政治和人文素养"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="10">
+                        <el-row>
+                            <el-col :span="6">性质：</el-col>
+                            <el-col :span="18">
+                                <el-select v-model="nature" class="shoutInput">
+                                    <el-option
+                                        label="活动"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="活动"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="活动"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <!-- 其他信息 -->
+                <el-row>
+                    <el-col :span="3" style="height:49px;line-height:49px">
+                        <i class="el-icon-share"></i> 其他信息
+                    </el-col>
+                    <el-col :span="21">
+                        <el-divider></el-divider>
+                    </el-col>
+                </el-row>
+
+                <el-row :gutter="4">
+                    <el-col :span="3">
+                        分类明细：
+                    </el-col>
+                    <el-col :span="5.5">
+                        <el-select v-model="classSort" class="classSort">
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="1"
+                            ></el-option>
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="2"
+                            ></el-option>
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="3"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                    <el-col :span="9.5">
+                        <el-select v-model="activitySort" class="activitySort">
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="1"
+                            ></el-option>
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="2"
+                            ></el-option>
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="3"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-select v-model="rankSort" class="rankSort">
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="1"
+                            ></el-option>
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="2"
+                            ></el-option>
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="3"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="3">
+                        积分标准号
+                    </el-col>
+                    <el-col :span="21">
+                        {{integral}}
+                    </el-col>
+                </el-row>
+
+                <el-row style="height:80px">
+                    <el-col :span="3">
+                        积分下限要求：
+                    </el-col>
+                    <el-col :span="21" >
+                        <el-row :gutter="5" style="margin-bottom:12px">
+                            <el-col :span="5.5">
+                                <el-select v-model="unitValue" class="shoutInput">
+                                    <el-option
+                                        label="预设"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设2"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设3"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+                            <el-col :span="5.5">
+                                <el-select v-model="unitValue" class="shoutInput">
+                                    <el-option
+                                        label="预设"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设2"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设3"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+                                
+                            <el-col :span="5.5">
+                                <span class="addOrMine">-</span>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="5">
+                            <el-col :span="5.5">
+                                <el-select v-model="unitValue" class="shoutInput">
+                                    <el-option
+                                        label="预设"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设2"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设3"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+                            <el-col :span="5.5">
+                                <el-select v-model="unitValue" class="shoutInput">
+                                    <el-option
+                                        label="预设"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设2"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设3"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+                                
+                            <el-col :span="5.5">
+                                <span class="addOrMine">-</span>
+                            </el-col>
+
+                            <el-col :span="5.5">
+                                <span class="addOrMine">+</span>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="3">
+                        备注：
+                    </el-col>
+                    <el-col :span="21">
+                         <el-input type="textarea" v-model="textareaContent"></el-input>
                     </el-col>
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">关闭</el-button>
                 <el-button type="primary" @click="submitForm">确 定</el-button>
-                <el-button @click="cancel">取 消</el-button>
             </div>
         </el-dialog>
 
@@ -316,6 +460,7 @@
             :visible.sync="upload.open"
             width="400px"
             append-to-body
+            
         >
             <el-upload
                 ref="upload"
@@ -381,6 +526,25 @@
         components: { Treeselect },
         data() {
             return {
+                //first line
+                yearOfLean: '2021-2022学年',
+                unitValue: '1',
+                //second line
+                planOfgrain: '湖南科技大学',
+                isRequire: true,
+                //thrid
+                wayValue: '1',
+                //fouth
+                sortClass: '1',
+                nature: '1',
+                //fiv
+                classSort: '1',
+                activitySort: '1',
+                rankSort: '1',
+                //
+                integral: '5',
+                //
+                textareaContent: '',
                 datadata: [
                     {
                         id: 1,
@@ -436,13 +600,13 @@
                                 markType: '定值',
                                 mark: 5,
                                 modifyTime: '2021-3.02'
-                            },
-                            
+                            }
                         ]
                     },
                     {
                         id: 8,
-                        itemName: '参加思想政治与人文素养类主题教育讲座、报告、读书会等教育活动(含竞赛)',
+                        itemName:
+                            '参加思想政治与人文素养类主题教育讲座、报告、读书会等教育活动(含竞赛)',
                         type: '分类',
                         markType: '',
                         modifyTime: '2021-3.02',
@@ -454,14 +618,14 @@
                                 markType: '定值',
                                 mark: 2,
                                 modifyTime: '2021-3.02',
-                                children:[
+                                children: [
                                     {
                                         id: 10,
                                         itemName: '成功参与',
                                         markType: '定值',
                                         type: '积分项',
                                         mark: 1,
-                                        modifyTime: '2021-3.02',
+                                        modifyTime: '2021-3.02'
                                     },
                                     {
                                         id: 11,
@@ -469,8 +633,8 @@
                                         markType: '定值',
                                         mark: 1.5,
                                         type: '积分项',
-                                        
-                                        modifyTime: '2021-3.02',
+
+                                        modifyTime: '2021-3.02'
                                     },
                                     {
                                         id: 12,
@@ -478,8 +642,8 @@
                                         itemName: '进入决赛',
                                         markType: '定值',
                                         mark: 2,
-                                        modifyTime: '2021-3.02',
-                                    },
+                                        modifyTime: '2021-3.02'
+                                    }
                                 ]
                             },
                             {
@@ -521,8 +685,7 @@
                                 markType: '定值',
                                 mark: 5,
                                 modifyTime: '2021-3.02'
-                            },
-                            
+                            }
                         ]
                     }
                 ],
@@ -875,7 +1038,7 @@
                     this.postOptions = response.posts
                     this.roleOptions = response.roles
                     this.open = true
-                    this.title = '添加用户'
+                    this.title = '新增课程'
                     this.form.password = this.initPassword
                 })
             },
@@ -998,7 +1161,7 @@
     }
 </script>
 
-<style scoped>
+<style scope>
     .erke-top {
         /* height: 120px; */
         padding: 15px;
@@ -1080,5 +1243,113 @@
     }
     .textPlain {
         color: #8b8b8b;
+    }
+    /**/
+    .addOrMine {
+        display: inline-block;
+        height: 30px;
+        width: 30px;
+        text-align: center;
+        vertical-align: top;
+        line-height: 30px;
+        border: 1px solid #aaa;
+        border-radius: 3px;
+    }
+    .addClassDialog .el-dialog__body {
+        height: 500px;
+        overflow: auto;
+    }
+    .addClassDialog .el-form > .el-row {
+        margin: 13px 0;
+    }
+    .addClassDialog .el-dialog__body {
+        padding-top: 15px;
+    }
+    .unitValue .el-input__inner,
+    .unitValue .el-input--suffix {
+        width: 260px;
+    }
+    .unitValue .el-input__icon::before {
+        color: #000;
+        font-weight: 700;
+    }
+    /*two*/
+    .switchStyle .el-switch__label {
+        position: absolute;
+        display: none;
+        color: #fff;
+    }
+    .switchStyle .el-switch__label--left {
+        z-index: 9;
+        left: 22px;
+    }
+    .switchStyle .el-switch__label--right {
+        z-index: 9;
+        left: -2px;
+    }
+    .switchStyle .el-switch__label.is-active {
+        display: block;
+    }
+    .switchStyle.el-switch .el-switch__core,
+    .el-switch .el-switch__label {
+        width: 45px !important;
+    }
+    /*three*/
+    .className .el-input__inner {
+        width: 330px;
+    }
+
+    .shoutInput .el-input__inner,
+    .shoutInput .el-input--suffix {
+        width: 130px;
+    }
+    .shoutInput .el-input__icon::before {
+        color: #000;
+        font-weight: 700;
+    }
+    /*four line */
+    .sortClass .el-input__inner,
+    .sortClass .el-input--suffix {
+        width: 200px;
+    }
+    .sortClass .el-input__icon::before {
+        color: #000;
+        font-weight: 700;
+    }
+    /*five */
+    .classSort .el-input__inner,
+    .classSort .el-input--suffix {
+        width: 180px;
+    }
+    .classSort .el-input__icon::before {
+        color: #000;
+        font-weight: 700;
+    }
+
+    .activitySort .el-input__inner,
+    .activitySort .el-input--suffix {
+        width: 320px;
+    }
+    .activitySort .el-input__icon::before {
+        color: #000;
+        font-weight: 700;
+    }
+
+    .rankSort .el-input__inner,
+    .rankSort .el-input--suffix {
+        width: 100px;
+    }
+    .rankSort .el-input__icon::before {
+        color: #000;
+        font-weight: 700;
+    }
+    textarea {
+        resize: none !important;
+        height: 150px;
+        width: 690px !important;
+        border: 1px solid #aaa !important;
+    }
+    .addClassDialog .el-dialog__header {
+        border-bottom: 1px solid #ddd;
     }
 </style>
