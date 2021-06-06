@@ -6,7 +6,7 @@
             :unique-opened="true"
             text-color="#333"
             active-text-color="#1890ff"
-            default-active="1"
+            default-active="/application/erke/erkePlan"
             :router="true"
         >
             <el-submenu index="1" >

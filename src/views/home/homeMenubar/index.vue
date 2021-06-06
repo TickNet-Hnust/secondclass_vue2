@@ -8,7 +8,7 @@
             :unique-opened="true"
             text-color="#333"
             active-text-color="#1890ff"
-            default-active="1"
+            default-active="/home"
             :router="true"
         >
             <el-menu-item index="/home">

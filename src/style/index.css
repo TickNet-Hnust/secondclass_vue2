@@ -13,3 +13,31 @@
 .el-table {
     /* width: 99.9%!important; */
 }
+
+.el-tooltip,
+.el-submenu__title {
+    /* background-color: #fff !important; */
+}
+
+.el-menu--vertical ul {
+    background-color: #fff !important;
+}
+
+.el-menu--vertical ul .sidebarBlue {
+    background-color: #fff !important;
+}
+
+.el-submenu__title:hover {
+    background-color: #fff !important;
+}
+
+.submenu-title-noDropdown:hover {
+    background-color: #fff !important;
+}
+
+.el-menu--popup {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 185px !important;
+    box-shadow: 5px 5px 8px #aaa !important;
+}

@@ -64,7 +64,7 @@
         .submenu-title-noDropdown,
         .el-submenu__title {
             &:hover {
-                background-color: rgba(0, 0, 0, 0.06) !important;
+                background-color: #0084d1 !important;
             }
         }
         & .theme-dark .is-active>.el-submenu__title {
@@ -165,9 +165,11 @@
     }
     .nest-menu .el-submenu>.el-submenu__title,
     .el-menu-item {
+        color: rgb(51, 51, 51) !important;
         &:hover {
             // you can use $subMenuHover
-            background-color: rgba(0, 0, 0, 0.06) !important;
+            color: #0084d1 !important;
+            background-color: #f4f4f5 !important;
         }
     }
     // the scroll bar appears when the subMenu is too long

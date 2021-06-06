@@ -92,7 +92,7 @@
         width: 100%;
         height: 50px;
         line-height: 50px;
-        background: #0084d1 !important;
+        // background: #0084d1 !important;
         text-align: center;
         overflow: hidden;
 

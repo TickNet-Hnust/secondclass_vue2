@@ -12,6 +12,7 @@
                 :to="resolvePath(onlyOneChild.path)"
             >
                 <el-menu-item
+                    class="sidebarBlue"
                     :index="resolvePath(onlyOneChild.path)"
                     :class="{ 'submenu-title-noDropdown': !isNest }"
                 >
@@ -31,6 +32,7 @@
             ref="subMenu"
             :index="resolvePath(item.path)"
             popper-append-to-body
+            class="sidebarBlue"
         >
             <template slot="title">
                 <item
@@ -126,3 +128,10 @@
         }
     }
 </script>
+
+<style scope>
+    .sidebarBlue,
+    .sidebarBlue div {
+        background-color: #0084d1 !important;
+    }
+</style>

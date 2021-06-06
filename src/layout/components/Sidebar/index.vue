@@ -8,7 +8,11 @@
                     : variables.menuLightBg
         }"
     >
-        <logo v-if="showLogo" :collapse="isCollapse" />
+        <div class="logo" >
+            <img src="../../../assets/sidebar/logo.png" alt="">
+        </div>
+        
+        <!-- <logo v-if="showLogo" :collapse="isCollapse" /> -->
         <el-scrollbar
             :class="settings.sideTheme"
             wrap-class="scrollbar-wrapper"
@@ -160,3 +164,15 @@
         }
     }
 </script>
+
+<style scope>
+    div.logo {
+        text-align: center;
+        height: 70px;
+        /* line-height: 50px; */
+    }
+    .logo img {
+        width: 30px;
+        margin-top: 18px;
+    }
+</style>
