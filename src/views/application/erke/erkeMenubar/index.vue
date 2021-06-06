@@ -1,7 +1,10 @@
 <template>
     <div class="menubar">
-        <div class="menubar-title">第二课堂成绩单</div>
-
+        <div class="menubar-title">
+            <router-link to="/home">
+                <i class="el-icon-arrow-left"></i>
+            </router-link> 第二课堂成绩单
+        </div>
         <el-menu
             :unique-opened="true"
             text-color="#333"
@@ -57,6 +60,6 @@
         height: 50px;
         line-height: 50px;
         text-align: center;
-        border-bottom: 1px dashed #aaa;
+        border-bottom: 1px dashed #ccc;
     }
 </style>

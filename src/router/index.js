@@ -58,13 +58,13 @@ export const constantRoutes = [{
         hidden: true
     },
     {
-        path: '',
+        path: '/',
         component: Layout,
-        redirect: 'index',
+        redirect: '/home',
         children: [{
                 path: 'index',
                 component: resolve => require(['@/views/index'], resolve),
-                name: '首页',
+                name: '',
                 meta: {
                     title: '首页',
                     icon: 'dashboard',
@@ -76,21 +76,41 @@ export const constantRoutes = [{
                 path: '/application',
                 component: rightShow,
                 redirect: '/application/erke',
+                name: 'rightShow',
+                meta: {
+                    title: '应用',
+                },
                 children: [{
                     path: '/application/erke',
                     component: erke,
+                    name: 'erke',
+                    meta: {
+                        title: '第二课堂成绩单',
+                    },
                     redirect: '/application/erke/erkePlan',
                     children: [{
                             path: '/application/erke/erkePlan',
-                            component: erkePlan
+                            component: erkePlan,
+                            name: 'erkePlan',
+                            meta: {
+                                title: '培养方案',
+                            },
                         },
                         {
                             path: 'erkeStandard',
-                            component: erkeStandard
+                            name: 'erkeStandard',
+                            component: erkeStandard,
+                            meta: {
+                                title: '积分标准',
+                            },
                         },
                         {
                             path: '/application/erke/detail',
-                            component: detail
+                            component: detail,
+                            name: 'detail',
+                            meta: {
+                                title: '培养方案-详情',
+                            },
                         }
                     ]
                 }]
@@ -99,8 +119,15 @@ export const constantRoutes = [{
                 path: '/',
                 component: rightShow,
                 redirect: '/home',
+                meta: {
+                    title: ''
+                },
                 children: [{
                     path: '/home',
+                    name: 'home',
+                    meta: {
+                        title: '首页'
+                    },
                     component: home,
                     children: [{
                         path: '/home/homeContent',

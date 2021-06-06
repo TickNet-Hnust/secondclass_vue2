@@ -163,6 +163,7 @@
             },
             addTags() {
                 const { name } = this.$route
+                console.log(this.$route)
                 if (name) {
                     this.$store.dispatch('tagsView/addView', this.$route)
                 }
@@ -318,9 +319,9 @@
                 padding: 0 8px;
                 font-size: 12px;
                 margin-left: 5px;
-                margin-top: 4px;
+                margin-top: 6px;
                 &:first-of-type {
-                    margin-left: 15px;
+                    // margin-left: 15px;
                 }
                 &:last-of-type {
                     // margin-right: 15px;
