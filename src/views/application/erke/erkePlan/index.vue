@@ -19,7 +19,9 @@
                     >
                     </el-option>
                 </el-select>
-                <el-button style="margin-left: 10px" @click="handleManager">管理</el-button>
+                <el-button style="margin-left: 10px" @click="handleManager"
+                    >管理</el-button
+                >
             </div>
         </div>
 
@@ -270,43 +272,42 @@
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" >确 定</el-button>
+                <el-button type="primary">确 定</el-button>
                 <el-button @click="cancel">取 消</el-button>
             </div>
         </el-dialog>
-<!-- 这里是管理【button】 -->
+        <!-- this is manage button -->
         <el-dialog
-            :title="title"
-            :visible.sync="manager.open"
+            :title="managerDialog.title"
+            :visible.sync="managerDialog.open"
             width="635px"
             append-to-body
             class="managerDialog"
         >
-            <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-                <el-table
-                    :data="yearOfLeanConfig"
-                    stripe
-                >
-                    <el-table-column
-                        prop="sort"
-                        label="排序"
-                        
-                        width="80"
-                    >
-                    <template slot-scope="scope">
-                        <el-input class="sortInput" v-model="scope.row.sort"></el-input>
-                    </template>
+            <el-form
+                ref="managerDialog"
+                :model="form"
+                :rules="rules"
+                label-width="80px"
+            >
+                <el-table :data="managerDialog.config" stripe>
+                    <el-table-column prop="sort" label="排序" width="80">
+                        <template slot-scope="scope">
+                            <el-input
+                                class="sortInput"
+                                v-model="scope.row.sort"
+                            ></el-input>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="nameOflearn"
                         label="学年名称"
                         width="300"
                     >
-                    <template slot-scope="scope">
-                        <el-input v-model="scope.row.nameOflearn">
-
-                        </el-input>
-                    </template>
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.nameOflearn">
+                            </el-input>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="idOfLearnYear"
@@ -319,13 +320,94 @@
                         label="当前学年"
                         align="center"
                     >
-                    <template slot-scope="scope">
-                        <input type="radio" name="isNow" value="scope.row.learnYearNo">
-                        
-                    </template>
+                        <template slot-scope="scope">
+                            <input
+                                type="radio"
+                                name="isNow"
+                                value="scope.row.learnYearNo"
+                            />
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">关闭</el-button>
+                <el-button type="primary" @click="submitForm">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- this is importButton -->
+        <el-dialog
+            :title="importDialog.title"
+            :visible.sync="importDialog.open"
+            width="635px"
+            append-to-body
+            class="importDialog"
+        >
+            <el-tabs class="importDialog" tab-position="left">
+                <el-tab-pane label="导入之前年度数据">
+                    <el-row>
+                        <el-col :span="5"> 目标年度： </el-col>
+                        <el-col :span="19">
+                            <el-select>
+                                <el-option label="2021-2022学年"></el-option>
+                                <el-option label="2021-2022学年"></el-option>
+                                <el-option label="2021-2022学年"></el-option>
+                            </el-select>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="5"> 被导入年度： </el-col>
+                        <el-col :span="15">
+                            <el-select>
+                                <el-option label="2021-2022学年"></el-option>
+                                <el-option label="2021-2022学年"></el-option>
+                                <el-option label="2021-2022学年"></el-option>
+                            </el-select>
+                        </el-col>
+                        <el-col :span="4">
+                            <el-checkbox></el-checkbox>导入全部
+                        </el-col>
+                    </el-row>
+                    <el-row style="text-align: center">
+                        <el-checkbox></el-checkbox> 导入课程后，自动发布培养方案
+                    </el-row>
+                    <el-row>
+                        <el-table :data="importDialog.config">
+                            <el-table-column
+                                prop="isChoose"
+                                label="选中"
+                                width="70"
+                            >
+                                <template slot-scope="scope">
+                                    <el-checkbox v-model="scope.row.isChoose">
+                                    </el-checkbox>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column
+                                prop="nameOfPlan"
+                                label="培养方案名称"
+                                width="250"
+                            ></el-table-column>
+
+                            <el-table-column
+                                prop="level"
+                                label="级别"
+                                width="70"
+                            ></el-table-column>
+
+                            <el-table-column
+                                prop="classNumber"
+                                label="课程数"
+                                width="70"
+                            ></el-table-column>
+                        </el-table>
+                    </el-row>
+                </el-tab-pane>
+                <el-tab-pane style="height: 409px" label="根据模版导入">
+                    这里是根据模板导入
+                </el-tab-pane>
+            </el-tabs>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">关闭</el-button>
                 <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -403,33 +485,92 @@
         components: { Treeselect },
         data() {
             return {
-                radio: '1',
-                yearOfLeanConfig: [
-                    {
-                        sort: '1',
-                        nameOflearn: '2018-2019学年',
-                        idOfLearnYear: '1',
-                        learnYearNo: '1'
-                    },
-                    {
-                        sort: '2',
-                        nameOflearn: '2019-2020学年',
-                        idOfLearnYear: '2',
-                        learnYearNo: '2'
-                    },
-                    {
-                        sort: '3',
-                        nameOflearn: '2020-2021学年',
-                        idOfLearnYear: '3',
-                        learnYearNo: '3'
-                    },
-                    {
-                        sort: '4',
-                        nameOflearn: '2021-2022学年',
-                        idOfLearnYear: '4',
-                        learnYearNo: '4'
-                    }
-                ],
+                importDialog: {
+                    title: '导入方案',
+                    open: false,
+                    config: [
+                        {
+                            isChoose: true,
+                            nameOfPlan: '湖南科技大学',
+                            level: '校级',
+                            classNumber: 84
+                        },
+                        {
+                            isChoose: false,
+                            nameOfPlan: '资源环境与安全工程学',
+                            level: '院级',
+                            classNumber: 53
+                        },
+                        {
+                            isChoose: true,
+                            nameOfPlan: '土木工程学院',
+                            level: '院级',
+                            classNumber: 7
+                        },
+                        {
+                            isChoose: true,
+                            nameOfPlan: '计算机科学与工程',
+                            level: '院级',
+                            classNumber: 25
+                        },
+                        {
+                            isChoose: false,
+                            nameOfPlan: '教育学院',
+                            level: '院级',
+                            classNumber: 14
+                        },
+                        {
+                            isChoose: true,
+                            nameOfPlan: '湖南科技大学',
+                            level: '校级',
+                            classNumber: 84
+                        },
+                        {
+                            isChoose: false,
+                            nameOfPlan: '湖南科技大学',
+                            level: '校级',
+                            classNumber: 28
+                        },
+                        {
+                            isChoose: true,
+                            nameOfPlan: '湖南科技大学',
+                            level: '校级',
+                            classNumber: 84
+                        }
+                    ]
+                },
+                managerDialog: {
+                    title: '',
+                    open: false,
+                    radio: '1',
+                    config: [
+                        {
+                            sort: '1',
+                            nameOflearn: '2018-2019学年',
+                            idOfLearnYear: '1',
+                            learnYearNo: '1'
+                        },
+                        {
+                            sort: '2',
+                            nameOflearn: '2019-2020学年',
+                            idOfLearnYear: '2',
+                            learnYearNo: '2'
+                        },
+                        {
+                            sort: '3',
+                            nameOflearn: '2020-2021学年',
+                            idOfLearnYear: '3',
+                            learnYearNo: '3'
+                        },
+                        {
+                            sort: '4',
+                            nameOflearn: '2021-2022学年',
+                            idOfLearnYear: '4',
+                            learnYearNo: '4'
+                        }
+                    ]
+                },
+
                 manager: {
                     open: false
                 },
@@ -782,8 +923,8 @@
                 getUser().then(response => {
                     this.postOptions = response.posts
                     this.roleOptions = response.roles
-                    this.manager.open = true
-                    this.title = '学年配置'
+                    this.managerDialog.open = true
+                    this.managerDialog.title = '学年配置'
                     this.form.password = this.initPassword
                 })
             },
@@ -875,8 +1016,8 @@
             },
             /** 导入按钮操作 */
             handleImport() {
-                this.upload.title = '用户导入'
-                this.upload.open = true
+                this.importDialog.title = '导入方案'
+                this.importDialog.open = true
             },
             /** 下载模板操作 */
             importTemplate() {
@@ -948,12 +1089,81 @@
     .el-input {
         width: 200px;
     }
-    .app-container {
-        /* margin-left: 23px; */
-    }
-     .el-dialog {
+
+    .el-dialog {
         height: 475px !important;
         overflow: hidden;
     }
-    
+    .sortInput >>> .el-input__inner {
+        width: 40px !important;
+    }
+    .managerDialog >>> .el-dialog__body {
+        height: 350px;
+    }
+
+    .managerDialog >>> .el-table__row td {
+        padding: 5px 0;
+    }
+    /*import button */
+    .importDialog >>> .el-dialog {
+        width: 745px !important;
+    }
+    .importDialog >>> .el-tabs__item {
+        text-align: left;
+    }
+    .importDialog,
+    .importDialog >>> .el-tabs__nav-scroll {
+        overflow: visible !important;
+    }
+    .importDialog >>> .el-tabs__nav-wrap {
+        position: relative;
+        overflow: visible !important;
+    }
+    .importDialog >>> .el-tabs__nav-wrap::after {
+        content: '';
+        position: absolute;
+        top: -45px;
+        right: 0;
+        width: 1px;
+        background-color: #ddd;
+        height: 450px !important;
+    }
+    .importDialog >>> .el-tabs__active-bar {
+        display: none;
+    }
+    .importDialog >>> .el-tabs__content {
+        padding: 0 10px 10px 10px;
+    }
+    .importDialog >>> .el-input__inner {
+        width: 300px;
+    }
+    .importDialog >>> .el-row {
+        margin: 12px 0;
+        /* line-height: 30px; */
+        overflow: hidden;
+    }
+
+    .importDialog >>> .el-table {
+        height: 270px;
+        /* border: 1px solid #ddd; */
+        /* border-radius: 5px; */
+        overflow: auto;
+    }
+    .importDialog >>> .el-table::before {
+        content: none;
+    }
+    .importDialog >>> td {
+        height: 40px !important;
+        padding: 5px 0;
+    }
+    .importDialog >>> .el-tabs__header {
+        width: 163px;
+    }
+    .importDialog >>> .el-dialog__body {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .importDialog >>> .el-tabs__nav {
+        padding-top: 20px !important;
+    }
 </style>

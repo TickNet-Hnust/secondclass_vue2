@@ -177,7 +177,7 @@
                         </el-row>
                     </el-col>
                 </el-row>
-                
+
                 <el-row>
                     <el-col :span="14">
                         <el-row>
@@ -201,7 +201,7 @@
                         </el-row>
                     </el-col>
                 </el-row>
-                
+
                 <el-row>
                     <el-col :span="14">
                         <el-row>
@@ -215,7 +215,10 @@
                         <el-row>
                             <el-col :span="6">加入方式：</el-col>
                             <el-col :span="18">
-                                <el-select v-model="unitValue" class="shoutInput">
+                                <el-select
+                                    v-model="unitValue"
+                                    class="shoutInput"
+                                >
                                     <el-option
                                         label="预设"
                                         value="1"
@@ -233,13 +236,16 @@
                         </el-row>
                     </el-col>
                 </el-row>
-                
+
                 <el-row>
                     <el-col :span="14">
                         <el-row>
                             <el-col :span="5">分类：</el-col>
                             <el-col :span="19">
-                                <el-select v-model="sortClass" class="sortClass">
+                                <el-select
+                                    v-model="sortClass"
+                                    class="sortClass"
+                                >
                                     <el-option
                                         label="思想政治和人文素养"
                                         value="1"
@@ -280,7 +286,7 @@
                 </el-row>
                 <!-- 其他信息 -->
                 <el-row>
-                    <el-col :span="3" style="height:49px;line-height:49px">
+                    <el-col :span="3" style="height: 49px; line-height: 49px">
                         <i class="el-icon-share"></i> 其他信息
                     </el-col>
                     <el-col :span="21">
@@ -289,9 +295,7 @@
                 </el-row>
 
                 <el-row :gutter="4">
-                    <el-col :span="3">
-                        分类明细：
-                    </el-col>
+                    <el-col :span="3"> 分类明细： </el-col>
                     <el-col :span="5.5">
                         <el-select v-model="classSort" class="classSort">
                             <el-option
@@ -343,22 +347,21 @@
                 </el-row>
 
                 <el-row>
-                    <el-col :span="3">
-                        积分标准号
-                    </el-col>
+                    <el-col :span="3"> 积分标准号 </el-col>
                     <el-col :span="21">
-                        {{integral}}
+                        {{ integral }}
                     </el-col>
                 </el-row>
 
-                <el-row style="height:80px">
-                    <el-col :span="3">
-                        积分下限要求：
-                    </el-col>
-                    <el-col :span="21" >
-                        <el-row :gutter="5" style="margin-bottom:12px">
+                <el-row style="height: 80px">
+                    <el-col :span="3"> 积分下限要求： </el-col>
+                    <el-col :span="21">
+                        <el-row :gutter="5" style="margin-bottom: 12px">
                             <el-col :span="5.5">
-                                <el-select v-model="unitValue" class="shoutInput">
+                                <el-select
+                                    v-model="unitValue"
+                                    class="shoutInput"
+                                >
                                     <el-option
                                         label="预设"
                                         value="1"
@@ -374,7 +377,10 @@
                                 </el-select>
                             </el-col>
                             <el-col :span="5.5">
-                                <el-select v-model="unitValue" class="shoutInput">
+                                <el-select
+                                    v-model="unitValue"
+                                    class="shoutInput"
+                                >
                                     <el-option
                                         label="预设"
                                         value="1"
@@ -389,14 +395,17 @@
                                     ></el-option>
                                 </el-select>
                             </el-col>
-                                
+
                             <el-col :span="5.5">
                                 <span class="addOrMine">-</span>
                             </el-col>
                         </el-row>
                         <el-row :gutter="5">
                             <el-col :span="5.5">
-                                <el-select v-model="unitValue" class="shoutInput">
+                                <el-select
+                                    v-model="unitValue"
+                                    class="shoutInput"
+                                >
                                     <el-option
                                         label="预设"
                                         value="1"
@@ -412,7 +421,10 @@
                                 </el-select>
                             </el-col>
                             <el-col :span="5.5">
-                                <el-select v-model="unitValue" class="shoutInput">
+                                <el-select
+                                    v-model="unitValue"
+                                    class="shoutInput"
+                                >
                                     <el-option
                                         label="预设"
                                         value="1"
@@ -427,7 +439,7 @@
                                     ></el-option>
                                 </el-select>
                             </el-col>
-                                
+
                             <el-col :span="5.5">
                                 <span class="addOrMine">-</span>
                             </el-col>
@@ -440,11 +452,12 @@
                 </el-row>
 
                 <el-row>
-                    <el-col :span="3">
-                        备注：
-                    </el-col>
+                    <el-col :span="3"> 备注： </el-col>
                     <el-col :span="21">
-                         <el-input type="textarea" v-model="textareaContent"></el-input>
+                        <el-input
+                            type="textarea"
+                            v-model="textareaContent"
+                        ></el-input>
                     </el-col>
                 </el-row>
             </el-form>
@@ -460,7 +473,6 @@
             :visible.sync="upload.open"
             width="400px"
             append-to-body
-            
         >
             <el-upload
                 ref="upload"
@@ -1161,7 +1173,7 @@
     }
 </script>
 
-<style scope>
+<style scoped>
     .erke-top {
         /* height: 120px; */
         padding: 15px;
