@@ -345,7 +345,7 @@
         >
             <el-tabs class="importDialog" tab-position="left">
                 <el-tab-pane label="导入之前年度数据">
-                    <el-row>
+                    <el-row class="lh30">
                         <el-col :span="5"> 目标年度： </el-col>
                         <el-col :span="19">
                             <el-select>
@@ -355,16 +355,16 @@
                             </el-select>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <el-row class="lh30">
                         <el-col :span="5"> 被导入年度： </el-col>
-                        <el-col :span="15">
+                        <el-col :span="15" >
                             <el-select>
                                 <el-option label="2021-2022学年"></el-option>
                                 <el-option label="2021-2022学年"></el-option>
                                 <el-option label="2021-2022学年"></el-option>
                             </el-select>
                         </el-col>
-                        <el-col :span="4">
+                        <el-col :span="4" >
                             <el-checkbox></el-checkbox>导入全部
                         </el-col>
                     </el-row>
@@ -404,7 +404,7 @@
                         </el-table>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane style="height: 409px" label="根据模版导入">
+                <el-tab-pane  label="根据模版导入">
                     这里是根据模板导入
                 </el-tab-pane>
             </el-tabs>
@@ -413,7 +413,40 @@
                 <el-button type="primary" @click="submitForm">确 定</el-button>
             </div>
         </el-dialog>
-
+        
+        <!-- this is exportButton -->
+        <el-dialog
+            :title="exportDialog.title"
+            :visible.sync="exportDialog.open"
+            width="635px"
+            append-to-body
+            class="exportDialog"
+        >
+            <el-tabs class="exportDialog" tab-position="left">
+                <el-tab-pane label="湖南科技大学">
+                    梵蒂冈的发
+                </el-tab-pane>
+                <el-tab-pane  label="全部">
+                    这里是根据模板导入
+                </el-tab-pane>
+                <el-tab-pane  label="指定单位" disabled>
+                    这里是根据模板导入
+                </el-tab-pane>
+                <el-tab-pane  label="资源环境与安全工程学院">
+                    这里是根据模板导入
+                </el-tab-pane>
+                <el-tab-pane  label="计算机科学与工程学院">
+                    这里是根据模板导入
+                </el-tab-pane>
+                <el-tab-pane  label="化学化工学院">
+                    这里是根据模板导入
+                </el-tab-pane>
+            </el-tabs>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">关闭</el-button>
+                <el-button type="primary" @click="submitForm">确 定</el-button>
+            </div>
+        </el-dialog>
         <!-- 用户导入对话框 -->
         <el-dialog
             :title="upload.title"
@@ -538,6 +571,11 @@
                             classNumber: 84
                         }
                     ]
+                },
+                exportDialog: {
+                    title: '',
+                    open: false,
+
                 },
                 managerDialog: {
                     title: '',
@@ -999,20 +1037,22 @@
             },
             /** 导出按钮操作 */
             handleExport() {
-                const queryParams = this.queryParams
-                this.$confirm('是否确认导出所有用户数据项?', '警告', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                })
-                    .then(() => {
-                        this.exportLoading = true
-                        return exportUser(queryParams)
-                    })
-                    .then(response => {
-                        this.download(response.msg)
-                        this.exportLoading = false
-                    })
+                this.exportDialog.title = '导出数据'
+                this.exportDialog.open = true
+                // const queryParams = this.queryParams
+                // this.$confirm('是否确认导出所有用户数据项?', '警告', {
+                //     confirmButtonText: '确定',
+                //     cancelButtonText: '取消',
+                //     type: 'warning'
+                // })
+                //     .then(() => {
+                //         this.exportLoading = true
+                //         return exportUser(queryParams)
+                //     })
+                //     .then(response => {
+                //         this.download(response.msg)
+                //         this.exportLoading = false
+                //     })
             },
             /** 导入按钮操作 */
             handleImport() {
@@ -1091,7 +1131,7 @@
     }
 
     .el-dialog {
-        height: 475px !important;
+        /* height: 475px !important; */
         overflow: hidden;
     }
     .sortInput >>> .el-input__inner {
@@ -1142,7 +1182,9 @@
         /* line-height: 30px; */
         overflow: hidden;
     }
-
+    .lh30 {
+        line-height: 30px;
+    }
     .importDialog >>> .el-table {
         height: 270px;
         /* border: 1px solid #ddd; */
@@ -1160,10 +1202,25 @@
         width: 163px;
     }
     .importDialog >>> .el-dialog__body {
+        height: 420px;
         padding-top: 0;
         padding-bottom: 0;
+        padding-right: 0;
     }
     .importDialog >>> .el-tabs__nav {
         padding-top: 20px !important;
+    }
+
+    .exportDialog >>> .el-dialog{
+        width: 762px !important;
+    }
+    .exportDialog >>> .el-dialog__body {
+        height: 390px;
+    }
+    .exportDialog >>> .el-tabs__header {
+        width: 260px;
+    }
+    .exportDialog >>> .el-tabs__item {
+        text-align: left;
     }
 </style>
