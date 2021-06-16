@@ -105,12 +105,12 @@
                 <div class="erke-bottom">
                     <div class="erke-buttom-left">
                         <ul>
-                            <li>全部</li>
-                            <li>思想政治与人文素养</li>
-                            <li>学术科技与创新</li>
-                            <li>社会时间与志愿公益</li>
-                            <li>文化体育与艺术</li>
-                            <li>社会工作与阅历</li>
+                            <li>全部 <span>3</span></li>
+                            <li>思想政治与人文素养<span>10</span></li>
+                            <li>学术科技与创新<span>9</span></li>
+                            <li>社会时间与志愿公益<span>7</span></li>
+                            <li>文化体育与艺术<span>8</span></li>
+                            <li>社会工作与阅历<span>3</span></li>
                         </ul>
                     </div>
                     <div class="erke-buttom-right">
@@ -569,7 +569,7 @@
                         ID: 2,
                         className: '明月讲坛',
                         trainPlan: '湖南科技大学',
-                        termLearn: '2021-2022学年■',
+                        termLearn: '2021-2022学年',
                         classsort: '思想政治与人文素养预设',
                         joinWay: '预设',
                         classMust: '是',
@@ -1128,6 +1128,7 @@
         padding: 0;
     }
     .erke-buttom-left li {
+        position: relative;
         list-style: none;
         font-size: 13px;
         width: 192px;
@@ -1141,6 +1142,13 @@
         background-color: #e6f7ff;
         color: #0084d1;
         cursor: pointer;
+    }
+    .erke-buttom-left li span {
+        position: absolute;
+        right: 10px;
+        width: 20px;
+        text-align: center;
+        top: 0;
     }
     .erke-buttom-right {
         background-color: #fff;

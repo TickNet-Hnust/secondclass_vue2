@@ -60,7 +60,7 @@ export const constantRoutes = [{
     {
         path: '/',
         component: Layout,
-        redirect: '/', //首页会少一级路由，后期可用index替代
+        redirect: '/index', //首页会少一级路由，后期可用index替代
         children: [
             // {
             //     path: 'index',
@@ -74,7 +74,7 @@ export const constantRoutes = [{
             //     }
             // },
             {
-                path: '/', //首页会少一级路由，后期可用index替代
+                path: '/index', //首页会少一级路由，后期可用index替代
                 component: rightShow,
                 redirect: '/home',
                 meta: {

@@ -88,3 +88,16 @@ textarea {
     resize: none !important;
     border: 1px solid #aaa !important;
 }
+
+.addOrMinus {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    line-height: 1.2;
+    border: 2px solid #aaa;
+    text-align: center;
+}
+
+.addOrMinus:hover {
+    cursor: pointer;
+}

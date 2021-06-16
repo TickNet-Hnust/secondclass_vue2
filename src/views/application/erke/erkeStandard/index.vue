@@ -14,13 +14,16 @@
                 <div class="erke-bottom">
                     <div class="erke-buttom-left">
                         <ul>
-                            <li>全部</li>
-                            <li>思想政治与人文素养</li>
-                            <li>学术科技与创新</li>
-                            <li>社会时间与志愿公益</li>
-                            <li>文化体育与艺术</li>
-                            <li>社会工作与阅历</li>
+                            <li>全部 <span>3</span></li>
+                            <li>思想政治与人文素养<span>10</span></li>
+                            <li>学术科技与创新<span>9</span></li>
+                            <li>社会时间与志愿公益<span>7</span></li>
+                            <li>文化体育与艺术<span>8</span></li>
+                            <li>社会工作与阅历<span>3</span></li>
                         </ul>
+                        <div class="typeSet" @click="handleSetting">
+                            <i class="el-icon-setting"></i>
+                        </div>
                     </div>
                     <div class="erke-buttom-right">
                         <div class="operate">
@@ -117,7 +120,7 @@
                                 label="操作"
                                 fixed="right"
                             >
-                                <template slot-scope="scope">
+                                <template slot-scope="">
                                     <el-link type="primary">修改</el-link>
                                     <el-link type="info">排序</el-link>
                                     <el-link type="info">删除</el-link>
@@ -513,6 +516,79 @@
                 <el-button @click="upload.open = false">取 消</el-button>
             </div>
         </el-dialog>
+
+        <!-- 设置 -->
+        <el-dialog
+            :title="managerDialog.title"
+            :visible.sync="managerDialog.open"
+            width="635px"
+            append-to-body
+            class="managerDialog"
+        >
+            <el-form
+                ref="managerDialog"
+                :model="form"
+                :rules="rules"
+                label-width="80px"
+            >
+                <el-table :data="managerDialog.config" stripe>
+                    <el-table-column
+                        lable="sdf"
+                        width="40"
+                        :render-header="renderHeader"
+                    >
+                    <template slot-scope="scope">
+                        <span @click="deleteManagerDialog(scope.row)" class="addOrMinus">-</span>
+                    </template>
+                    </el-table-column>
+                    <el-table-column 
+                        prop="sort" 
+                        label="排序" 
+                        width="80"
+                    >
+                        <template slot-scope="scope">
+                            <el-input
+                                class="sortInput"
+                                v-model="scope.row.sort"
+                            ></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="nameOflearn"
+                        label="学年名称"
+                        min-width="250"
+                    >
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.nameOflearn">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="idOfLearnYear"
+                        label="学年ID"
+                        align="center"
+                    >
+                    </el-table-column>
+                    <el-table-column
+                        prop="learnYearNo"
+                        label="当前学年"
+                        align="center"
+                    >
+                        <template slot-scope="">
+                            <input
+                                type="checkbox"
+                                name="isNow"
+                                value="scope.row.learnYearNo"
+                            />
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">关闭</el-button>
+                <el-button type="primary" @click="submitForm">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -557,6 +633,49 @@
                 integral: '5',
                 //
                 textareaContent: '',
+                managerDialog: {
+                    title: '',
+                    open: false,
+                    radio: '1',
+                    config: [
+                        {
+                            sort: '1',
+                            nameOflearn: '思想政治与人文素养',
+                            idOfLearnYear: '1',
+                            learnYearNo: '1'
+                        },
+                        {
+                            sort: '2',
+                            nameOflearn: '学术科技与创新',
+                            idOfLearnYear: '2',
+                            learnYearNo: '2'
+                        },
+                        {
+                            sort: '3',
+                            nameOflearn: '社会实践与志愿公益',
+                            idOfLearnYear: '3',
+                            learnYearNo: '3'
+                        },
+                        {
+                            sort: '4',
+                            nameOflearn: '文化体育与艺术',
+                            idOfLearnYear: '4',
+                            learnYearNo: '4'
+                        },
+                        {
+                            sort: '5',
+                            nameOflearn: '社会工作与原历',
+                            idOfLearnYear: '5',
+                            learnYearNo: '4'
+                        },
+                        {
+                            sort: '6',
+                            nameOflearn: '职业技能与特长',
+                            idOfLearnYear: '6',
+                            learnYearNo: '4'
+                        }
+                    ]
+                },
                 datadata: [
                     {
                         id: 1,
@@ -943,6 +1062,31 @@
             })
         },
         methods: {
+            renderHeader(h) {
+                return h(
+                    'span',
+                    {
+                        class: 'addOrMinus',
+                        on: {
+                            click:this.addManagerDialog
+                        }
+                    },
+                    '+'
+                )
+            },
+            addManagerDialog() {
+
+            },
+            handleSetting() {
+                this.reset()
+                this.getTreeselect()
+                
+                    // this.postOptions = response.posts
+                    // this.roleOptions = response.roles
+                    this.managerDialog.open = true
+                    this.managerDialog.title = '学年配置'
+                    this.form.password = this.initPassword
+            },
             sureClass(row) {
                 if (row.state === '申请中') {
                     return 'textPlain'
@@ -1224,6 +1368,7 @@
         padding: 0;
     }
     .erke-buttom-left li {
+        position: relative;
         list-style: none;
         font-size: 13px;
         width: 192px;
@@ -1237,6 +1382,26 @@
         background-color: #e6f7ff;
         color: #0084d1;
         cursor: pointer;
+    }
+    .erke-buttom-left li span {
+        position: absolute;
+        right: 10px;
+        width: 20px;
+        text-align: center;
+        top: 0;
+    }
+    .typeSet {
+        margin-top: 10px;
+        position: relative;
+        height: 40px;
+        border: dashed 1px #ccc;
+        cursor: pointer;
+    }
+    .typeSet i {
+        position: absolute;
+        left: calc(50% - 8px);
+        top: calc(50% - 8px);
+        color: #999;
     }
     .erke-buttom-right {
         background-color: #fff;
@@ -1363,5 +1528,15 @@
     }
     .addClassDialog .el-dialog__header {
         border-bottom: 1px solid #ddd;
+    }
+    .sortInput >>> .el-input__inner {
+        width: 40px !important;
+    }
+    .managerDialog >>> .el-dialog__body {
+        height: 350px;
+    }
+
+    .managerDialog >>> .el-table__row td {
+        padding: 5px 0;
     }
 </style>
