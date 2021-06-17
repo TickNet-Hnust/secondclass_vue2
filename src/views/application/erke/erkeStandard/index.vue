@@ -139,56 +139,6 @@
             </el-col>
         </el-row>
 
-        <!-- 添加或修改参数配置对话框 -->
-        
-
-        <!-- 用户导入对话框 -->
-        <el-dialog
-            :title="upload.title"
-            :visible.sync="upload.open"
-            width="400px"
-            append-to-body
-        >
-            <el-upload
-                ref="upload"
-                :limit="1"
-                accept=".xlsx, .xls"
-                :headers="upload.headers"
-                :action="upload.url + '?updateSupport=' + upload.updateSupport"
-                :disabled="upload.isUploading"
-                :on-progress="handleFileUploadProgress"
-                :on-success="handleFileSuccess"
-                :auto-upload="false"
-                drag
-            >
-                <i class="el-icon-upload"></i>
-                <div class="el-upload__text">
-                    将文件拖到此处，或
-                    <em>点击上传</em>
-                </div>
-                <div class="el-upload__tip" slot="tip">
-                    <el-checkbox
-                        v-model="upload.updateSupport"
-                    />是否更新已经存在的用户数据
-                    <el-link
-                        type="info"
-                        style="font-size: 12px"
-                        @click="importTemplate"
-                        >下载模板</el-link
-                    >
-                </div>
-                <div class="el-upload__tip" style="color: red" slot="tip">
-                    提示：仅允许导入“xls”或“xlsx”格式文件！
-                </div>
-            </el-upload>
-            <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="submitFileForm"
-                    >确 定</el-button
-                >
-                <el-button @click="upload.open = false">取 消</el-button>
-            </div>
-        </el-dialog>
-
         <!-- 设置 -->
         <el-dialog
             :title="managerDialog.title"
@@ -261,6 +211,100 @@
                 <el-button type="primary" @click="submitForm">确 定</el-button>
             </div>
         </el-dialog>
+
+        <!-- 新增 -->
+        <el-dialog
+            :title="addStardardDialog.title"
+            :visible.sync="addStardardDialog.open"
+            append-to-body
+            class="addStardardDialog"
+            width="850px"
+        >
+            <el-row>
+                <el-col span="4">
+                    上级节点： 
+                </el-col>
+                <el-col span="20">
+                    <el-select value="思想政治与人文素养" class="longSelect">
+                        <el-options value="思想政治与人文素养"></el-options>
+                    </el-select>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col span="4">
+                    节点名称： 
+                </el-col>
+                <el-col span="20">
+                    <textarea ></textarea>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col span="4">
+                    类型： 
+                </el-col>
+                <el-col span="20">
+                    <el-select value="积分项" class="">
+                        <el-options value="积分项"></el-options>
+                    </el-select>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col span="4">
+                    分值： 
+                </el-col>
+                <el-col span="20">
+                    <el-row>
+                        <el-radio v-model="addStardardDialog.radio" label="1">定值</el-radio>
+                        <el-input v-model="addStardardDialog.fixed"></el-input>
+                    </el-row>
+                    <el-row>
+                        <el-radio v-model="addStardardDialog.radio" label="2">范围</el-radio>
+                        <el-input v-model="addStardardDialog.start"></el-input>
+                        至
+                        <el-input v-model="addStardardDialog.end"></el-input>
+                    </el-row>
+                    <el-row>
+                        <el-radio v-model="addStardardDialog.radio" label="3">不定值</el-radio>
+
+                    </el-row>
+                </el-col>
+            </el-row>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="cancel">关闭</el-button>
+            <el-button type="primary" >确定</el-button>
+        </div>
+        </el-dialog>
+        <!-- 导出 -->
+        <el-dialog
+            :title="exportDialog.title"
+            :visible.sync="exportDialog.open"
+            width="635px"
+            append-to-body
+            class="exportDialog"
+        >
+            <el-row >
+                <el-col :span="9" class="planExport">
+                        <div>
+                            <el-tree 
+                                :data="exportDialog.units"
+                                
+                            ></el-tree>
+                        </div>
+                    
+                </el-col>
+                <el-col :span="15" class="planChoose">
+                    <el-checkbox-group v-model="exportDialog.checkboxGroup" >
+                        <el-checkbox label="第二课堂项目(活动、竞赛类)积分标准表" border></el-checkbox>
+                        <!-- <el-checkbox label="第二课堂项目(活动、竞赛类)积分名录" border ></el-checkbox>
+                        <!-- <el-checkbox label="第二课堂项目（活动、竟赛类)积分要求表" border ></el-checkbox> --> -->
+                    </el-checkbox-group>
+                </el-col>
+            </el-row>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="submitForm">导出数据</el-button>
+                <el-button @click="cancel">关闭</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -286,9 +330,42 @@
         components: { Treeselect },
         data() {
             return {
-                //first line
-                
-                //
+                exportDialog: {
+                    title: '',
+                    open: false,
+                    checkboxGroup: [],
+                    units: [
+                        {
+                            label:'全部',
+                        },
+                        {   
+                            label:'湖南科技大学',
+                        },
+                        {
+                            label:'学术科技与创新',
+                        },
+                        {
+                            label:'社会实线与志愿公',
+                        },
+                        {
+                            label:'文化体育与艺术',
+                        },
+                        {
+                            label:'社会工作与履历',
+                        },
+                        {
+                            label:'职业技能与特长',
+                        },
+                    ] 
+                },
+                addStardardDialog: {
+                    title: '新增/编辑',
+                    open: false,
+                    radio: '1',
+                    fixed: '',
+                    start: '',
+                    end: ''
+                },
                 textareaContent: '',
                  managerDialog: {
                     title: '',
@@ -888,11 +965,12 @@
             },
             /** 新增按钮操作 */
             handleAdd() {
-                this.postOptions = response.posts
-                this.roleOptions = response.roles
-                this.open = true
-                this.title = '新增课程'
-                this.form.password = this.initPassword
+                this.addStardardDialog.open = true
+                // this.postOptions = response.posts
+                // this.roleOptions = response.roles
+                // this.open = true
+                // this.title = '新增课程'
+                // this.form.password = this.initPassword
             },
             /** 修改按钮操作 */
             handleUpdate(row) {
@@ -965,20 +1043,21 @@
             },
             /** 导出按钮操作 */
             handleExport() {
-                const queryParams = this.queryParams
-                this.$confirm('是否确认导出所有用户数据项?', '警告', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                })
-                    .then(() => {
-                        this.exportLoading = true
-                        return exportUser(queryParams)
-                    })
-                    .then(response => {
-                        this.download(response.msg)
-                        this.exportLoading = false
-                    })
+                this.exportDialog.open = true
+                // const queryParams = this.queryParams
+                // this.$confirm('是否确认导出所有用户数据项?', '警告', {
+                //     confirmButtonText: '确定',
+                //     cancelButtonText: '取消',
+                //     type: 'warning'
+                // })
+                //     .then(() => {
+                //         this.exportLoading = true
+                //         return exportUser(queryParams)
+                //     })
+                //     .then(response => {
+                //         this.download(response.msg)
+                //         this.exportLoading = false
+                //     })
             },
             /** 导入按钮操作 */
             handleImport() {
@@ -1151,5 +1230,66 @@
 
     .managerDialog >>> .el-table__row td {
         padding: 5px 0;
+    }
+    .addStardardDialog .el-row {
+        margin: 16px 0;
+    }
+    .longSelect >>> .el-input__inner {
+        width: 600px !important;
+    }
+    .addStardardDialog textarea{
+        outline: none;
+        height: 70px;
+        border-radius: 5px;
+        width: 600px;
+    }
+    .addOrMine {
+        display: inline-block;
+        height: 30px;
+        width: 30px;
+        text-align: center;
+        vertical-align: top;
+        line-height: 30px;
+        border: 1px solid #aaa;
+        border-radius: 3px;
+    }
+    .exportDialog >>> .el-dialog{
+        width: 762px !important;
+    }
+    .exportDialog >>> .el-dialog__body {
+        padding-top: 10px;
+        height: 390px;
+    }
+    .exportDialog >>> .el-tabs__header {
+        width: 260px;
+    }
+    .exportDialog >>> .el-tabs__item {
+        text-align: left;
+    }
+    .planExport {
+        position: relative;
+    }
+    .planExport::after {
+        position: absolute;
+        right: 0;
+        top: -40px;
+        content: '';
+        width: 1px;
+        height: 400px;
+        background-color: #ddd;
+    }
+    .planExport >>> .el-tree-node__content {
+        height: 40px;
+        line-height: 20px;
+        padding: 10px;
+    }
+    *>>>.is-current {
+        background-color: #f6f7f9;
+        color: #5f9dfd;
+        cursor: pointer;
+    }
+    .planChoose >>> .el-checkbox {
+        margin: 5px 20px !important;
+        width: 320px;
     }
 </style>
