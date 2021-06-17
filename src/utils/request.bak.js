@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
-export const baseURL = "http://localhost:3000"
+export const baseURL = "http://localhost:8080"
 
 const instance = axios.create({
     baseURL,
@@ -10,7 +10,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     function(config) {
-        config.headers['Authorization'] = 'thisisAuthorization'
+        config.headers['Authorization'] = 'eyJhbGciOiJIUzUxMiJ9.eyJsb2dpbl91c2VyX2tleSI6IjhjODI5YTkzLTA4ZGUtNDQzYi1iNzI0LTczZTI5NWM2YjMxNSJ9.CXwyeeNbhl_lRGI5ynr9Id_1DHdkx-54oUjmTRwPwnaEVv-RScvDMYggpx-iHOnwqrvBGNR7y5OpwTPyFFDSgw'
         if (config.method === 'get' && config.params) {
             let url = config.url + '?'
             for (const propName of Object.keys(config.params)) {

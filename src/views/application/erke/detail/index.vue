@@ -526,6 +526,369 @@
                 <el-button @click="upload.open = false">取 消</el-button>
             </div>
         </el-dialog>
+
+        <!-- 详情新增 -->
+        <el-dialog
+            :title="addDetailDialog.title"
+            :visible.sync="addDetailDialog.open"
+            width="915px"
+            append-to-body
+            class="addDetailDialog"
+        >
+            <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+                <el-row>
+                    <el-col :span="14">
+                        <el-row>
+                            <el-col :span="5">学年：</el-col>
+                            <el-col :span="19">{{ addDetailDialog.yearOfLean }}</el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="10">
+                        <el-row>
+                            <el-col :span="6">发布单位：</el-col>
+                            <el-col :span="18">
+                                <el-select
+                                    v-model="addDetailDialog.unitValue"
+                                    class="unitValue"
+                                >
+                                    <el-option
+                                        label="校团委"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="校团委2"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="校团委3"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="14">
+                        <el-row>
+                            <el-col :span="5">培养方案</el-col>
+                            <el-col :span="19">{{ addDetailDialog.planOfgrain }}</el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="10">
+                        <el-row>
+                            <el-col :span="6">必修课程：</el-col>
+                            <el-col :span="18">
+                                <el-switch
+                                    v-model="addDetailDialog.isRequire"
+                                    active-text="是"
+                                    active-value="是"
+                                    inactive-text="否"
+                                    class="switchStyle"
+                                >
+                                </el-switch>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="14">
+                        <el-row>
+                            <el-col :span="5">课程名称：</el-col>
+                            <el-col :span="19">
+                                <el-input class="className"></el-input>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="10">
+                        <el-row>
+                            <el-col :span="6">加入方式：</el-col>
+                            <el-col :span="18">
+                                <el-select
+                                    v-model="addDetailDialog.unitValue"
+                                    class="shoutInput"
+                                >
+                                    <el-option
+                                        label="预设"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设2"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设3"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="14">
+                        <el-row>
+                            <el-col :span="5">分类：</el-col>
+                            <el-col :span="19">
+                                <el-select
+                                    v-model="addDetailDialog.sortClass"
+                                    class="sortClass"
+                                >
+                                    <el-option
+                                        label="思想政治和人文素养"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="思想政治和人文素养"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="思想政治和人文素养"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="10">
+                        <el-row>
+                            <el-col :span="6">性质：</el-col>
+                            <el-col :span="18">
+                                <el-select v-model="addDetailDialog.nature" class="shoutInput">
+                                    <el-option
+                                        label="活动"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="活动"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="活动"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <!-- 其他信息 -->
+                <el-row>
+                    <el-col :span="3" style="height: 49px; line-height: 49px">
+                        <i class="el-icon-share"></i> 其他信息
+                    </el-col>
+                    <el-col :span="21">
+                        <el-divider></el-divider>
+                    </el-col>
+                </el-row>
+
+                <el-row :gutter="4">
+                    <el-col :span="3"> 分类明细： </el-col>
+                    <el-col :span="5.5">
+                        <el-select v-model="addDetailDialog.classSort" class="classSort">
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="1"
+                            ></el-option>
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="2"
+                            ></el-option>
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="3"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                    <el-col :span="9.5">
+                        <el-select v-model="addDetailDialog.activitySort" class="activitySort">
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="1"
+                            ></el-option>
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="2"
+                            ></el-option>
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="3"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-select v-model="addDetailDialog.rankSort" class="rankSort">
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="1"
+                            ></el-option>
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="2"
+                            ></el-option>
+                            <el-option
+                                label="思想政治和人文素养"
+                                value="3"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="3"> 积分标准号 </el-col>
+                    <el-col :span="21">
+                        {{ addDetailDialog.integral }}
+                    </el-col>
+                </el-row>
+
+                <el-row style="height: 80px">
+                    <el-col :span="3"> 积分下限要求： </el-col>
+                    <el-col :span="21">
+                        <el-row :gutter="5" style="margin-bottom: 12px">
+                            <el-col :span="5.5">
+                                <el-select
+                                    v-model="addDetailDialog.unitValue"
+                                    class="shoutInput"
+                                >
+                                    <el-option
+                                        label="预设"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设2"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设3"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+                            <el-col :span="5.5">
+                                <el-select
+                                    v-model="addDetailDialog.unitValue"
+                                    class="shoutInput"
+                                >
+                                    <el-option
+                                        label="预设"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设2"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设3"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+
+                            <el-col :span="5.5">
+                                <span class="addOrMine">-</span>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="5">
+                            <el-col :span="5.5">
+                                <el-select
+                                    v-model="addDetailDialog.unitValue"
+                                    class="shoutInput"
+                                >
+                                    <el-option
+                                        label="预设"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设2"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设3"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+                            <el-col :span="5.5">
+                                <el-select
+                                    v-model="addDetailDialog.unitValue"
+                                    class="shoutInput"
+                                >
+                                    <el-option
+                                        label="预设"
+                                        value="1"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设2"
+                                        value="2"
+                                    ></el-option>
+                                    <el-option
+                                        label="预设3"
+                                        value="3"
+                                    ></el-option>
+                                </el-select>
+                            </el-col>
+
+                            <el-col :span="5.5">
+                                <span class="addOrMine">-</span>
+                            </el-col>
+
+                            <el-col :span="5.5">
+                                <span class="addOrMine">+</span>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="3"> 备注： </el-col>
+                    <el-col :span="21">
+                        <el-input
+                            type="textarea"
+                            v-model="addDetailDialog.textareaContent"
+                        ></el-input>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">关闭</el-button>
+                <el-button type="primary" @click="submitForm">确 定</el-button>
+            </div>
+        </el-dialog>
+
+        <!-- 导出数据 -->
+        <el-dialog
+            :title="exportDialog.title"
+            :visible.sync="exportDialog.open"
+            width="635px"
+            append-to-body
+            class="exportDialog"
+        >
+            <el-row >
+                <el-col :span="9" class="planExport">
+                        <div>
+                            <el-tree 
+                                :data="exportDialog.units"
+                                
+                            ></el-tree>
+                        </div>
+                    
+                </el-col>
+                <el-col :span="15" class="planChoose">
+                    <el-checkbox-group v-model="exportDialog.checkboxGroup" >
+                        <el-checkbox label="第二课堂项目(活动、竞赛类)培养方案" border></el-checkbox>
+                        <el-checkbox label="第二课堂项目(活动、竞赛类)积分名录" border ></el-checkbox>
+                        <el-checkbox label="第二课堂项目（活动、竟赛类)积分要求表" border ></el-checkbox>
+                    </el-checkbox-group>
+                </el-col>
+            </el-row>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="submitForm">导出数据</el-button>
+                <el-button @click="cancel">关闭</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -551,6 +914,53 @@
         components: { Treeselect },
         data() {
             return {
+                exportDialog: {
+                    title: '',
+                    open: false,
+                    checkboxGroup: [],
+                    units:[
+                    {
+                        label:'湖南科技大学',
+                    },
+                    {   
+                        label:'全部',
+                    },
+                    {
+                        label:'指定单位',
+                        children: [
+                            {
+                                label: '资源环境与安全工程学院'
+                            },
+                            {
+                                label: '计算机科学与工程学院'
+                            },
+                            {
+                                label: '化学化工实验'
+                            }
+                        ]
+                    }]
+                },
+                addDetailDialog: {
+                    title: '新增课程',
+                    open:false,
+                    yearOfLean: '2021-2022学年',
+                unitValue: '1',
+                //second line
+                planOfgrain: '湖南科技大学',
+                isRequire: true,
+                //thrid
+                wayValue: '1',
+                //fouth
+                sortClass: '1',
+                nature: '1',
+                //fiv
+                classSort: '1',
+                activitySort: '1',
+                rankSort: '1',
+                //
+                integral: '5',
+                },
+                textareaContent: '',
                 datadata: [
                     {
                         ID: 1,
@@ -948,15 +1358,7 @@
             },
             /** 新增按钮操作 */
             handleAdd() {
-                this.reset()
-                this.getTreeselect()
-                getUser().then(response => {
-                    this.postOptions = response.posts
-                    this.roleOptions = response.roles
-                    this.open = true
-                    this.title = '添加用户'
-                    this.form.password = this.initPassword
-                })
+                this.addDetailDialog.open = true
             },
             /** 修改按钮操作 */
             handleUpdate(row) {
@@ -1029,20 +1431,21 @@
             },
             /** 导出按钮操作 */
             handleExport() {
-                const queryParams = this.queryParams
-                this.$confirm('是否确认导出所有用户数据项?', '警告', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                })
-                    .then(() => {
-                        this.exportLoading = true
-                        return exportUser(queryParams)
-                    })
-                    .then(response => {
-                        this.download(response.msg)
-                        this.exportLoading = false
-                    })
+                this.exportDialog.open = true
+                // const queryParams = this.queryParams
+                // this.$confirm('是否确认导出所有用户数据项?', '警告', {
+                //     confirmButtonText: '确定',
+                //     cancelButtonText: '取消',
+                //     type: 'warning'
+                // })
+                //     .then(() => {
+                //         this.exportLoading = true
+                //         return exportUser(queryParams)
+                //     })
+                //     .then(response => {
+                //         this.download(response.msg)
+                //         this.exportLoading = false
+                //     })
             },
             /** 导入按钮操作 */
             handleImport() {
@@ -1167,5 +1570,152 @@
     }
     .textPlain {
         color: #8b8b8b;
+    }
+    .unitValue .el-input__inner,
+    .unitValue .el-input--suffix {
+        width: 260px;
+    }
+    .unitValue .el-input__icon::before {
+        color: #000;
+        font-weight: 700;
+    }
+    /*two*/
+    .switchStyle .el-switch__label {
+        position: absolute;
+        display: none;
+        color: #fff;
+    }
+    .switchStyle .el-switch__label--left {
+        z-index: 9;
+        left: 22px;
+    }
+    .switchStyle .el-switch__label--right {
+        z-index: 9;
+        left: -2px;
+    }
+    .switchStyle .el-switch__label.is-active {
+        display: block;
+    }
+    .switchStyle.el-switch .el-switch__core,
+    .el-switch .el-switch__label {
+        width: 45px !important;
+    }
+    /*three*/
+    .className .el-input__inner {
+        width: 330px;
+    }
+
+    .shoutInput .el-input__inner,
+    .shoutInput .el-input--suffix {
+        width: 130px;
+    }
+    .shoutInput .el-input__icon::before {
+        color: #000;
+        font-weight: 700;
+    }
+    /*four line */
+    .sortClass .el-input__inner,
+    .sortClass .el-input--suffix {
+        width: 200px;
+    }
+    .sortClass .el-input__icon::before {
+        color: #000;
+        font-weight: 700;
+    }
+    /*five */
+    .classSort .el-input__inner,
+    .classSort .el-input--suffix {
+        width: 180px;
+    }
+    .classSort .el-input__icon::before {
+        color: #000;
+        font-weight: 700;
+    }
+
+    .activitySort .el-input__inner,
+    .activitySort .el-input--suffix {
+        width: 320px;
+    }
+    .activitySort .el-input__icon::before {
+        color: #000;
+        font-weight: 700;
+    }
+
+    .rankSort .el-input__inner,
+    .rankSort .el-input--suffix {
+        width: 100px;
+    }
+    .rankSort .el-input__icon::before {
+        color: #000;
+        font-weight: 700;
+    }
+    textarea {
+        resize: none !important;
+        height: 150px;
+        width: 690px !important;
+        border: 1px solid #aaa !important;
+    }
+    .addDetailDialog .el-dialog__body {
+        height: 500px;
+        overflow: auto;
+    }
+    .addDetailDialog .el-form > .el-row {
+        margin: 13px 0 !important;
+    }
+    .addDetailDialog .el-dialog__body {
+        padding-top: 15px;
+    }
+    
+    .addDetailDialog .el-dialog__header {
+        border-bottom: 1px solid #ddd;
+    }
+    .addOrMine {
+        display: inline-block;
+        height: 30px;
+        width: 30px;
+        text-align: center;
+        vertical-align: top;
+        line-height: 30px;
+        border: 1px solid #aaa;
+        border-radius: 3px;
+    }
+    .exportDialog >>> .el-dialog{
+        width: 762px !important;
+    }
+    .exportDialog >>> .el-dialog__body {
+        padding-top: 10px;
+        height: 390px;
+    }
+    .exportDialog >>> .el-tabs__header {
+        width: 260px;
+    }
+    .exportDialog >>> .el-tabs__item {
+        text-align: left;
+    }
+    .planExport {
+        position: relative;
+    }
+    .planExport::after {
+        position: absolute;
+        right: 0;
+        top: -40px;
+        content: '';
+        width: 1px;
+        height: 400px;
+        background-color: #ddd;
+    }
+    .planExport >>> .el-tree-node__content {
+        height: 40px;
+        line-height: 20px;
+        padding: 10px;
+    }
+    *>>>.is-current {
+        background-color: #f6f7f9;
+        color: #5f9dfd;
+        cursor: pointer;
+    }
+    .planChoose >>> .el-checkbox {
+        margin: 5px 20px !important;
+        width: 320px;
     }
 </style>

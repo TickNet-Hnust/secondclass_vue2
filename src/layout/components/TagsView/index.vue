@@ -295,6 +295,8 @@
         left: 0;
         top: -5px;
         // top: 10px;
+        width: calc(100% + 50px);
+        // width: 100%;
     }
     .tags-view-container {
         // float: left;

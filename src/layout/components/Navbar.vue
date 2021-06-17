@@ -1,6 +1,6 @@
 <template>
     <div class="navbar">
-        <hamburger
+        <!-- <hamburger
             id="hamburger-container"
             :is-active="sidebar.opened"
             class="hamburger-container"
@@ -11,7 +11,7 @@
             id="breadcrumb-container"
             class="breadcrumb-container"
             v-if="!topNav"
-        />
+        /> -->
         <!-- <top-nav
             id="topmenu-container"
             class="topmenu-container"

@@ -419,11 +419,31 @@
                         </el-table>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane  label="根据模版导入">
-                    这里是根据模板导入
+                <el-tab-pane  label="根据模版导入" style="padding:30px">
+                    <el-row>
+                        <div class="templateDownload" style="float:right">
+                            <el-button type="primary" icon="el-icon-download">模板文件下载</el-button>
+                        </div>
+                    </el-row>
+                    <el-row>
+                        <el-upload
+                            class="uploadPlan"
+                            drag
+                            action="https://jsonplaceholder.typicode.com/posts/"
+                            multiple
+                        >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">点击或将<em><b>补充后的模板文件</b></em>拖拽到这里导入</div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                        </el-upload>
+                    </el-row>
+                    <el-row>
+                        <div class="uploadMessage"><i class="el-icon-warning-outline"></i> 成功导入记录： 421，<span><i class="el-icon-error"></i> 失败3条错误记录下载</span></div>
+                    </el-row>
                 </el-tab-pane>
             </el-tabs>
             <div slot="footer" class="dialog-footer">
+
                 <el-button @click="cancel">关闭</el-button>
                 <el-button type="primary" @click="submitForm">确 定</el-button>
             </div>
@@ -460,50 +480,79 @@
                 <el-button @click="cancel">关闭</el-button>
             </div>
         </el-dialog>
-        <!-- 用户导入对话框 -->
+        <!-- 新增 -->
         <el-dialog
-            :title="upload.title"
-            :visible.sync="upload.open"
-            width="400px"
+            :title="addPlanDialog.title"
+            :visible.sync="addPlanDialog.open"
+            width="635px"
             append-to-body
+            class="addPlanDialog"
         >
-            <el-upload
-                ref="upload"
-                :limit="1"
-                accept=".xlsx, .xls"
-                :headers="upload.headers"
-                :action="upload.url + '?updateSupport=' + upload.updateSupport"
-                :disabled="upload.isUploading"
-                :on-progress="handleFileUploadProgress"
-                :on-success="handleFileSuccess"
-                :auto-upload="false"
-                drag
+            <el-form
+                ref="addPlanDialog"
+                :model="form"
+                :rules="rules"
+                label-width="80px"
             >
-                <i class="el-icon-upload"></i>
-                <div class="el-upload__text">
-                    将文件拖到此处，或
-                    <em>点击上传</em>
-                </div>
-                <div class="el-upload__tip" slot="tip">
-                    <el-checkbox
-                        v-model="upload.updateSupport"
-                    />是否更新已经存在的用户数据
-                    <el-link
-                        type="info"
-                        style="font-size: 12px"
-                        @click="importTemplate"
-                        >下载模板</el-link
+                <el-table :data="addPlanDialog.config" stripe>
+                    <el-table-column
+                        lable="sdf"
+                        width="40"
+                        :render-header="renderHeader"
                     >
-                </div>
-                <div class="el-upload__tip" style="color: red" slot="tip">
-                    提示：仅允许导入“xls”或“xlsx”格式文件！
-                </div>
-            </el-upload>
+                    <template slot-scope="scope">
+                        <span @click="deleteManagerDialog(scope.row)" class="addOrMinus">-</span>
+                    </template>
+                    </el-table-column>
+                    <el-table-column 
+                        prop="sort" 
+                        label="排序" 
+                        width="80"
+                    >
+                        <template slot-scope="scope">
+                            <el-input
+                                class="sortInput"
+                                v-model="scope.row.sort"
+                            ></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="nameOfPlan"
+                        label="培养方案名称"
+                        min-width="250"
+                    >
+                        <template slot-scope="scope">
+                            <el-input v-model="scope.row.nameOfPlan" class="nameOfPlan" >
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="level"
+                        label="级别"
+                        align="center"
+                        width="120"
+                    >
+                        <template slot-scope="scope">
+                            <el-select v-model="scope.row.level">
+                                <el-option value="校级"></el-option>
+                                <el-option value="院级"></el-option>
+                            </el-select>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="isUse"
+                        label="当前学年"
+                        align="center"
+                    >
+                        <template slot-scope="scope">
+                            <el-switch v-model="scope.row.isUse"></el-switch>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="submitFileForm"
-                    >确 定</el-button
-                >
-                <el-button @click="upload.open = false">取 消</el-button>
+                <el-button @click="cancel">关闭</el-button>
+                <el-button type="primary" @click="submitForm">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -531,6 +580,36 @@
         components: { Treeselect },
         data() {
             return {
+                addPlanDialog: {
+                    title: '新增培养方案',
+                    open: false,
+                    config: [
+                        {
+                            sort: 1,
+                            nameOfPlan:'湖南科技大学',
+                            level: '校级',
+                            isUse: true,
+                        },
+                        {
+                            sort: 2,
+                            nameOfPlan:'湖南科技大学',
+                            level: '院级',
+                            isUse: true,
+                        },
+                        {
+                            sort: 3,
+                            nameOfPlan:'资源环境与安全工程学院',
+                            level: '院级',
+                            isUse: true,
+                        },
+                        {
+                            sort: 4,
+                            nameOfPlan:'化学化工学院',
+                            level: '院级',
+                            isUse: true,
+                        }
+                    ]
+                },
                 checkboxGroup:[],
                 units:[
                     {
@@ -959,15 +1038,7 @@
                     })
             },
             handleAdd() {
-                this.reset()
-                this.getTreeselect()
-                getUser().then(response => {
-                    this.postOptions = response.posts
-                    this.roleOptions = response.roles
-                    this.open = true
-                    this.title = '新增课程'
-                    this.form.password = this.initPassword
-                })
+                this.addPlanDialog.open = true
             },
             // 取消按钮
             cancel() {
@@ -1335,5 +1406,32 @@
     .planChoose >>> .el-checkbox {
         margin: 5px 20px !important;
         width: 320px;
+    }
+    .uploadPlan {
+        /* width: 500px !important; */
+    }
+    .uploadPlan >>> .el-upload-dragger {
+        border: 1px dashed #1890ff;
+        width: 440px !important;
+    }
+    .uploadMessage {
+        background-color: red;
+        height: 32px;
+        background-color: #e8f4ff;
+        line-height: 32px;
+        border: 1px solid #ddd;
+        padding: 0 20px;
+    }
+    .uploadMessage span {
+        color: #de3c50;
+    }
+    .addPlanDialog >>> .el-dialog {
+        width: 740px !important;
+    }
+    .nameOfPlan {
+        width: 300px ;
+    }
+    .nameOfPlan >>> .el-input__inner {
+        width: 300px !important;
     }
 </style>

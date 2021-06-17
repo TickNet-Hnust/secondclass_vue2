@@ -28,7 +28,7 @@ export function trainingProgramId(id) {
 /* 查询培养方案分页 */
 export function trainingProgramList(query) {
     return request({
-        url: '/secondClass/trainingProgramList',
+        url: '/secondClass/trainingProgram/list',
         method: 'get',
         params: query,
     })
