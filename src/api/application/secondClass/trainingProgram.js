@@ -1,9 +1,9 @@
 import request from '@/utils/request.bak.js'
 
 /* 课程数量 */
-export function traningProgramFindClassNumber(query) {
+export function trainingProgramFindClassNumber(query) {
     return request({
-        url: '/secondClass/traningProgram/findClassNumber',
+        url: '/secondClass/trainingProgram/findClassNumber',
         method: 'get',
         params: query
     })
@@ -12,7 +12,7 @@ export function traningProgramFindClassNumber(query) {
 /* 批量操作 */
 export function trainingProgramMulti() {
     return request({
-        url: '/secondClass/traningProgram/multi',
+        url: '/secondClass/trainingProgram/multi',
         method: 'put',
     })
 }

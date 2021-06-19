@@ -38,6 +38,7 @@ const user = {
             return new Promise((resolve, reject) => {
                 login(username, password, code, uuid)
                     .then(res => {
+                        console.log(res)
                         setToken(res.token)
                         commit('SET_TOKEN', res.token)
                         resolve()
@@ -55,9 +56,9 @@ const user = {
                     .then(res => {
                         const user = res.user
                         const avatar =
-                            user.avatar == ''
-                                ? require('@/assets/images/profile.jpg')
-                                : process.env.VUE_APP_BASE_API + user.avatar
+                            user.avatar == '' ?
+                            require('@/assets/images/profile.jpg') :
+                            process.env.VUE_APP_BASE_API + user.avatar
                         if (res.roles && res.roles.length > 0) {
                             // 验证返回的roles是否是一个非空数组
                             commit('SET_ROLES', res.roles)

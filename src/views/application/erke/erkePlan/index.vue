@@ -10,12 +10,12 @@
                 <span> <i>✈</i> 培养方案</span>
             </div>
             <div class="erke-top-foot">
-                学年度：<el-select v-model="value" placeholder="请选择">
+                学年度：<el-select v-model="list.value" placeholder="请选择">
                     <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
+                        v-for="item in list.rows"
+                        :key="item.id"
+                        :label="item.yearName"
+                        :value="item.id"
                     >
                     </el-option>
                 </el-select>
@@ -114,170 +114,14 @@
             </el-table>
 
             <pagination
-                v-show="total > 0"
-                :total="total"
-                :page.sync="queryParams.pageNum"
+                v-show="queryParams.totalPage > 0"
+                :total="queryParams.totalPage"
+                :page.sync="queryParams.pageCount"
                 :limit.sync="queryParams.pageSize"
                 @pagination="getList"
             />
         </div>
-        <!-- </el-col> -->
-        <!-- </el-row> -->
 
-        <!-- 添加或修改参数配置对话框 -->
-        <el-dialog
-            :title="title"
-            :visible.sync="open"
-            width="600px"
-            append-to-body
-        >
-            <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-                <el-row>
-                    <el-col :span="12">
-                        <el-form-item label="用户昵称" prop="nickName">
-                            <el-input
-                                v-model="form.nickName"
-                                placeholder="请输入用户昵称"
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="归属部门" prop="deptId">
-                            <treeselect
-                                v-model="form.deptId"
-                                :options="deptOptions"
-                                :show-count="true"
-                                placeholder="请选择归属部门"
-                            />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="12">
-                        <el-form-item label="手机号码" prop="phonenumber">
-                            <el-input
-                                v-model="form.phonenumber"
-                                placeholder="请输入手机号码"
-                                maxlength="11"
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="邮箱" prop="email">
-                            <el-input
-                                v-model="form.email"
-                                placeholder="请输入邮箱"
-                                maxlength="50"
-                            />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="12">
-                        <el-form-item
-                            v-if="form.userId == undefined"
-                            label="用户名称"
-                            prop="userName"
-                        >
-                            <el-input
-                                v-model="form.userName"
-                                placeholder="请输入用户名称"
-                            />
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item
-                            v-if="form.userId == undefined"
-                            label="用户密码"
-                            prop="password"
-                        >
-                            <el-input
-                                v-model="form.password"
-                                placeholder="请输入用户密码"
-                                type="password"
-                            />
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="12">
-                        <el-form-item label="用户性别">
-                            <el-select v-model="form.sex" placeholder="请选择">
-                                <el-option
-                                    v-for="dict in sexOptions"
-                                    :key="dict.dictValue"
-                                    :label="dict.dictLabel"
-                                    :value="dict.dictValue"
-                                ></el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="状态">
-                            <el-radio-group v-model="form.status">
-                                <el-radio
-                                    v-for="dict in statusOptions"
-                                    :key="dict.dictValue"
-                                    :label="dict.dictValue"
-                                    >{{ dict.dictLabel }}</el-radio
-                                >
-                            </el-radio-group>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="12">
-                        <el-form-item label="岗位">
-                            <el-select
-                                v-model="form.postIds"
-                                multiple
-                                placeholder="请选择"
-                            >
-                                <el-option
-                                    v-for="item in postOptions"
-                                    :key="item.postId"
-                                    :label="item.postName"
-                                    :value="item.postId"
-                                    :disabled="item.status == 1"
-                                ></el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="角色">
-                            <el-select
-                                v-model="form.roleIds"
-                                multiple
-                                placeholder="请选择"
-                            >
-                                <el-option
-                                    v-for="item in roleOptions"
-                                    :key="item.roleId"
-                                    :label="item.roleName"
-                                    :value="item.roleId"
-                                    :disabled="item.status == 1"
-                                ></el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="备注">
-                            <el-input
-                                v-model="form.remark"
-                                type="textarea"
-                                placeholder="请输入内容"
-                            ></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button type="primary">确 定</el-button>
-                <el-button @click="cancel">取 消</el-button>
-            </div>
-        </el-dialog>
         <!-- this is manage button -->
         <el-dialog
             :title="managerDialog.title"
@@ -292,7 +136,7 @@
                 :rules="rules"
                 label-width="80px"
             >
-                <el-table :data="managerDialog.config" stripe>
+                <el-table :data="list.rows" stripe>
                     <el-table-column
                         lable="sdf"
                         width="40"
@@ -315,17 +159,17 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                        prop="nameOflearn"
+                        prop="yearName"
                         label="分类名称"
                         min-width="250"
                     >
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.nameOflearn">
+                            <el-input v-model="scope.row.yearName">
                             </el-input>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        prop="idOfLearnYear"
+                        prop="id"
                         label="ID"
                         align="center"
                     >
@@ -339,8 +183,9 @@
                             <input
                                 type="radio"
                                 name="isNow"
-                                value="scope.row.learnYearNo"
+                                value="true"
                             />
+                                <!-- :value="scope.row.learnYearNo" -->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -560,7 +405,7 @@
 
 <script>
     import {
-        traningProgramFindClassNumber,
+        trainingProgramFindClassNumber,
         trainingProgramMulti,
         trainingProgramId,
         trainingProgramList,
@@ -580,6 +425,12 @@
         components: { Treeselect },
         data() {
             return {
+                /* 学年列表 */
+                list: {
+                    value: '2021',
+                    rows: []
+                },
+
                 addPlanDialog: {
                     title: '新增培养方案',
                     open: false,
@@ -886,7 +737,8 @@
                 },
                 // 查询参数
                 queryParams: {
-                    pageNum: 1,
+                    totalPage: 0,
+                    pageCount: 1,
                     pageSize: 10,
                     userName: undefined,
                     phonenumber: undefined,
@@ -1210,15 +1062,25 @@
                 this.$refs.upload.submit()
             }
         },
-        created() {
-            schoolYearList().then(value => {
+        async created() {
+            /* 获取学年列表over */
+            await schoolYearList().then(value => {
                 console.log(value,'schoolYearList')
+                this.list.rows = value.rows
+                this.list.value =  value.rows[0].yearName
+                console.log(this.list)
             })
-            schoolYearMulti().then(value => {
+            /* 批量修改学年 */
+            await schoolYearMulti({
+                ...this.list,
+                params: {},
+                remark: '',
+                updateBy: ''
+            }).then(value => {
                 console.log(value,'schoolYearMulti')
             })
 
-            traningProgramFindClassNumber({
+            trainingProgramFindClassNumber({
                 schoolYearName: 'das',
                 trainingName: 4
             }).then(value => {
@@ -1232,7 +1094,7 @@
             })
             trainingProgramList({
                 name: "mingyue",
-                schoolYearId: 2
+                schoolYearId: 1
             }).then(value => {
                 console.log(value,'trainingProgramList')
             })
@@ -1294,6 +1156,7 @@
         width: 40px !important;
     }
     .managerDialog >>> .el-dialog__body {
+        overflow: auto ;
         height: 350px;
     }
 

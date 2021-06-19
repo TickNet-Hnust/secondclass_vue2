@@ -9,9 +9,18 @@ export function schoolYearList(Authorization) {
 }
 
 /* 批量修改学年 */
-export function schoolYearMulti() {
+export function schoolYearMulti(body) {
     return request({
         url: '/secondClass/schoolYear/mutlti',
-        method: 'put'
+        method: 'put',
+        body: body
+    })
+}
+
+export function schoolYearTestDelete(query) {
+    return request({
+        url: '/secondClass/schoolYear/mutili',
+        method: 'get',
+        params: query
     })
 }
