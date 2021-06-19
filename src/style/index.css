@@ -60,7 +60,7 @@
 }
 
 .el-input--medium .el-input__inner {
-    height: 30px !important;
+    /* height: 30px !important; */
     border: 1px solid #aaa;
 }
 

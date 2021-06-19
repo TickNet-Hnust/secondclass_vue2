@@ -13,7 +13,7 @@ export function trainingProgramFindClassNumber(query) {
 export function trainingProgramMulti() {
     return request({
         url: '/secondClass/trainingProgram/multi',
-        method: 'put',
+        method: 'put'
     })
 }
 
@@ -21,7 +21,7 @@ export function trainingProgramMulti() {
 export function trainingProgramId(id) {
     return request({
         url: '/secondClass/trainingProgram/' + id,
-        method: 'get',
+        method: 'get'
     })
 }
 
@@ -30,7 +30,7 @@ export function trainingProgramList(query) {
     return request({
         url: '/secondClass/trainingProgram/list',
         method: 'get',
-        params: query,
+        params: query
     })
 }
 

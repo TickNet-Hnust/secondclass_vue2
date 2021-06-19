@@ -165,7 +165,7 @@
             },
             addTags() {
                 const { name } = this.$route
-                
+
                 if (name) {
                     this.$store.dispatch('tagsView/addView', this.$route)
                 }

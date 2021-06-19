@@ -19,7 +19,11 @@
                     >
                     </el-option>
                 </el-select>
-                <el-button style="margin-left: 10px" circle icon="el-icon-refresh"></el-button>
+                <el-button
+                    style="margin-left: 10px"
+                    circle
+                    icon="el-icon-refresh"
+                ></el-button>
                 <el-button style="margin-left: 10px" @click="handleManager"
                     >管理</el-button
                 >
@@ -110,7 +114,6 @@
                         <el-link type="info">删除</el-link>
                     </template>
                 </el-table-column>
-                
             </el-table>
 
             <pagination
@@ -142,15 +145,15 @@
                         width="40"
                         :render-header="renderHeader"
                     >
-                    <template slot-scope="scope">
-                        <span @click="deleteManagerDialog(scope.row)" class="addOrMinus">-</span>
-                    </template>
+                        <template slot-scope="scope">
+                            <span
+                                @click="deleteManagerDialog(scope.row)"
+                                class="addOrMinus"
+                                >-</span
+                            >
+                        </template>
                     </el-table-column>
-                    <el-table-column 
-                        prop="sort" 
-                        label="排序" 
-                        width="80"
-                    >
+                    <el-table-column prop="sort" label="排序" width="80">
                         <template slot-scope="scope">
                             <el-input
                                 class="sortInput"
@@ -164,15 +167,10 @@
                         min-width="250"
                     >
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.yearName">
-                            </el-input>
+                            <el-input v-model="scope.row.yearName"> </el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column
-                        prop="id"
-                        label="ID"
-                        align="center"
-                    >
+                    <el-table-column prop="id" label="ID" align="center">
                     </el-table-column>
                     <el-table-column
                         prop="learnYearNo"
@@ -180,12 +178,8 @@
                         align="center"
                     >
                         <template slot-scope="scope">
-                            <input
-                                type="radio"
-                                name="isNow"
-                                value="true"
-                            />
-                                <!-- :value="scope.row.learnYearNo" -->
+                            <input type="radio" name="isNow" value="true" />
+                            <!-- :value="scope.row.learnYearNo" -->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -217,14 +211,14 @@
                     </el-row>
                     <el-row class="lh30">
                         <el-col :span="5"> 被导入年度： </el-col>
-                        <el-col :span="15" >
+                        <el-col :span="15">
                             <el-select>
                                 <el-option label="2021-2022学年"></el-option>
                                 <el-option label="2021-2022学年"></el-option>
                                 <el-option label="2021-2022学年"></el-option>
                             </el-select>
                         </el-col>
-                        <el-col :span="4" >
+                        <el-col :span="4">
                             <el-checkbox></el-checkbox>导入全部
                         </el-col>
                     </el-row>
@@ -264,10 +258,12 @@
                         </el-table>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane  label="根据模版导入" style="padding:30px">
+                <el-tab-pane label="根据模版导入" style="padding: 30px">
                     <el-row>
-                        <div class="templateDownload" style="float:right">
-                            <el-button type="primary" icon="el-icon-download">模板文件下载</el-button>
+                        <div class="templateDownload" style="float: right">
+                            <el-button type="primary" icon="el-icon-download"
+                                >模板文件下载</el-button
+                            >
                         </div>
                     </el-row>
                     <el-row>
@@ -277,23 +273,33 @@
                             action="https://jsonplaceholder.typicode.com/posts/"
                             multiple
                         >
-                        <i class="el-icon-upload"></i>
-                        <div class="el-upload__text">点击或将<em><b>补充后的模板文件</b></em>拖拽到这里导入</div>
-                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                            <i class="el-icon-upload"></i>
+                            <div class="el-upload__text">
+                                点击或将<em><b>补充后的模板文件</b></em
+                                >拖拽到这里导入
+                            </div>
+                            <div class="el-upload__tip" slot="tip">
+                                只能上传jpg/png文件，且不超过500kb
+                            </div>
                         </el-upload>
                     </el-row>
                     <el-row>
-                        <div class="uploadMessage"><i class="el-icon-warning-outline"></i> 成功导入记录： 421，<span><i class="el-icon-error"></i> 失败3条错误记录下载</span></div>
+                        <div class="uploadMessage">
+                            <i class="el-icon-warning-outline"></i>
+                            成功导入记录： 421，<span
+                                ><i class="el-icon-error"></i>
+                                失败3条错误记录下载</span
+                            >
+                        </div>
                     </el-row>
                 </el-tab-pane>
             </el-tabs>
             <div slot="footer" class="dialog-footer">
-
                 <el-button @click="cancel">关闭</el-button>
                 <el-button type="primary" @click="submitForm">确 定</el-button>
             </div>
         </el-dialog>
-        
+
         <!-- this is exportButton -->
         <el-dialog
             :title="exportDialog.title"
@@ -302,26 +308,33 @@
             append-to-body
             class="exportDialog"
         >
-            <el-row >
+            <el-row>
                 <el-col :span="9" class="planExport">
-                        <div>
-                            <el-tree 
-                                :data="units"
-                                
-                            ></el-tree>
-                        </div>
-                    
+                    <div>
+                        <el-tree :data="units"></el-tree>
+                    </div>
                 </el-col>
                 <el-col :span="15" class="planChoose">
-                    <el-checkbox-group v-model="checkboxGroup" >
-                        <el-checkbox label="第二课堂项目(活动、竞赛类)培养方案" border></el-checkbox>
-                        <el-checkbox label="第二课堂项目(活动、竞赛类)积分名录" border ></el-checkbox>
-                        <el-checkbox label="第二课堂项目（活动、竟赛类)积分要求表" border ></el-checkbox>
+                    <el-checkbox-group v-model="checkboxGroup">
+                        <el-checkbox
+                            label="第二课堂项目(活动、竞赛类)培养方案"
+                            border
+                        ></el-checkbox>
+                        <el-checkbox
+                            label="第二课堂项目(活动、竞赛类)积分名录"
+                            border
+                        ></el-checkbox>
+                        <el-checkbox
+                            label="第二课堂项目（活动、竟赛类)积分要求表"
+                            border
+                        ></el-checkbox>
                     </el-checkbox-group>
                 </el-col>
             </el-row>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="submitForm">导出数据</el-button>
+                <el-button type="primary" @click="submitForm"
+                    >导出数据</el-button
+                >
                 <el-button @click="cancel">关闭</el-button>
             </div>
         </el-dialog>
@@ -345,15 +358,15 @@
                         width="40"
                         :render-header="renderHeader"
                     >
-                    <template slot-scope="scope">
-                        <span @click="deleteManagerDialog(scope.row)" class="addOrMinus">-</span>
-                    </template>
+                        <template slot-scope="scope">
+                            <span
+                                @click="deleteManagerDialog(scope.row)"
+                                class="addOrMinus"
+                                >-</span
+                            >
+                        </template>
                     </el-table-column>
-                    <el-table-column 
-                        prop="sort" 
-                        label="排序" 
-                        width="80"
-                    >
+                    <el-table-column prop="sort" label="排序" width="80">
                         <template slot-scope="scope">
                             <el-input
                                 class="sortInput"
@@ -367,7 +380,10 @@
                         min-width="250"
                     >
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.nameOfPlan" class="nameOfPlan" >
+                            <el-input
+                                v-model="scope.row.nameOfPlan"
+                                class="nameOfPlan"
+                            >
                             </el-input>
                         </template>
                     </el-table-column>
@@ -437,40 +453,40 @@
                     config: [
                         {
                             sort: 1,
-                            nameOfPlan:'湖南科技大学',
+                            nameOfPlan: '湖南科技大学',
                             level: '校级',
-                            isUse: true,
+                            isUse: true
                         },
                         {
                             sort: 2,
-                            nameOfPlan:'湖南科技大学',
+                            nameOfPlan: '湖南科技大学',
                             level: '院级',
-                            isUse: true,
+                            isUse: true
                         },
                         {
                             sort: 3,
-                            nameOfPlan:'资源环境与安全工程学院',
+                            nameOfPlan: '资源环境与安全工程学院',
                             level: '院级',
-                            isUse: true,
+                            isUse: true
                         },
                         {
                             sort: 4,
-                            nameOfPlan:'化学化工学院',
+                            nameOfPlan: '化学化工学院',
                             level: '院级',
-                            isUse: true,
+                            isUse: true
                         }
                     ]
                 },
-                checkboxGroup:[],
-                units:[
+                checkboxGroup: [],
+                units: [
                     {
-                        label:'湖南科技大学',
-                    },
-                    {   
-                        label:'全部',
+                        label: '湖南科技大学'
                     },
                     {
-                        label:'指定单位',
+                        label: '全部'
+                    },
+                    {
+                        label: '指定单位',
                         children: [
                             {
                                 label: '资源环境与安全工程学院'
@@ -482,8 +498,8 @@
                                 label: '化学化工实验'
                             }
                         ]
-                    }]
-                ,
+                    }
+                ],
                 importDialog: {
                     title: '导入方案',
                     open: false,
@@ -540,8 +556,7 @@
                 },
                 exportDialog: {
                     title: '',
-                    open: false,
-
+                    open: false
                 },
                 managerDialog: {
                     title: '',
@@ -572,7 +587,6 @@
                             idOfLearnYear: '4',
                             learnYearNo: '4'
                         }
-                        
                     ]
                 },
 
@@ -675,7 +689,7 @@
                         label: '北京烤鸭'
                     }
                 ],
-                value: '',
+                value: 'hello',
 
                 // 遮罩层
                 loading: true,
@@ -821,18 +835,14 @@
                     {
                         class: 'addOrMinus',
                         on: {
-                            click:this.addManagerDialog
+                            click: this.addManagerDialog
                         }
                     },
                     '+'
                 )
             },
-            addManagerDialog() {
-
-            },
-            deleteManagerDialog() {
-
-            },
+            addManagerDialog() {},
+            deleteManagerDialog() {},
             handleManage() {
                 this.manager.open = true
             },
@@ -936,13 +946,12 @@
             handleManager() {
                 this.reset()
                 this.getTreeselect()
-                
-                    // this.postOptions = response.posts
-                    // this.roleOptions = response.roles
-                    this.managerDialog.open = true
-                    this.managerDialog.title = '学年配置'
-                    this.form.password = this.initPassword
-                
+
+                // this.postOptions = response.posts
+                // this.roleOptions = response.roles
+                this.managerDialog.open = true
+                this.managerDialog.title = '学年配置'
+                this.form.password = this.initPassword
             },
             /** 修改按钮操作 */
             handleUpdate(row) {
@@ -1065,9 +1074,9 @@
         async created() {
             /* 获取学年列表over */
             await schoolYearList().then(value => {
-                console.log(value,'schoolYearList')
+                console.log(value, 'schoolYearList')
                 this.list.rows = value.rows
-                this.list.value =  value.rows[0].yearName
+                this.list.value = value.rows[0].yearName
             })
             /* 批量修改学年 */
             await schoolYearMulti({
@@ -1076,30 +1085,30 @@
                 remark: '',
                 updateBy: ''
             }).then(value => {
-                console.log(value,'schoolYearMulti')
+                console.log(value, 'schoolYearMulti')
             })
 
             trainingProgramFindClassNumber({
                 schoolYearName: 'das',
                 trainingName: 4
             }).then(value => {
-                console.log(value,'traningProgramFindClassNumber')
+                console.log(value, 'traningProgramFindClassNumber')
             })
             trainingProgramMulti().then(value => {
-                console.log(value ,'trainingProgramMulti')
+                console.log(value, 'trainingProgramMulti')
             })
             trainingProgramId(2).then(value => {
-                console.log(value,'trainingProgramId')
+                console.log(value, 'trainingProgramId')
             })
             /* 查询培养方案分页 */
             trainingProgramList({
-                name: "mingyue",
+                name: 'mingyue',
                 schoolYearId: 1
             }).then(value => {
-                console.log(value,'trainingProgramList')
+                console.log(value, 'trainingProgramList')
             })
             trainingProgram().then(value => {
-                console.log(value,'trainingProgram')
+                console.log(value, 'trainingProgram')
             })
         }
     }
@@ -1156,14 +1165,14 @@
         width: 40px !important;
     }
     .managerDialog >>> .el-dialog__body {
-        overflow: auto ;
+        overflow: auto;
         height: 350px;
     }
 
     .managerDialog >>> .el-table__row td {
         padding: 5px 0;
     }
-    
+
     /*import button */
     .importDialog >>> .el-dialog {
         width: 745px !important;
@@ -1231,7 +1240,7 @@
         padding-top: 20px !important;
     }
 
-    .exportDialog >>> .el-dialog{
+    .exportDialog >>> .el-dialog {
         width: 762px !important;
     }
     .exportDialog >>> .el-dialog__body {
@@ -1261,7 +1270,7 @@
         line-height: 20px;
         padding: 10px;
     }
-    *>>>.is-current {
+    * >>> .is-current {
         background-color: #f6f7f9;
         color: #5f9dfd;
         cursor: pointer;
@@ -1292,7 +1301,7 @@
         width: 740px !important;
     }
     .nameOfPlan {
-        width: 300px ;
+        width: 300px;
     }
     .nameOfPlan >>> .el-input__inner {
         width: 300px !important;

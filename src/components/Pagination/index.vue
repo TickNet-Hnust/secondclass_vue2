@@ -1,7 +1,6 @@
 <template>
     <div :class="{ hidden: hidden }" class="pagination-container">
         <el-pagination
-            
             :current-page.sync="currentPage"
             :page-size.sync="pageSize"
             :layout="layout"

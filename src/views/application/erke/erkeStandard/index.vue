@@ -12,20 +12,10 @@
                 </div>
 
                 <div class="erke-bottom">
-                    <div class="erke-buttom-left">
-                        <ul>
-                            <li>全部 <span>3</span></li>
-                            <li>思想政治与人文素养<span>10</span></li>
-                            <li>学术科技与创新<span>9</span></li>
-                            <li>社会时间与志愿公益<span>7</span></li>
-                            <li>文化体育与艺术<span>8</span></li>
-                            <li>社会工作与阅历<span>3</span></li>
-                        </ul>
-                        <div class="typeSet" @click="handleSetting">
-                            <i class="el-icon-setting"></i>
-                        </div>
+                    <div class="typeSet" @click="handleSetting">
+                        <i class="el-icon-setting"></i>
                     </div>
-                    <div class="erke-buttom-right">
+                    <el-tabs tab-position="left">
                         <div class="operate">
                             <el-row :gutter="10" style="height: 50px">
                                 <el-col :span="1.5">
@@ -90,51 +80,92 @@
                                 </el-col>
                             </el-row>
                         </div>
-                        <el-table
-                            :data="datadata"
-                            row-key="id"
-                            default-expand-all
-                            :tree-props="{
-                                children: 'children',
-                                hasChildren: 'hasChildren'
-                            }"
+                        <el-tab-pane label="全部">
+                            <div class="erke-buttom-right">
+                                <el-table
+                                    :data="datadata"
+                                    row-key="id"
+                                    default-expand-all
+                                    :tree-props="{
+                                        children: 'children',
+                                        hasChildren: 'hasChildren'
+                                    }"
+                                >
+                                    <el-table-column prop="id" label="ID">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="itemName"
+                                        label="项目名称"
+                                        width="700"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column prop="type" label="类型">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="markType"
+                                        label="积分类别"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column prop="mark" label="分值">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="modifyTime"
+                                        label="修订时间"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="id"
+                                        label="操作"
+                                        fixed="right"
+                                    >
+                                        <template slot-scope="">
+                                            <el-link type="primary"
+                                                >修改</el-link
+                                            >
+                                            <el-link type="info">排序</el-link>
+                                            <el-link type="info">删除</el-link>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                                <pagination
+                                    v-show="total > 0"
+                                    :total="total"
+                                    :page.sync="queryParams.pageNum"
+                                    :limit.sync="queryParams.pageSize"
+                                    @pagination="getList"
+                                />
+                            </div>
+                        </el-tab-pane>
+                        <el-tab-pane label="思想政治与人文素养"
+                            >思想政治与人文素养</el-tab-pane
                         >
-                            <el-table-column prop="id" label="ID">
-                            </el-table-column>
-                            <el-table-column
-                                prop="itemName"
-                                label="项目名称"
-                                width="700"
-                            >
-                            </el-table-column>
-                            <el-table-column prop="type" label="类型">
-                            </el-table-column>
-                            <el-table-column prop="markType" label="积分类别">
-                            </el-table-column>
-                            <el-table-column prop="mark" label="分值">
-                            </el-table-column>
-                            <el-table-column prop="modifyTime" label="修订时间">
-                            </el-table-column>
-                            <el-table-column
-                                prop="id"
-                                label="操作"
-                                fixed="right"
-                            >
-                                <template slot-scope="">
-                                    <el-link type="primary">修改</el-link>
-                                    <el-link type="info">排序</el-link>
-                                    <el-link type="info">删除</el-link>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                        <pagination
-                            v-show="total > 0"
-                            :total="total"
-                            :page.sync="queryParams.pageNum"
-                            :limit.sync="queryParams.pageSize"
-                            @pagination="getList"
-                        />
-                    </div>
+                        <el-tab-pane label="学术科技与创新"
+                            >学术科技与创新</el-tab-pane
+                        >
+                        <el-tab-pane label="社会时间与志愿公益"
+                            >社会时间与志愿公益</el-tab-pane
+                        >
+                        <el-tab-pane label="文化体育与艺术"
+                            >文化体育与艺术</el-tab-pane
+                        >
+                        <el-tab-pane label="社会工作与阅历"
+                            >社会工作与阅历</el-tab-pane
+                        >
+
+                        <!-- <div class="erke-buttom-left">
+                        <ul>
+                            <li>全部 <span>3</span></li>
+                            <li>思想政治与人文素养<span>10</span></li>
+                            <li>学术科技与创新<span>9</span></li>
+                            <li>社会时间与志愿公益<span>7</span></li>
+                            <li>文化体育与艺术<span>8</span></li>
+                            <li>社会工作与阅历<span>3</span></li>
+                        </ul>
+                        <div class="typeSet" @click="handleSetting">
+                            <i class="el-icon-setting"></i>
+                        </div>
+                    </div> -->
+                    </el-tabs>
                 </div>
             </el-col>
         </el-row>
@@ -159,15 +190,15 @@
                         width="40"
                         :render-header="renderHeader"
                     >
-                    <template slot-scope="scope">
-                        <span @click="deleteManagerDialog(scope.row)" class="addOrMinus">-</span>
-                    </template>
+                        <template slot-scope="scope">
+                            <span
+                                @click="deleteManagerDialog(scope.row)"
+                                class="addOrMinus"
+                                >-</span
+                            >
+                        </template>
                     </el-table-column>
-                    <el-table-column 
-                        prop="sort" 
-                        label="排序" 
-                        width="80"
-                    >
+                    <el-table-column prop="sort" label="排序" width="80">
                         <template slot-scope="scope">
                             <el-input
                                 class="sortInput"
@@ -221,9 +252,7 @@
             width="850px"
         >
             <el-row>
-                <el-col span="4">
-                    上级节点： 
-                </el-col>
+                <el-col span="4"> 上级节点： </el-col>
                 <el-col span="20">
                     <el-select value="思想政治与人文素养" class="longSelect">
                         <el-options value="思想政治与人文素养"></el-options>
@@ -231,17 +260,13 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col span="4">
-                    节点名称： 
-                </el-col>
+                <el-col span="4"> 节点名称： </el-col>
                 <el-col span="20">
-                    <textarea ></textarea>
+                    <textarea></textarea>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col span="4">
-                    类型： 
-                </el-col>
+                <el-col span="4"> 类型： </el-col>
                 <el-col span="20">
                     <el-select value="积分项" class="">
                         <el-options value="积分项"></el-options>
@@ -249,30 +274,33 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col span="4">
-                    分值： 
-                </el-col>
+                <el-col span="4"> 分值： </el-col>
                 <el-col span="20">
                     <el-row>
-                        <el-radio v-model="addStardardDialog.radio" label="1">定值</el-radio>
+                        <el-radio v-model="addStardardDialog.radio" label="1"
+                            >定值</el-radio
+                        >
                         <el-input v-model="addStardardDialog.fixed"></el-input>
                     </el-row>
                     <el-row>
-                        <el-radio v-model="addStardardDialog.radio" label="2">范围</el-radio>
+                        <el-radio v-model="addStardardDialog.radio" label="2"
+                            >范围</el-radio
+                        >
                         <el-input v-model="addStardardDialog.start"></el-input>
                         至
                         <el-input v-model="addStardardDialog.end"></el-input>
                     </el-row>
                     <el-row>
-                        <el-radio v-model="addStardardDialog.radio" label="3">不定值</el-radio>
-
+                        <el-radio v-model="addStardardDialog.radio" label="3"
+                            >不定值</el-radio
+                        >
                     </el-row>
                 </el-col>
             </el-row>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="cancel">关闭</el-button>
-            <el-button type="primary" >确定</el-button>
-        </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">关闭</el-button>
+                <el-button type="primary">确定</el-button>
+            </div>
         </el-dialog>
         <!-- 导出 -->
         <el-dialog
@@ -282,26 +310,28 @@
             append-to-body
             class="exportDialog"
         >
-            <el-row >
+            <el-row>
                 <el-col :span="9" class="planExport">
-                        <div>
-                            <el-tree 
-                                :data="exportDialog.units"
-                                
-                            ></el-tree>
-                        </div>
-                    
+                    <div>
+                        <el-tree :data="exportDialog.units"></el-tree>
+                    </div>
                 </el-col>
                 <el-col :span="15" class="planChoose">
-                    <el-checkbox-group v-model="exportDialog.checkboxGroup" >
-                        <el-checkbox label="第二课堂项目(活动、竞赛类)积分标准表" border></el-checkbox>
+                    <el-checkbox-group v-model="exportDialog.checkboxGroup">
+                        <el-checkbox
+                            label="第二课堂项目(活动、竞赛类)积分标准表"
+                            border
+                        ></el-checkbox>
                         <!-- <el-checkbox label="第二课堂项目(活动、竞赛类)积分名录" border ></el-checkbox>
-                        <!-- <el-checkbox label="第二课堂项目（活动、竟赛类)积分要求表" border ></el-checkbox> --> -->
+                        <!-- <el-checkbox label="第二课堂项目（活动、竟赛类)积分要求表" border ></el-checkbox> -->
+                        -->
                     </el-checkbox-group>
                 </el-col>
             </el-row>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="submitForm">导出数据</el-button>
+                <el-button type="primary" @click="submitForm"
+                    >导出数据</el-button
+                >
                 <el-button @click="cancel">关闭</el-button>
             </div>
         </el-dialog>
@@ -336,27 +366,27 @@
                     checkboxGroup: [],
                     units: [
                         {
-                            label:'全部',
-                        },
-                        {   
-                            label:'湖南科技大学',
+                            label: '全部'
                         },
                         {
-                            label:'学术科技与创新',
+                            label: '湖南科技大学'
                         },
                         {
-                            label:'社会实线与志愿公',
+                            label: '学术科技与创新'
                         },
                         {
-                            label:'文化体育与艺术',
+                            label: '社会实线与志愿公'
                         },
                         {
-                            label:'社会工作与履历',
+                            label: '文化体育与艺术'
                         },
                         {
-                            label:'职业技能与特长',
+                            label: '社会工作与履历'
                         },
-                    ] 
+                        {
+                            label: '职业技能与特长'
+                        }
+                    ]
                 },
                 addStardardDialog: {
                     title: '新增/编辑',
@@ -367,7 +397,7 @@
                     end: ''
                 },
                 textareaContent: '',
-                 managerDialog: {
+                managerDialog: {
                     title: '',
                     open: false,
                     radio: '1',
@@ -845,24 +875,22 @@
                     {
                         class: 'addOrMinus',
                         on: {
-                            click:this.addManagerDialog
+                            click: this.addManagerDialog
                         }
                     },
                     '+'
                 )
             },
-            addManagerDialog() {
-
-            },
+            addManagerDialog() {},
             handleSetting() {
                 this.reset()
                 this.getTreeselect()
-                
-                    // this.postOptions = response.posts
-                    // this.roleOptions = response.roles
-                    this.managerDialog.open = true
-                    this.managerDialog.title = '学年配置'
-                    this.form.password = this.initPassword
+
+                // this.postOptions = response.posts
+                // this.roleOptions = response.roles
+                this.managerDialog.open = true
+                this.managerDialog.title = '学年配置'
+                this.form.password = this.initPassword
             },
             sureClass(row) {
                 if (row.state === '申请中') {
@@ -1128,7 +1156,7 @@
     }
     .erke-bottom {
         /* background-color: #fff; */
-
+        position: relative;
         overflow: hidden;
     }
     .erke-buttom-left {
@@ -1137,6 +1165,8 @@
         padding: 16px;
         height: calc(100vh - 140px);
         background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
     }
     .erke-buttom-left ul {
         margin: 0;
@@ -1167,8 +1197,12 @@
     }
     .typeSet {
         margin-top: 10px;
-        position: relative;
+        position: absolute;
+        left: 17px;
+        top: 255px;
+        z-index: 99;
         height: 40px;
+        width: 186px;
         border: dashed 1px #ccc;
         cursor: pointer;
     }
@@ -1179,10 +1213,13 @@
         color: #999;
     }
     .erke-buttom-right {
+        /* overflow: auto;
         background-color: #fff;
-        margin-left: 230px;
+
         height: calc(100vh - 140px);
         padding: 16px;
+        border: 1px solid #ddd;
+        border-radius: 5px; */
     }
     .el-input {
         width: 200px;
@@ -1217,7 +1254,7 @@
     .addClassDialog .el-dialog__body {
         padding-top: 15px;
     }
-    
+
     .addClassDialog .el-dialog__header {
         border-bottom: 1px solid #ddd;
     }
@@ -1237,7 +1274,7 @@
     .longSelect >>> .el-input__inner {
         width: 600px !important;
     }
-    .addStardardDialog textarea{
+    .addStardardDialog textarea {
         outline: none;
         height: 70px;
         border-radius: 5px;
@@ -1253,7 +1290,7 @@
         border: 1px solid #aaa;
         border-radius: 3px;
     }
-    .exportDialog >>> .el-dialog{
+    .exportDialog >>> .el-dialog {
         width: 762px !important;
     }
     .exportDialog >>> .el-dialog__body {
@@ -1283,7 +1320,7 @@
         line-height: 20px;
         padding: 10px;
     }
-    *>>>.is-current {
+    * >>> .is-current {
         background-color: #f6f7f9;
         color: #5f9dfd;
         cursor: pointer;
@@ -1291,5 +1328,49 @@
     .planChoose >>> .el-checkbox {
         margin: 5px 20px !important;
         width: 320px;
+    }
+
+    .erke-bottom >>> .el-tabs__header {
+        background-color: #fff;
+        width: 220px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        height: calc(100vh - 140px);
+        margin-right: 10px;
+        padding: 15px;
+    }
+    .erke-bottom >>> .el-tabs__content {
+        padding: 15px !important;
+        background-color: #fff;
+        overflow: auto;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        height: calc(100vh - 140px);
+    }
+    .erke-bottom >>> .el-tabs__item {
+        text-align: left;
+
+        border-bottom: 1px dashed #ddd;
+    }
+    .erke-bottom,
+    .erke-bottom >>> .el-tabs__nav-scroll {
+        overflow: visible !important;
+    }
+    .erke-bottom >>> .el-tabs__nav-wrap {
+        position: relative;
+        overflow: visible !important;
+    }
+    .erke-bottom >>> .el-tabs__nav-wrap::after {
+        content: '';
+        width: 0;
+    }
+    .erke-bottom >>> .el-tabs__active-bar {
+        display: none;
+    }
+    .erke-bottom >>> .el-tabs__content {
+        padding: 0 10px 10px 10px;
+    }
+    .erke-bottom >>> .el-input__inner {
+        /* width: 300px; */
     }
 </style>

@@ -5,13 +5,12 @@
                 v-for="(item, index) in levelList"
                 :key="item.path"
             >
-            <!-- class="no-redirect" -->
+                <!-- class="no-redirect" -->
                 <span
                     v-if="
                         item.redirect === 'noRedirect' ||
                         index == levelList.length - 1
                     "
-                    
                     >{{ item.meta.title }}</span
                 >
                 <a v-else @click.prevent="handleLink(item)">{{
@@ -71,7 +70,6 @@
                 return name.trim() === '首页'
             },
             handleLink(item) {
-                
                 const { redirect, path } = item
                 if (redirect) {
                     this.$router.push(redirect)
@@ -90,7 +88,7 @@
         font-size: 14px;
         line-height: 50px;
         margin-left: 8px;
-
+        width: 400px;
         .no-redirect {
             color: #97a8be;
             cursor: text;

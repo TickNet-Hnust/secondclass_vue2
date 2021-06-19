@@ -4,7 +4,7 @@ import request from '@/utils/request.bak.js'
 export function schoolYearList(Authorization) {
     return request({
         url: '/secondClass/schoolYear/list',
-        method: 'get',
+        method: 'get'
     })
 }
 
