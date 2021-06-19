@@ -1523,7 +1523,7 @@
         width: 220px;
         float: left;
         padding: 16px;
-        height: calc(100vh - 270px);
+        height: calc(100vh - 260px);
         background-color: #fff;
     }
     .erke-buttom-left ul {
@@ -1556,7 +1556,7 @@
     .erke-buttom-right {
         background-color: #fff;
         margin-left: 230px;
-        height: calc(100vh - 270px);
+        height: calc(100vh - 260px);
         padding: 16px;
     }
     .el-input {

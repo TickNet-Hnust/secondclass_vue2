@@ -737,9 +737,9 @@
                 },
                 // 查询参数
                 queryParams: {
-                    totalPage: 0,
+                    totalPage: 50,
                     pageCount: 1,
-                    pageSize: 10,
+                    pageSize: 4,
                     userName: undefined,
                     phonenumber: undefined,
                     status: undefined,
@@ -1068,7 +1068,6 @@
                 console.log(value,'schoolYearList')
                 this.list.rows = value.rows
                 this.list.value =  value.rows[0].yearName
-                console.log(this.list)
             })
             /* 批量修改学年 */
             await schoolYearMulti({
@@ -1089,9 +1088,10 @@
             trainingProgramMulti().then(value => {
                 console.log(value ,'trainingProgramMulti')
             })
-            trainingProgramId(5).then(value => {
+            trainingProgramId(2).then(value => {
                 console.log(value,'trainingProgramId')
             })
+            /* 查询培养方案分页 */
             trainingProgramList({
                 name: "mingyue",
                 schoolYearId: 1
