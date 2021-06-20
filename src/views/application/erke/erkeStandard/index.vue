@@ -13,159 +13,181 @@
 
                 <div class="erke-bottom">
                     <div class="typeSet" @click="handleSetting">
-                        <i class="el-icon-setting"></i>
-                    </div>
-                    <el-tabs tab-position="left">
-                        <div class="operate">
-                            <el-row :gutter="10" style="height: 50px">
-                                <el-col :span="1.5">
-                                    <el-button
-                                        type="primary"
-                                        plain
-                                        icon="el-icon-plus"
-                                        size="mini"
-                                        @click="handleAdd"
-                                        v-hasPermi="['system:user:add']"
-                                        >新增</el-button
-                                    >
-                                </el-col>
-
-                                <el-col :span="1.5">
-                                    <el-button
-                                        type="warning"
-                                        plain
-                                        icon="el-icon-download"
-                                        size="mini"
-                                        :loading="exportLoading"
-                                        @click="handleExport"
-                                        v-hasPermi="['system:user:export']"
-                                        >导出</el-button
-                                    >
-                                </el-col>
-                                <el-col :span="1.5">
-                                    <el-input
-                                        suffix-icon="el-icon-search"
-                                        placeholder="课程名称"
-                                    >
-                                    </el-input>
-                                </el-col>
-                                <el-col :span="1.5">
-                                    <el-select
-                                        v-model="value"
-                                        placeholder="选择"
-                                    >
-                                        <el-option
-                                            v-for="item in options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value"
-                                        >
-                                        </el-option>
-                                    </el-select>
-                                </el-col>
-
-                                <el-col :span="1.5">
-                                    <el-select
-                                        v-model="value"
-                                        placeholder="选择"
-                                    >
-                                        <el-option
-                                            v-for="item in options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value"
-                                        >
-                                        </el-option>
-                                    </el-select>
-                                </el-col>
-                            </el-row>
-                        </div>
-                        <el-tab-pane label="全部">
-                            <div class="erke-buttom-right">
-                                <el-table
-                                    :data="datadata"
-                                    row-key="id"
-                                    default-expand-all
-                                    :tree-props="{
-                                        children: 'children',
-                                        hasChildren: 'hasChildren'
-                                    }"
-                                >
-                                    <el-table-column prop="id" label="ID">
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="itemName"
-                                        label="项目名称"
-                                        width="700"
-                                    >
-                                    </el-table-column>
-                                    <el-table-column prop="type" label="类型">
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="markType"
-                                        label="积分类别"
-                                    >
-                                    </el-table-column>
-                                    <el-table-column prop="mark" label="分值">
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="modifyTime"
-                                        label="修订时间"
-                                    >
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="id"
-                                        label="操作"
-                                        fixed="right"
-                                    >
-                                        <template slot-scope="">
-                                            <el-link type="primary"
-                                                >修改</el-link
-                                            >
-                                            <el-link type="info">排序</el-link>
-                                            <el-link type="info">删除</el-link>
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                                <pagination
-                                    v-show="total > 0"
-                                    :total="total"
-                                    :page.sync="queryParams.pageNum"
-                                    :limit.sync="queryParams.pageSize"
-                                    @pagination="getList"
-                                />
-                            </div>
-                        </el-tab-pane>
-                        <el-tab-pane label="思想政治与人文素养"
-                            >思想政治与人文素养</el-tab-pane
-                        >
-                        <el-tab-pane label="学术科技与创新"
-                            >学术科技与创新</el-tab-pane
-                        >
-                        <el-tab-pane label="社会时间与志愿公益"
-                            >社会时间与志愿公益</el-tab-pane
-                        >
-                        <el-tab-pane label="文化体育与艺术"
-                            >文化体育与艺术</el-tab-pane
-                        >
-                        <el-tab-pane label="社会工作与阅历"
-                            >社会工作与阅历</el-tab-pane
-                        >
-
-                        <!-- <div class="erke-buttom-left">
-                        <ul>
-                            <li>全部 <span>3</span></li>
-                            <li>思想政治与人文素养<span>10</span></li>
-                            <li>学术科技与创新<span>9</span></li>
-                            <li>社会时间与志愿公益<span>7</span></li>
-                            <li>文化体育与艺术<span>8</span></li>
-                            <li>社会工作与阅历<span>3</span></li>
-                        </ul>
-                        <div class="typeSet" @click="handleSetting">
                             <i class="el-icon-setting"></i>
-                        </div>
-                    </div> -->
-                    </el-tabs>
+                    </div>
+                        <el-tabs tab-position="left">
+                            <div class="operate">
+                                <el-row :gutter="10" style="height: 50px">
+                                    <el-col :span="1.5">
+                                        <el-button
+                                            type="primary"
+                                            plain
+                                            icon="el-icon-plus"
+                                            size="mini"
+                                            @click="handleAdd"
+                                            v-hasPermi="['system:user:add']"
+                                            >新增</el-button
+                                        >
+                                    </el-col>
+
+                                    <el-col :span="1.5">
+                                        <el-button
+                                            type="warning"
+                                            plain
+                                            icon="el-icon-download"
+                                            size="mini"
+                                            :loading="exportLoading"
+                                            @click="handleExport"
+                                            v-hasPermi="['system:user:export']"
+                                            >导出</el-button
+                                        >
+                                    </el-col>
+                                    <el-col :span="1.5">
+                                        <el-input
+                                            suffix-icon="el-icon-search"
+                                            placeholder="课程名称"
+                                        >
+                                        </el-input>
+                                    </el-col>
+                                    <el-col :span="1.5">
+                                        <el-select
+                                            v-model="value"
+                                            placeholder="选择"
+                                        >
+                                            <el-option
+                                                v-for="item in options"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value"
+                                            >
+                                            </el-option>
+                                        </el-select>
+                                    </el-col>
+
+                                    <el-col :span="1.5">
+                                        <el-select
+                                            v-model="value"
+                                            placeholder="选择"
+                                        >
+                                            <el-option
+                                                v-for="item in options"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value"
+                                            >
+                                            </el-option>
+                                        </el-select>
+                                    </el-col>
+                                </el-row>
+                            </div>
+                            <!-- 表单下面 -->
+                            <template v-for="item in datadata" >
+                                
+                                    <el-tab-pane :label="item.name" :key="item.id">
+                                        <div class="erke-buttom-right" >
+                                        <el-table
+                                        :data="item.children"
+                                        row-key="id"
+                                        default-expand-all
+                                        :tree-props="{
+                                            children: 'children',
+                                            hasChildren: 'hasChildren'
+                                        }"
+                                    >
+                                        <el-table-column prop="id" label="ID">
+                                        </el-table-column>
+                                        <el-table-column
+                                            prop="name"
+                                            label="项目名称"
+                                            width="700"
+                                        >
+                                        </el-table-column>
+                                        <el-table-column prop="type" label="类型">
+                                        </el-table-column>
+                                        <el-table-column prop="integralType" label="积分类别">
+                                        </el-table-column>
+                                        <el-table-column prop="integrationRange" label="分值">
+                                        </el-table-column>
+                                        <el-table-column prop="updateTime" label="修订时间">
+                                        </el-table-column>
+                                        <el-table-column
+                                            
+                                            label="操作"
+                                            fixed="right"
+                                        >
+                                            <template slot-scope="">
+                                                <el-link type="primary">修改</el-link>
+                                                <el-link type="info">排序</el-link>
+                                                <el-link type="info">删除</el-link>
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+                                    <pagination
+                                        v-show="total > 0"
+                                        :total="total"
+                                        :page.sync="queryParams.pageNum"
+                                        :limit.sync="queryParams.pageSize"
+                                        @pagination="getList"
+                                    />
+                                    </div>
+                                    </el-tab-pane>
+                                
+                            </template>
+
+                            <!-- <el-tab-pane label="思想政治和人文素养">
+                                <div class="erke-buttom-right">
+                                    <el-table
+                                        :data="datadata"
+                                        row-key="id"
+                                        default-expand-all
+                                        :tree-props="{
+                                            children: 'children',
+                                            hasChildren: 'hasChildren'
+                                        }"
+                                    >
+                                        <el-table-column prop="id" label="ID">
+                                        </el-table-column>
+                                        <el-table-column
+                                            prop="itemName"
+                                            label="项目名称"
+                                            width="700"
+                                        >
+                                        </el-table-column>
+                                        <el-table-column prop="type" label="类型">
+                                        </el-table-column>
+                                        <el-table-column prop="markType" label="积分类别">
+                                        </el-table-column>
+                                        <el-table-column prop="mark" label="分值">
+                                        </el-table-column>
+                                        <el-table-column prop="modifyTime" label="修订时间">
+                                        </el-table-column>
+                                        <el-table-column
+                                            prop="id"
+                                            label="操作"
+                                            fixed="right"
+                                        >
+                                            <template slot-scope="">
+                                                <el-link type="primary">修改</el-link>
+                                                <el-link type="info">排序</el-link>
+                                                <el-link type="info">删除</el-link>
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+                                    <pagination
+                                        v-show="total > 0"
+                                        :total="total"
+                                        :page.sync="queryParams.pageNum"
+                                        :limit.sync="queryParams.pageSize"
+                                        @pagination="getList"
+                                    />
+                                </div>
+                            </el-tab-pane>
+                            <el-tab-pane label="学术科技与创新">学术科技与创新</el-tab-pane>
+                            <el-tab-pane label="社会时间与志愿公益">社会时间与志愿公益</el-tab-pane>
+                            <el-tab-pane label="文化体育与艺术">文化体育与艺术</el-tab-pane>
+                            <el-tab-pane label="社会工作与阅历">社会工作与阅历</el-tab-pane>
+                            <el-tab-pane label="职业技能与特长">职业技能与特长</el-tab-pane> -->
+                        </el-tabs>
                 </div>
             </el-col>
         </el-row>
@@ -252,7 +274,9 @@
             width="850px"
         >
             <el-row>
-                <el-col span="4"> 上级节点： </el-col>
+                <el-col span="4">
+                    上级节点：
+                </el-col>
                 <el-col span="20">
                     <el-select value="思想政治与人文素养" class="longSelect">
                         <el-options value="思想政治与人文素养"></el-options>
@@ -260,13 +284,17 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col span="4"> 节点名称： </el-col>
+                <el-col span="4">
+                    节点名称：
+                </el-col>
                 <el-col span="20">
                     <textarea></textarea>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col span="4"> 类型： </el-col>
+                <el-col span="4">
+                    类型：
+                </el-col>
                 <el-col span="20">
                     <el-select value="积分项" class="">
                         <el-options value="积分项"></el-options>
@@ -274,7 +302,9 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col span="4"> 分值： </el-col>
+                <el-col span="4">
+                    分值：
+                </el-col>
                 <el-col span="20">
                     <el-row>
                         <el-radio v-model="addStardardDialog.radio" label="1"
@@ -340,6 +370,16 @@
 
 <script>
     import {
+        courseClassificationSortList,
+        courseClassificationMulti,
+        courseClassificationJudgeId,
+        courseClassificationList,
+        courseClassificationIds,
+        courseClassification
+    } from '@/api/application/secondClass/courseClassification.js'
+    import filterCourseClassificationList from '@/utils/filterCourseClassificationList'
+    
+    import {
         listUser,
         getUser,
         delUser,
@@ -360,6 +400,7 @@
         components: { Treeselect },
         data() {
             return {
+                activeName: '思想政治与人文素养',
                 exportDialog: {
                     title: '',
                     open: false,
@@ -397,49 +438,7 @@
                     end: ''
                 },
                 textareaContent: '',
-                managerDialog: {
-                    title: '',
-                    open: false,
-                    radio: '1',
-                    config: [
-                        {
-                            sort: '1',
-                            nameOflearn: '思想政治与人文素养',
-                            idOfLearnYear: '1',
-                            learnYearNo: '1'
-                        },
-                        {
-                            sort: '2',
-                            nameOflearn: '学术科技与创新',
-                            idOfLearnYear: '2',
-                            learnYearNo: '2'
-                        },
-                        {
-                            sort: '3',
-                            nameOflearn: '社会实践与志愿公益',
-                            idOfLearnYear: '3',
-                            learnYearNo: '3'
-                        },
-                        {
-                            sort: '4',
-                            nameOflearn: '文化体育与艺术',
-                            idOfLearnYear: '4',
-                            learnYearNo: '4'
-                        },
-                        {
-                            sort: '5',
-                            nameOflearn: '社会工作与原历',
-                            idOfLearnYear: '5',
-                            learnYearNo: '4'
-                        },
-                        {
-                            sort: '6',
-                            nameOflearn: '职业技能与特长',
-                            idOfLearnYear: '6',
-                            learnYearNo: '4'
-                        }
-                    ]
-                },
+
                 managerDialog: {
                     title: '',
                     open: false,
@@ -484,148 +483,7 @@
                     ]
                 },
                 datadata: [
-                    {
-                        id: 1,
-                        itemName: '参加党、团学习培训并顺利完成',
-                        type: '分类',
-                        markType: '',
-                        modifyTime: '2021-3.02',
-                        children: [
-                            {
-                                id: 2,
-                                type: '积分项',
-                                itemName: '院级',
-                                markType: '定值',
-                                mark: null,
-                                modifyTime: '2021-3.02'
-                            },
-                            {
-                                id: 3,
-                                type: '积分项',
-                                itemName: '校级',
-                                markType: '定值',
-                                mark: 2,
-                                modifyTime: '2021-3.02'
-                            },
-                            {
-                                id: 4,
-                                type: '积分项',
-                                itemName: '市级',
-                                markType: '定值',
-                                mark: 5,
-                                modifyTime: '2021-3.02'
-                            },
-                            {
-                                id: 5,
-                                type: '积分项',
-                                itemName: '省部级',
-                                markType: '定值',
-                                mark: 2,
-                                modifyTime: '2021-3.02'
-                            },
-                            {
-                                id: 6,
-                                type: '积分项',
-                                itemName: '国家级',
-                                markType: '定值',
-                                mark: 2,
-                                modifyTime: '2021-3.02'
-                            },
-                            {
-                                id: 7,
-                                type: '积分项',
-                                itemName: '在培训学习中被评为优秀可另加一分',
-                                markType: '定值',
-                                mark: 5,
-                                modifyTime: '2021-3.02'
-                            }
-                        ]
-                    },
-                    {
-                        id: 8,
-                        itemName:
-                            '参加思想政治与人文素养类主题教育讲座、报告、读书会等教育活动(含竞赛)',
-                        type: '分类',
-                        markType: '',
-                        modifyTime: '2021-3.02',
-                        children: [
-                            {
-                                id: 9,
-                                type: '积分项',
-                                itemName: '院级',
-                                markType: '定值',
-                                mark: 2,
-                                modifyTime: '2021-3.02',
-                                children: [
-                                    {
-                                        id: 10,
-                                        itemName: '成功参与',
-                                        markType: '定值',
-                                        type: '积分项',
-                                        mark: 1,
-                                        modifyTime: '2021-3.02'
-                                    },
-                                    {
-                                        id: 11,
-                                        itemName: '进入复赛',
-                                        markType: '定值',
-                                        mark: 1.5,
-                                        type: '积分项',
-
-                                        modifyTime: '2021-3.02'
-                                    },
-                                    {
-                                        id: 12,
-                                        type: '积分项',
-                                        itemName: '进入决赛',
-                                        markType: '定值',
-                                        mark: 2,
-                                        modifyTime: '2021-3.02'
-                                    }
-                                ]
-                            },
-                            {
-                                id: 13,
-                                type: '积分项',
-                                itemName: '校级',
-                                mark: 2,
-                                markType: '定值',
-                                modifyTime: '2021-3.02'
-                            },
-                            {
-                                id: 14,
-                                type: '积分项',
-                                mark: 5,
-                                itemName: '市级',
-                                markType: '定值',
-                                modifyTime: '2021-3.02'
-                            },
-                            {
-                                id: 15,
-                                type: '积分项',
-                                itemName: '省部级',
-                                markType: '定值',
-                                mark: 5,
-                                modifyTime: '2021-3.02'
-                            },
-                            {
-                                id: 16,
-                                type: '积分项',
-                                itemName: '国家级',
-                                mark: 2,
-                                markType: '定值',
-                                modifyTime: '2021-3.02'
-                            },
-                            {
-                                id: 17,
-                                type: '积分项',
-                                itemName: '在培训学习中被评为优秀可另加一分',
-                                markType: '定值',
-                                mark: 5,
-                                modifyTime: '2021-3.02'
-                            }
-                        ]
-                    }
+                    
                 ],
                 count: {
                     classCount: 50,
@@ -941,13 +799,13 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return changeUserStatus(row.userId, row.status)
                     })
                     .then(() => {
                         this.msgSuccess(text + '成功')
                     })
-                    .catch(function () {
+                    .catch(function() {
                         row.status = row.status === '0' ? '1' : '0'
                     })
             },
@@ -1030,7 +888,7 @@
                     .catch(() => {})
             },
             /** 提交按钮 */
-            submitForm: function () {
+            submitForm: function() {
                 this.$refs['form'].validate(valid => {
                     if (valid) {
                         if (this.form.userId != undefined) {
@@ -1061,7 +919,7 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return delUser(userIds)
                     })
                     .then(() => {
@@ -1115,7 +973,17 @@
             // 提交上传文件
             submitFileForm() {
                 this.$refs.upload.submit()
+            },
+            //根据参数查询二课课程分类列表
+            async getCourseClassificationList() {
+                await courseClassificationList().then(value => {
+                    this.datadata = filterCourseClassificationList(value)
+                    console.log(this.datadata)
+                })
             }
+        },
+        mounted() {
+            this.getCourseClassificationList()
         }
     }
 </script>
@@ -1198,7 +1066,7 @@
     .typeSet {
         margin-top: 10px;
         position: absolute;
-        left: 17px;
+        left:17px;
         top: 255px;
         z-index: 99;
         height: 40px;
@@ -1349,7 +1217,7 @@
     }
     .erke-bottom >>> .el-tabs__item {
         text-align: left;
-
+        
         border-bottom: 1px dashed #ddd;
     }
     .erke-bottom,

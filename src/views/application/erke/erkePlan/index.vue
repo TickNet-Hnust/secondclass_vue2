@@ -138,12 +138,13 @@
                 :model="form"
                 :rules="rules"
                 label-width="80px"
+                height="250"
             >
                 <el-table :data="list.rows" stripe>
                     <el-table-column
                         lable="sdf"
                         width="40"
-                        :render-header="renderHeader"
+                        :render-header="renderSchoolYear"
                     >
                         <template slot-scope="scope">
                             <span
@@ -835,13 +836,40 @@
                     {
                         class: 'addOrMinus',
                         on: {
-                            click: this.addManagerDialog
+                            click: this.addtrainingProgram
                         }
                     },
                     '+'
                 )
             },
-            addManagerDialog() {},
+            renderSchoolYear(h) {
+                return h(
+                    'span',
+                    {
+                        class: 'addOrMinus',
+                        on: {
+                            click: this.addSchoolYear
+                        }
+                    },
+                    '+'
+                )
+            },
+            async addSchoolYear() {
+                /* 后端未写添加的接口。。。 */
+                this.list.row.push({
+                    creteTime: null,
+                    delateTime: null,
+                    
+                })
+            },
+            async addtrainingProgram() {
+                this.addPlanDialog.config.push({
+                    sort: null,
+                    nameOfPlan: '',
+                    level: '',
+                    isUse: true
+                })
+            },
             deleteManagerDialog() {},
             handleManage() {
                 this.manager.open = true
@@ -983,23 +1011,11 @@
                     .catch(() => {})
             },
             /** 提交按钮 */
-            submitForm: function () {
-                this.$refs['form'].validate(valid => {
-                    if (valid) {
-                        if (this.form.userId != undefined) {
-                            updateUser(this.form).then(response => {
-                                this.msgSuccess('修改成功')
-                                this.open = false
-                                this.getList()
-                            })
-                        } else {
-                            addUser(this.form).then(response => {
-                                this.msgSuccess('新增成功')
-                                this.open = false
-                                this.getList()
-                            })
-                        }
-                    }
+            async submitForm () {
+                let temp = this.addPlanDialog.config
+                console.log(temp[temp.length-1])
+                trainingProgram(temp[temp.length-1]).then(value => {
+                    console.log(value, 'trainingProgram')
                 })
             },
             /** 删除按钮操作 */
@@ -1080,10 +1096,23 @@
             })
             /* 批量修改学年 */
             await schoolYearMulti({
-                ...this.list,
-                params: {},
-                remark: '',
-                updateBy: ''
+                deleteIds: [
+                    6,7
+                ],
+                schoolYearList:[
+                    {
+                        id: 11,
+                        nowYear:5,
+                        sort: 43,
+                        yearName: "2022"
+                    },
+                    {
+                        id: 12,
+                        nowYear:5,
+                        sort: 43,
+                        yearName: "2023"
+                    }
+                ]
             }).then(value => {
                 console.log(value, 'schoolYearMulti')
             })
@@ -1094,7 +1123,25 @@
             }).then(value => {
                 console.log(value, 'traningProgramFindClassNumber')
             })
-            trainingProgramMulti().then(value => {
+            trainingProgramMulti({
+                deleteIds: [
+                    6,7
+                ],
+                schoolYearList:[
+                    {
+                        id: 11,
+                        nowYear:5,
+                        sort: 43,
+                        yearName: "2022"
+                    },
+                    {
+                        
+                        nowYear:5,
+                        sort: 43,
+                        yearName: "2023"
+                    }
+                ]
+            }).then(value => {
                 console.log(value, 'trainingProgramMulti')
             })
             trainingProgramId(2).then(value => {
@@ -1107,9 +1154,7 @@
             }).then(value => {
                 console.log(value, 'trainingProgramList')
             })
-            trainingProgram().then(value => {
-                console.log(value, 'trainingProgram')
-            })
+            
         }
     }
 </script>
@@ -1165,10 +1210,13 @@
         width: 40px !important;
     }
     .managerDialog >>> .el-dialog__body {
-        overflow: auto;
+        /* overflow: auto; */
         height: 350px;
     }
-
+    .managerDialog >>> .el-table__body-wrapper {
+        overflow: auto;
+         height: 250px;
+    }
     .managerDialog >>> .el-table__row td {
         padding: 5px 0;
     }

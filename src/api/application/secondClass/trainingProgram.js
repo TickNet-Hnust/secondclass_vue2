@@ -10,10 +10,11 @@ export function trainingProgramFindClassNumber(query) {
 }
 
 /* 批量操作 */
-export function trainingProgramMulti() {
+export function trainingProgramMulti(data) {
     return request({
         url: '/secondClass/trainingProgram/multi',
-        method: 'put'
+        method: 'put',
+        data: data
     })
 }
 
@@ -35,10 +36,10 @@ export function trainingProgramList(query) {
 }
 
 /* 添加 */
-export function trainingProgram(body) {
+export function trainingProgram(data) {
     return request({
         url: '/secondClass/trainingProgram',
         method: 'post',
-        body: body
+        data: data
     })
 }

@@ -1,26 +1,26 @@
 import request from '@/utils/request.bak.js'
 
-/* 获取学年列表 */
-export function schoolYearList(Authorization) {
+/* GET获取学年列表 */
+export function schoolYearList() {
     return request({
         url: '/secondClass/schoolYear/list',
         method: 'get'
     })
 }
 
-/* 批量修改学年 */
-export function schoolYearMulti(body) {
+/* PUT批量修改学年 */
+export function schoolYearMulti(data) {
     return request({
-        url: '/secondClass/schoolYear/mutlti',
+        url: '/secondClass/schoolYear/multi',
         method: 'put',
-        body: body
+        data: data
     })
 }
-
-export function schoolYearTestDelete(query) {
+/* GET批量修改学年-测试能否删除 */
+export function schoolYearTestDeleteIds(ids) {
     return request({
-        url: '/secondClass/schoolYear/mutili',
+        url: '/secondClass/testDelete/' + ids,
         method: 'get',
-        params: query
+
     })
 }
