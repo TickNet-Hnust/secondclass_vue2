@@ -83,22 +83,24 @@
 
             <!-- table start here -->
             <el-table :data="planData" stripe>
-                <el-table-column prop="pcid" label="批次ID"> </el-table-column>
-                <el-table-column prop="plan" label="培养方案">
+                <el-table-column prop="id" label="批次ID"> </el-table-column>
+                <el-table-column prop="name" label="培养方案">
                 </el-table-column>
-                <el-table-column prop="xnid" label="学年ID"> </el-table-column>
-                <el-table-column prop="xn" label="学年"> </el-table-column>
-                <el-table-column prop="jb" label="级别"> </el-table-column>
-                <el-table-column prop="classCount" label="课程数">
+                <el-table-column prop="schoolYearId" label="学年ID"> </el-table-column>
+                <el-table-column prop="schoolYearName" label="学年"> </el-table-column>
+                <el-table-column prop="rank" label="级别" :formatter="formatRank"> </el-table-column>
+                <el-table-column prop="courseCount" label="课程数">
                 </el-table-column>
-                <el-table-column prop="state" label="状态"> </el-table-column>
-                <el-table-column prop="createTime" label="创建时间">
+                <el-table-column prop="applyingCount" label="申请中">
                 </el-table-column>
-                <el-table-column prop="createPerson" label="创建人">
+                <el-table-column prop="status" label="状态" :formatter="formarStatus"> </el-table-column>
+                <el-table-column prop="createTime" label="创建时间" :formatter="formatUpdateTime">
                 </el-table-column>
-                <el-table-column prop="modifyTime" label="修改时间">
+                <el-table-column prop="createBy" label="创建人">
                 </el-table-column>
-                <el-table-column prop="modifyPerson" label="修改人">
+                <el-table-column prop="updateTime" label="修改时间" :formatter="formatUpdateTime">
+                </el-table-column>
+                <el-table-column prop="updateBy" label="修改人">
                 </el-table-column>
                 <el-table-column
                     fixed="right"
@@ -118,10 +120,10 @@
 
             <pagination
                 v-show="queryParams.totalPage > 0"
-                :total="queryParams.totalPage"
+                :total="queryParams.totalCount"
                 :page.sync="queryParams.pageCount"
                 :limit.sync="queryParams.pageSize"
-                @pagination="getList"
+                @pagination="getList($event)"
             />
         </div>
 
@@ -353,10 +355,11 @@
                 :rules="rules"
                 label-width="80px"
             >
-                <el-table :data="addPlanDialog.config" stripe>
+                <el-table :data="planData" height="350" stripe>
                     <el-table-column
                         lable="sdf"
                         width="40"
+                        
                         :render-header="renderHeader"
                     >
                         <template slot-scope="scope">
@@ -376,28 +379,36 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                        prop="nameOfPlan"
+                        prop="name"
                         label="培养方案名称"
                         min-width="250"
                     >
                         <template slot-scope="scope">
                             <el-input
-                                v-model="scope.row.nameOfPlan"
+                                v-model="scope.row.name"
                                 class="nameOfPlan"
                             >
                             </el-input>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        prop="level"
+                        prop="rank"
                         label="级别"
                         align="center"
                         width="120"
+                        :formatter="formatRank"
                     >
                         <template slot-scope="scope">
-                            <el-select v-model="scope.row.level">
-                                <el-option value="校级"></el-option>
-                                <el-option value="院级"></el-option>
+                            <el-select v-model="scope.row.rank">
+                                <el-option
+                                    v-for="item in dict_sc_train_program_rank"
+                                    :key="item.id"
+                                    :value="item.dictValue"
+                                    :label="item.dictLabel"
+                                >
+                                </el-option>
+                                <!-- <el-option value="校级" label="校级"></el-option> -->
+                                <!-- <el-option value="院级" label=></el-option> -->
                             </el-select>
                         </template>
                     </el-table-column>
@@ -432,6 +443,9 @@
         schoolYearList,
         schoolYearMulti
     } from '@/api/application/secondClass/schoolYear'
+    import formatDate from '@/utils/formatDate.js'
+    import {getDict} from '@/api/application/secondClass/dict/type.js'
+
     import { getToken } from '@/utils/auth'
     import { treeselect } from '@/api/system/dept'
     import Treeselect from '@riophae/vue-treeselect'
@@ -442,6 +456,10 @@
         components: { Treeselect },
         data() {
             return {
+                /* 培养方案级别 */
+                dict_sc_train_program_rank: {},
+                /* 培养方案状态 */
+                dict_sc_train_program_status: {},
                 /* 学年列表 */
                 list: {
                     value: '2021',
@@ -612,60 +630,6 @@
                             detail: '/application/erke/datail',
                             delete: ''
                         }
-                    },
-                    {
-                        pcid: 1,
-                        plan: '湖南科技大学',
-                        xnid: 1,
-                        xn: '2021-2022学年',
-                        jb: '校级',
-                        classCount: 30,
-                        state: '启用',
-                        createTime: '2021-03-01',
-                        createPerson: '袁建国',
-                        modifyTime: '2021-03-02',
-                        modifyPerson: '袁建国',
-                        oprator: {
-                            modify: '',
-                            detail: '/application/erke/datail',
-                            delete: ''
-                        }
-                    },
-                    {
-                        pcid: 1,
-                        plan: '湖南科技大学',
-                        xnid: 1,
-                        xn: '2021-2022学年',
-                        jb: '校级',
-                        classCount: 30,
-                        state: '启用',
-                        createTime: '2021-03-01',
-                        createPerson: '袁建国',
-                        modifyTime: '2021-03-02',
-                        modifyPerson: '袁建国',
-                        oprator: {
-                            modify: '',
-                            detail: '/application/erke/datail',
-                            delete: ''
-                        }
-                    },
-                    {
-                        pcid: 1,
-                        plan: '湖南科技大学',
-                        xnid: 1,
-                        xn: '2021-2022学年',
-                        jb: '校级',
-                        classCount: 30,
-                        state: '启用',
-                        createTime: '2021-03-01',
-                        createPerson: '袁建国',
-                        modifyTime: '2021-03-02',
-                        modifyPerson: '袁建国',
-                        oprator: {
-                            modify: '',
-                            detail: '/application/erke/datail',
-                            delete: ''
-                        }
                     }
                 ],
                 options: [
@@ -752,6 +716,7 @@
                 },
                 // 查询参数
                 queryParams: {
+                    totalCount: 0,
                     totalPage: 50,
                     pageCount: 1,
                     pageSize: 4,
@@ -830,6 +795,24 @@
             })
         },
         methods: {
+            formatUpdateTime(row,column,cellValue) {
+                if(cellValue != null) {
+                    return formatDate(cellValue)
+                }
+                return cellValue
+            },
+            formarStatus(row,column,cellValue) {
+                if(cellValue != null) {
+                    return this.dict_sc_train_program_status[cellValue].dictLabel
+                }
+                return cellValue
+            },
+            formatRank(row,column,cellValue) {
+                if(cellValue != null) {
+                    return this.dict_sc_train_program_rank[cellValue].dictLabel
+                }
+                return cellValue
+            },
             renderHeader(h) {
                 return h(
                     'span',
@@ -863,11 +846,11 @@
                 })
             },
             async addtrainingProgram() {
-                this.addPlanDialog.config.push({
-                    sort: null,
-                    nameOfPlan: '',
-                    level: '',
-                    isUse: true
+                this.planData.push({
+                    schoolYearId: 5,
+                    name: "",
+                    rank: 0,
+                    status: 1,
                 })
             },
             deleteManagerDialog() {},
@@ -878,15 +861,25 @@
                 this.manager.open = false
             },
             /** 查询用户列表 */
-            getList() {
+            async getList(t) {
+                console.log(t)
                 this.loading = true
-                listUser(
-                    this.addDateRange(this.queryParams, this.dateRange)
-                ).then(response => {
-                    this.userList = response.rows
-                    this.total = response.total
+                await trainingProgramList({
+                    page: t.page,
+                    limit: t.limit
+                }).then(value => {
+                    this.planData = value.data.list
+                    console.log(value.data.list)
+                    this.$forceUpdate()
                     this.loading = false
                 })
+                // listUser(
+                //     this.addDateRange(this.queryParams, this.dateRange)
+                // ).then(response => {
+                //     this.userList = response.rows
+                //     this.total = response.total
+                    
+                // })
             },
             /** 查询部门下拉树结构 */
             getTreeselect() {
@@ -1012,7 +1005,8 @@
             },
             /** 提交按钮 */
             async submitForm () {
-                let temp = this.addPlanDialog.config
+                let temp = this.planData
+                delete temp[temp.length-1].isUse
                 console.log(temp[temp.length-1])
                 trainingProgram(temp[temp.length-1]).then(value => {
                     console.log(value, 'trainingProgram')
@@ -1148,13 +1142,25 @@
                 console.log(value, 'trainingProgramId')
             })
             /* 查询培养方案分页 */
-            trainingProgramList({
-                name: 'mingyue',
-                schoolYearId: 1
-            }).then(value => {
+            await trainingProgramList().then(value => {
+                this.planData = value.data.list
+                this.queryParams.totalCount = value.data.totalCount
+                this.queryParams.totalPage = value.data.totalPage
+                this.queryParams.pageSize = value.data.pageSize
+                this.queryParams.currPage = value.data.currPage
                 console.log(value, 'trainingProgramList')
             })
             
+        },
+        async mounted() {
+            await getDict('sc_train_program_rank').then(value => {
+                console.log(value)
+                this.dict_sc_train_program_rank = value.data
+            })
+            await getDict('sc_train_program_status').then(value => {
+                console.log(value)
+                this.dict_sc_train_program_status = value.data
+            })
         }
     }
 </script>
@@ -1347,6 +1353,9 @@
     }
     .addPlanDialog >>> .el-dialog {
         width: 740px !important;
+    }
+    .addPlanDialog >>> .el-table {
+        /* height: 350px; */
     }
     .nameOfPlan {
         width: 300px;

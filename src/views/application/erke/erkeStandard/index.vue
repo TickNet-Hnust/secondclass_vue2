@@ -15,7 +15,7 @@
                     <div class="typeSet" @click="handleSetting">
                             <i class="el-icon-setting"></i>
                     </div>
-                        <el-tabs tab-position="left">
+                        <el-tabs tab-position="left" v-model="activeName">
                             <div class="operate">
                                 <el-row :gutter="10" style="height: 50px">
                                     <el-col :span="1.5">
@@ -83,7 +83,7 @@
                             <!-- 表单下面 -->
                             <template v-for="item in datadata" >
                                 
-                                    <el-tab-pane :label="item.name" :key="item.id">
+                                    <el-tab-pane :label="item.name" :key="item.id" :name="item.name">
                                         <div class="erke-buttom-right" >
                                         <el-table
                                         :data="item.children"
@@ -102,23 +102,38 @@
                                             width="700"
                                         >
                                         </el-table-column>
-                                        <el-table-column prop="type" label="类型">
+                                        <el-table-column 
+                                            prop="type" 
+                                            label="类型"
+                                            :formatter="formatType"
+                                        >
                                         </el-table-column>
-                                        <el-table-column prop="integralType" label="积分类别">
+                                        <el-table-column 
+                                            prop="integralType" 
+                                            label="积分类别" 
+                                            :formatter="formatIntegralType"    
+                                        >
                                         </el-table-column>
-                                        <el-table-column prop="integrationRange" label="分值">
+                                        <el-table-column 
+                                            prop="integrationRange" 
+                                            label="分值"
+                                        >
                                         </el-table-column>
-                                        <el-table-column prop="updateTime" label="修订时间">
+                                        <el-table-column 
+                                            prop="updateTime" 
+                                            label="修订时间"
+                                            :formatter="formatUpdateTime"
+                                        >
                                         </el-table-column>
                                         <el-table-column
                                             
                                             label="操作"
                                             fixed="right"
                                         >
-                                            <template slot-scope="">
+                                            <template slot-scope="scope">
                                                 <el-link type="primary">修改</el-link>
                                                 <el-link type="info">排序</el-link>
-                                                <el-link type="info">删除</el-link>
+                                                <el-link type="info" @click="deleteCourseClassificaiton(scope.row)">删除</el-link>
                                             </template>
                                         </el-table-column>
                                     </el-table>
@@ -133,60 +148,6 @@
                                     </el-tab-pane>
                                 
                             </template>
-
-                            <!-- <el-tab-pane label="思想政治和人文素养">
-                                <div class="erke-buttom-right">
-                                    <el-table
-                                        :data="datadata"
-                                        row-key="id"
-                                        default-expand-all
-                                        :tree-props="{
-                                            children: 'children',
-                                            hasChildren: 'hasChildren'
-                                        }"
-                                    >
-                                        <el-table-column prop="id" label="ID">
-                                        </el-table-column>
-                                        <el-table-column
-                                            prop="itemName"
-                                            label="项目名称"
-                                            width="700"
-                                        >
-                                        </el-table-column>
-                                        <el-table-column prop="type" label="类型">
-                                        </el-table-column>
-                                        <el-table-column prop="markType" label="积分类别">
-                                        </el-table-column>
-                                        <el-table-column prop="mark" label="分值">
-                                        </el-table-column>
-                                        <el-table-column prop="modifyTime" label="修订时间">
-                                        </el-table-column>
-                                        <el-table-column
-                                            prop="id"
-                                            label="操作"
-                                            fixed="right"
-                                        >
-                                            <template slot-scope="">
-                                                <el-link type="primary">修改</el-link>
-                                                <el-link type="info">排序</el-link>
-                                                <el-link type="info">删除</el-link>
-                                            </template>
-                                        </el-table-column>
-                                    </el-table>
-                                    <pagination
-                                        v-show="total > 0"
-                                        :total="total"
-                                        :page.sync="queryParams.pageNum"
-                                        :limit.sync="queryParams.pageSize"
-                                        @pagination="getList"
-                                    />
-                                </div>
-                            </el-tab-pane>
-                            <el-tab-pane label="学术科技与创新">学术科技与创新</el-tab-pane>
-                            <el-tab-pane label="社会时间与志愿公益">社会时间与志愿公益</el-tab-pane>
-                            <el-tab-pane label="文化体育与艺术">文化体育与艺术</el-tab-pane>
-                            <el-tab-pane label="社会工作与阅历">社会工作与阅历</el-tab-pane>
-                            <el-tab-pane label="职业技能与特长">职业技能与特长</el-tab-pane> -->
                         </el-tabs>
                 </div>
             </el-col>
@@ -274,62 +235,110 @@
             width="850px"
         >
             <el-row>
-                <el-col span="4">
+                <el-col :span="4">
                     上级节点：
                 </el-col>
-                <el-col span="20">
-                    <el-select value="思想政治与人文素养" class="longSelect">
-                        <el-options value="思想政治与人文素养"></el-options>
-                    </el-select>
+                <el-col :span="20">
+                    <el-cascader
+                        :options="datadata"
+                        :props="{ checkStrictly: true }"
+                        :show-all-levels="false"
+                        @change="handleNodeChange"
+                    >
+                        <!-- <template slot-scope="{ node, data }">
+                            <span>{{ data.name }}</span>
+                            <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
+                        </template> -->
+                    </el-cascader>
+
+                    <!-- <el-select v-model="activeName" class="longSelect">
+                        <el-option
+                            v-for="item in datadata"    
+                            :key="item.id"
+                            :value="item.name"
+                            :label="item.name"    
+                        >
+                        </el-option>
+                    </el-select> -->
                 </el-col>
             </el-row>
             <el-row>
-                <el-col span="4">
+                <el-col :span="4">
                     节点名称：
                 </el-col>
-                <el-col span="20">
-                    <textarea></textarea>
+                <el-col :span="20">
+                    <el-input
+                        type="textarea"
+                        v-model="postCourseClassification.name"
+                    >
+                    </el-input>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col span="4">
+                <el-col :span="4">
                     类型：
                 </el-col>
-                <el-col span="20">
-                    <el-select value="积分项" class="">
-                        <el-options value="积分项"></el-options>
+                <el-col :span="20">
+                    <el-select v-model="postCourseClassification.type">
+                        <el-option
+                            v-for="item in dict_sc_course_classification_type"
+                            :key="item.dictCode"
+                            :value="item.dictSort"
+                            :label="item.dictLabel"
+                        >
+
+                        </el-option>
+                        <!-- <el-option value="积分项"></el-option> -->
                     </el-select>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col span="4">
+                <el-col :span="4">
                     分值：
                 </el-col>
-                <el-col span="20">
+                <el-col :span="20">
                     <el-row>
-                        <el-radio v-model="addStardardDialog.radio" label="1"
-                            >定值</el-radio
-                        >
-                        <el-input v-model="addStardardDialog.fixed"></el-input>
+                        <el-radio 
+                            v-model="addStardardDialog.radio" 
+                            :label="0"
+                            @change="handleIntegralType"
+                        >定值</el-radio>
+                        <el-input 
+                            v-model="addStardardDialog.fixed" 
+                            :disabled="isFixed"
+                            @change="handleFixed"
+                        ></el-input>
                     </el-row>
                     <el-row>
-                        <el-radio v-model="addStardardDialog.radio" label="2"
-                            >范围</el-radio
-                        >
-                        <el-input v-model="addStardardDialog.start"></el-input>
+                        <el-radio 
+                            v-model="addStardardDialog.radio" 
+                            :label="1"
+                            @change="handleIntegralType"
+                        >范围</el-radio>
+                        <el-input
+                            v-model="addStardardDialog.start"
+                            :disabled="isRange"
+                            @change="handleRange"
+                        ></el-input>
                         至
-                        <el-input v-model="addStardardDialog.end"></el-input>
+                        <el-input 
+                            v-model="addStardardDialog.end"
+                            :disabled="isRange"
+                            @change="handleRange"
+                        ></el-input>
                     </el-row>
                     <el-row>
-                        <el-radio v-model="addStardardDialog.radio" label="3"
-                            >不定值</el-radio
-                        >
+                        <el-radio 
+                            v-model="addStardardDialog.radio" 
+                            :label="2"
+                            @change="handleIntegralType"
+                        >不定值</el-radio>
                     </el-row>
                 </el-col>
             </el-row>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">关闭</el-button>
-                <el-button type="primary">确定</el-button>
+                <el-button type="primary" @click="addCourseClassification">确定</el-button>
             </div>
         </el-dialog>
         <!-- 导出 -->
@@ -352,9 +361,9 @@
                             label="第二课堂项目(活动、竞赛类)积分标准表"
                             border
                         ></el-checkbox>
-                        <!-- <el-checkbox label="第二课堂项目(活动、竞赛类)积分名录" border ></el-checkbox>
+                        <!-- <el-checkbox label="第二课堂项目(活动、竞赛类)积分名录" border ></el-checkbox>-->
                         <!-- <el-checkbox label="第二课堂项目（活动、竟赛类)积分要求表" border ></el-checkbox> -->
-                        -->
+                        
                     </el-checkbox-group>
                 </el-col>
             </el-row>
@@ -378,7 +387,9 @@
         courseClassification
     } from '@/api/application/secondClass/courseClassification.js'
     import filterCourseClassificationList from '@/utils/filterCourseClassificationList'
-    
+    import formatDate from '@/utils/formatDate.js'
+    import {getDict} from '@/api/application/secondClass/dict/type.js'
+
     import {
         listUser,
         getUser,
@@ -400,7 +411,29 @@
         components: { Treeselect },
         data() {
             return {
+                postCourseClassification: {
+                    createTime: null,
+                    createUserId: null,
+                    deleteTime: null,
+                    daleteUserId: null,
+                    // id:
+                    integralType: 0,
+                    integrationRange: 5,
+                    layer: 1,
+                    name: '',
+                    pid: 1,
+                    remark: 'elit cod sdf s',
+                    sort: 0,
+                    type: 0,
+                    updateTime: null,
+                    updateUserId: null
+                },
+                /* 弹窗 -> 类型  */
+                label: '',
+                /* tab栏 */
                 activeName: '思想政治与人文素养',
+                dict_sc_integral_type: {},
+                dict_sc_course_classification_type: {},
                 exportDialog: {
                     title: '',
                     open: false,
@@ -432,7 +465,7 @@
                 addStardardDialog: {
                     title: '新增/编辑',
                     open: false,
-                    radio: '1',
+                    radio: 0,
                     fixed: '',
                     start: '',
                     end: ''
@@ -707,6 +740,14 @@
                 }
             }
         },
+        computed: {
+            isFixed() {
+                return this.addStardardDialog.radio != 0 
+            },
+            isRange() {
+                return this.addStardardDialog.radio != 1
+            },
+        },
         watch: {
             // 根据名称筛选部门树
             deptName(val) {
@@ -727,6 +768,60 @@
             })
         },
         methods: {
+            async deleteCourseClassificaiton(row) {
+                await courseClassificationIds(row.id).then(value => {
+                    console.log(value)
+                })
+                location.reload()
+            },
+            handleFixed() {
+                this.postCourseClassification.integrationRange = this.addStardardDialog.fixed
+            },
+            handleRange() {
+                this.postCourseClassification.integrationRange = 
+                    this.addStardardDialog.start+':'+
+                    this.addStardardDialog.end
+            },
+            handleIntegralType(value) {
+                this.postCourseClassification.integralType = value + 1
+                console.log(this.postCourseClassification.integralType)
+
+            },
+            /* 选择上级节点触发的事件 */
+            handleNodeChange(value) {
+                this.postCourseClassification.pid = value[value.length - 1]
+                this.postCourseClassification.layer = value.length
+                console.log(value)
+            },
+            /* 新增积分类别 */
+            async addCourseClassification() {
+                console.log( this.postCourseClassification)
+                await courseClassification(
+                    this.postCourseClassification
+                ).then(value => {
+                    console.log(value,777)
+                    location.reload()
+                })
+                // console.log()
+            },
+            formatIntegralType(row,column,cellValue) {
+                if(cellValue != null) {
+                    return  this.dict_sc_integral_type[cellValue].remark
+                }
+                return cellValue
+            },
+            formatType(row,column,cellValue) {
+                if(cellValue != null) {
+                    return this.dict_sc_course_classification_type[cellValue].dictLabel
+                }
+                return cellValue
+            },
+            formatUpdateTime(row,column,cellValue) {
+                if(cellValue != null) {
+                    return formatDate(cellValue)
+                }
+                return cellValue
+            },
             renderHeader(h) {
                 return h(
                     'span',
@@ -977,13 +1072,33 @@
             //根据参数查询二课课程分类列表
             async getCourseClassificationList() {
                 await courseClassificationList().then(value => {
+                    /* 保证value存在且唯一 */
+                    /* label保证渲染视图 */
+                    value.data = value.data.map((item => ({
+                        ...item,
+                        value: item.id,
+                        label: item.name
+                    })))
                     this.datadata = filterCourseClassificationList(value)
                     console.log(this.datadata)
                 })
             }
         },
-        mounted() {
+        async created() {
+            await getDict('sc_course_classification_type').then(value => {
+                console.log(value,'sc_course_classification_type')
+                this.dict_sc_course_classification_type = value.data
+                this.label = this.dict_sc_course_classification_type[0].dictLabel
+            })
+        },
+        async mounted() {
             this.getCourseClassificationList()
+            await getDict('sc_integral_type').then(value => {
+                console.log(value,'sc_integral_type')
+                this.dict_sc_integral_type = value.data
+                
+            })
+            
         }
     }
 </script>
