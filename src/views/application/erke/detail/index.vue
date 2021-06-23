@@ -955,6 +955,8 @@
 </template>
 
 <script>
+    import { trainingProgramDetail } from '@/api/application/secondClass/trainingProgram'
+
     import {
         listUser,
         getUser,
@@ -1369,13 +1371,13 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return changeUserStatus(row.userId, row.status)
                     })
                     .then(() => {
                         this.msgSuccess(text + '成功')
                     })
-                    .catch(function () {
+                    .catch(function() {
                         row.status = row.status === '0' ? '1' : '0'
                     })
             },
@@ -1453,7 +1455,7 @@
                     .catch(() => {})
             },
             /** 提交按钮 */
-            submitForm: function () {
+            submitForm: function() {
                 this.$refs['form'].validate(valid => {
                     if (valid) {
                         if (this.form.userId != undefined) {
@@ -1484,7 +1486,7 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return delUser(userIds)
                     })
                     .then(() => {
@@ -1539,6 +1541,13 @@
             submitFileForm() {
                 this.$refs.upload.submit()
             }
+        },
+        async mounted() {
+            await trainingProgramDetail({
+                shoolYearId: this.$route.params.id
+            }).then(value => {
+                console.log(value)
+            })
         }
     }
 </script>

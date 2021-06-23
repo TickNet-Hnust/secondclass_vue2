@@ -399,7 +399,7 @@
                 })
             },
             /** 提交按钮 */
-            submitForm: function () {
+            submitForm: function() {
                 this.$refs['form'].validate(valid => {
                     if (valid) {
                         if (this.form.dictCode != undefined) {
@@ -430,7 +430,7 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return delData(dictCodes)
                     })
                     .then(() => {

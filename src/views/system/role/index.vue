@@ -546,13 +546,13 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return changeRoleStatus(row.roleId, row.status)
                     })
                     .then(() => {
                         this.msgSuccess(text + '成功')
                     })
-                    .catch(function () {
+                    .catch(function() {
                         row.status = row.status === '0' ? '1' : '0'
                     })
             },
@@ -696,7 +696,7 @@
                 })
             },
             /** 提交按钮 */
-            submitForm: function () {
+            submitForm: function() {
                 this.$refs['form'].validate(valid => {
                     if (valid) {
                         if (this.form.roleId != undefined) {
@@ -718,7 +718,7 @@
                 })
             },
             /** 提交按钮（数据权限） */
-            submitDataScope: function () {
+            submitDataScope: function() {
                 if (this.form.roleId != undefined) {
                     this.form.deptIds = this.getDeptAllCheckedKeys()
                     dataScope(this.form).then(response => {
@@ -740,7 +740,7 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return delRole(roleIds)
                     })
                     .then(() => {

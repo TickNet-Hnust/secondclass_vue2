@@ -344,7 +344,7 @@
         },
         created() {},
         watch: {
-            'info.subTableName': function (val) {
+            'info.subTableName': function(val) {
                 this.setSubTableColumns(val)
             }
         },

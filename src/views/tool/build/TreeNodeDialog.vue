@@ -105,7 +105,7 @@
         computed: {},
         watch: {
             // eslint-disable-next-line func-names
-            'formData.value': function (val) {
+            'formData.value': function(val) {
                 this.dataType = isNumberStr(val) ? 'number' : 'string'
             }
         },

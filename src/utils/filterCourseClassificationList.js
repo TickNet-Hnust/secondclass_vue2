@@ -8,12 +8,12 @@ function temp(obj) {
 function filter(layer) {
     let array = []
 
-    test.data.forEach((item) => {
+    test.data.forEach(item => {
         if (item.pid === layer) {
             array.push(item)
         }
     })
-    array.forEach((item) => {
+    array.forEach(item => {
         let temp = filter(item.id)
         if (temp.length != 0) {
             item.children = temp

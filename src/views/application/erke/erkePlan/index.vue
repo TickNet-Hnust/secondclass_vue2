@@ -10,7 +10,12 @@
                 <span> <i>✈</i> 培养方案</span>
             </div>
             <div class="erke-top-foot">
-                学年度：<el-select v-model="list.value" placeholder="请选择">
+                学年度：<el-select
+                    v-model="list.value"
+                    placeholder="请选择"
+                    @change="schoolYearChange"
+                >
+                    <el-option :key="-1" label="全部" :value="-1"> </el-option>
                     <el-option
                         v-for="item in list.rows"
                         :key="item.id"
@@ -86,19 +91,43 @@
                 <el-table-column prop="id" label="批次ID"> </el-table-column>
                 <el-table-column prop="name" label="培养方案">
                 </el-table-column>
-                <el-table-column prop="schoolYearId" label="学年ID"> </el-table-column>
-                <el-table-column prop="schoolYearName" label="学年"> </el-table-column>
-                <el-table-column prop="rank" label="级别" :formatter="formatRank"> </el-table-column>
+                <el-table-column prop="schoolYearId" label="学年ID">
+                </el-table-column>
+                <el-table-column
+                    prop="schoolYearId"
+                    label="学年"
+                    :formatter="formatSchoolYearName"
+                >
+                </el-table-column>
+                <el-table-column
+                    prop="rank"
+                    label="级别"
+                    :formatter="formatRank"
+                >
+                </el-table-column>
                 <el-table-column prop="courseCount" label="课程数">
                 </el-table-column>
                 <el-table-column prop="applyingCount" label="申请中">
                 </el-table-column>
-                <el-table-column prop="status" label="状态" :formatter="formarStatus"> </el-table-column>
-                <el-table-column prop="createTime" label="创建时间" :formatter="formatUpdateTime">
+                <el-table-column
+                    prop="status"
+                    label="状态"
+                    :formatter="formarStatus"
+                >
+                </el-table-column>
+                <el-table-column
+                    prop="createTime"
+                    label="创建时间"
+                    :formatter="formatUpdateTime"
+                >
                 </el-table-column>
                 <el-table-column prop="createBy" label="创建人">
                 </el-table-column>
-                <el-table-column prop="updateTime" label="修改时间" :formatter="formatUpdateTime">
+                <el-table-column
+                    prop="updateTime"
+                    label="修改时间"
+                    :formatter="formatUpdateTime"
+                >
                 </el-table-column>
                 <el-table-column prop="updateBy" label="修改人">
                 </el-table-column>
@@ -108,9 +137,14 @@
                     prop="oprator"
                     label="操作"
                 >
-                    <template slot-scope="">
+                    <template slot-scope="scope">
                         <el-link type="primary">修改</el-link>
-                        <router-link type="info" to="/application/erke/detail"
+                        <router-link
+                            type="info"
+                            :to="
+                                '/application/erke/detail/' +
+                                    scope.row.schoolYearId
+                            "
                             >详情</router-link
                         >
                         <el-link type="info">删除</el-link>
@@ -359,7 +393,6 @@
                     <el-table-column
                         lable="sdf"
                         width="40"
-                        
                         :render-header="renderHeader"
                     >
                         <template slot-scope="scope">
@@ -392,14 +425,16 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                        prop="rank"
                         label="级别"
                         align="center"
                         width="120"
                         :formatter="formatRank"
                     >
                         <template slot-scope="scope">
-                            <el-select v-model="scope.row.rank">
+                            <el-select
+                                :value="scope.row.rank == 0 ? '校级' : '院级'"
+                                @change="scope.row.rank = $event"
+                            >
                                 <el-option
                                     v-for="item in dict_sc_train_program_rank"
                                     :key="item.id"
@@ -444,7 +479,7 @@
         schoolYearMulti
     } from '@/api/application/secondClass/schoolYear'
     import formatDate from '@/utils/formatDate.js'
-    import {getDict} from '@/api/application/secondClass/dict/type.js'
+    import { getDict } from '@/api/application/secondClass/dict/type.js'
 
     import { getToken } from '@/utils/auth'
     import { treeselect } from '@/api/system/dept'
@@ -456,13 +491,16 @@
         components: { Treeselect },
         data() {
             return {
+                schoolMap: [],
+                /* 分页查询 */
+                t: {},
                 /* 培养方案级别 */
                 dict_sc_train_program_rank: {},
                 /* 培养方案状态 */
                 dict_sc_train_program_status: {},
                 /* 学年列表 */
                 list: {
-                    value: '2021',
+                    value: 7,
                     rows: []
                 },
 
@@ -795,20 +833,70 @@
             })
         },
         methods: {
-            formatUpdateTime(row,column,cellValue) {
-                if(cellValue != null) {
+            ccaagg(e, t) {
+                t = Number(e)
+                console.log(e, t)
+            },
+            async schoolYearChange(value) {
+                console.log(value)
+                if (value == -1) {
+                    await trainingProgramList({
+                        page: this.t.page ? this.t.page : 1,
+                        limit: this.t.limit ? this.t.limit : 10
+                    })
+                        .then(value => {
+                            console.log(value)
+                            this.queryParams.pageSize = value.data.pageSize
+                            this.queryParams.totalCount = value.data.totalCount
+                            this.queryParams.totalPage = value.data.totalPage
+                            this.planData = value.data.list
+                            this.$forceUpdate()
+                            this.loading = false
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                } else {
+                    await trainingProgramList({
+                        page: this.t.page ? this.t.page : 1,
+                        limit: this.t.limit ? this.t.limit : 10,
+                        schoolYearId: value
+                    })
+                        .then(value => {
+                            console.log(value)
+                            this.queryParams.pageSize = value.data.pageSize
+                            this.queryParams.totalCount = value.data.totalCount
+                            this.queryParams.totalPage = value.data.totalPage
+                            this.planData = value.data.list
+                            this.$forceUpdate()
+                            this.loading = false
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                }
+            },
+            formatSchoolYearName(row, column, cellValue) {
+                if (cellValue != null) {
+                    return this.schoolMap[cellValue]
+                }
+                return cellValue
+            },
+            formatUpdateTime(row, column, cellValue) {
+                if (cellValue != null) {
                     return formatDate(cellValue)
                 }
                 return cellValue
             },
-            formarStatus(row,column,cellValue) {
-                if(cellValue != null) {
-                    return this.dict_sc_train_program_status[cellValue].dictLabel
+            formarStatus(row, column, cellValue) {
+                if (cellValue != null) {
+                    return this.dict_sc_train_program_status[cellValue]
+                        .dictLabel
                 }
                 return cellValue
             },
-            formatRank(row,column,cellValue) {
-                if(cellValue != null) {
+            formatRank(row, column, cellValue) {
+                if (cellValue != null) {
                     return this.dict_sc_train_program_rank[cellValue].dictLabel
                 }
                 return cellValue
@@ -841,16 +929,15 @@
                 /* 后端未写添加的接口。。。 */
                 this.list.row.push({
                     creteTime: null,
-                    delateTime: null,
-                    
+                    delateTime: null
                 })
             },
             async addtrainingProgram() {
                 this.planData.push({
-                    schoolYearId: 5,
-                    name: "",
+                    schoolYearId: this.list.value,
+                    name: '',
                     rank: 0,
-                    status: 1,
+                    status: 1
                 })
             },
             deleteManagerDialog() {},
@@ -862,6 +949,7 @@
             },
             /** 查询用户列表 */
             async getList(t) {
+                this.t = t
                 console.log(t)
                 this.loading = true
                 await trainingProgramList({
@@ -878,7 +966,7 @@
                 // ).then(response => {
                 //     this.userList = response.rows
                 //     this.total = response.total
-                    
+
                 // })
             },
             /** 查询部门下拉树结构 */
@@ -910,13 +998,13 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return changeUserStatus(row.userId, row.status)
                     })
                     .then(() => {
                         this.msgSuccess(text + '成功')
                     })
-                    .catch(function () {
+                    .catch(function() {
                         row.status = row.status === '0' ? '1' : '0'
                     })
             },
@@ -1004,12 +1092,15 @@
                     .catch(() => {})
             },
             /** 提交按钮 */
-            async submitForm () {
+            async submitForm() {
                 let temp = this.planData
-                delete temp[temp.length-1].isUse
-                console.log(temp[temp.length-1])
-                trainingProgram(temp[temp.length-1]).then(value => {
+                delete temp[temp.length - 1].isUse
+                console.log(temp[temp.length - 1])
+                trainingProgram(temp[temp.length - 1]).then(value => {
                     console.log(value, 'trainingProgram')
+                    this.addPlanDialog.open = false
+                    this.$message.success('添加成功')
+                    this.schoolYearChange(this.list.value)
                 })
             },
             /** 删除按钮操作 */
@@ -1024,7 +1115,7 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return delUser(userIds)
                     })
                     .then(() => {
@@ -1084,27 +1175,29 @@
         async created() {
             /* 获取学年列表over */
             await schoolYearList().then(value => {
+                value.rows.forEach(item => {
+                    this.schoolMap[item.id] = item.yearName
+                })
+
                 console.log(value, 'schoolYearList')
                 this.list.rows = value.rows
-                this.list.value = value.rows[0].yearName
+                this.list.value = -1
             })
             /* 批量修改学年 */
             await schoolYearMulti({
-                deleteIds: [
-                    6,7
-                ],
-                schoolYearList:[
+                deleteIds: [6, 7],
+                schoolYearList: [
                     {
                         id: 11,
-                        nowYear:5,
+                        nowYear: 5,
                         sort: 43,
-                        yearName: "2022"
+                        yearName: '2022'
                     },
                     {
                         id: 12,
-                        nowYear:5,
+                        nowYear: 5,
                         sort: 43,
-                        yearName: "2023"
+                        yearName: '2023'
                     }
                 ]
             }).then(value => {
@@ -1118,21 +1211,18 @@
                 console.log(value, 'traningProgramFindClassNumber')
             })
             trainingProgramMulti({
-                deleteIds: [
-                    6,7
-                ],
-                schoolYearList:[
+                deleteIds: [6, 7],
+                schoolYearList: [
                     {
                         id: 11,
-                        nowYear:5,
+                        nowYear: 5,
                         sort: 43,
-                        yearName: "2022"
+                        yearName: '2022'
                     },
                     {
-                        
-                        nowYear:5,
+                        nowYear: 5,
                         sort: 43,
-                        yearName: "2023"
+                        yearName: '2023'
                     }
                 ]
             }).then(value => {
@@ -1150,7 +1240,6 @@
                 this.queryParams.currPage = value.data.currPage
                 console.log(value, 'trainingProgramList')
             })
-            
         },
         async mounted() {
             await getDict('sc_train_program_rank').then(value => {
@@ -1221,7 +1310,7 @@
     }
     .managerDialog >>> .el-table__body-wrapper {
         overflow: auto;
-         height: 250px;
+        height: 250px;
     }
     .managerDialog >>> .el-table__row td {
         padding: 5px 0;

@@ -20,21 +20,21 @@ export function courseClassificationMulti(data) {
 export function courseClassificationJudgeId(id) {
     return request({
         url: '/secondClass/courseClassification/' + id,
-        method: 'get',
+        method: 'get'
     })
 }
 /* GET根据参数查询二课课程分类列表 */
 export function courseClassificationList(id) {
     return request({
         url: '/secondClass/courseClassification/list',
-        method: 'get',
+        method: 'get'
     })
 }
 /* GET子类别排序列表 */
 export function SortListClassificationId(classificationId) {
     return request({
         url: '/secondClass/courseClassification/sort/list/' + classificationId,
-        method: 'get',
+        method: 'get'
     })
 }
 
@@ -42,7 +42,7 @@ export function SortListClassificationId(classificationId) {
 export function courseClassificationIds(ids) {
     return request({
         url: '/secondClass/courseClassification/' + ids,
-        method: 'delete',
+        method: 'delete'
     })
 }
 

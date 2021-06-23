@@ -9,7 +9,7 @@
                 <span
                     v-if="
                         item.redirect === 'noRedirect' ||
-                        index == levelList.length - 1
+                            index == levelList.length - 1
                     "
                     >{{ item.meta.title }}</span
                 >

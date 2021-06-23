@@ -128,8 +128,9 @@ const tags = {
         return `<${el.tag} ${type} ${icon} ${size} ${disabled}>${child}</${el.tag}>`
     },
     'el-input': el => {
-        const { disabled, vModel, clearable, placeholder, width } =
-            attrBuilder(el)
+        const { disabled, vModel, clearable, placeholder, width } = attrBuilder(
+            el
+        )
         const maxlength = el.maxlength ? `:maxlength="${el.maxlength}"` : ''
         const showWordLimit = el['show-word-limit'] ? 'show-word-limit' : ''
         const readonly = el.readonly ? 'readonly' : ''
@@ -164,8 +165,9 @@ const tags = {
         return `<${el.tag} ${vModel} ${placeholder} ${step} ${stepStrictly} ${precision} ${controlsPosition} ${min} ${max} ${disabled}></${el.tag}>`
     },
     'el-select': el => {
-        const { disabled, vModel, clearable, placeholder, width } =
-            attrBuilder(el)
+        const { disabled, vModel, clearable, placeholder, width } = attrBuilder(
+            el
+        )
         const filterable = el.filterable ? 'filterable' : ''
         const multiple = el.multiple ? 'multiple' : ''
         let child = buildElSelectChild(el)
@@ -217,8 +219,9 @@ const tags = {
         return `<${el.tag} ${vModel} ${activeText} ${inactiveText} ${activeColor} ${inactiveColor} ${activeValue} ${inactiveValue} ${disabled}></${el.tag}>`
     },
     'el-cascader': el => {
-        const { disabled, vModel, clearable, placeholder, width } =
-            attrBuilder(el)
+        const { disabled, vModel, clearable, placeholder, width } = attrBuilder(
+            el
+        )
         const options = el.options ? `:options="${el.vModel}Options"` : ''
         const props = el.props ? `:props="${el.vModel}Props"` : ''
         const showAllLevels = el['show-all-levels']
@@ -243,8 +246,9 @@ const tags = {
         return `<${el.tag} ${min} ${max} ${step} ${vModel} ${range} ${showStops} ${disabled}></${el.tag}>`
     },
     'el-time-picker': el => {
-        const { disabled, vModel, clearable, placeholder, width } =
-            attrBuilder(el)
+        const { disabled, vModel, clearable, placeholder, width } = attrBuilder(
+            el
+        )
         const startPlaceholder = el['start-placeholder']
             ? `start-placeholder="${el['start-placeholder']}"`
             : ''
@@ -266,8 +270,9 @@ const tags = {
         return `<${el.tag} ${vModel} ${isRange} ${format} ${valueFormat} ${pickerOptions} ${width} ${placeholder} ${startPlaceholder} ${endPlaceholder} ${rangeSeparator} ${clearable} ${disabled}></${el.tag}>`
     },
     'el-date-picker': el => {
-        const { disabled, vModel, clearable, placeholder, width } =
-            attrBuilder(el)
+        const { disabled, vModel, clearable, placeholder, width } = attrBuilder(
+            el
+        )
         const startPlaceholder = el['start-placeholder']
             ? `start-placeholder="${el['start-placeholder']}"`
             : ''

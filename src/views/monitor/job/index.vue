@@ -547,13 +547,13 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return changeJobStatus(row.jobId, row.status)
                     })
                     .then(() => {
                         this.msgSuccess(text + '成功')
                     })
-                    .catch(function () {
+                    .catch(function() {
                         row.status = row.status === '0' ? '1' : '0'
                     })
             },
@@ -568,7 +568,7 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return runJob(row.jobId, row.jobGroup)
                     })
                     .then(() => {
@@ -603,7 +603,7 @@
                 })
             },
             /** 提交按钮 */
-            submitForm: function () {
+            submitForm: function() {
                 this.$refs['form'].validate(valid => {
                     if (valid) {
                         if (this.form.jobId != undefined) {
@@ -634,7 +634,7 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return delJob(jobIds)
                     })
                     .then(() => {

@@ -135,7 +135,7 @@ export const constantRoutes = [
                                 }
                             },
                             {
-                                path: '/application/erke/detail',
+                                path: '/application/erke/detail/:id',
                                 component: detail,
                                 name: 'detail',
                                 meta: {

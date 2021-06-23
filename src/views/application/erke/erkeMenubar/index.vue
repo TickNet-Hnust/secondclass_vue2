@@ -10,7 +10,7 @@
             :unique-opened="true"
             text-color="#333"
             active-text-color="#1890ff"
-            default-active="/application/erke/erkePlan"
+            :default-active="$route.path"
             :router="true"
         >
             <el-submenu index="1">
@@ -43,6 +43,9 @@
         name: 'erkeMenubar',
         data() {
             return {}
+        },
+        mounted() {
+            // console.log(this.$router,this.$route)
         }
     }
 </script>

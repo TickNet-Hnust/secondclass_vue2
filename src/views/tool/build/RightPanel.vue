@@ -132,7 +132,7 @@
                     <el-form-item
                         v-if="
                             activeData.justify !== undefined &&
-                            activeData.type === 'flex'
+                                activeData.type === 'flex'
                         "
                         label="水平排列"
                     >
@@ -152,7 +152,7 @@
                     <el-form-item
                         v-if="
                             activeData.align !== undefined &&
-                            activeData.type === 'flex'
+                                activeData.type === 'flex'
                         "
                         label="垂直排列"
                     >
@@ -175,7 +175,7 @@
                     <el-form-item
                         v-if="
                             activeData.style &&
-                            activeData.style.width !== undefined
+                                activeData.style.width !== undefined
                         "
                         label="组件宽度"
                     >
@@ -416,7 +416,7 @@
                     <el-form-item
                         v-if="
                             activeData.type !== undefined &&
-                            'el-date-picker' === activeData.tag
+                                'el-date-picker' === activeData.tag
                         "
                         label="时间类型"
                     >
@@ -739,7 +739,7 @@
                     <el-form-item
                         v-if="
                             activeData.border !== undefined &&
-                            activeData.optionType === 'default'
+                                activeData.optionType === 'default'
                         "
                         label="是否带边框"
                     >
@@ -766,9 +766,9 @@
                     <el-form-item
                         v-if="
                             activeData.size !== undefined &&
-                            (activeData.optionType === 'button' ||
-                                activeData.border ||
-                                activeData.tag === 'el-color-picker')
+                                (activeData.optionType === 'button' ||
+                                    activeData.border ||
+                                    activeData.tag === 'el-color-picker')
                         "
                         label="选项尺寸"
                     >

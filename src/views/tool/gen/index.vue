@@ -126,8 +126,8 @@
                 <template slot-scope="scope">
                     <span>{{
                         (queryParams.pageNum - 1) * queryParams.pageSize +
-                        scope.$index +
-                        1
+                            scope.$index +
+                            1
                     }}</span>
                 </template>
             </el-table-column>
@@ -373,7 +373,7 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return synchDb(tableName)
                     })
                     .then(() => {
@@ -434,7 +434,7 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return delTable(tableIds)
                     })
                     .then(() => {

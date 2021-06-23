@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
-export const baseURL = "http://localhost:8080"
+export const baseURL = 'http://localhost:8080'
 
 const instance = axios.create({
     baseURL,
@@ -10,7 +10,6 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     function(config) {
-
         const isToken = (config.headers || {}).isToken === false
         if (getToken() && !isToken) {
             config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改

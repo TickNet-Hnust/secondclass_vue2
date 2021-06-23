@@ -13,82 +13,86 @@
 
                 <div class="erke-bottom">
                     <div class="typeSet" @click="handleSetting">
-                            <i class="el-icon-setting"></i>
+                        <i class="el-icon-setting"></i>
                     </div>
-                        <el-tabs tab-position="left" v-model="activeName">
-                            <div class="operate">
-                                <el-row :gutter="10" style="height: 50px">
-                                    <el-col :span="1.5">
-                                        <el-button
-                                            type="primary"
-                                            plain
-                                            icon="el-icon-plus"
-                                            size="mini"
-                                            @click="handleAdd"
-                                            v-hasPermi="['system:user:add']"
-                                            >新增</el-button
-                                        >
-                                    </el-col>
+                    <el-tabs tab-position="left" v-model="activeName">
+                        <div class="operate">
+                            <el-row :gutter="10" style="height: 50px">
+                                <el-col :span="1.5">
+                                    <el-button
+                                        type="primary"
+                                        plain
+                                        icon="el-icon-plus"
+                                        size="mini"
+                                        @click="handleAdd"
+                                        v-hasPermi="['system:user:add']"
+                                        >新增</el-button
+                                    >
+                                </el-col>
 
-                                    <el-col :span="1.5">
-                                        <el-button
-                                            type="warning"
-                                            plain
-                                            icon="el-icon-download"
-                                            size="mini"
-                                            :loading="exportLoading"
-                                            @click="handleExport"
-                                            v-hasPermi="['system:user:export']"
-                                            >导出</el-button
+                                <el-col :span="1.5">
+                                    <el-button
+                                        type="warning"
+                                        plain
+                                        icon="el-icon-download"
+                                        size="mini"
+                                        :loading="exportLoading"
+                                        @click="handleExport"
+                                        v-hasPermi="['system:user:export']"
+                                        >导出</el-button
+                                    >
+                                </el-col>
+                                <el-col :span="1.5">
+                                    <el-input
+                                        suffix-icon="el-icon-search"
+                                        placeholder="课程名称"
+                                    >
+                                    </el-input>
+                                </el-col>
+                                <el-col :span="1.5">
+                                    <el-select
+                                        v-model="value"
+                                        placeholder="选择"
+                                    >
+                                        <el-option
+                                            v-for="item in options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value"
                                         >
-                                    </el-col>
-                                    <el-col :span="1.5">
-                                        <el-input
-                                            suffix-icon="el-icon-search"
-                                            placeholder="课程名称"
-                                        >
-                                        </el-input>
-                                    </el-col>
-                                    <el-col :span="1.5">
-                                        <el-select
-                                            v-model="value"
-                                            placeholder="选择"
-                                        >
-                                            <el-option
-                                                v-for="item in options"
-                                                :key="item.value"
-                                                :label="item.label"
-                                                :value="item.value"
-                                            >
-                                            </el-option>
-                                        </el-select>
-                                    </el-col>
+                                        </el-option>
+                                    </el-select>
+                                </el-col>
 
-                                    <el-col :span="1.5">
-                                        <el-select
-                                            v-model="value"
-                                            placeholder="选择"
+                                <el-col :span="1.5">
+                                    <el-select
+                                        v-model="value"
+                                        placeholder="选择"
+                                    >
+                                        <el-option
+                                            v-for="item in options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value"
                                         >
-                                            <el-option
-                                                v-for="item in options"
-                                                :key="item.value"
-                                                :label="item.label"
-                                                :value="item.value"
-                                            >
-                                            </el-option>
-                                        </el-select>
-                                    </el-col>
-                                </el-row>
-                            </div>
-                            <!-- 表单下面 -->
-                            <template v-for="item in datadata" >
-                                
-                                    <el-tab-pane :label="item.name" :key="item.id" :name="item.name">
-                                        <div class="erke-buttom-right" >
-                                        <el-table
+                                        </el-option>
+                                    </el-select>
+                                </el-col>
+                            </el-row>
+                        </div>
+                        <!-- 表单下面 -->
+                        <template v-for="item in datadata">
+                            <!-- default-expand-all -->
+                            <el-tab-pane
+                                :label="item.name"
+                                :key="item.id"
+                                :name="item.name"
+                            >
+                                <div class="erke-buttom-right">
+                                    <el-table
                                         :data="item.children"
                                         row-key="id"
-                                        default-expand-all
+                                        :indent="10"
                                         :tree-props="{
                                             children: 'children',
                                             hasChildren: 'hasChildren'
@@ -102,38 +106,49 @@
                                             width="700"
                                         >
                                         </el-table-column>
-                                        <el-table-column 
-                                            prop="type" 
+                                        <el-table-column
+                                            prop="type"
                                             label="类型"
                                             :formatter="formatType"
                                         >
                                         </el-table-column>
-                                        <el-table-column 
-                                            prop="integralType" 
-                                            label="积分类别" 
-                                            :formatter="formatIntegralType"    
+                                        <el-table-column
+                                            prop="integralType"
+                                            label="积分类别"
+                                            :formatter="formatIntegralType"
                                         >
                                         </el-table-column>
-                                        <el-table-column 
-                                            prop="integrationRange" 
+                                        <el-table-column
+                                            prop="integrationRange"
                                             label="分值"
                                         >
                                         </el-table-column>
-                                        <el-table-column 
-                                            prop="updateTime" 
+                                        <el-table-column
+                                            prop="updateTime"
                                             label="修订时间"
                                             :formatter="formatUpdateTime"
                                         >
                                         </el-table-column>
                                         <el-table-column
-                                            
                                             label="操作"
                                             fixed="right"
                                         >
                                             <template slot-scope="scope">
-                                                <el-link type="primary">修改</el-link>
-                                                <el-link type="info">排序</el-link>
-                                                <el-link type="info" @click="deleteCourseClassificaiton(scope.row)">删除</el-link>
+                                                <el-link type="primary"
+                                                    >修改</el-link
+                                                >
+                                                <el-link type="info"
+                                                    >排序</el-link
+                                                >
+                                                <el-link
+                                                    type="info"
+                                                    @click="
+                                                        deleteCourseClassificaiton(
+                                                            scope.row
+                                                        )
+                                                    "
+                                                    >删除</el-link
+                                                >
                                             </template>
                                         </el-table-column>
                                     </el-table>
@@ -144,11 +159,10 @@
                                         :limit.sync="queryParams.pageSize"
                                         @pagination="getList"
                                     />
-                                    </div>
-                                    </el-tab-pane>
-                                
-                            </template>
-                        </el-tabs>
+                                </div>
+                            </el-tab-pane>
+                        </template>
+                    </el-tabs>
                 </div>
             </el-col>
         </el-row>
@@ -286,7 +300,6 @@
                             :value="item.dictSort"
                             :label="item.dictLabel"
                         >
-
                         </el-option>
                         <!-- <el-option value="积分项"></el-option> -->
                     </el-select>
@@ -298,47 +311,52 @@
                 </el-col>
                 <el-col :span="20">
                     <el-row>
-                        <el-radio 
-                            v-model="addStardardDialog.radio" 
+                        <el-radio
+                            v-model="addStardardDialog.radio"
                             :label="0"
                             @change="handleIntegralType"
-                        >定值</el-radio>
-                        <el-input 
-                            v-model="addStardardDialog.fixed" 
+                            >定值</el-radio
+                        >
+                        <el-input
+                            v-model="addStardardDialog.fixed"
                             :disabled="isFixed"
                             @change="handleFixed"
                         ></el-input>
                     </el-row>
                     <el-row>
-                        <el-radio 
-                            v-model="addStardardDialog.radio" 
+                        <el-radio
+                            v-model="addStardardDialog.radio"
                             :label="1"
                             @change="handleIntegralType"
-                        >范围</el-radio>
+                            >范围</el-radio
+                        >
                         <el-input
                             v-model="addStardardDialog.start"
                             :disabled="isRange"
                             @change="handleRange"
                         ></el-input>
                         至
-                        <el-input 
+                        <el-input
                             v-model="addStardardDialog.end"
                             :disabled="isRange"
                             @change="handleRange"
                         ></el-input>
                     </el-row>
                     <el-row>
-                        <el-radio 
-                            v-model="addStardardDialog.radio" 
+                        <el-radio
+                            v-model="addStardardDialog.radio"
                             :label="2"
                             @change="handleIntegralType"
-                        >不定值</el-radio>
+                            >不定值</el-radio
+                        >
                     </el-row>
                 </el-col>
             </el-row>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">关闭</el-button>
-                <el-button type="primary" @click="addCourseClassification">确定</el-button>
+                <el-button type="primary" @click="addCourseClassification"
+                    >确定</el-button
+                >
             </div>
         </el-dialog>
         <!-- 导出 -->
@@ -363,7 +381,6 @@
                         ></el-checkbox>
                         <!-- <el-checkbox label="第二课堂项目(活动、竞赛类)积分名录" border ></el-checkbox>-->
                         <!-- <el-checkbox label="第二课堂项目（活动、竟赛类)积分要求表" border ></el-checkbox> -->
-                        
                     </el-checkbox-group>
                 </el-col>
             </el-row>
@@ -388,7 +405,7 @@
     } from '@/api/application/secondClass/courseClassification.js'
     import filterCourseClassificationList from '@/utils/filterCourseClassificationList'
     import formatDate from '@/utils/formatDate.js'
-    import {getDict} from '@/api/application/secondClass/dict/type.js'
+    import { getDict } from '@/api/application/secondClass/dict/type.js'
 
     import {
         listUser,
@@ -515,9 +532,7 @@
                         }
                     ]
                 },
-                datadata: [
-                    
-                ],
+                datadata: [],
                 count: {
                     classCount: 50,
                     apyling: 5,
@@ -742,11 +757,11 @@
         },
         computed: {
             isFixed() {
-                return this.addStardardDialog.radio != 0 
+                return this.addStardardDialog.radio != 0
             },
             isRange() {
                 return this.addStardardDialog.radio != 1
-            },
+            }
         },
         watch: {
             // 根据名称筛选部门树
@@ -769,23 +784,39 @@
         },
         methods: {
             async deleteCourseClassificaiton(row) {
-                await courseClassificationIds(row.id).then(value => {
-                    console.log(value)
+                this.$alert('您确定要删除吗吗', '提示框', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    customClass: 'message_box_alert',
+                    callback: async action => {
+                        if (action == 'cancel') {
+                            this.$message.info('取消删除')
+                        } else {
+                            await courseClassificationIds(row.id)
+                                .then(value => {
+                                    console.log(value)
+                                    this.$message.success('删除成功')
+                                    this.getCourseClassificationList()
+                                })
+                                .catch(err => {
+                                    this.$message.error('删除失败')
+                                })
+                        }
+                    }
                 })
-                location.reload()
             },
             handleFixed() {
                 this.postCourseClassification.integrationRange = this.addStardardDialog.fixed
             },
             handleRange() {
-                this.postCourseClassification.integrationRange = 
-                    this.addStardardDialog.start+':'+
+                this.postCourseClassification.integrationRange =
+                    this.addStardardDialog.start +
+                    ':' +
                     this.addStardardDialog.end
             },
             handleIntegralType(value) {
                 this.postCourseClassification.integralType = value + 1
                 console.log(this.postCourseClassification.integralType)
-
             },
             /* 选择上级节点触发的事件 */
             handleNodeChange(value) {
@@ -795,29 +826,32 @@
             },
             /* 新增积分类别 */
             async addCourseClassification() {
-                console.log( this.postCourseClassification)
-                await courseClassification(
-                    this.postCourseClassification
-                ).then(value => {
-                    console.log(value,777)
-                    location.reload()
-                })
+                console.log(this.postCourseClassification)
+                await courseClassification(this.postCourseClassification).then(
+                    value => {
+                        console.log(value, 777)
+                        this.addStardardDialog.open = false
+                        this.$message.success('添加成功')
+                        this.getCourseClassificationList()
+                    }
+                )
                 // console.log()
             },
-            formatIntegralType(row,column,cellValue) {
-                if(cellValue != null) {
-                    return  this.dict_sc_integral_type[cellValue].remark
+            formatIntegralType(row, column, cellValue) {
+                if (cellValue != null) {
+                    return this.dict_sc_integral_type[cellValue].remark
                 }
                 return cellValue
             },
-            formatType(row,column,cellValue) {
-                if(cellValue != null) {
-                    return this.dict_sc_course_classification_type[cellValue].dictLabel
+            formatType(row, column, cellValue) {
+                if (cellValue != null) {
+                    return this.dict_sc_course_classification_type[cellValue]
+                        .dictLabel
                 }
                 return cellValue
             },
-            formatUpdateTime(row,column,cellValue) {
-                if(cellValue != null) {
+            formatUpdateTime(row, column, cellValue) {
+                if (cellValue != null) {
                     return formatDate(cellValue)
                 }
                 return cellValue
@@ -1074,11 +1108,11 @@
                 await courseClassificationList().then(value => {
                     /* 保证value存在且唯一 */
                     /* label保证渲染视图 */
-                    value.data = value.data.map((item => ({
+                    value.data = value.data.map(item => ({
                         ...item,
                         value: item.id,
                         label: item.name
-                    })))
+                    }))
                     this.datadata = filterCourseClassificationList(value)
                     console.log(this.datadata)
                 })
@@ -1086,7 +1120,7 @@
         },
         async created() {
             await getDict('sc_course_classification_type').then(value => {
-                console.log(value,'sc_course_classification_type')
+                console.log(value, 'sc_course_classification_type')
                 this.dict_sc_course_classification_type = value.data
                 this.label = this.dict_sc_course_classification_type[0].dictLabel
             })
@@ -1094,11 +1128,9 @@
         async mounted() {
             this.getCourseClassificationList()
             await getDict('sc_integral_type').then(value => {
-                console.log(value,'sc_integral_type')
+                console.log(value, 'sc_integral_type')
                 this.dict_sc_integral_type = value.data
-                
             })
-            
         }
     }
 </script>
@@ -1181,7 +1213,7 @@
     .typeSet {
         margin-top: 10px;
         position: absolute;
-        left:17px;
+        left: 17px;
         top: 255px;
         z-index: 99;
         height: 40px;
@@ -1332,7 +1364,7 @@
     }
     .erke-bottom >>> .el-tabs__item {
         text-align: left;
-        
+
         border-bottom: 1px dashed #ddd;
     }
     .erke-bottom,

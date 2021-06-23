@@ -364,7 +364,7 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return delJobLog(jobLogIds)
                     })
                     .then(() => {
@@ -379,7 +379,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 })
-                    .then(function () {
+                    .then(function() {
                         return cleanJobLog()
                     })
                     .then(() => {

@@ -172,7 +172,7 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return forceLogout(row.tokenId)
                     })
                     .then(() => {

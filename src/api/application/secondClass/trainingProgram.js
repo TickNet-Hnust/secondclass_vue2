@@ -1,6 +1,6 @@
 import request from '@/utils/request.bak.js'
 
-/* 课程数量 */
+/* GET课程数量 */
 export function trainingProgramFindClassNumber(query) {
     return request({
         url: '/secondClass/trainingProgram/findClassNumber',
@@ -8,25 +8,14 @@ export function trainingProgramFindClassNumber(query) {
         params: query
     })
 }
-
-/* 批量操作 */
-export function trainingProgramMulti(data) {
-    return request({
-        url: '/secondClass/trainingProgram/multi',
-        method: 'put',
-        data: data
-    })
-}
-
-/* 查询详情信息 */
+/* GET查询详情信息 */
 export function trainingProgramId(id) {
     return request({
         url: '/secondClass/trainingProgram/' + id,
         method: 'get'
     })
 }
-
-/* 查询培养方案分页 */
+/* GET查询培养方案分页 */
 export function trainingProgramList(query) {
     return request({
         url: '/secondClass/trainingProgram/list',
@@ -35,11 +24,28 @@ export function trainingProgramList(query) {
     })
 }
 
-/* 添加 */
+export function trainingProgramDetail(query) {
+    return request({
+        url: '/secondClass/trainingProgram/detail',
+        method: 'get',
+        params: query
+    })
+}
+
+/* POST添加 */
 export function trainingProgram(data) {
     return request({
         url: '/secondClass/trainingProgram',
         method: 'post',
+        data: data
+    })
+}
+
+/* PUT批量操作 */
+export function trainingProgramMulti(data) {
+    return request({
+        url: '/secondClass/trainingProgram/multi',
+        method: 'put',
         data: data
     })
 }

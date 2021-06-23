@@ -20,7 +20,6 @@ export function schoolYearMulti(data) {
 export function schoolYearTestDeleteIds(ids) {
     return request({
         url: '/secondClass/testDelete/' + ids,
-        method: 'get',
-
+        method: 'get'
     })
 }

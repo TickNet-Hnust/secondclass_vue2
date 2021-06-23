@@ -499,7 +499,7 @@
                 })
             },
             /** 提交按钮 */
-            submitForm: function () {
+            submitForm: function() {
                 this.$refs['form'].validate(valid => {
                     if (valid) {
                         if (this.form.menuId != undefined) {
@@ -529,7 +529,7 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return delMenu(row.menuId)
                     })
                     .then(() => {

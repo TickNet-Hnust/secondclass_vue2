@@ -1,8 +1,14 @@
 import variables from '@/assets/styles/element-variables.scss'
 import defaultSettings from '@/settings'
 
-const { sideTheme, showSettings, topNav, tagsView, fixedHeader, sidebarLogo } =
-    defaultSettings
+const {
+    sideTheme,
+    showSettings,
+    topNav,
+    tagsView,
+    fixedHeader,
+    sidebarLogo
+} = defaultSettings
 
 const storageSetting = JSON.parse(localStorage.getItem('layout-setting')) || ''
 const state = {

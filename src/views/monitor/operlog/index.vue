@@ -383,7 +383,7 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return delOperlog(operIds)
                     })
                     .then(() => {
@@ -398,7 +398,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 })
-                    .then(function () {
+                    .then(function() {
                         return cleanOperlog()
                     })
                     .then(() => {

@@ -18,7 +18,7 @@
                 loading: true
             }
         },
-        mounted: function () {
+        mounted: function() {
             setTimeout(() => {
                 this.loading = false
             }, 230)

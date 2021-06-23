@@ -256,7 +256,7 @@
                         type: 'warning'
                     }
                 )
-                    .then(function () {
+                    .then(function() {
                         return delLogininfor(infoIds)
                     })
                     .then(() => {
@@ -271,7 +271,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 })
-                    .then(function () {
+                    .then(function() {
                         return cleanLogininfor()
                     })
                     .then(() => {
