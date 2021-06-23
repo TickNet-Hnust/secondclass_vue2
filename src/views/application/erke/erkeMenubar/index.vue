@@ -57,7 +57,7 @@
         margin-top: 1px;
         background: #fff;
         width: 200px;
-        height: calc(100vh - 1px);
+        min-height: calc(100vh - 1px);
         float: left;
     }
     .menubar-title {

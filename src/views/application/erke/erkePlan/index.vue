@@ -88,14 +88,29 @@
 
             <!-- table start here -->
             <el-table :data="planData" stripe>
-                <el-table-column prop="id" label="批次ID"> </el-table-column>
-                <el-table-column prop="name" label="培养方案">
+                <el-table-column 
+                    prop="id" 
+                    label="批次ID"
+                    width="80"
+                >
                 </el-table-column>
-                <el-table-column prop="schoolYearId" label="学年ID">
+                <el-table-column 
+                    prop="name" 
+                    label="培养方案"
+                    min-width="180"
+                    :show-overflow-tooltip="true"
+                >
+                </el-table-column>
+                <el-table-column 
+                    prop="schoolYearId" 
+                    label="学年ID"
+                    width="80"
+                >
                 </el-table-column>
                 <el-table-column
                     prop="schoolYearId"
                     label="学年"
+                    min-width="120"
                     :formatter="formatSchoolYearName"
                 >
                 </el-table-column>
@@ -105,9 +120,15 @@
                     :formatter="formatRank"
                 >
                 </el-table-column>
-                <el-table-column prop="courseCount" label="课程数">
+                <el-table-column 
+                    prop="courseCount" 
+                    label="课程数"
+                >
                 </el-table-column>
-                <el-table-column prop="applyingCount" label="申请中">
+                <el-table-column 
+                    prop="applyingCount" 
+                    label="申请中"
+                >
                 </el-table-column>
                 <el-table-column
                     prop="status"
@@ -118,18 +139,25 @@
                 <el-table-column
                     prop="createTime"
                     label="创建时间"
+                    min-width="120"
                     :formatter="formatUpdateTime"
                 >
                 </el-table-column>
-                <el-table-column prop="createBy" label="创建人">
+                <el-table-column 
+                    prop="createBy" 
+                    label="创建人"
+                >
                 </el-table-column>
                 <el-table-column
                     prop="updateTime"
                     label="修改时间"
+                    min-width="120"
                     :formatter="formatUpdateTime"
                 >
                 </el-table-column>
-                <el-table-column prop="updateBy" label="修改人">
+                <el-table-column 
+                    prop="updateBy" 
+                    label="修改人">
                 </el-table-column>
                 <el-table-column
                     fixed="right"
@@ -480,6 +508,7 @@
     } from '@/api/application/secondClass/schoolYear'
     import formatDate from '@/utils/formatDate.js'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
+    import horwheel from 'horwheel'
 
     import { getToken } from '@/utils/auth'
     import { treeselect } from '@/api/system/dept'
@@ -1250,6 +1279,9 @@
                 console.log(value)
                 this.dict_sc_train_program_status = value.data
             })
+            let view = document.querySelector('.el-table--scrollable-x .el-table__body-wrapper')
+            console.log(view)
+            horwheel(view)
         }
     }
 </script>

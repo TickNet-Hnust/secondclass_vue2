@@ -35,13 +35,13 @@
                 :collapse-transition="false"
                 mode="vertical"
             >
-                <sidebar-item
+                <!-- <sidebar-item
                     v-for="(route, index) in sidebarRouters"
                     :key="route.path + index"
                     :item="route"
                     :kk="route.path + index"
                     :base-path="route.path"
-                />
+                /> -->
 
                 <sidebar-item
                     :item="home"

@@ -101,3 +101,13 @@ textarea {
 .addOrMinus:hover {
     cursor: pointer;
 }
+
+@media screen and (max-width:1000px) {
+    body {
+        width: 1000px;
+    }
+}
+
+.scroll-container .el-scrollbar__bar {
+    display: none !important;
+}

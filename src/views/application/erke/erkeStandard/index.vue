@@ -92,18 +92,24 @@
                                     <el-table
                                         :data="item.children"
                                         row-key="id"
-                                        :indent="10"
+                                        
                                         :tree-props="{
                                             children: 'children',
                                             hasChildren: 'hasChildren'
                                         }"
                                     >
-                                        <el-table-column prop="id" label="ID">
+                                        <el-table-column 
+                                            prop="id" 
+                                            label="ID"
+                                            width="150"
+                                            
+                                        >
                                         </el-table-column>
                                         <el-table-column
                                             prop="name"
                                             label="项目名称"
-                                            width="700"
+                                            min-width="300"
+                                            :show-overflow-tooltip="true"
                                         >
                                         </el-table-column>
                                         <el-table-column
@@ -115,6 +121,7 @@
                                         <el-table-column
                                             prop="integralType"
                                             label="积分类别"
+                                            min-width="120"
                                             :formatter="formatIntegralType"
                                         >
                                         </el-table-column>
@@ -126,12 +133,14 @@
                                         <el-table-column
                                             prop="updateTime"
                                             label="修订时间"
+                                            :show-overflow-tooltip="true"
                                             :formatter="formatUpdateTime"
                                         >
                                         </el-table-column>
                                         <el-table-column
                                             label="操作"
                                             fixed="right"
+                                            width="120"
                                         >
                                             <template slot-scope="scope">
                                                 <el-link type="primary"
