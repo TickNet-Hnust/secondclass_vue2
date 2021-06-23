@@ -76,6 +76,8 @@
                 </el-button>
             </el-form-item>
         </el-form>
+        <!-- 微信登录 -->
+        <div id="wxLogin"></div>
         <!--  底部  -->
         <div class="el-login-footer">
             <span>Copyright © 2018-2021 ruoyi.vip All Rights Reserved.</span>
@@ -92,6 +94,11 @@
         name: 'Login',
         data() {
             return {
+                wx: {
+                  appid: "1000034",
+                  scope: 'snsapi_login',
+                  redirect_uri: 'http://test.mingyuefusu.cn',
+                },
                 codeUrl: '',
                 cookiePassword: '',
                 loginForm: {
@@ -128,10 +135,39 @@
                 redirect: undefined
             }
         },
-        watch: {
+      mounted() {
+        WwLogin({
+          "id" : "wxLogin",
+          "appid" : "wx1eedf3f9bb7f47b0",
+          "agentid" : "1000034",
+          "redirect_uri" :encodeURIComponent(window.location.href),
+          "state" : "",
+          "href" : "",
+        });
+      },
+      watch: {
             $route: {
                 handler: function(route) {
-                    this.redirect = route.query && route.query.redirect
+                  this.redirect = route.query && route.query.redirect
+                  const query = route.query;
+                  if (query) {
+                    this.redirect = query.redirect;
+                    let code = query.code;
+                    console.log(code)
+                    if(code) {
+                      this.$store
+                        .dispatch('LoginByCode', code)
+                        .then(() => {
+                          this.$router
+                            .push({ path: this.redirect || '/' })
+                            .catch(() => {})
+                        })
+                        .catch(() => {
+                          this.loading = false
+                        })
+                    }
+                    delete this.query.code;
+                  }
                 },
                 immediate: true
             }
@@ -140,7 +176,7 @@
             this.getCode()
             this.getCookie()
         },
-        methods: {
+      methods: {
             getCode() {
                 getCodeImg().then(res => {
                     this.codeUrl = 'data:image/gif;base64,' + res.img
