@@ -23,7 +23,7 @@ export function trainingProgramList(query) {
         params: query
     })
 }
-
+/* GET查询方案详细课程信息 */
 export function trainingProgramDetail(query) {
     return request({
         url: '/secondClass/trainingProgram/detail',

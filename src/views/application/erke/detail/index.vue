@@ -18,17 +18,19 @@
                     <div class="erke-top-foot">
                         <div style="margin-bottom: 10px">
                             学年度：<el-select
-                                v-model="value"
-                                placeholder="请选择"
-                            >
-                                <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    v-model="list.value"
+                                    placeholder="请选择"
+                                    @change="schoolYearChange"
                                 >
-                                </el-option>
-                            </el-select>
+                                    <!-- <el-option :key="-1" label="全部" :value="-1"> </el-option> -->
+                                    <el-option
+                                        v-for="item in list.rows"
+                                        :key="item.id"
+                                        :label="item.yearName"
+                                        :value="item.id"
+                                    >
+                                    </el-option>
+                                </el-select>
 
                             培养方案：<el-select
                                 v-model="value"
@@ -110,21 +112,17 @@
                                     <el-select
                                         style="width: 80px"
                                         v-model="value"
-                                        placeholder="选择"
+                                        placeholder="操作"
                                     >
-                                        <el-option
-                                            v-for="item in options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value"
-                                        >
-                                        </el-option>
+                                        <el-option value="批量修改"></el-option>
+                                        <el-option value="排序"></el-option>
                                     </el-select>
                                 </el-col>
                                 <el-col :span="1.5">
                                     <el-input
                                         suffix-icon="el-icon-search"
                                         placeholder="课程名称"
+                                        v-model="queryDetail.courseName"
                                     >
                                     </el-input>
                                 </el-col>
@@ -132,16 +130,40 @@
                                 <el-col :span="1.5">
                                     <el-select
                                         style="width: 120px"
-                                        v-model="value"
-                                        placeholder="选择"
+                                        v-model="queryDetail.joinType"
+                                        placeholder="加入方式"
                                     >
-                                        <el-option
-                                            v-for="item in options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value"
-                                        >
-                                        </el-option>
+                                        <el-option value="加入方式：不限"></el-option>
+                                        <el-option value="预设"></el-option>
+                                        <el-option value="临增"></el-option>
+                                    </el-select>
+                                </el-col>
+
+                                <el-col :span="1.5">
+                                    <el-select
+                                        style="width: 120px"
+                                        v-model="queryDetail.neccessary"
+                                        placeholder="必修课"
+                                    >
+                                        <el-option value="必修课：不限"></el-option>
+                                        <el-option value="是"></el-option>
+                                        <el-option value="否"></el-option>
+                                    </el-select>
+                                </el-col>
+
+                                <el-col :span="1.5">
+                                    <el-select
+                                        style="width: 120px"
+                                        v-model="queryDetail.term"
+                                        placeholder="开课学期：不限"
+                                    >
+                                        <el-option value="开课学期：不限"></el-option>
+                                        <el-option 
+                                            v-for="it in 8"
+                                            :key="it"
+                                            :value="'第'+it+'学期'"
+                                        ></el-option>
+                                        
                                     </el-select>
                                 </el-col>
 
@@ -149,15 +171,11 @@
                                     <el-select
                                         style="width: 120px"
                                         v-model="value"
-                                        placeholder="选择"
+                                        placeholder="发布单位：不限"
                                     >
-                                        <el-option
-                                            v-for="item in options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value"
-                                        >
-                                        </el-option>
+                                        <el-option value="发布单位：不限"></el-option>
+                                        <el-option value="保卫处"></el-option>
+                                        <el-option value="网络中心"></el-option>
                                     </el-select>
                                 </el-col>
 
@@ -165,56 +183,24 @@
                                     <el-select
                                         style="width: 120px"
                                         v-model="value"
-                                        placeholder="选择"
+                                        placeholder="课程性质：不限"
                                     >
-                                        <el-option
-                                            v-for="item in options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value"
-                                        >
-                                        </el-option>
+                                        <el-option value="课程性质：不限"></el-option>
+                                        <el-option value="活动"></el-option>
+                                        <el-option value="竞赛"></el-option>
                                     </el-select>
                                 </el-col>
 
                                 <el-col :span="1.5">
-                                    <el-select
-                                        style="width: 120px"
-                                        v-model="value"
-                                        placeholder="选择"
-                                    >
-                                        <el-option
-                                            v-for="item in options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value"
-                                        >
-                                        </el-option>
-                                    </el-select>
+                                    <el-radio-group v-model="statusRadio" size="small">
+                                        <el-radio-button label="全部" value="0"></el-radio-button>
+                                        <el-radio-button label="申请中"  value="1"></el-radio-button>
+                                        <el-radio-button label="审核未通过" value="2"></el-radio-button>
+                                        <el-radio-button label="有效" value="3"></el-radio-button>
+                                        <el-radio-button label="无效" value="4"></el-radio-button>
+                                    </el-radio-group>
                                 </el-col>
-
-                                <el-col :span="1.5">
-                                    <el-select
-                                        style="width: 120px"
-                                        v-model="value"
-                                        placeholder="选择"
-                                    >
-                                        <el-option
-                                            v-for="item in options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value"
-                                        >
-                                        </el-option>
-                                    </el-select>
-                                </el-col>
-
-                                <el-col :span="1.5">
-                                    <el-button size="mini" round
-                                        >全部</el-button
-                                    >
-                                </el-col>
-                                <el-col :span="1.5">
+                                <!-- <el-col :span="1.5">
                                     <el-button size="mini" round
                                         >申请中</el-button
                                     >
@@ -233,11 +219,126 @@
                                     <el-button size="mini" round
                                         >无效</el-button
                                     >
-                                </el-col>
+                                </el-col> -->
                             </el-row>
                         </div>
-                        <el-tab-pane label="全部">
-                            <div class="erke-buttom-right">
+                        <template
+                            v-for="item in classificationList"
+                        >
+                            <el-tab-pane 
+                                :key="item.id"
+                                :label="item.name"
+                            >
+                                <div class="erke-buttom-right">
+                                    <el-table :data="item.children">
+                                    <el-table-column
+                                        type="selection"
+                                        width="55"
+                                    >
+                                    </el-table-column>
+
+                                    <el-table-column
+                                        prop="id"
+                                        label="ID"
+                                        width="50"
+                                    >
+                                    </el-table-column>
+
+                                    <el-table-column
+                                        prop="name"
+                                        label="课程名称"
+                                    >
+                                    </el-table-column>
+
+                                    <el-table-column
+                                        prop="trainingProgram"
+                                        label="培养方案"
+                                    >
+                                    </el-table-column>
+
+                                    <el-table-column
+                                        prop="schoolYearName"
+                                        label="学年"
+                                    >
+                                    </el-table-column>
+
+                                    <el-table-column
+                                        prop="classification"
+                                        label="分类"
+                                    >
+                                    </el-table-column>
+
+                                    <el-table-column
+                                        prop="joinType"
+                                        label="加入方式"
+                                    >
+                                    </el-table-column>
+
+                                    <el-table-column
+                                        prop="necessary"
+                                        label="必修课"
+                                    >
+                                    </el-table-column>
+
+                                    <el-table-column
+                                        prop="lowestValue"
+                                        label="学期积分下限要求"
+                                        width="130"
+                                    >
+                                    </el-table-column>
+
+                                    <el-table-column prop="status" label="状态">
+                                        <!-- <template slot-scope="scope">
+                                            <el-button
+                                                size="mini"
+                                                round
+                                                :class="sureClass(scope.row)"
+                                                >{{
+                                                    scope.row.state
+                                                }}</el-button
+                                            >
+                                        </template> -->
+                                    </el-table-column>
+
+                                    <el-table-column
+                                        prop="updateTime"
+                                        label="修改时间"
+                                    >
+                                    </el-table-column>
+
+                                    <el-table-column
+                                        prop="operate"
+                                        label="操作"
+                                        fixed="right"
+                                        width="200"
+                                    >
+                                        <template>
+                                            <el-link
+                                                style="margin-right: 10px"
+                                                type="primary"
+                                                >修改/详情</el-link
+                                            >
+                                            <el-link
+                                                style="margin-right: 10px"
+                                                type="info"
+                                                >审核</el-link
+                                            >
+                                            <el-link type="info">删除</el-link>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                                <pagination
+                                    v-show="queryParams.totalPage > 0"
+                                    :total="queryParams.totalCount"
+                                    :page.sync="queryParams.pageCount"
+                                    :limit.sync="queryParams.pageSize"
+                                    @pagination="getList($event)"
+                                />
+                                </div>
+                            </el-tab-pane>
+                        </template>
+                        <!--<el-tab-pane label="全部">
+                             <div class="erke-buttom-right">
                                 <el-table :data="datadata">
                                     <el-table-column
                                         type="selection"
@@ -336,11 +437,11 @@
                                     </el-table-column>
                                 </el-table>
                                 <pagination
-                                    v-show="total > 0"
-                                    :total="total"
-                                    :page.sync="queryParams.pageNum"
+                                    v-show="queryParams.totalPage > 0"
+                                    :total="queryParams.totalCount"
+                                    :page.sync="queryParams.pageCount"
                                     :limit.sync="queryParams.pageSize"
-                                    @pagination="getList"
+                                    @pagination="getList($event)"
                                 />
                             </div>
                         </el-tab-pane>
@@ -358,7 +459,7 @@
                         >
                         <el-tab-pane label="社会工作与阅历"
                             >社会工作与阅历</el-tab-pane
-                        >
+                        > -->
                     </el-tabs>
                 </div>
             </el-col>
@@ -371,7 +472,7 @@
             width="600px"
             append-to-body
         >
-            <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+            <el-form ref="form" :model="form"  label-width="80px">
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="用户昵称" prop="nickName">
@@ -574,7 +675,7 @@
             append-to-body
             class="addDetailDialog"
         >
-            <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+            <el-form ref="form" :model="form"  label-width="80px">
                 <el-row>
                     <el-col :span="14">
                         <el-row>
@@ -955,7 +1056,18 @@
 </template>
 
 <script>
-    import { trainingProgramDetail } from '@/api/application/secondClass/trainingProgram'
+    import { 
+        trainingProgramDetail,
+        trainingProgramList ,
+        trainingProgramId
+    } from '@/api/application/secondClass/trainingProgram'
+    import {
+        schoolYearList,
+        schoolYearMulti
+    } from '@/api/application/secondClass/schoolYear'
+    import {
+        courseListId
+    } from '@/api/application/secondClass/course'
 
     import {
         listUser,
@@ -974,10 +1086,46 @@
     import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
     export default {
+        
+        
         name: 'User',
         components: { Treeselect },
         data() {
             return {
+                /* 方便挂载，直接映射 */
+                classificationMapid:new Map(),
+                classificationList: [],
+                statusRadio:'全部',
+                /* 查询详情的条件 */
+                queryDetail: {
+                    classification: '',
+                    courseName: '',
+                    departmentId: '',
+                    joinType: '',
+                    neccessary: '',
+                    shoolYearId: '',
+                    status: '',
+                    term: '',
+                    trainingProgramId: '',
+                    type: ''
+                },
+                //学年id =>学年名称
+                schoolMap: [],
+                queryParams: {
+                    totalCount: 0,
+                    totalPage: 50,
+                    pageCount: 1,
+                    pageSize: 4,
+                    userName: undefined,
+                    phonenumber: undefined,
+                    status: undefined,
+                    deptId: undefined
+                },
+                list: {
+                    value:  Number(this.$route.params.sid),
+                    rows: []
+                },
+                t: {},
                 exportDialog: {
                     title: '',
                     open: false,
@@ -1243,63 +1391,6 @@
                     url:
                         process.env.VUE_APP_BASE_API + '/system/user/importData'
                 },
-                // 查询参数
-                queryParams: {
-                    pageNum: 1,
-                    pageSize: 10,
-                    userName: undefined,
-                    phonenumber: undefined,
-                    status: undefined,
-                    deptId: undefined
-                },
-                // 列信息
-                columns: [
-                    { key: 0, label: `用户编号`, visible: true },
-                    { key: 1, label: `用户名称`, visible: true },
-                    { key: 2, label: `用户昵称`, visible: true },
-                    { key: 3, label: `部门`, visible: true },
-                    { key: 4, label: `手机号码`, visible: true },
-                    { key: 5, label: `状态`, visible: true },
-                    { key: 6, label: `创建时间`, visible: true }
-                ],
-                // 表单校验
-                rules: {
-                    userName: [
-                        {
-                            required: true,
-                            message: '用户名称不能为空',
-                            trigger: 'blur'
-                        }
-                    ],
-                    nickName: [
-                        {
-                            required: true,
-                            message: '用户昵称不能为空',
-                            trigger: 'blur'
-                        }
-                    ],
-                    password: [
-                        {
-                            required: true,
-                            message: '用户密码不能为空',
-                            trigger: 'blur'
-                        }
-                    ],
-                    email: [
-                        {
-                            type: 'email',
-                            message: "'请输入正确的邮箱地址",
-                            trigger: ['blur', 'change']
-                        }
-                    ],
-                    phonenumber: [
-                        {
-                            pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-                            message: '请输入正确的手机号码',
-                            trigger: 'blur'
-                        }
-                    ]
-                }
             }
         },
         watch: {
@@ -1322,6 +1413,45 @@
             })
         },
         methods: {
+            async schoolYearChange(value) {
+                console.log(value)
+                if (value == -1) {
+                    await trainingProgramList({
+                        page: this.t.page ? this.t.page : 1,
+                        limit: this.t.limit ? this.t.limit : 10
+                    })
+                        .then(value => {
+                            console.log(value)
+                            this.queryParams.pageSize = value.data.pageSize
+                            this.queryParams.totalCount = value.data.totalCount
+                            this.queryParams.totalPage = value.data.totalPage
+                            this.planData = value.data.list
+                            this.$forceUpdate()
+                            this.loading = false
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                } else {
+                    await trainingProgramList({
+                        page: this.t.page ? this.t.page : 1,
+                        limit: this.t.limit ? this.t.limit : 10,
+                        schoolYearId: value
+                    })
+                        .then(value => {
+                            console.log(value)
+                            this.queryParams.pageSize = value.data.pageSize
+                            this.queryParams.totalCount = value.data.totalCount
+                            this.queryParams.totalPage = value.data.totalPage
+                            this.planData = value.data.list
+                            this.$forceUpdate()
+                            this.loading = false
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                }
+            },
             sureClass(row) {
                 if (row.state === '申请中') {
                     return 'textPlain'
@@ -1332,13 +1462,16 @@
                 }
             },
             /** 查询用户列表 */
-            getList() {
+            async getList(option) {
+                this.t = option
                 this.loading = true
-                listUser(
-                    this.addDateRange(this.queryParams, this.dateRange)
-                ).then(response => {
-                    this.userList = response.rows
-                    this.total = response.total
+                await trainingProgramList({
+                    page: option.page,
+                    limit: option.limit
+                }).then(value => {
+                    this.planData = value.data.list
+                    console.log(value.data.list)
+                    this.$forceUpdate()
                     this.loading = false
                 })
             },
@@ -1542,12 +1675,48 @@
                 this.$refs.upload.submit()
             }
         },
+        async created() {
+            await schoolYearList().then(value => {
+                console.log(value)
+                value.rows.forEach(item => {
+                    this.schoolMap[item.id] = item.yearName
+                })
+
+                console.log(value, 'schoolYearList')
+                this.list.rows = value.rows
+                // this.list.value = -1
+            })
+        },
         async mounted() {
+            console.log(this.$route.params,77)
             await trainingProgramDetail({
-                shoolYearId: this.$route.params.id
+                schoolYearId: this.$route.params.sid
             }).then(value => {
                 console.log(value)
+                this.classificationList = value.data.classificationList
+                value.data.classificationList.forEach((item,index) => {
+                    this.classificationMapid.set(item.id,index)
+                })
+                value.data.pageData.list.forEach(item => {
+                    let index = this.classificationMapid.get(item.classificationId)
+                    /* 添加成员 */
+                    if(this.classificationList[index].children) {
+                        this.classificationList[index].children.push(item)
+                    }else { //初始化
+                        this.classificationList[index].children = [item]
+                    }
+                })
+                console.log(this.classificationList,"trainingProgramDetail")
             })
+            // await courseListId(
+            //     this.$route.params.id
+            // ).then(value => {
+            //     value.rows.forEach((item) => {
+                    
+            //     })                
+            //     console.log(value,"courseListId")
+                
+            // })
         }
     }
 </script>

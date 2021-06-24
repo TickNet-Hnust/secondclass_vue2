@@ -102,7 +102,7 @@ textarea {
     cursor: pointer;
 }
 
-@media screen and (max-width:1000px) {
+@media screen and (max-width: 1000px) {
     body {
         width: 1000px;
     }

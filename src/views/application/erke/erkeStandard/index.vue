@@ -92,17 +92,16 @@
                                     <el-table
                                         :data="item.children"
                                         row-key="id"
-                                        
+                                        v-loading="loading"
                                         :tree-props="{
                                             children: 'children',
                                             hasChildren: 'hasChildren'
                                         }"
                                     >
-                                        <el-table-column 
-                                            prop="id" 
+                                        <el-table-column
+                                            prop="id"
                                             label="ID"
                                             width="150"
-                                            
                                         >
                                         </el-table-column>
                                         <el-table-column
@@ -437,6 +436,7 @@
         components: { Treeselect },
         data() {
             return {
+                loading: false,
                 postCourseClassification: {
                     createTime: null,
                     createUserId: null,
@@ -646,9 +646,6 @@
                     }
                 ],
                 value: '',
-
-                // 遮罩层
-                loading: true,
                 // 导出遮罩层
                 exportLoading: false,
                 // 选中数组
@@ -1114,6 +1111,7 @@
             },
             //根据参数查询二课课程分类列表
             async getCourseClassificationList() {
+                this.loading = true
                 await courseClassificationList().then(value => {
                     /* 保证value存在且唯一 */
                     /* label保证渲染视图 */
@@ -1125,6 +1123,7 @@
                     this.datadata = filterCourseClassificationList(value)
                     console.log(this.datadata)
                 })
+                this.loading = false
             }
         },
         async created() {
