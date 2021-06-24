@@ -45,6 +45,9 @@ module.exports = {
     },
     configureWebpack: {
         name: name,
+        externals: {
+          'wxLogin': 'WwLogin'
+        },
         resolve: {
             alias: {
                 '@': resolve('src')
