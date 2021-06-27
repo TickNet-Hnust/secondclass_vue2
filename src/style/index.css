@@ -23,7 +23,7 @@
 }
 
 .el-table {
-    overflow: auto !important;
+    /* overflow: auto !important; */
 }
 
 .el-tooltip,

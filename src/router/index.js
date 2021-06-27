@@ -30,6 +30,8 @@ import erke from '@/views/application/erke/index.vue'
 import erkeStandard from '@/views/application/erke/erkeStandard/index.vue'
 import erkePlan from '@/views/application/erke/erkePlan/index.vue'
 import detail from '@/views/application/erke/detail/index.vue'
+import activity from '@/views/application/erke/activity/index.vue'
+
 /*home*/
 import home from '@/views/home/index.vue'
 import homeContent from '@/views/home/homeContent/index.vue'
@@ -133,6 +135,11 @@ export const constantRoutes = [{
                             meta: {
                                 title: '培养方案-详情'
                             }
+                        },
+                        {
+                            path: '/application/erke/activity',
+                            component: activity,
+                            name: 'activity'
                         }
                     ]
                 }]

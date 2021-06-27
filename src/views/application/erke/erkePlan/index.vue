@@ -81,7 +81,7 @@
             </el-row>
 
             <!-- table start here -->
-            <el-table :data="planData" stripe v-loading="loading">
+            <el-table :data="planData" stripe v-loading="loading" class="erkePlanMainTable">
                 <el-table-column prop="id" label="批次ID" width="80">
                 </el-table-column>
                 <el-table-column
@@ -151,7 +151,7 @@
                             "
                             >详情</router-link
                         >
-                        <el-link type="info">删除</el-link>
+                        <el-link type="info" @click="deletePlan(scope.row,scope.$index)">删除</el-link>
                     </template>
                 </el-table-column>
             </el-table>
@@ -634,6 +634,30 @@
             })
         },
         methods: {
+            async deletePlan(row,index) {
+                console.log(row,index)
+                this.$alert('您确定要删除吗吗', '提示框', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    customClass: 'message_box_alert',
+                    callback: async action => {
+                        if (action == 'cancel') {
+                            this.$message.info('取消删除')
+                        } else {
+                            await trainingProgramMulti({
+                            deleteIds: [row.id]
+                        }).then(async value => {
+                            this.planData.splice(index,1)
+                            this.$forceUpdate()
+                            this.$message.success('删除成功')
+                        }).catch(err => {
+                            console.log('删除失败')
+                        })
+                        }
+                    }
+                })
+                
+            },
             async schoolYearChange(value) {
                 console.log(value)
                 if (value == -1) {
@@ -932,7 +956,7 @@
                 this.dict_sc_train_program_status = value.data
             })
             let view = document.querySelector(
-                '.el-table--scrollable-x .el-table__body-wrapper'
+                '.erkePlanMainTable .el-table__body-wrapper'
             )
             console.log(view)
             view && horwheel(view)

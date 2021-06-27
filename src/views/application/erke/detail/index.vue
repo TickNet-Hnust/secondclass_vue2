@@ -33,14 +33,18 @@
                                 </el-select>
 
                             培养方案：<el-select
-                                v-model="value"
+                                :value="
+                                    schoolYearIdMapProgramArray.value
+                                "
+                                @change="schoolYearIdMapProgramArray.value=$event"
+                                
                                 placeholder="请选择"
                             >
                                 <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
+                                    v-for="item in schoolYearIdMapProgramArray.rows[list.value]"
+                                    :key="item.id"
+                                    :label="item.name"
+                                    :value="item.id"
                                 >
                                 </el-option>
                             </el-select>
@@ -50,7 +54,8 @@
                             <el-input
                                 style="margin-right: 10px"
                                 placeholder="请输入内容"
-                                v-model="count.classCount"
+                                :value="countState.courseCount"
+                                
                             >
                                 <template slot="prepend">课程总数</template>
                             </el-input>
@@ -58,7 +63,7 @@
                             <el-input
                                 style="margin-right: 10px"
                                 placeholder="请输入内容"
-                                v-model="count.apyling"
+                                :value="countState.applyingCount"
                             >
                                 <template slot="prepend">申请中</template>
                             </el-input>
@@ -66,7 +71,7 @@
                             <el-input
                                 style="margin-right: 10px"
                                 placeholder="请输入内容"
-                                v-model="count.haspass"
+                                :value="countState.validCount"
                             >
                                 <template slot="prepend">审核通过</template>
                             </el-input>
@@ -74,7 +79,7 @@
                             <el-input
                                 style="margin-right: 10px"
                                 placeholder="请输入内容"
-                                v-model="count.nopass"
+                                :value="countState.failCount"
                             >
                                 <template slot="prepend">审核未通过</template>
                             </el-input>
@@ -94,13 +99,13 @@
                             plain
                             icon="el-icon-download"
                             size="mini"
-                            :loading="exportLoading"
+                            :load="exportLoading"
                             @click="handleExport"
                             v-hasPermi="['system:user:export']"
                             >导出</el-button
                         >
 
-                        <el-button circle icon="el-icon-refresh"> </el-button>
+                        <el-button circle icon="el-icon-refresh" @click="refresh"> </el-button>
                     </div>
                 </div>
 
@@ -230,110 +235,180 @@
                                 :label="item.name"
                             >
                                 <div class="erke-buttom-right">
-                                    <el-table :data="item.children">
-                                    <el-table-column
-                                        type="selection"
-                                        width="55"
+                                    <el-table 
+                                        :data="item.children"
+                                        v-loading="loading"
+                                        class="detailMainTable"
                                     >
-                                    </el-table-column>
+                                        <el-table-column
+                                            type="selection"
+                                            min-width="55"
+                                        >
+                                        </el-table-column>
 
-                                    <el-table-column
-                                        prop="id"
-                                        label="ID"
-                                        width="50"
-                                    >
-                                    </el-table-column>
+                                        <el-table-column
+                                            prop="id"
+                                            label="ID"
+                                            min-width="50"
+                                        >
+                                        </el-table-column>
 
-                                    <el-table-column
-                                        prop="name"
-                                        label="课程名称"
-                                    >
-                                    </el-table-column>
+                                        <el-table-column
+                                            prop="name"
+                                            label="课程名称"
+                                            min-width="200"
+                                        >
+                                        </el-table-column>
 
-                                    <el-table-column
-                                        prop="trainingProgram"
-                                        label="培养方案"
-                                    >
-                                    </el-table-column>
+                                        <el-table-column
+                                            prop="trainingProgramId"
+                                            label="培养方案"
+                                            min-width="150"
+                                            :formatter="formatTrainingProgram"
+                                        >
+                                        </el-table-column>
 
-                                    <el-table-column
-                                        prop="schoolYearName"
-                                        label="学年"
-                                    >
-                                    </el-table-column>
+                                        <el-table-column
+                                            prop="schoolYearName"
+                                            label="学年"
+                                            min-width="120"
+                                        >
+                                        </el-table-column>
 
-                                    <el-table-column
-                                        prop="classification"
-                                        label="分类"
-                                    >
-                                    </el-table-column>
+                                        <el-table-column
+                                            prop="classificationId"
+                                            label="分类"
+                                            min-width="150"
+                                            :formatter="formatClassificationId"
+                                        >
+                                        </el-table-column>
 
-                                    <el-table-column
-                                        prop="joinType"
-                                        label="加入方式"
-                                    >
-                                    </el-table-column>
+                                        <el-table-column
+                                            prop="joinType"
+                                            label="加入方式"
+                                            min-width="80"
+                                            :formatter="formatJoinType"
+                                        >
+                                        </el-table-column>
 
-                                    <el-table-column
-                                        prop="necessary"
-                                        label="必修课"
-                                    >
-                                    </el-table-column>
+                                        <el-table-column
+                                            prop="necessary"
+                                            label="必修课"
+                                            min-width="80"
+                                            :formatter="formatNecessary"
+                                        >
+                                        </el-table-column>
 
-                                    <el-table-column
-                                        prop="lowestValue"
-                                        label="学期积分下限要求"
-                                        width="130"
-                                    >
-                                    </el-table-column>
+                                        <el-table-column
+                                            prop="lowestValue"
+                                            label="学期积分下限要求"
+                                            width="140"
+                                        >
+                                        </el-table-column>
 
-                                    <el-table-column prop="status" label="状态">
-                                        <!-- <template slot-scope="scope">
-                                            <el-button
-                                                size="mini"
-                                                round
-                                                :class="sureClass(scope.row)"
-                                                >{{
-                                                    scope.row.state
-                                                }}</el-button
-                                            >
-                                        </template> -->
-                                    </el-table-column>
+                                        <el-table-column 
+                                            prop="status" 
+                                            label="状态"
+                                            min-width="120"
+                                            :formatter="formatStatus"
+                                        >
+                                            <template slot-scope="scope">
+                                                <el-button
+                                                    size="mini"
+                                                    round
+                                                    :class="sureClass(scope.row)"
+                                                    >{{
+                                                        computedStatus(scope.row.status)
+                                                    }}</el-button
+                                                >
+                                            </template>
+                                        </el-table-column>
 
-                                    <el-table-column
-                                        prop="updateTime"
-                                        label="修改时间"
-                                    >
-                                    </el-table-column>
+                                        <el-table-column
+                                            prop="updateTime"
+                                            label="修改时间"
+                                            min-width="120"
+                                            :formatter="formatDate"
+                                        >
+                                        </el-table-column>
 
-                                    <el-table-column
-                                        prop="operate"
-                                        label="操作"
-                                        fixed="right"
-                                        width="200"
-                                    >
-                                        <template>
-                                            <el-link
-                                                style="margin-right: 10px"
-                                                type="primary"
-                                                >修改/详情</el-link
-                                            >
-                                            <el-link
-                                                style="margin-right: 10px"
-                                                type="info"
-                                                >审核</el-link
-                                            >
-                                            <el-link type="info">删除</el-link>
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                                <pagination
-                                    v-show="queryParams.totalPage > 0"
-                                    :total="queryParams.totalCount"
-                                    :page.sync="queryParams.pageCount"
-                                    :limit.sync="queryParams.pageSize"
-                                    @pagination="getList($event)"
-                                />
+                                        <el-table-column
+                                            prop="departmentName"
+                                            label="发布单位"
+                                            min-width="120"
+                                        >
+                                        </el-table-column>
+
+                                        <el-table-column
+                                            prop="type"
+                                            label="性质"
+                                            min-width="80"
+                                            :formatter="formatType"
+                                        >
+                                        </el-table-column>
+
+                                        <el-table-column
+                                            prop="classificationDetail"
+                                            label="分类明细"
+                                            min-width="180"
+                                            :formatter="formatClassificationDetail"
+                                        >
+                                        </el-table-column>
+
+                                        <el-table-column
+                                            prop="createTime"
+                                            label="创建时间"
+                                            min-width="150"
+                                            :formatter="formatDate"
+                                        >
+                                        </el-table-column>
+
+                                        <el-table-column
+                                            prop="createUserId"
+                                            label="创建人"
+                                        >
+                                        </el-table-column>
+
+                                        <el-table-column
+                                            prop="updateUserId"
+                                            label="修改人"
+                                        >
+                                        </el-table-column>
+
+                                        <el-table-column
+                                            prop="remark"
+                                            label="备注"
+                                        >
+                                        </el-table-column>
+
+                                        <el-table-column
+                                            prop="operate"
+                                            label="操作"
+                                            fixed="right"
+                                            width="200"
+                                        >
+                                            <template>
+                                                <el-link
+                                                    style="margin-right: 10px"
+                                                    type="primary"
+                                                    >修改/详情</el-link
+                                                >
+                                                <el-link
+                                                    style="margin-right: 10px"
+                                                    type="info"
+                                                    >审核</el-link
+                                                >
+                                                <el-link type="info">删除</el-link>
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+                                    <pagination
+                                        v-show="queryParams.totalPage > 0"
+                                        :total="queryParams.totalCount"
+                                        :page.sync="queryParams.pageCount"
+                                        :limit.sync="queryParams.pageSize"
+                                        @pagination="getList($event)"
+                                    />
                                 </div>
                             </el-tab-pane>
                         </template>
@@ -681,7 +756,7 @@
                         <el-row>
                             <el-col :span="5">学年：</el-col>
                             <el-col :span="19">{{
-                                addDetailDialog.yearOfLean
+                                schoolMap[list.value]
                             }}</el-col>
                         </el-row>
                     </el-col>
@@ -716,7 +791,7 @@
                         <el-row>
                             <el-col :span="5">培养方案</el-col>
                             <el-col :span="19">{{
-                                addDetailDialog.planOfgrain
+                                trainingProgramIdMapname[schoolYearIdMapProgramArray.value]
                             }}</el-col>
                         </el-row>
                     </el-col>
@@ -725,10 +800,11 @@
                             <el-col :span="6">必修课程：</el-col>
                             <el-col :span="18">
                                 <el-switch
-                                    v-model="addDetailDialog.isRequire"
+                                    v-model="addDetailDialog.config.neccessary"
                                     active-text="是"
-                                    active-value="是"
+                                    active-value="1"
                                     inactive-text="否"
+                                    inactive-value="0"
                                     class="switchStyle"
                                 >
                                 </el-switch>
@@ -742,7 +818,10 @@
                         <el-row>
                             <el-col :span="5">课程名称：</el-col>
                             <el-col :span="19">
-                                <el-input class="className"></el-input>
+                                <el-input 
+                                    class="className"
+                                    v-model="addDetailDialog.config.name"
+                                ></el-input>
                             </el-col>
                         </el-row>
                     </el-col>
@@ -751,21 +830,23 @@
                             <el-col :span="6">加入方式：</el-col>
                             <el-col :span="18">
                                 <el-select
-                                    v-model="addDetailDialog.unitValue"
+                                    v-model="addDetailDialog.config.joinType"
                                     class="shoutInput"
                                 >
                                     <el-option
-                                        label="预设"
-                                        value="1"
+                                        v-for="it in dict_sc_course_join_type"
+                                        :key="it.id"
+                                        :label="it.dictLabel"
+                                        :value="it.dictValue"
                                     ></el-option>
-                                    <el-option
+                                    <!-- <el-option
                                         label="预设2"
                                         value="2"
                                     ></el-option>
                                     <el-option
                                         label="预设3"
                                         value="3"
-                                    ></el-option>
+                                    ></el-option> -->
                                 </el-select>
                             </el-col>
                         </el-row>
@@ -778,21 +859,16 @@
                             <el-col :span="5">分类：</el-col>
                             <el-col :span="19">
                                 <el-select
-                                    v-model="addDetailDialog.sortClass"
+                                    v-model="addDetailDialog.config.classificationId"
                                     class="sortClass"
                                 >
                                     <el-option
-                                        label="思想政治和人文素养"
-                                        value="1"
+                                        v-for="it in classificationList"
+                                        :key="it.id"
+                                        :label="it.name"
+                                        :value="it.id"
                                     ></el-option>
-                                    <el-option
-                                        label="思想政治和人文素养"
-                                        value="2"
-                                    ></el-option>
-                                    <el-option
-                                        label="思想政治和人文素养"
-                                        value="3"
-                                    ></el-option>
+                                    
                                 </el-select>
                             </el-col>
                         </el-row>
@@ -802,21 +878,23 @@
                             <el-col :span="6">性质：</el-col>
                             <el-col :span="18">
                                 <el-select
-                                    v-model="addDetailDialog.nature"
+                                    v-model="addDetailDialog.config.type"
                                     class="shoutInput"
                                 >
                                     <el-option
-                                        label="活动"
-                                        value="1"
+                                        v-for="it in dict_sc_course_type"
+                                        :key="it.id"
+                                        :label="it.dictLabel"
+                                        :value="it.dictValue"
                                     ></el-option>
-                                    <el-option
+                                    <!-- <el-option
                                         label="活动"
                                         value="2"
                                     ></el-option>
                                     <el-option
                                         label="活动"
                                         value="3"
-                                    ></el-option>
+                                    ></el-option> -->
                                 </el-select>
                             </el-col>
                         </el-row>
@@ -1003,14 +1081,14 @@
                     <el-col :span="21">
                         <el-input
                             type="textarea"
-                            v-model="addDetailDialog.textareaContent"
+                            v-model="addDetailDialog.config.remark"
                         ></el-input>
                     </el-col>
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">关闭</el-button>
-                <el-button type="primary" @click="submitForm">确 定</el-button>
+                <el-button type="primary" @click="addDetail">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -1066,9 +1144,19 @@
         schoolYearMulti
     } from '@/api/application/secondClass/schoolYear'
     import {
-        courseListId
+        courseId,
+        coursePost,
+        courstPut,
+        courseDelete,
     } from '@/api/application/secondClass/course'
+    import {
+        getDict
+    } from '@/api/application/secondClass/dict/type.js'
 
+    import formatDate from '@/utils/formatDate.js'
+    import horwheel from 'horwheel'
+
+    
     import {
         listUser,
         getUser,
@@ -1085,16 +1173,43 @@
     import Treeselect from '@riophae/vue-treeselect'
     import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
-    export default {
-        
-        
+    export default { 
         name: 'User',
         components: { Treeselect },
         data() {
             return {
-                /* 方便挂载，直接映射 */
-                classificationMapid:new Map(),
+                //课程加入方式
+                dict_sc_course_join_type: [],
+                //是否必修
+                dict_sc_course_necessary: [],
+                //课程状态
+                dict_sc_course_status:[],
+                //课程类型/性质
+                dict_sc_course_type: [],
+                //课程分类类型/分类明细?
+                dict_sc_course_classification_type:[],
+                //加载
+                loading:false,
+                //课程状态数量
+                countState: {
+                    applyingCount:0,
+                    courseCount:0,
+                    failCount:0,
+                    validCount:0
+                },
+                //学年度id映射培养方案/方便下拉列表
+                schoolYearIdMapProgramArray: {
+                    value: Number(this.$route.params.tid),
+                    rows: []
+                },
+                //培养方案
+                trainingProgramIdMapname:[],
+                /* 左下侧分类列表以及其子列表 */
                 classificationList: [],
+                /* 方便分类挂载其子列表，分类id => 分类数组所在index */
+                classificationIdMapIndex:new Map(),
+                /* 分类Id映射Name */
+                classificationIdMapName:[],
                 statusRadio:'全部',
                 /* 查询详情的条件 */
                 queryDetail: {
@@ -1125,6 +1240,7 @@
                     value:  Number(this.$route.params.sid),
                     rows: []
                 },
+                
                 t: {},
                 exportDialog: {
                     title: '',
@@ -1156,6 +1272,14 @@
                 addDetailDialog: {
                     title: '新增课程',
                     open: false,
+                    config: {
+                        neccessary: '',
+                        name: '',
+                        joinType: "0",
+                        classificationId: 1,
+                        type: "0",
+                        remark: ''
+                    },
                     yearOfLean: '2021-2022学年',
                     unitValue: '1',
                     //second line
@@ -1393,7 +1517,20 @@
                 },
             }
         },
+        computed: {
+            computedStatus() {
+                return (temp) => {
+                    return this.dict_sc_course_status[temp].dictLabel
+                }
+            }
+        },
         watch: {
+            schoolYearIdMapProgramArray: {
+                handler(newV,oldV) {
+                    console.log(newV,111111111111)
+                },
+                deep:true
+            },
             // 根据名称筛选部门树
             deptName(val) {
                 this.$refs.tree.filter(val)
@@ -1413,8 +1550,87 @@
             })
         },
         methods: {
+            formatDate(row, column, cellValue) {
+                if (cellValue != null) {
+                    return formatDate(cellValue)
+                }
+                return cellValue
+            },
+            formatClassificationId(row, column, cellValue) {
+                if(cellValue != null) {
+                    return this.classificationIdMapName[cellValue]
+                }
+                return cellValue
+            },
+            formatClassificationDetail(row, column, cellValue) {
+                // console.log(this.dict_sc_course_classification_type,cellValue,'formatClassificationDetail')
+                // if(cellValue != null) {
+                //     return this.dict_sc_course_classification_type[cellValue]
+                // }
+                return cellValue
+            },
+            formatStatus(row, column, cellValue) {
+                if(cellValue != null) {
+                    return this.dict_sc_course_status[cellValue].dictLabel
+                }
+                return cellValue
+            },
+            formatType(row, column, cellValue) {
+                // console.log(this.dict_sc_course_type,7878)
+                if(cellValue != null) {
+                    return this.dict_sc_course_type[cellValue].dictLabel
+                }
+                return cellValue
+            },
+            formatNecessary(row, column, cellValue) {
+                
+                if(cellValue != null) {
+                    return this.dict_sc_course_necessary[cellValue].dictLabel
+                }
+                return cellValue
+            },
+            formatJoinType(row, column, cellValue) {
+                
+                if(cellValue != null) {
+                    return this.dict_sc_course_join_type[cellValue].dictLabel
+                }
+                return cellValue
+            },
+            formatTrainingProgram(row, column, cellValue) {
+                
+                if (cellValue != null) {
+                    
+                return this.trainingProgramIdMapname[cellValue]
+                }
+                return cellValue
+            },
+            async addDetail() {
+                this.addDetailDialog.config.schoolYearId = this.list.value
+                this.addDetailDialog.config.trainingProgramId = this.schoolYearIdMapProgramArray.value
+                this.addDetailDialog.config.schoolYearName = this.schoolMap[this.list.value]
+                console.log(this.addDetailDialog.config,999)
+                await coursePost(
+                    this.addDetailDialog.config
+                ).then(value => {
+                    console.log(value,789789)
+                })
+            },
+            refresh() {
+                this.$forceUpdate()
+            },
             async schoolYearChange(value) {
                 console.log(value)
+                this.list.value = value
+                this.loading = true
+                await this.initTableData(value)
+                this.loading = false
+                if(!!this.schoolYearIdMapProgramArray.rows[value]) {
+                    this.schoolYearIdMapProgramArray.value = this.schoolYearIdMapProgramArray.rows[value][0].id
+                } else {
+                    this.schoolYearIdMapProgramArray.value = '无数据'
+                }
+                
+                console.log(this.schoolYearIdMapProgramArray)
                 if (value == -1) {
                     await trainingProgramList({
                         page: this.t.page ? this.t.page : 1,
@@ -1453,11 +1669,14 @@
                 }
             },
             sureClass(row) {
-                if (row.state === '申请中') {
+                
+                if (row.status == 0) { //ing
                     return 'textPlain'
-                } else if (row.state === '有效') {
+                } else if (row.status == 1) {//yes
                     return 'textgreen'
-                } else {
+                } else if(row.status == 2){//no
+                    return 'textyellow'
+                } else {//unpass
                     return 'textRed'
                 }
             },
@@ -1673,9 +1892,72 @@
             // 提交上传文件
             submitFileForm() {
                 this.$refs.upload.submit()
+            },
+            async initTableData(schoolYearId) {
+                await trainingProgramDetail({
+                    schoolYearId
+                }).then(value => {
+                    console.log(value,88)
+                    const {
+                        applyingCount,
+                        courseCount,
+                        failCount,
+                        validCount
+                    } = value.data
+                    this.countState = {
+                        applyingCount,
+                        courseCount,
+                        failCount,
+                        validCount
+                    }
+                    console.log(value,'trainingProgramDetail')
+                    this.classificationList = value.data.classificationList
+                    console.log(this.classificationList,8988)
+                    value.data.classificationList.forEach((item,index) => {
+                        this.classificationIdMapIndex.set(item.id,index)
+                        
+                        this.classificationIdMapName[item.id] = item.name
+                    })
+                    
+                    value.data.pageData.list.forEach(item => {
+                        let index = this.classificationIdMapIndex.get(item.classificationId)
+                        /* 添加成员 */
+                        let {children} = this.classificationList[index]
+                        
+                        if(children) {
+                            children.push(item)
+                        }else { //增加属性
+                            this.classificationList[index].children = [item]
+                        }
+                    })
+                    console.log(this.classificationList,"trainingProgramDetail")
+                })
+            },
+            initDict() {
+                // getDict
+                Promise.all([
+                    getDict('sc_course_join_type'),
+                    getDict('sc_course_necessary'),
+                    getDict('sc_course_status'),
+                    getDict('sc_course_type'),
+                    getDict('sc_course_classification_type')
+                ]).then(value => {
+                    console.log(value,'initDict')
+                    let tempArr = [
+                        'dict_sc_course_join_type',
+                        'dict_sc_course_necessary',
+                        'dict_sc_course_status',
+                        'dict_sc_course_type',
+                        'dict_sc_course_classification_type'
+                    ]
+                    value.forEach((item, index) => {
+                        this[tempArr[index]] = item.data
+                    })
+                })
             }
         },
         async created() {
+            this.initDict()
             await schoolYearList().then(value => {
                 console.log(value)
                 value.rows.forEach(item => {
@@ -1686,37 +1968,42 @@
                 this.list.rows = value.rows
                 // this.list.value = -1
             })
+            
+        },
+        async beforeMount() {
+            await trainingProgramList({
+                limit: 1000
+            }).then(value => {
+                console.log(value,"1000")
+                
+                console.log(this.trainingProgramIdMapname,11)
+                value.data.list.forEach(item => {
+                    this.schoolYearIdMapProgramArray.rows[item.schoolYearId] ?
+                        this.schoolYearIdMapProgramArray.rows[item.schoolYearId].push(item) :
+                        this.schoolYearIdMapProgramArray.rows[item.schoolYearId] = [item]
+
+                    this.trainingProgramIdMapname[item.id] = item.name
+                })
+                
+                console.log(this.schoolYearIdMapProgramArray,55)
+            })
         },
         async mounted() {
+            console.log(this.schoolYearIdMapProgramArray,66)
             console.log(this.$route.params,77)
-            await trainingProgramDetail({
-                schoolYearId: this.$route.params.sid
-            }).then(value => {
-                console.log(value)
-                this.classificationList = value.data.classificationList
-                value.data.classificationList.forEach((item,index) => {
-                    this.classificationMapid.set(item.id,index)
+            this.loading = true
+            this.initTableData(this.$route.params.sid)
+            this.loading = false
+
+            //not a good way to mounted
+            setTimeout(() => {
+                let view = document.querySelectorAll(
+                    '.detailMainTable .el-table__body-wrapper'
+                )
+                view.forEach((item) => {
+                    item && horwheel(item)
                 })
-                value.data.pageData.list.forEach(item => {
-                    let index = this.classificationMapid.get(item.classificationId)
-                    /* 添加成员 */
-                    if(this.classificationList[index].children) {
-                        this.classificationList[index].children.push(item)
-                    }else { //初始化
-                        this.classificationList[index].children = [item]
-                    }
-                })
-                console.log(this.classificationList,"trainingProgramDetail")
-            })
-            // await courseListId(
-            //     this.$route.params.id
-            // ).then(value => {
-            //     value.rows.forEach((item) => {
-                    
-            //     })                
-            //     console.log(value,"courseListId")
-                
-            // })
+            },1000)
         }
     }
 </script>
@@ -1812,6 +2099,9 @@
     }
     .textgreen {
         color: #54d7b4;
+    }
+    .textyellow {
+        color: yellow;
     }
     .textPlain {
         color: #8b8b8b;

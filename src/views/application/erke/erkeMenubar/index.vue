@@ -16,7 +16,7 @@
             <el-submenu index="1">
                 <template slot="title">
                     <i class="el-icon-location"></i>
-                    <span>课堂</span>
+                    <span>课程</span>
                 </template>
                 <el-menu-item index="/application/erke/erkePlan">
                     培养方案
@@ -30,8 +30,11 @@
                     <i class="el-icon-setting"></i>
                     <span>活动</span>
                 </template>
-                <el-menu-item index="2-1">批次</el-menu-item>
-                <el-menu-item index="2-2">积分标准</el-menu-item>
+                <el-menu-item index="/application/erke/activity">活动管理</el-menu-item>
+                <el-menu-item index="2-2">场地申请</el-menu-item>
+                <el-menu-item index="2-3">成长记录认证</el-menu-item>
+                <el-menu-item index="2-4">内容管理</el-menu-item>
+                <el-menu-item index="2-5">待办管理</el-menu-item>
             </el-submenu>
         </el-menu>
     </div>
