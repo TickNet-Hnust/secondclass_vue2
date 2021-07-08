@@ -1016,7 +1016,7 @@
         getDict
     } from '@/api/application/secondClass/dict/type.js'
 
-    import formatDate from '@/utils/formatDate.js'
+    import formaterDate from '@/utils/formatDate.js'
     import horwheel from 'horwheel'
 
     
@@ -1416,16 +1416,10 @@
         },
         methods: {
             formatDate(row, column, cellValue) {
-                if (cellValue != null) {
-                    return formatDate(cellValue)
-                }
-                return cellValue
+                return cellValue && formaterDate(cellValue)
             },
             formatClassificationId(row, column, cellValue) {
-                if(cellValue != null) {
-                    return this.classificationIdMapName[cellValue]
-                }
-                return cellValue
+                return cellValue && this.classificationIdMapName[cellValue]
             },
             formatClassificationDetail(row, column, cellValue) {
                 // console.log(this.dict_sc_course_classification_type,cellValue,'formatClassificationDetail')
@@ -1435,39 +1429,22 @@
                 return cellValue
             },
             formatStatus(row, column, cellValue) {
-                if(cellValue != null) {
-                    return this.dict_sc_course_status[cellValue].dictLabel
-                }
-                return cellValue
+                return cellValue &&
+                this.dict_sc_course_status[cellValue].dictLabel
             },
             formatType(row, column, cellValue) {
-                // console.log(this.dict_sc_course_type,7878)
-                if(cellValue != null) {
-                    return this.dict_sc_course_type[cellValue].dictLabel
-                }
-                return cellValue
+                return cellValue &&
+                this.dict_sc_course_type[cellValue].dictLabel
             },
             formatNecessary(row, column, cellValue) {
-                
-                if(cellValue != null) {
-                    return this.dict_sc_course_necessary[cellValue].dictLabel
-                }
-                return cellValue
+                return cellValue &&
+                this.dict_sc_course_necessary[cellValue].dictLabel
             },
             formatJoinType(row, column, cellValue) {
-                
-                if(cellValue != null) {
-                    return this.dict_sc_course_join_type[cellValue].dictLabel
-                }
-                return cellValue
+                return cellValue && this.dict_sc_course_join_type[cellValue].dictLabel
             },
             formatTrainingProgram(row, column, cellValue) {
-                
-                if (cellValue != null) {
-                    
-                return this.trainingProgramIdMapname[cellValue]
-                }
-                return cellValue
+                return cellValue && this.trainingProgramIdMapname[cellValue]
             },
             async addDetail() {
                 this.addDetailDialog.config.schoolYearId = this.list.value
@@ -1497,24 +1474,7 @@
                 }
                 
                 console.log(this.schoolYearIdMapProgramArray)
-                if (value == -1) {
-                    await trainingProgramList({
-                        page: this.t.page ? this.t.page : 1,
-                        limit: this.t.limit ? this.t.limit : 10
-                    })
-                        .then(value => {
-                            console.log(value)
-                            this.queryParams.pageSize = value.data.pageSize
-                            this.queryParams.totalCount = value.data.totalCount
-                            this.queryParams.totalPage = value.data.totalPage
-                            this.planData = value.data.list
-                            this.$forceUpdate()
-                            this.loading = false
-                        })
-                        .catch(err => {
-                            console.log(err)
-                        })
-                } else {
+                
                     await trainingProgramList({
                         page: this.t.page ? this.t.page : 1,
                         limit: this.t.limit ? this.t.limit : 10,
@@ -1532,7 +1492,7 @@
                         .catch(err => {
                             console.log(err)
                         })
-                }
+                
             },
             sureClass(row) {
                 
