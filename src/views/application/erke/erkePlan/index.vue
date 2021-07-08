@@ -472,6 +472,7 @@
         schoolYearMulti
     } from '@/api/application/secondClass/schoolYear'
     import formatDate from '@/utils/formatDate.js'
+    import alertDialog from '@/utils/alertDialog.js'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
     import horwheel from 'horwheel'
 
@@ -614,113 +615,72 @@
                     totalPage: 50,
                     pageCount: 1,
                     pageSize: 4,
-                    userName: undefined,
-                    phonenumber: undefined,
-                    status: undefined,
-                    deptId: undefined
                 }
             }
         },
         created() {
             this.getList()
-            this.getDicts('sys_normal_disable').then(response => {
-                this.statusOptions = response.data
-            })
-            this.getDicts('sys_user_sex').then(response => {
-                this.sexOptions = response.data
-            })
-            this.getConfigKey('sys.user.initPassword').then(response => {
-                this.initPassword = response.msg
-            })
         },
         methods: {
             async deletePlan(row,index) {
                 console.log(row,index)
-                this.$alert('您确定要删除吗吗', '提示框', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    customClass: 'message_box_alert',
-                    callback: async action => {
-                        if (action == 'cancel') {
-                            this.$message.info('取消删除')
-                        } else {
-                            await trainingProgramMulti({
+                alertDialog.call(this,'删除',{
+                    confirm: async()=>{
+                        await trainingProgramMulti({
                             deleteIds: [row.id]
-                        }).then(async value => {
+                        }).then(value => {
                             this.planData.splice(index,1)
                             this.$forceUpdate()
-                            this.$message.success('删除成功')
+                            this.msgSuccess('删除成功')
                         }).catch(err => {
-                            console.log('删除失败')
+                            this.msgError('删除失败')
                         })
-                        }
                     }
                 })
-                
             },
             async schoolYearChange(value) {
                 console.log(value)
-                if (value == -1) {
-                    await trainingProgramList({
-                        page: this.t.page ? this.t.page : 1,
-                        limit: this.t.limit ? this.t.limit : 10
+                //如果value为-1则查询全部，否则查询对应的value
+                await (function(that) {
+                    if(value == -1) {
+                        return  trainingProgramList({
+                            page: that.t.page ? that.t.page : 1,
+                            limit: that.t.limit ? that.t.limit : 10
+                        })
+                    }
+                    else {
+                        return  trainingProgramList({
+                            page: that.t.page ? that.t.page : 1,
+                            limit: that.t.limit ? that.t.limit : 10,
+                            schoolYearId: value
+                        })
+                    }
+                }(this))
+                    .then(value => {
+                        this.queryParams.pageSize = value.data.pageSize
+                        this.queryParams.totalCount = value.data.totalCount
+                        this.queryParams.totalPage = value.data.totalPage
+                        this.planData = value.data.list
+                        this.$forceUpdate()
+                        this.loading = false
                     })
-                        .then(value => {
-                            console.log(value)
-                            this.queryParams.pageSize = value.data.pageSize
-                            this.queryParams.totalCount = value.data.totalCount
-                            this.queryParams.totalPage = value.data.totalPage
-                            this.planData = value.data.list
-                            this.$forceUpdate()
-                            this.loading = false
-                        })
-                        .catch(err => {
-                            console.log(err)
-                        })
-                } else {
-                    await trainingProgramList({
-                        page: this.t.page ? this.t.page : 1,
-                        limit: this.t.limit ? this.t.limit : 10,
-                        schoolYearId: value
+                    .catch(err => {
+                        console.log(err)
                     })
-                        .then(value => {
-                            console.log(value)
-                            this.queryParams.pageSize = value.data.pageSize
-                            this.queryParams.totalCount = value.data.totalCount
-                            this.queryParams.totalPage = value.data.totalPage
-                            this.planData = value.data.list
-                            this.$forceUpdate()
-                            this.loading = false
-                        })
-                        .catch(err => {
-                            console.log(err)
-                        })
-                }
             },
             formatSchoolYearName(row, column, cellValue) {
-                if (cellValue != null) {
-                    return this.schoolMap[cellValue]
-                }
-                return cellValue
+                return cellValue && this.schoolMap[cellValue]
             },
             formatUpdateTime(row, column, cellValue) {
-                if (cellValue != null) {
-                    return formatDate(cellValue)
-                }
-                return cellValue
+                return cellValue && formatDate(cellValue)
             },
             formarStatus(row, column, cellValue) {
-                if (cellValue != null) {
-                    return this.dict_sc_train_program_status[cellValue]
-                        .dictLabel
-                }
-                return cellValue
+                return cellValue && 
+                this.dict_sc_train_program_status[cellValue].dictLabel
             },
             formatRank(row, column, cellValue) {
-                if (cellValue != null) {
-                    return this.dict_sc_train_program_rank[cellValue].dictLabel
-                }
-                return cellValue
+                return cellValue &&
+                this.dict_sc_train_program_rank[cellValue].dictLabel
             },
             renderHeader(h) {
                 return h(

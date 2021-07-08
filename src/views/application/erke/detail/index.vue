@@ -412,136 +412,13 @@
                                 </div>
                             </el-tab-pane>
                         </template>
-                        <!--<el-tab-pane label="全部">
-                             <div class="erke-buttom-right">
-                                <el-table :data="datadata">
-                                    <el-table-column
-                                        type="selection"
-                                        width="55"
-                                    >
-                                    </el-table-column>
-
-                                    <el-table-column
-                                        prop="ID"
-                                        label="ID"
-                                        width="50"
-                                    >
-                                    </el-table-column>
-
-                                    <el-table-column
-                                        prop="className"
-                                        label="课程名称"
-                                    >
-                                    </el-table-column>
-
-                                    <el-table-column
-                                        prop="trainPlan"
-                                        label="培养方案"
-                                    >
-                                    </el-table-column>
-
-                                    <el-table-column
-                                        prop="termLearn"
-                                        label="学年"
-                                    >
-                                    </el-table-column>
-
-                                    <el-table-column
-                                        prop="classsort"
-                                        label="分类"
-                                    >
-                                    </el-table-column>
-
-                                    <el-table-column
-                                        prop="joinWay"
-                                        label="加入方式"
-                                    >
-                                    </el-table-column>
-
-                                    <el-table-column
-                                        prop="classMust"
-                                        label="必修课"
-                                    >
-                                    </el-table-column>
-
-                                    <el-table-column
-                                        prop="TermDown"
-                                        label="学期积分下限要求"
-                                        width="130"
-                                    >
-                                    </el-table-column>
-
-                                    <el-table-column prop="state" label="状态">
-                                        <template slot-scope="scope">
-                                            <el-button
-                                                size="mini"
-                                                round
-                                                :class="sureClass(scope.row)"
-                                                >{{
-                                                    scope.row.state
-                                                }}</el-button
-                                            >
-                                        </template>
-                                    </el-table-column>
-
-                                    <el-table-column
-                                        prop="modifyTime"
-                                        label="修改时间"
-                                    >
-                                    </el-table-column>
-
-                                    <el-table-column
-                                        prop="operate"
-                                        label="操作"
-                                        fixed="right"
-                                        width="200"
-                                    >
-                                        <template>
-                                            <el-link
-                                                style="margin-right: 10px"
-                                                type="primary"
-                                                >修改/详情</el-link
-                                            >
-                                            <el-link
-                                                style="margin-right: 10px"
-                                                type="info"
-                                                >审核</el-link
-                                            >
-                                            <el-link type="info">删除</el-link>
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                                <pagination
-                                    v-show="queryParams.totalPage > 0"
-                                    :total="queryParams.totalCount"
-                                    :page.sync="queryParams.pageCount"
-                                    :limit.sync="queryParams.pageSize"
-                                    @pagination="getList($event)"
-                                />
-                            </div>
-                        </el-tab-pane>
-                        <el-tab-pane label="思想政治与人文素养"
-                            >思想政治与人文素养</el-tab-pane
-                        >
-                        <el-tab-pane label="学术科技与创新"
-                            >学术科技与创新</el-tab-pane
-                        >
-                        <el-tab-pane label="社会时间与志愿公益"
-                            >社会时间与志愿公益</el-tab-pane
-                        >
-                        <el-tab-pane label="文化体育与艺术"
-                            >文化体育与艺术</el-tab-pane
-                        >
-                        <el-tab-pane label="社会工作与阅历"
-                            >社会工作与阅历</el-tab-pane
-                        > -->
                     </el-tabs>
                 </div>
             </el-col>
         </el-row>
 
         <!-- 添加或修改参数配置对话框 -->
-        <el-dialog
+        <!-- <el-dialog
             :title="title"
             :visible.sync="open"
             width="600px"
@@ -693,7 +570,7 @@
                 <el-button type="primary" @click="submitForm">确 定</el-button>
                 <el-button @click="cancel">取 消</el-button>
             </div>
-        </el-dialog>
+        </el-dialog> -->
 
         <!-- 用户导入对话框 -->
         <el-dialog
@@ -800,11 +677,11 @@
                             <el-col :span="6">必修课程：</el-col>
                             <el-col :span="18">
                                 <el-switch
-                                    v-model="addDetailDialog.config.neccessary"
+                                    v-model="addDetailDialog.config.necessary"
                                     active-text="是"
-                                    active-value="1"
+                                    :active-value="1"
                                     inactive-text="否"
-                                    inactive-value="0"
+                                    :inactive-value="0"
                                     class="switchStyle"
                                 >
                                 </el-switch>
@@ -839,14 +716,7 @@
                                         :label="it.dictLabel"
                                         :value="it.dictValue"
                                     ></el-option>
-                                    <!-- <el-option
-                                        label="预设2"
-                                        value="2"
-                                    ></el-option>
-                                    <el-option
-                                        label="预设3"
-                                        value="3"
-                                    ></el-option> -->
+
                                 </el-select>
                             </el-col>
                         </el-row>
@@ -887,20 +757,13 @@
                                         :label="it.dictLabel"
                                         :value="it.dictValue"
                                     ></el-option>
-                                    <!-- <el-option
-                                        label="活动"
-                                        value="2"
-                                    ></el-option>
-                                    <el-option
-                                        label="活动"
-                                        value="3"
-                                    ></el-option> -->
+
                                 </el-select>
                             </el-col>
                         </el-row>
                     </el-col>
                 </el-row>
-                <!-- 其他信息 -->
+                
                 <el-row>
                     <el-col :span="3" style="height: 49px; line-height: 49px">
                         <i class="el-icon-share"></i> 其他信息
@@ -1217,7 +1080,7 @@
                     courseName: '',
                     departmentId: '',
                     joinType: '',
-                    neccessary: '',
+                    necessary: '',
                     shoolYearId: '',
                     status: '',
                     term: '',
@@ -1273,12 +1136,13 @@
                     title: '新增课程',
                     open: false,
                     config: {
-                        neccessary: '',
+                        necessary: 1,
                         name: '',
                         joinType: "0",
                         classificationId: 1,
                         type: "0",
-                        remark: ''
+                        remark: '',
+                        status: 0,
                     },
                     yearOfLean: '2021-2022学年',
                     unitValue: '1',
@@ -1520,6 +1384,7 @@
         computed: {
             computedStatus() {
                 return (temp) => {
+                    // console.log(this.dict_sc_course_status,temp,333)
                     return this.dict_sc_course_status[temp].dictLabel
                 }
             }
@@ -1608,6 +1473,7 @@
                 this.addDetailDialog.config.schoolYearId = this.list.value
                 this.addDetailDialog.config.trainingProgramId = this.schoolYearIdMapProgramArray.value
                 this.addDetailDialog.config.schoolYearName = this.schoolMap[this.list.value]
+
                 console.log(this.addDetailDialog.config,999)
                 await coursePost(
                     this.addDetailDialog.config

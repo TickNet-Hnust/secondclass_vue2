@@ -15,7 +15,8 @@ import permission from './directive/permission'
 
 import './assets/icons' // icon
 import './permission' // permission control
-import { getDicts } from '@/api/system/dict/data'
+// import { getDicts } from '@/api/system/dict/data'
+import { getDict } from '@/api/application/secondClass/dict/type.js'
 import { getConfigKey } from '@/api/system/config'
 import {
     parseTime,
@@ -26,12 +27,13 @@ import {
     download,
     handleTree
 } from '@/utils/ruoyi'
+import alertDialog from './utils/alertDialog'
 import Pagination from '@/components/Pagination'
 // 自定义表格工具扩展
 import RightToolbar from '@/components/RightToolbar'
 
 // 全局方法挂载
-Vue.prototype.getDicts = getDicts
+Vue.prototype.getDict = getDict
 Vue.prototype.getConfigKey = getConfigKey
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm
@@ -40,6 +42,8 @@ Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
+
+Vue.prototype.alertDialog = alertDialog
 
 Vue.prototype.msgSuccess = function(msg) {
     this.$message({ showClose: true, message: msg, type: 'success' })
