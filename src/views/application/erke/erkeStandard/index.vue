@@ -987,11 +987,6 @@
             /** 新增按钮操作 */
             handleAdd() {
                 this.addStardardDialog.open = true
-                // this.postOptions = response.posts
-                // this.roleOptions = response.roles
-                // this.open = true
-                // this.title = '新增课程'
-                // this.form.password = this.initPassword
             },
             /** 修改按钮操作 */
             handleUpdate(row) {
@@ -1065,20 +1060,6 @@
             /** 导出按钮操作 */
             handleExport() {
                 this.exportDialog.open = true
-                // const queryParams = this.queryParams
-                // this.$confirm('是否确认导出所有用户数据项?', '警告', {
-                //     confirmButtonText: '确定',
-                //     cancelButtonText: '取消',
-                //     type: 'warning'
-                // })
-                //     .then(() => {
-                //         this.exportLoading = true
-                //         return exportUser(queryParams)
-                //     })
-                //     .then(response => {
-                //         this.download(response.msg)
-                //         this.exportLoading = false
-                //     })
             },
             /** 导入按钮操作 */
             handleImport() {
