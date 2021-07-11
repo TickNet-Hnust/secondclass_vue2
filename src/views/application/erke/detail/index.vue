@@ -1522,11 +1522,12 @@
                     schoolYearId: value
                 })
                     .then(value => {
-                        console.log(value)
+                        console.log(value,'培养方案详细')
                         this.queryParams.pageSize = value.data.pageSize
                         this.queryParams.totalCount = value.data.totalCount
                         this.queryParams.totalPage = value.data.totalPage
                         this.planData = value.data.list
+                        console.log(this.planData,7777)
                         this.$forceUpdate()
                         this.loading = false
                     })
@@ -1762,6 +1763,7 @@
             submitFileForm() {
                 this.$refs.upload.submit()
             },
+            //得到当前学年的培养方案详细信息
             async initTableData(schoolYearId) {
                 await trainingProgramDetail({
                     schoolYearId
@@ -1783,8 +1785,9 @@
                     this.classificationList = value.data.classificationList
                     console.log(this.classificationList, 8988)
                     value.data.classificationList.forEach((item, index) => {
+                        //分类id映射分类数组下标
                         this.classificationIdMapIndex.set(item.id, index)
-
+                        //分类id映射Name
                         this.classificationIdMapName[item.id] = item.name
                     })
 
@@ -1832,25 +1835,29 @@
             }
         },
         async created() {
-            this.initDict()
+            //初始化字典
+            this.initDict() 
             await schoolYearList().then(value => {
                 console.log(value)
                 value.rows.forEach(item => {
-                    this.schoolMap[item.id] = item.yearName
+                    //学年id映射name
+                    this.schoolMap[item.id] = item.yearName 
                 })
 
                 console.log(value, 'schoolYearList')
+                //记录所有学年，用于学年度展示
                 this.list.rows = value.rows
-                // this.list.value = -1
             })
         },
         async beforeMount() {
+            //拿到所有培养方案
             await trainingProgramList({
                 limit: 1000
             }).then(value => {
                 console.log(value, '1000')
 
-                console.log(this.trainingProgramIdMapname, 11)
+                
+                //学年Id映射其下培养方案数组
                 value.data.list.forEach(item => {
                     this.schoolYearIdMapProgramArray.rows[item.schoolYearId]
                         ? this.schoolYearIdMapProgramArray.rows[
@@ -1859,29 +1866,29 @@
                         : (this.schoolYearIdMapProgramArray.rows[
                               item.schoolYearId
                           ] = [item])
-
+                    //培养方案Id映射名字
                     this.trainingProgramIdMapname[item.id] = item.name
                 })
-
-                console.log(this.schoolYearIdMapProgramArray, 55)
+                console.log(this.schoolYearIdMapProgramArray,'学年Id映射其下培养方案数组' )
+                console.log(this.trainingProgramIdMapname, '培养方案Id映射名字')
             })
         },
         async mounted() {
-            console.log(this.schoolYearIdMapProgramArray, 66)
+            
             console.log(this.$route.params, 77)
             this.loading = true
             this.initTableData(this.$route.params.sid)
             this.loading = false
 
             //not a good way to mounted
-            setTimeout(() => {
-                let view = document.querySelectorAll(
-                    '.detailMainTable .el-table__body-wrapper'
-                )
-                view.forEach(item => {
-                    item && horwheel(item)
-                })
-            }, 1000)
+            // setTimeout(() => {
+            //     let view = document.querySelectorAll(
+            //         '.detailMainTable .el-table__body-wrapper'
+            //     )
+            //     view.forEach(item => {
+            //         item && horwheel(item)
+            //     })
+            // }, 1000)
         }
     }
 </script>
