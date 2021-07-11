@@ -35,14 +35,17 @@ import activity from '@/views/application/erke/activity/index.vue'
 /*home*/
 import home from '@/views/home/index.vue'
 import homeContent from '@/views/home/homeContent/index.vue'
-export const constantRoutes = [{
+export const constantRoutes = [
+    {
         path: '/redirect',
         component: Layout,
         hidden: true,
-        children: [{
-            path: '/redirect/:path(.*)',
-            component: resolve => require(['@/views/redirect'], resolve)
-        }]
+        children: [
+            {
+                path: '/redirect/:path(.*)',
+                component: resolve => require(['@/views/redirect'], resolve)
+            }
+        ]
     },
     {
         path: '/login',
@@ -82,18 +85,22 @@ export const constantRoutes = [{
                 meta: {
                     title: ''
                 },
-                children: [{
-                    path: '/home',
-                    name: 'home',
-                    meta: {
-                        title: '首页'
-                    },
-                    component: home,
-                    children: [{
-                        path: '/home/homeContent',
-                        component: homeContent
-                    }]
-                }]
+                children: [
+                    {
+                        path: '/home',
+                        name: 'home',
+                        meta: {
+                            title: '首页'
+                        },
+                        component: home,
+                        children: [
+                            {
+                                path: '/home/homeContent',
+                                component: homeContent
+                            }
+                        ]
+                    }
+                ]
             },
             {
                 path: '/application',
@@ -103,46 +110,49 @@ export const constantRoutes = [{
                 meta: {
                     title: '应用'
                 },
-                children: [{
-                    path: '/application/erke',
-                    component: erke,
-                    name: 'erke',
-                    meta: {
-                        title: '第二课堂成绩单'
-                    },
-                    redirect: '/application/erke/erkePlan',
-                    children: [{
-                            path: '/application/erke/erkePlan',
-                            component: erkePlan,
-                            name: 'erkePlan',
-                            meta: {
-                                title: '培养方案'
-                            }
+                children: [
+                    {
+                        path: '/application/erke',
+                        component: erke,
+                        name: 'erke',
+                        meta: {
+                            title: '第二课堂成绩单'
                         },
-                        {
-                            path: 'erkeStandard',
-                            name: 'erkeStandard',
-                            component: erkeStandard,
-                            meta: {
-                                title: '积分标准'
-                            }
-                        },
-                        {
-                            path: '/application/erke/detail/:sid/:tid',
-                            component: detail,
-                            name: 'detail',
+                        redirect: '/application/erke/erkePlan',
+                        children: [
+                            {
+                                path: '/application/erke/erkePlan',
+                                component: erkePlan,
+                                name: 'erkePlan',
+                                meta: {
+                                    title: '培养方案'
+                                }
+                            },
+                            {
+                                path: 'erkeStandard',
+                                name: 'erkeStandard',
+                                component: erkeStandard,
+                                meta: {
+                                    title: '积分标准'
+                                }
+                            },
+                            {
+                                path: '/application/erke/detail/:sid/:tid',
+                                component: detail,
+                                name: 'detail',
 
-                            meta: {
-                                title: '培养方案-详情'
+                                meta: {
+                                    title: '培养方案-详情'
+                                }
+                            },
+                            {
+                                path: '/application/erke/activity',
+                                component: activity,
+                                name: 'activity'
                             }
-                        },
-                        {
-                            path: '/application/erke/activity',
-                            component: activity,
-                            name: 'activity'
-                        }
-                    ]
-                }]
+                        ]
+                    }
+                ]
             }
             // {
             //     path: '/application/erke',
@@ -169,49 +179,57 @@ export const constantRoutes = [{
         component: Layout,
         hidden: true,
         redirect: 'noredirect',
-        children: [{
-            path: 'profile',
-            component: resolve =>
-                require(['@/views/system/user/profile/index'], resolve),
-            name: 'Profile',
-            meta: { title: '个人中心', icon: 'user' }
-        }]
+        children: [
+            {
+                path: 'profile',
+                component: resolve =>
+                    require(['@/views/system/user/profile/index'], resolve),
+                name: 'Profile',
+                meta: { title: '个人中心', icon: 'user' }
+            }
+        ]
     },
     {
         path: '/dict',
         component: Layout,
         hidden: true,
-        children: [{
-            path: 'type/data/:dictId(\\d+)',
-            component: resolve =>
-                require(['@/views/system/dict/data'], resolve),
-            name: 'Data',
-            meta: { title: '字典数据', icon: '' }
-        }]
+        children: [
+            {
+                path: 'type/data/:dictId(\\d+)',
+                component: resolve =>
+                    require(['@/views/system/dict/data'], resolve),
+                name: 'Data',
+                meta: { title: '字典数据', icon: '' }
+            }
+        ]
     },
     {
         path: '/job',
         component: Layout,
         hidden: true,
-        children: [{
-            path: 'log',
-            component: resolve =>
-                require(['@/views/monitor/job/log'], resolve),
-            name: 'JobLog',
-            meta: { title: '调度日志' }
-        }]
+        children: [
+            {
+                path: 'log',
+                component: resolve =>
+                    require(['@/views/monitor/job/log'], resolve),
+                name: 'JobLog',
+                meta: { title: '调度日志' }
+            }
+        ]
     },
     {
         path: '/gen',
         component: Layout,
         hidden: true,
-        children: [{
-            path: 'edit/:tableId(\\d+)',
-            component: resolve =>
-                require(['@/views/tool/gen/editTable'], resolve),
-            name: 'GenEdit',
-            meta: { title: '修改生成配置' }
-        }]
+        children: [
+            {
+                path: 'edit/:tableId(\\d+)',
+                component: resolve =>
+                    require(['@/views/tool/gen/editTable'], resolve),
+                name: 'GenEdit',
+                meta: { title: '修改生成配置' }
+            }
+        ]
     }
 ]
 

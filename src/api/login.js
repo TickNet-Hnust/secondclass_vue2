@@ -2,10 +2,10 @@ import request from '@/utils/request'
 
 // 微信登录方法
 export function loginByCode(code) {
-  return request({
-    url: `/loginByCode/${code}`,
-    method: 'get'
-  })
+    return request({
+        url: `/loginByCode/${code}`,
+        method: 'get'
+    })
 }
 
 // 登录方法

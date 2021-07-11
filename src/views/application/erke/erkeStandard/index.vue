@@ -257,9 +257,7 @@
             width="850px"
         >
             <el-row>
-                <el-col :span="4">
-                    上级节点：
-                </el-col>
+                <el-col :span="4"> 上级节点： </el-col>
                 <el-col :span="20">
                     <el-cascader
                         :options="datadata"
@@ -285,9 +283,7 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="4">
-                    节点名称：
-                </el-col>
+                <el-col :span="4"> 节点名称： </el-col>
                 <el-col :span="20">
                     <el-input
                         type="textarea"
@@ -297,9 +293,7 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="4">
-                    类型：
-                </el-col>
+                <el-col :span="4"> 类型： </el-col>
                 <el-col :span="20">
                     <el-select v-model="postCourseClassification.type">
                         <el-option
@@ -314,9 +308,7 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="4">
-                    分值：
-                </el-col>
+                <el-col :span="4"> 分值： </el-col>
                 <el-col :span="20">
                     <el-row>
                         <el-radio

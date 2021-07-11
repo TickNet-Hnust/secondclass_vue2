@@ -6,7 +6,7 @@
             </div>
             <div class="erke-top-foot">
                 <el-row>
-                    <el-col :span="4.5" >
+                    <el-col :span="4.5">
                         学年度：
                         <el-select value="2021-2022学年">
                             <el-option value="2021-2022学年 "></el-option>
@@ -14,54 +14,54 @@
                             <el-option value="2023-2024学年"></el-option>
                         </el-select>
                     </el-col>
-                    <el-col :span="5" >
+                    <el-col :span="5">
                         学院/二级单位:
                         <el-select value="资源环境与安全工程学院">
                             <el-option value="计算机科学与工程学院"></el-option>
-                            <el-option value="商学院"></el-option>          
+                            <el-option value="商学院"></el-option>
                         </el-select>
                     </el-col>
                     <el-col :span="4.5">
                         活动名称：
-                        <el-input ></el-input>
+                        <el-input></el-input>
                     </el-col>
                     <el-col :span="4.5">
                         活动ID：
-                        <el-input ></el-input>
+                        <el-input></el-input>
                     </el-col>
                     <el-col :span="4.5">
                         主办方：
                         <el-input></el-input>
                     </el-col>
                 </el-row>
-                <el-row style="margin-top:15px" :gutter="10">
-                    <el-col :span="4.5" >
+                <el-row style="margin-top: 15px" :gutter="10">
+                    <el-col :span="4.5">
                         录取方式：
-                        <el-select value="全部" style="width:80px">
+                        <el-select value="全部" style="width: 80px">
                             <el-option value="全部"></el-option>
                             <el-option value="报名"></el-option>
                             <el-option value="审核"></el-option>
                         </el-select>
                     </el-col>
-                    <el-col :span="6" >
+                    <el-col :span="6">
                         发布事件:
                         <el-date-picker
-                            
                             type="monthrange"
                             range-separator="至"
                             start-placeholder="开始月份"
-                            end-placeholder="结束月份">
+                            end-placeholder="结束月份"
+                        >
                         </el-date-picker>
                     </el-col>
-                    <el-col :span="4.5" >
+                    <el-col :span="4.5">
                         活动分类：
-                        <el-select value="全部" style="width:120px">
+                        <el-select value="全部" style="width: 120px">
                             <el-option value="全部"></el-option>
                             <el-option value="报名"></el-option>
                             <el-option value="审核"></el-option>
                         </el-select>
                         --
-                        <el-select value="全部" style="width:120px">
+                        <el-select value="全部" style="width: 120px">
                             <el-option value="全部"></el-option>
                             <el-option value="报名"></el-option>
                             <el-option value="审核"></el-option>
@@ -80,8 +80,7 @@
         </div>
 
         <div class="erke-bottom">
-            
-asdf
+            asdf
             <pagination
                 v-show="queryParams.totalPage > 0"
                 :total="queryParams.totalCount"
@@ -90,7 +89,6 @@ asdf
                 @pagination="getList($event)"
             />
         </div>
-
     </div>
 </template>
 
@@ -116,16 +114,12 @@ asdf
                 }
             }
         },
-        created() {
-            
-        },
-        methods: {
-        
-        }
+        created() {},
+        methods: {}
     }
 </script>
 
-<style  scoped>
+<style scoped>
     .erke-top {
         margin-right: 10px;
         height: 170px;
@@ -172,5 +166,4 @@ asdf
         /* height: 475px !important; */
         overflow: hidden;
     }
-    
 </style>

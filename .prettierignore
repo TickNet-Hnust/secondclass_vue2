@@ -3,6 +3,13 @@ buid
 server
 public
 dist
+src/assets/**
 node_moudels
 *.json
 *.config.js
+*.env.*
+.editorconfig
+.eslintignore
+.prettierignore
+.gitignore
+out/**

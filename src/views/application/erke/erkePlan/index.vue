@@ -81,7 +81,12 @@
             </el-row>
 
             <!-- table start here -->
-            <el-table :data="planData" stripe v-loading="loading" class="erkePlanMainTable">
+            <el-table
+                :data="planData"
+                stripe
+                v-loading="loading"
+                class="erkePlanMainTable"
+            >
                 <el-table-column prop="id" label="批次ID" width="80">
                 </el-table-column>
                 <el-table-column
@@ -146,12 +151,17 @@
                             type="info"
                             :to="
                                 '/application/erke/detail/' +
-                                    scope.row.schoolYearId+'/'+
+                                    scope.row.schoolYearId +
+                                    '/' +
                                     scope.row.id
                             "
                             >详情</router-link
                         >
-                        <el-link type="info" @click="deletePlan(scope.row,scope.$index)">删除</el-link>
+                        <el-link
+                            type="info"
+                            @click="deletePlan(scope.row, scope.$index)"
+                            >删除</el-link
+                        >
                     </template>
                 </el-table-column>
             </el-table>
@@ -213,16 +223,14 @@
                         align="center"
                     >
                         <template slot-scope="scope">
-                            
                             <!-- <el-radio :label="scope.$index" v-model="managerDialog.radio">&nbsp;</el-radio> -->
-                            <input 
-                                type="radio" 
-                                name="isNow" 
-                                :value="scope.$index" 
+                            <input
+                                type="radio"
+                                name="isNow"
+                                :value="scope.$index"
                                 v-model="managerDialog.radio"
                                 @change="tt"
                             />
-                            
                         </template>
                     </el-table-column>
                 </el-table>
@@ -399,7 +407,9 @@
                     >
                         <template slot-scope="scope">
                             <span
-                                @click="deletePlanDialog(scope.row,scope.$index)"
+                                @click="
+                                    deletePlanDialog(scope.row, scope.$index)
+                                "
                                 class="addOrMinus"
                                 >-</span
                             >
@@ -420,7 +430,8 @@
                     >
                         <template slot-scope="scope">
                             <el-input
-                                v-model="scope.row.name"
+                                :value="scope.row.name"
+                                @input="nameChanged(scope.row, $event)"
                                 class="nameOfPlan"
                             >
                             </el-input>
@@ -435,8 +446,7 @@
                         <template slot-scope="scope">
                             <el-select
                                 :value="rankSelect(scope.row.rank)"
-                                
-                                @change="scope.row.rank = $event"
+                                @change="rankChanged(scope.row, $event)"
                             >
                                 <el-option
                                     v-for="item in dict_sc_train_program_rank"
@@ -445,26 +455,22 @@
                                     :label="item.dictLabel"
                                 >
                                 </el-option>
-                                
                             </el-select>
                         </template>
                     </el-table-column>
-                    <el-table-column
-                        prop="status"
-                        label="启用"
-                        align="center"
-                    >
+                    <el-table-column prop="status" label="启用" align="center">
                         <template slot-scope="scope">
                             <el-switch
                                 :value="!!scope.row.status"
-                                @change="scope.row.status=$event">
+                                @change="statusChanged(scope.row, $event)"
+                            >
                             </el-switch>
                         </template>
                     </el-table-column>
                 </el-table>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="cancel">关闭</el-button>
+                <el-button @click="cancelAdd">关闭</el-button>
                 <el-button type="primary" @click="submitForm">确 定</el-button>
             </div>
         </el-dialog>
@@ -499,7 +505,7 @@
                 //学年id =>学年名称
                 schoolMap: [],
                 //记录的分页状态
-                t:{},
+                t: {},
                 /* 培养方案级别字典 */
                 dict_sc_train_program_rank: {},
                 /* 培养方案状态字典 */
@@ -522,7 +528,7 @@
                         }
                     ]
                 },
-                
+
                 //导入弹窗里面的数据
                 importDialog: {
                     title: '导入方案',
@@ -583,13 +589,11 @@
                     ]
                 },
                 //删除列表
-                deleteIds:[
-
-                ],
+                deleteIds: [],
                 //新增列表
-                newAddList:[
-
-                ],
+                newAddList: [],
+                //修改列表
+                updateList: [],
                 //培养方案表格数据
                 planData: [
                     {
@@ -633,14 +637,14 @@
                     totalCount: 0,
                     totalPage: 50,
                     pageCount: 1,
-                    pageSize: 4,
+                    pageSize: 4
                 }
             }
         },
         computed: {
             rankSelect() {
-                return (index) => {
-                    if(index == null) return null
+                return index => {
+                    if (index == null) return null
                     return this.dict_sc_train_program_rank[index].dictLabel
                 }
             }
@@ -649,23 +653,36 @@
             this.getList()
         },
         methods: {
-            
+            nameChanged(row, value) {
+                !this.updateList.includes(row) && this.updateList.push(row)
+                row.name = value
+            },
+            rankChanged(row, value) {
+                !this.updateList.includes(row) && this.updateList.push(row)
+                row.rank = value
+            },
+            statusChanged(row, value) {
+                !this.updateList.includes(row) && this.updateList.push(row)
+                row.status = Number(value)
+            },
             tt(q) {
                 console.log(this.managerDialog.radio)
             },
-            async deletePlan(row,index) {
-                console.log(row,index)
-                this.alertDialog.call(this,'删除',{
-                    confirm: async()=>{
+            async deletePlan(row, index) {
+                console.log(row, index)
+                this.alertDialog.call(this, '删除', {
+                    confirm: async () => {
                         await trainingProgramMulti({
                             deleteIds: [row.id]
-                        }).then(value => {
-                            this.planData.splice(index,1)
-                            this.$forceUpdate()
-                            this.msgSuccess('删除成功')
-                        }).catch(err => {
-                            this.msgError('删除失败')
                         })
+                            .then(value => {
+                                this.planData.splice(index, 1)
+                                this.$forceUpdate()
+                                this.msgSuccess('删除成功')
+                            })
+                            .catch(err => {
+                                this.msgError('删除失败')
+                            })
                     }
                 })
             },
@@ -673,20 +690,19 @@
                 console.log(value)
                 //如果value为-1则查询全部，否则查询对应的value
                 await (function(that) {
-                    if(value == -1) {
-                        return  trainingProgramList({
+                    if (value == -1) {
+                        return trainingProgramList({
                             page: that.t.page ? that.t.page : 1,
                             limit: that.t.limit ? that.t.limit : 10
                         })
-                    }
-                    else {
-                        return  trainingProgramList({
+                    } else {
+                        return trainingProgramList({
                             page: that.t.page ? that.t.page : 1,
                             limit: that.t.limit ? that.t.limit : 10,
                             schoolYearId: value
                         })
                     }
-                }(this))
+                })(this)
                     .then(value => {
                         this.queryParams.pageSize = value.data.pageSize
                         this.queryParams.totalCount = value.data.totalCount
@@ -700,18 +716,23 @@
                     })
             },
             formatSchoolYearName(row, column, cellValue) {
-                return cellValue!=null && this.schoolMap[cellValue]
+                return cellValue != null && this.schoolMap[cellValue]
             },
             formatUpdateTime(row, column, cellValue) {
                 return cellValue && formatDate(cellValue)
             },
             formatStatus(row, column, cellValue) {
-                return cellValue != null &&
-                this.dict_sc_train_program_status[cellValue].dictLabel
+                // console.log(cellValue)
+                return (
+                    cellValue != null &&
+                    this.dict_sc_train_program_status[cellValue].dictLabel
+                )
             },
             formatRank(row, column, cellValue) {
-                return cellValue !=null &&
-                this.dict_sc_train_program_rank[cellValue].dictLabel
+                return (
+                    cellValue != null &&
+                    this.dict_sc_train_program_rank[cellValue].dictLabel
+                )
             },
             renderHeader(h) {
                 return h(
@@ -738,7 +759,6 @@
                 )
             },
             async addSchoolYear() {
-                
                 this.list.row.push({
                     creteTime: null,
                     delateTime: null
@@ -746,7 +766,7 @@
             },
             async addtrainingProgram() {
                 let data = {
-                    schoolYearId: this.managerDialog.radio,
+                    schoolYearId: this.list.rows[this.managerDialog.radio].id,
                     name: '',
                     rank: null,
                     status: 0
@@ -754,7 +774,9 @@
                 this.newAddList.push(data) //先存在提交数据里面
                 this.planData.push(data) //为了展示视图，也添加
                 this.$nextTick(() => {
-                    let tableBody = document.querySelector('.addPlanDialog .el-table__body-wrapper')
+                    let tableBody = document.querySelector(
+                        '.addPlanDialog .el-table__body-wrapper'
+                    )
                     tableBody.scrollTop = 9999
                 })
             },
@@ -766,11 +788,16 @@
                 //     }
                 // })
             },
-            async deletePlanDialog(row,index) {
+            async deletePlanDialog(row, index) {
                 //删除预添加的数据，需要同时在欲添加/实际两个数组中删除
-                if(row.id == undefined) {
-                    this.newAddList.splice(this.newAddList.length-(this.planData.length-index-1)-1,1)
-                    this.planData.splice(index,1)
+                if (row.id == undefined) {
+                    this.newAddList.splice(
+                        this.newAddList.length -
+                            (this.planData.length - index - 1) -
+                            1,
+                        1
+                    )
+                    this.planData.splice(index, 1)
                 }
                 // console.log(row.id,555)
                 // this.alertDialog.call(this,'删除',{
@@ -845,20 +872,42 @@
                 this.managerDialog.open = true
                 this.managerDialog.title = '学年配置'
             },
-            /** 提交按钮 */
+            /* 关闭添加按钮 */
+            cancelAdd() {
+                this.addPlanDialog.open = false
+                this.planData.splice(
+                    this.planData.length - this.newAddList.length
+                )
+                this.newAddList = []
+                this.updateList = []
+                this.$forceUpdate()
+            },
+            /** 添加按钮 */
             async submitForm() {
                 console.log(this.newAddList)
-                let msgNotFull = this.newAddList.every((item) => {
-                    if(
-                        item.name == '' ||
-                        item.rank == null 
-                    )
-                        return true
-                        return false
+                let msgFull = this.newAddList.every(item => {
+                    if (item.name == '' || item.rank == null) return false
+                    return true
                 })
-                if(msgNotFull) {
+                if (!msgFull) {
                     this.msgInfo('请填入完整信息')
+                    return
                 }
+                //等待后端优化，批量添加
+                this.newAddList.forEach(async item => {
+                    await trainingProgram(item).then(value => {
+                        this.msgSuccess('添加成功')
+                    })
+                })
+                // this.updateList
+                // 这里等待后端修改
+                // await trainingProgramMulti({
+                //     schoolYearList: this.updateList
+                // }).then(value => {
+                //     this.msgSuccess('修改成功')
+                // })
+                this.cancelAdd()
+
                 // console.log(this.managerDialog.radio,445)
                 // let temp = this.planData
                 // delete temp[temp.length - 1].isUse
@@ -901,7 +950,6 @@
                 this.importDialog.open = true
             },
 
-
             // 提交上传文件
             submitFileForm() {
                 this.$refs.upload.submit()
@@ -914,7 +962,8 @@
                 value.rows.forEach(item => {
                     this.schoolMap[item.id] = item.yearName
                 })
-
+                //默认选中学年的第一个
+                // this.managerDialog.radio = value.rows[0].id
                 console.log(value, 'schoolYearList')
                 this.list.rows = value.rows
                 this.list.value = -1
@@ -996,7 +1045,7 @@
     }
 </script>
 
-<style  scoped>
+<style scoped>
     .erke-top {
         margin-right: 10px;
         height: 120px;

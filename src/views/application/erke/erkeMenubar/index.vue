@@ -30,7 +30,9 @@
                     <i class="el-icon-setting"></i>
                     <span>活动</span>
                 </template>
-                <el-menu-item index="/application/erke/activity">活动管理</el-menu-item>
+                <el-menu-item index="/application/erke/activity"
+                    >活动管理</el-menu-item
+                >
                 <el-menu-item index="2-2">场地申请</el-menu-item>
                 <el-menu-item index="2-3">成长记录认证</el-menu-item>
                 <el-menu-item index="2-4">内容管理</el-menu-item>

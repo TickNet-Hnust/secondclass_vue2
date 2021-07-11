@@ -1,6 +1,6 @@
 import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import {loginByCode} from "../../api/login";
+import { loginByCode } from '../../api/login'
 
 const user = {
     state: {
@@ -32,18 +32,18 @@ const user = {
     actions: {
         // 微信登录
         LoginByCode({ commit }, code) {
-          return new Promise((resolve, reject) => {
-            loginByCode(code)
-              .then(res => {
-                console.log(res)
-                setToken(res.token)
-                commit('SET_TOKEN', res.token)
-                resolve()
-              })
-              .catch(error => {
-                reject(error)
-              })
-          })
+            return new Promise((resolve, reject) => {
+                loginByCode(code)
+                    .then(res => {
+                        console.log(res)
+                        setToken(res.token)
+                        commit('SET_TOKEN', res.token)
+                        resolve()
+                    })
+                    .catch(error => {
+                        reject(error)
+                    })
+            })
         },
         // 登录
         Login({ commit }, userInfo) {

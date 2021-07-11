@@ -11,7 +11,8 @@ const instance = axios.create({
 
 let loading //定义loading变量
 
-function startLoading() { //使用Element loading-start 方法
+function startLoading() {
+    //使用Element loading-start 方法
     loading = Loading.service({
         lock: true,
         text: '加载中……',
@@ -19,7 +20,8 @@ function startLoading() { //使用Element loading-start 方法
     })
 }
 
-function endLoading() { //使用Element loading-close 方法
+function endLoading() {
+    //使用Element loading-close 方法
     loading.close()
 }
 //那么 showFullScreenLoading() tryHideFullScreenLoading() 要干的事儿就是将同一时刻的请求合并。
