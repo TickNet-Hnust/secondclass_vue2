@@ -111,3 +111,8 @@ textarea {
 .scroll-container .el-scrollbar__bar {
     display: none !important;
 }
+
+
+/* .graph>div:first-child {
+    width: 100% !important;
+} */

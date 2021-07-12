@@ -1,7 +1,16 @@
 import Vue from 'vue'
 
 import Cookies from 'js-cookie'
-
+import { Steps, Dropdown, Menu, Icon } from 'ant-design-vue'
+// import 'ant-design-vue/dist/antd.css'
+import 'ant-design-vue/lib/steps/style/css'
+import 'ant-design-vue/lib/dropdown/style/css'
+import 'ant-design-vue/lib/menu/style/css'
+import 'ant-design-vue/lib/icon/style/css'
+Vue.use(Steps)
+Vue.use(Dropdown)
+Vue.use(Menu)
+Vue.use(Icon)
 import Element from 'element-ui'
 import './assets/styles/element-variables.scss'
 

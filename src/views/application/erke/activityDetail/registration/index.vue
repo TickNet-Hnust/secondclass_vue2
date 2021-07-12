@@ -1,5 +1,311 @@
 <template>
-    <div>
-        registration
+    <div class="app-container">
+        <el-row :gutter="20">
+            <el-col :span="24" :xs="24">
+                <div class="erke-top">
+                    <div class="erke-top-foot">
+                        <el-row style="margin-bottom: 15px">
+                            <el-col :span="10" style="min-width:410px">
+                                <span class="labelSpan"> 签到时间：</span>
+                                <span class="textSpan"
+                                    >{{ enrollStartTime }} ~
+                                    {{ enrollEndTime }}</span
+                                >
+                            </el-col>
+                            <el-col :span="14">
+                                <span class="labelSpan"> 活动负责人：</span>
+                                <span class="textSpan">2003010727–张光辉</span>
+                            </el-col>
+                        </el-row>
+
+                        <el-row style="margin-bottom: 15px">
+                            <el-col :span="10" style="min-width:410px">
+                                <span class="labelSpan"> 活动地点：</span>
+                                <span class="textSpan">第三教学楼</span>
+                            </el-col>
+                            <el-col :span="14">
+                                <span class="labelSpan"> 活动组织者：</span>
+                                <span class="textSpan">2003010727–张光辉</span>
+                            </el-col>
+                        </el-row>
+
+                        <el-row style="margin-bottom: 15px">
+                            <el-col :span="10" style="min-width:410px">
+                                <span class="labelSpan"> 签到距离：</span>
+                                <span class="textSpan">50米</span>
+                            </el-col>
+                        </el-row>
+
+                        <el-row :gutter="20">
+                            <el-col :span="1" style="min-width:190px">
+                                <el-input value="50">
+                                    <template slot="prepend">
+                                        录取人数：
+                                    </template>
+                                </el-input>
+                            </el-col>
+                            <el-col :span="1" style="min-width:180px">
+                                <el-input value="50">
+                                    <template slot="prepend">
+                                        已签到
+                                    </template>
+                                </el-input>
+                            </el-col>
+                            <el-col :span="1" style="min-width:180px">
+                                <el-input value="50">
+                                    <template slot="prepend">
+                                        未签到
+                                    </template>
+                                </el-input>
+                            </el-col>
+                            <el-col :span="1" style="min-width:170px">
+                                <el-input value="50">
+                                    <template slot="prepend">
+                                        补签
+                                    </template>
+                                </el-input>
+                            </el-col>
+                        </el-row>
+                    </div>
+                </div>
+
+                <div class="erke-bottom">
+                    <div class="erke-buttom-left">
+                        <ul>
+                            <li>全部<span>50</span></li>
+                            <li>资源环境与安全工程学院</li>
+                            <li>土木工程学院</li>
+                            <li>机械工程学院</li>
+                            <li>计算机科学与工程学院</li>
+                            <li>化学化工学院</li>
+                        </ul>
+                    </div>
+                    <div class="erke-buttom-right">
+                        <div class="operate">
+                            <el-form :inline="true" class="demo-form-inline">
+                                <el-row
+                                    :gutter="0"
+                                    type="flex"
+                                    justify="space-around"
+                                    style="flexWrap:wrap"
+                                >
+                                    <el-col :span="1" style="min-width:80px">
+                                        <el-select
+                                            value="操作"
+                                            style="width:80px"
+                                        >
+                                            <el-option label="操作"></el-option>
+                                        </el-select>
+                                    </el-col>
+
+                                    <el-col :span="1" style="min-width:165px">
+                                        <el-form-item label="学号:">
+                                            <el-input data-text></el-input>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="1" style="min-width:165px">
+                                        <el-form-item label="姓名:">
+                                            <el-input data-text></el-input>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="1" style="min-width:205px">
+                                        <el-form-item label="报名状态:">
+                                            <el-select
+                                                value="操作"
+                                                style="width:120px"
+                                            >
+                                                <el-option
+                                                    label="操作"
+                                                ></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="1" style="min-width:205px">
+                                        <el-form-item label="录取状态:">
+                                            <el-select
+                                                value="操作"
+                                                style="width:120px"
+                                            >
+                                                <el-option
+                                                    label="操作"
+                                                ></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="1" style="min-width:335px">
+                                        <el-form-item label="报名时间:">
+                                            <el-date-picker
+                                                type="daterange"
+                                                align="right"
+                                                unlink-panels
+                                                range-separator="至"
+                                                start-placeholder="开始日期"
+                                                end-placeholder="结束日期"
+                                            >
+                                            </el-date-picker>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="1" style="min-width:130px">
+                                        <el-button type="primary" size="mini"
+                                            >查询</el-button
+                                        >
+                                        <el-button size="mini">重置</el-button>
+                                    </el-col>
+                                </el-row>
+                            </el-form>
+                        </div>
+
+                        <pagination
+                            v-show="queryParams.totalPage > 0"
+                            :total="queryParams.totalCount"
+                            :page.sync="queryParams.pageCount"
+                            :limit.sync="queryParams.pageSize"
+                            @pagination="getList($event)"
+                        />
+                    </div>
+                </div>
+            </el-col>
+        </el-row>
     </div>
 </template>
+
+<script>
+    import {
+        trainingProgramDetail,
+        trainingProgramList,
+        trainingProgramId
+    } from '@/api/application/secondClass/trainingProgram'
+    import {
+        schoolYearList,
+        schoolYearMulti
+    } from '@/api/application/secondClass/schoolYear'
+    import {
+        courseId,
+        coursePost,
+        courstPut,
+        courseDelete
+    } from '@/api/application/secondClass/course'
+    import { getDict } from '@/api/application/secondClass/dict/type.js'
+
+    import formaterDate from '@/utils/formatDate.js'
+    import horwheel from 'horwheel'
+
+    import {
+        listUser,
+        getUser,
+        delUser,
+        addUser,
+        updateUser,
+        exportUser,
+        resetUserPwd,
+        changeUserStatus,
+        importTemplate
+    } from '@/api/system/user'
+    import { getToken } from '@/utils/auth'
+    import { treeselect } from '@/api/system/dept'
+    import Treeselect from '@riophae/vue-treeselect'
+    import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+
+    export default {
+        name: 'User',
+        components: { Treeselect },
+        data() {
+            return {
+                enrollStartTime: '2021-10-2 08:00:00',
+                enrollEndTime: '2021-10-10 08:00:00',
+                enrollRange: ['计算机科学与工程学院', '商学院'],
+                enrollYearRange: [2018, 2019],
+                queryParams: {
+                    totalCount: 0,
+                    totalPage: 50,
+                    pageCount: 1,
+                    pageSize: 4
+                }
+            }
+        }
+    }
+</script>
+
+<style scoped>
+    .erke-top {
+        /* height: 120px; */
+        padding: 30px;
+        margin: 0 0 10px 0;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    .erke-bottom {
+        /* background-color: #fff; */
+
+        overflow: hidden;
+    }
+    .erke-buttom-left {
+        width: 300px;
+        float: left;
+        padding: 16px;
+        height: calc(100vh - 350px);
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    .erke-buttom-left ul {
+        margin: 0;
+        padding: 0;
+    }
+    .erke-buttom-left li {
+        position: relative;
+        list-style: none;
+        font-size: 13px;
+        /* width: px; */
+        height: 40px;
+        padding: 0 20px;
+        color: #979797;
+        line-height: 40px;
+        border-radius: 5px;
+        border-bottom: 1px dashed #ddd;
+    }
+    .erke-buttom-left li:hover {
+        background-color: #e6f7ff;
+        color: #0084d1;
+        cursor: pointer;
+    }
+    .erke-buttom-left li span {
+        position: absolute;
+        right: 10px;
+        width: 20px;
+        text-align: center;
+        top: 0;
+    }
+    .erke-buttom-right {
+        background-color: #fff;
+        margin-left: 305px;
+        height: calc(100vh - 350px);
+        padding: 16px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    .labelSpan {
+        display: inline-block;
+        margin-right: 50px;
+    }
+    .textSpan {
+        color: #888;
+    }
+    .erke-top-foot {
+        font-size: 14px;
+    }
+    .operate >>> .el-input__inner[data-text] {
+        width: 110px;
+    }
+    .operate >>> .el-date-editor {
+        width: 250px;
+    }
+    .el-row {
+        height: initial;
+    }
+</style>

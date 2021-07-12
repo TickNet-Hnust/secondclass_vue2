@@ -117,137 +117,137 @@
                     <div class="erke-buttom-left">
                         <ul>
                             <li
-                                v-for="(item,index) in classificationList"
+                                v-for="(item, index) in classificationList"
                                 :key="index"
                                 @click="renderPlanData(item.id)"
                             >
-                            {{item.name}}
+                                {{ item.name }}
                             </li>
                         </ul>
                     </div>
                     <div class="erke-buttom-right">
                         <div class="operate">
-                <el-row :gutter="10" style="height: 50px">
-                    <el-col :span="1.5">
-                        <el-select
-                            style="width: 80px"
-                            v-model="value"
-                            placeholder="操作"
-                        >
-                            <el-option value="批量修改"></el-option>
-                            <el-option value="排序"></el-option>
-                        </el-select>
-                    </el-col>
-                    <el-col :span="1.5">
-                        <el-input
-                            suffix-icon="el-icon-search"
-                            placeholder="课程名称"
-                            v-model="queryDetail.courseName"
-                        >
-                        </el-input>
-                    </el-col>
+                            <el-row :gutter="10" style="height: 50px">
+                                <el-col :span="1.5">
+                                    <el-select
+                                        style="width: 80px"
+                                        v-model="value"
+                                        placeholder="操作"
+                                    >
+                                        <el-option value="批量修改"></el-option>
+                                        <el-option value="排序"></el-option>
+                                    </el-select>
+                                </el-col>
+                                <el-col :span="1.5">
+                                    <el-input
+                                        suffix-icon="el-icon-search"
+                                        placeholder="课程名称"
+                                        v-model="queryDetail.courseName"
+                                    >
+                                    </el-input>
+                                </el-col>
 
-                    <el-col :span="1.5">
-                        <el-select
-                            style="width: 120px"
-                            v-model="queryDetail.joinType"
-                            placeholder="加入方式"
-                        >
-                            <el-option
-                                value="加入方式：不限"
-                            ></el-option>
-                            <el-option value="预设"></el-option>
-                            <el-option value="临增"></el-option>
-                        </el-select>
-                    </el-col>
+                                <el-col :span="1.5">
+                                    <el-select
+                                        style="width: 120px"
+                                        v-model="queryDetail.joinType"
+                                        placeholder="加入方式"
+                                    >
+                                        <el-option
+                                            value="加入方式：不限"
+                                        ></el-option>
+                                        <el-option value="预设"></el-option>
+                                        <el-option value="临增"></el-option>
+                                    </el-select>
+                                </el-col>
 
-                    <el-col :span="1.5">
-                        <el-select
-                            style="width: 120px"
-                            v-model="queryDetail.neccessary"
-                            placeholder="必修课"
-                        >
-                            <el-option
-                                value="必修课：不限"
-                            ></el-option>
-                            <el-option value="是"></el-option>
-                            <el-option value="否"></el-option>
-                        </el-select>
-                    </el-col>
+                                <el-col :span="1.5">
+                                    <el-select
+                                        style="width: 120px"
+                                        v-model="queryDetail.neccessary"
+                                        placeholder="必修课"
+                                    >
+                                        <el-option
+                                            value="必修课：不限"
+                                        ></el-option>
+                                        <el-option value="是"></el-option>
+                                        <el-option value="否"></el-option>
+                                    </el-select>
+                                </el-col>
 
-                    <el-col :span="1.5">
-                        <el-select
-                            style="width: 120px"
-                            v-model="queryDetail.term"
-                            placeholder="开课学期：不限"
-                        >
-                            <el-option
-                                value="开课学期：不限"
-                            ></el-option>
-                            <el-option
-                                v-for="it in 8"
-                                :key="it"
-                                :value="'第' + it + '学期'"
-                            ></el-option>
-                        </el-select>
-                    </el-col>
+                                <el-col :span="1.5">
+                                    <el-select
+                                        style="width: 120px"
+                                        v-model="queryDetail.term"
+                                        placeholder="开课学期：不限"
+                                    >
+                                        <el-option
+                                            value="开课学期：不限"
+                                        ></el-option>
+                                        <el-option
+                                            v-for="it in 8"
+                                            :key="it"
+                                            :value="'第' + it + '学期'"
+                                        ></el-option>
+                                    </el-select>
+                                </el-col>
 
-                    <el-col :span="1.5">
-                        <el-select
-                            style="width: 120px"
-                            v-model="value"
-                            placeholder="发布单位：不限"
-                        >
-                            <el-option
-                                value="发布单位：不限"
-                            ></el-option>
-                            <el-option value="保卫处"></el-option>
-                            <el-option value="网络中心"></el-option>
-                        </el-select>
-                    </el-col>
+                                <el-col :span="1.5">
+                                    <el-select
+                                        style="width: 120px"
+                                        v-model="value"
+                                        placeholder="发布单位：不限"
+                                    >
+                                        <el-option
+                                            value="发布单位：不限"
+                                        ></el-option>
+                                        <el-option value="保卫处"></el-option>
+                                        <el-option value="网络中心"></el-option>
+                                    </el-select>
+                                </el-col>
 
-                    <el-col :span="1.5">
-                        <el-select
-                            style="width: 120px"
-                            v-model="value"
-                            placeholder="课程性质：不限"
-                        >
-                            <el-option
-                                value="课程性质：不限"
-                            ></el-option>
-                            <el-option value="活动"></el-option>
-                            <el-option value="竞赛"></el-option>
-                        </el-select>
-                    </el-col>
+                                <el-col :span="1.5">
+                                    <el-select
+                                        style="width: 120px"
+                                        v-model="value"
+                                        placeholder="课程性质：不限"
+                                    >
+                                        <el-option
+                                            value="课程性质：不限"
+                                        ></el-option>
+                                        <el-option value="活动"></el-option>
+                                        <el-option value="竞赛"></el-option>
+                                    </el-select>
+                                </el-col>
 
-                    <el-col :span="1.5">
-                        <el-radio-group
-                            v-model="statusRadio"
-                            size="small"
-                        >
-                            <el-radio-button
-                                label="全部"
-                                value="0"
-                            ></el-radio-button>
-                            <el-radio-button
-                                label="申请中"
-                                value="1"
-                            ></el-radio-button>
-                            <el-radio-button
-                                label="审核未通过"
-                                value="2"
-                            ></el-radio-button>
-                            <el-radio-button
-                                label="有效"
-                                value="3"
-                            ></el-radio-button>
-                            <el-radio-button
-                                label="无效"
-                                value="4"
-                            ></el-radio-button>
-                        </el-radio-group>
-                    </el-col>
-                    <!-- <el-col :span="1.5">
+                                <el-col :span="1.5">
+                                    <el-radio-group
+                                        v-model="statusRadio"
+                                        size="small"
+                                    >
+                                        <el-radio-button
+                                            label="全部"
+                                            value="0"
+                                        ></el-radio-button>
+                                        <el-radio-button
+                                            label="申请中"
+                                            value="1"
+                                        ></el-radio-button>
+                                        <el-radio-button
+                                            label="审核未通过"
+                                            value="2"
+                                        ></el-radio-button>
+                                        <el-radio-button
+                                            label="有效"
+                                            value="3"
+                                        ></el-radio-button>
+                                        <el-radio-button
+                                            label="无效"
+                                            value="4"
+                                        ></el-radio-button>
+                                    </el-radio-group>
+                                </el-col>
+                                <!-- <el-col :span="1.5">
                         <el-button size="mini" round
                             >申请中</el-button
                         >
@@ -267,17 +267,14 @@
                             >无效</el-button
                         >
                     </el-col> -->
-                </el-row>
-            </div>
+                            </el-row>
+                        </div>
                         <el-table
                             :data="planData"
                             v-loading="loading"
                             class="detailMainTable"
                         >
-                            <el-table-column
-                                type="selection"
-                                min-width="55"
-                            >
+                            <el-table-column type="selection" min-width="55">
                             </el-table-column>
 
                             <el-table-column
@@ -350,13 +347,9 @@
                                     <el-button
                                         size="mini"
                                         round
-                                        :class="
-                                            sureClass(scope.row)
-                                        "
+                                        :class="sureClass(scope.row)"
                                         >{{
-                                            computedStatus(
-                                                scope.row.status
-                                            )
+                                            computedStatus(scope.row.status)
                                         }}</el-button
                                     >
                                 </template>
@@ -389,9 +382,7 @@
                                 prop="classificationDetail"
                                 label="分类明细"
                                 min-width="180"
-                                :formatter="
-                                    formatClassificationDetail
-                                "
+                                :formatter="formatClassificationDetail"
                             >
                             </el-table-column>
 
@@ -403,22 +394,13 @@
                             >
                             </el-table-column>
 
-                            <el-table-column
-                                prop="createUserId"
-                                label="创建人"
-                            >
+                            <el-table-column prop="createUserId" label="创建人">
                             </el-table-column>
 
-                            <el-table-column
-                                prop="updateUserId"
-                                label="修改人"
-                            >
+                            <el-table-column prop="updateUserId" label="修改人">
                             </el-table-column>
 
-                            <el-table-column
-                                prop="remark"
-                                label="备注"
-                            >
+                            <el-table-column prop="remark" label="备注">
                             </el-table-column>
 
                             <el-table-column
@@ -438,9 +420,7 @@
                                         type="info"
                                         >审核</el-link
                                     >
-                                    <el-link type="info"
-                                        >删除</el-link
-                                    >
+                                    <el-link type="info">删除</el-link>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -455,7 +435,6 @@
                 </div>
             </el-col>
         </el-row>
-
 
         <!-- 用户导入对话框 -->
         <el-dialog
@@ -1105,9 +1084,7 @@
                     haspass: 40,
                     nopass: 5
                 },
-                planData: [
-                    
-                ],
+                planData: [],
                 value: '1',
                 options: [
                     {
@@ -1302,12 +1279,12 @@
                     schoolYearId: value
                 })
                     .then(value => {
-                        console.log(value,'培养方案详细')
+                        console.log(value, '培养方案详细')
                         this.queryParams.pageSize = value.data.pageSize
                         this.queryParams.totalCount = value.data.totalCount
                         this.queryParams.totalPage = value.data.totalPage
                         this.planData = value.data.list
-                        console.log(this.planData,7777)
+                        console.log(this.planData, 7777)
                         this.$forceUpdate()
                         this.loading = false
                     })
@@ -1547,8 +1524,7 @@
             renderPlanData(id) {
                 console.log(id)
                 trainingProgramDetail({
-                    classification:id
-                    
+                    classification: id
                 }).then(value => {
                     this.planData = value.data.pageData.list
                     console.log(value)
@@ -1558,7 +1534,7 @@
             async initTableData(schoolYearId) {
                 await trainingProgramDetail({
                     schoolYearId,
-                    limit:99
+                    limit: 99
                 }).then(value => {
                     console.log(value, 88)
                     const {
@@ -1582,7 +1558,7 @@
                         //分类id映射Name
                         this.classificationIdMapName[item.id] = item.name
                     })
-                    
+
                     value.data.pageData.list.forEach(item => {
                         let index = this.classificationIdMapIndex.get(
                             item.classificationId
@@ -1634,7 +1610,7 @@
                 console.log(value)
                 value.rows.forEach(item => {
                     //学年id映射name
-                    this.schoolMap[item.id] = item.yearName 
+                    this.schoolMap[item.id] = item.yearName
                 })
 
                 console.log(value, 'schoolYearList')
@@ -1661,12 +1637,14 @@
                     //培养方案Id映射名字
                     this.trainingProgramIdMapname[item.id] = item.name
                 })
-                console.log(this.schoolYearIdMapProgramArray,'学年Id映射其下培养方案数组' )
+                console.log(
+                    this.schoolYearIdMapProgramArray,
+                    '学年Id映射其下培养方案数组'
+                )
                 console.log(this.trainingProgramIdMapname, '培养方案Id映射名字')
             })
         },
         async mounted() {
-            
             console.log(this.$route.params, 77)
             this.loading = true
             this.initTableData(this.$route.params.sid)
