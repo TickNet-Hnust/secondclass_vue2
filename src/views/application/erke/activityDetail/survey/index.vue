@@ -1,5 +1,5 @@
 <template>
-    <div class="erke-buttom">
+    <div class="erke-buttom survey">
         <el-row>
             <el-col :span="16" class="msgLeft">
                 <div class="msgDetail">
@@ -158,67 +158,79 @@
                                     </span>
                                 </a-step>
                                 <a-step title="结束" description="" />
+                                <a-step title="报名" description="人数：30" />
+                                <a-step title="报名" description="人数：30" />
+                                <a-step title="报名" description="人数：30" />
                             </a-steps>
                         </el-col>
                     </el-row>
                 </div>
                 <div class="msgGraph">
                     <el-row>
-                        <el-col :span="18">
+                        <el-col :span="17">
                             <div class="graphTitle">
                                 <el-radio-group
                                     size="mini"
                                     v-model="range"
                                     @change="rangeChange"
                                 >
-                                    <el-radio-button
-                                        label="1"
-                                    >全年</el-radio-button>
-                                    <el-radio-button
-                                        label="2"
-                                    >本月</el-radio-button>
-                                    <el-radio-button
-                                        label="3"
-                                    >本周</el-radio-button>
-                                    <el-radio-button
-                                        label="4"
-                                    >今天</el-radio-button>
+                                    <el-radio-button label="1"
+                                        >全年</el-radio-button
+                                    >
+                                    <el-radio-button label="2"
+                                        >本月</el-radio-button
+                                    >
+                                    <el-radio-button label="3"
+                                        >本周</el-radio-button
+                                    >
+                                    <el-radio-button label="4"
+                                        >今天</el-radio-button
+                                    >
                                 </el-radio-group>
                             </div>
                             <div class="graph" ref="graph"></div>
                         </el-col>
-                        <el-col :span="6">
+                        <el-col :span="7">
                             <el-date-picker style="float:right">
-
                             </el-date-picker>
                             <div class="Ratetitle">
                                 群组报名率（ 报名人数 / 群组人数 ）
                             </div>
-                                <el-row class="groupRateRow">
-                                    <el-col :span="3" ><span class="circleBlack">1</span></el-col>
-                                    <el-col :span="18">商学院</el-col>
-                                    <el-col :span="3">95.42%</el-col>
-                                </el-row>
-                                <el-row class="groupRateRow">
-                                    <el-col :span="3" ><span class="circleBlack">2</span></el-col>
-                                    <el-col :span="18">人文学院</el-col>
-                                    <el-col :span="3">95.42%</el-col>
-                                </el-row>
-                                <el-row class="groupRateRow">
-                                    <el-col :span="3"><span class="circleBlack">3</span></el-col>
-                                    <el-col :span="18">计算机科学与工程学院</el-col>
-                                    <el-col :span="3">95.42%</el-col>
-                                </el-row>
-                                <el-row class="groupRateRow">
-                                    <el-col :span="3" ><span class="circleWrite">4</span></el-col>
-                                    <el-col :span="18">机械工程学院</el-col>
-                                    <el-col :span="3">95.42%</el-col>
-                                </el-row>
-                                <el-row class="groupRateRow">
-                                    <el-col :span="3"><span class="circleWrite">5</span></el-col>
-                                    <el-col :span="18">土木工程学院</el-col>
-                                    <el-col :span="3">95.42%</el-col>
-                                </el-row>
+                            <el-row class="groupRateRow">
+                                <el-col :span="3"
+                                    ><span class="circleBlack">1</span></el-col
+                                >
+                                <el-col :span="18">商学院</el-col>
+                                <el-col :span="3">95.42%</el-col>
+                            </el-row>
+                            <el-row class="groupRateRow">
+                                <el-col :span="3"
+                                    ><span class="circleBlack">2</span></el-col
+                                >
+                                <el-col :span="18">人文学院</el-col>
+                                <el-col :span="3">95.42%</el-col>
+                            </el-row>
+                            <el-row class="groupRateRow">
+                                <el-col :span="3"
+                                    ><span class="circleBlack">3</span></el-col
+                                >
+                                <el-col :span="18">计算机科学与工程学院</el-col>
+                                <el-col :span="3">95.42%</el-col>
+                            </el-row>
+                            <el-row class="groupRateRow">
+                                <el-col :span="3"
+                                    ><span class="circleWrite">4</span></el-col
+                                >
+                                <el-col :span="18">机械工程学院</el-col>
+                                <el-col :span="3">95.42%</el-col>
+                            </el-row>
+                            <el-row class="groupRateRow">
+                                <el-col :span="3"
+                                    ><span class="circleWrite">5</span></el-col
+                                >
+                                <el-col :span="18">土木工程学院</el-col>
+                                <el-col :span="3">95.42%</el-col>
+                            </el-row>
                         </el-col>
                     </el-row>
                 </div>
@@ -264,10 +276,11 @@
 
 <script>
     import * as echarts from 'echarts'
+    import XScrollbar from 'x-scrollbar';
     export default {
         data() {
             return {
-                range: '全年',
+                range: '2',
                 activeName: 'first',
                 userList: [
                     {
@@ -398,118 +411,118 @@
                     }
                 ],
                 //挂载目标
-                myChart:{},
+                myChart: {},
                 //基本配置
                 option: {},
                 //全年数据
-                data:{},
-                today:{},
+                data: {},
+                today: {}
             }
         },
         methods: {
             rangeChange(value) {
-                let start,end
+                let start, end
                 this.option = {
-                color: ['#3ba1ff'],
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow',
-                        label: {
-                            show: true
-                        }
-                    }
-                },
-                toolbox: {
-                    show: true,
-                    feature: {
-                        mark: { show: true },
-                        dataView: { show: true, readOnly: false },
-                        magicType: { show: true, type: ['line', 'bar'] },
-                        restore: { show: true },
-                        saveAsImage: { show: true }
-                    }
-                },
-                calculable: true,
-                legend: {
-                    data: ['Growth', 'Budget 2012'],
-                    itemGap: 5
-                },
-                grid: {
-                    top: '12%',
-                    left: '2%',
-                    right: '10%',
-                    containLabel: true
-                },
-                xAxis: [
-                    {
-                        type: 'category',
-                        data: this.data.names
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: '活动报名情况',
-                        axisLabel: {
-                            formatter: function(a) {
-                                a = +a
-                                return isFinite(a)
-                                    ? echarts.format.addCommas(+a / 1)
-                                    : ''
+                    color: ['#3ba1ff'],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow',
+                            label: {
+                                show: true
                             }
                         }
-                    }
-                ],
-                dataZoom: [
-                    {
-                        show: true,
-                        start: 94,
-                        end: 100
                     },
-                    {
-                        type: 'inside',
-                        start: 94,
-                        end: 100
-                    },
-                    {
+                    toolbox: {
                         show: true,
-                        yAxisIndex: 0,
-                        filterMode: 'empty',
-                        width: 30,
-                        height: '80%',
-                        showDataShadow: false,
-                        left: '93%'
-                    }
-                ],
-                series: [
-                    {
-                        name: 'Budget 2011',
-                        type: 'bar',
-                        data: this.data.nums
-                    }
-                ]
-            }
-                if(value == 4) {
-                     start=0
-                        end=100;
-                        this.option.xAxis[0].data = this.today.names
-                        this.option.series[0].data = this.today.nums
-                }else {
-                    if(value == 1) {
-                        start=0
-                        end=100
-                    }else if(value == 2) {
-                        start=60
-                        end=68
-                    }else {
-                        start=55
-                        end=56.7
+                        feature: {
+                            mark: { show: true },
+                            dataView: { show: true, readOnly: false },
+                            magicType: { show: true, type: ['line', 'bar'] },
+                            restore: { show: true },
+                            saveAsImage: { show: true }
+                        }
+                    },
+                    calculable: true,
+                    legend: {
+                        data: ['Growth', 'Budget 2012'],
+                        itemGap: 5
+                    },
+                    grid: {
+                        top: '12%',
+                        left: '2%',
+                        right: '10%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: this.data.names
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '活动报名情况',
+                            axisLabel: {
+                                formatter: function(a) {
+                                    a = +a
+                                    return isFinite(a)
+                                        ? echarts.format.addCommas(+a / 1)
+                                        : ''
+                                }
+                            }
+                        }
+                    ],
+                    dataZoom: [
+                        {
+                            show: true,
+                            start: 94,
+                            end: 100
+                        },
+                        {
+                            type: 'inside',
+                            start: 94,
+                            end: 100
+                        },
+                        {
+                            show: true,
+                            yAxisIndex: 0,
+                            filterMode: 'empty',
+                            width: 30,
+                            height: '80%',
+                            showDataShadow: false,
+                            left: '93%'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'Budget 2011',
+                            type: 'bar',
+                            data: this.data.nums
+                        }
+                    ]
+                }
+                if (value == 4) {
+                    start = 0
+                    end = 100
+                    this.option.xAxis[0].data = this.today.names
+                    this.option.series[0].data = this.today.nums
+                } else {
+                    if (value == 1) {
+                        start = 0
+                        end = 100
+                    } else if (value == 2) {
+                        start = 60
+                        end = 68
+                    } else {
+                        start = 55
+                        end = 56.7
                     }
                     this.option.xAxis[0].data = this.data.names
                     this.option.series[0].data = this.data.nums
                 }
-                console.log(value,this.option)
+                console.log(value, this.option)
                 this.option.dataZoom[0].start = start
                 this.option.dataZoom[0].end = end
                 this.myChart.setOption(this.option)
@@ -517,7 +530,373 @@
         },
         mounted() {
             this.data = {
-                nums: [42,21,33,1,52,57,47,58,62,75,23,60,61,5,28,50,72,11,53,21,37,9,21,48,7,18,46,74,65,79,3,17,42,28,18,19,75,75,10,19,26,55,70,15,9,4,18,72,23,5,62,67,37,1,31,61,78,38,73,9,7,20,30,52,50,56,56,58,15,71,6,70,50,3,59,64,66,26,58,19,16,76,50,18,17,39,41,76,26,45,9,64,3,72,78,50,77,69,73,19,36,69,13,20,33,59,61,55,40,30,60,72,28,40,25,67,25,67,42,42,47,34,61,42,48,42,50,76,56,64,15,43,46,75,23,26,31,7,14,14,33,53,48,75,31,46,21,79,74,22,41,65,72,60,55,50,19,58,45,34,70,79,80,73,73,20,29,49,74,64,16,66,65,23,78,51,61,57,78,57,28,78,27,9,38,32,75,47,6,47,45,15,75,13,40,76,18,31,4,58,40,5,57,13,20,18,41,57,29,28,58,50,70,43,51,16,40,77,79,76,32,5,46,45,64,27,9,57,50,1,75,23,72,6,7,44,34,20,15,29,9,49,79,15,65,22,50,75,74,59,44,6,55,64,36,77,13,35,19,41,58,44,0,0,48,53,75,41,20,65,71,12,10,23,64,32,32,69,59,27,3,58,79,41,40,64,60,73,15,72,44,1,20,54,46,16,50,2,5,73,9,79,32,55,46,76,25,19,8,71,19,52,34,65,8,62,9,73,53,70,55,9,66,62,61,76,23,27,9,50,31,70,11,51,53,34,80,52,61,39,34,52,12,76,25,58,60,38,19,35,60,29,44,78,38,25,16,17,16,47,63,26,54,48,2],
+                nums: [
+                    42,
+                    21,
+                    33,
+                    1,
+                    52,
+                    57,
+                    47,
+                    58,
+                    62,
+                    75,
+                    23,
+                    60,
+                    61,
+                    5,
+                    28,
+                    50,
+                    72,
+                    11,
+                    53,
+                    21,
+                    37,
+                    9,
+                    21,
+                    48,
+                    7,
+                    18,
+                    46,
+                    74,
+                    65,
+                    79,
+                    3,
+                    17,
+                    42,
+                    28,
+                    18,
+                    19,
+                    75,
+                    75,
+                    10,
+                    19,
+                    26,
+                    55,
+                    70,
+                    15,
+                    9,
+                    4,
+                    18,
+                    72,
+                    23,
+                    5,
+                    62,
+                    67,
+                    37,
+                    1,
+                    31,
+                    61,
+                    78,
+                    38,
+                    73,
+                    9,
+                    7,
+                    20,
+                    30,
+                    52,
+                    50,
+                    56,
+                    56,
+                    58,
+                    15,
+                    71,
+                    6,
+                    70,
+                    50,
+                    3,
+                    59,
+                    64,
+                    66,
+                    26,
+                    58,
+                    19,
+                    16,
+                    76,
+                    50,
+                    18,
+                    17,
+                    39,
+                    41,
+                    76,
+                    26,
+                    45,
+                    9,
+                    64,
+                    3,
+                    72,
+                    78,
+                    50,
+                    77,
+                    69,
+                    73,
+                    19,
+                    36,
+                    69,
+                    13,
+                    20,
+                    33,
+                    59,
+                    61,
+                    55,
+                    40,
+                    30,
+                    60,
+                    72,
+                    28,
+                    40,
+                    25,
+                    67,
+                    25,
+                    67,
+                    42,
+                    42,
+                    47,
+                    34,
+                    61,
+                    42,
+                    48,
+                    42,
+                    50,
+                    76,
+                    56,
+                    64,
+                    15,
+                    43,
+                    46,
+                    75,
+                    23,
+                    26,
+                    31,
+                    7,
+                    14,
+                    14,
+                    33,
+                    53,
+                    48,
+                    75,
+                    31,
+                    46,
+                    21,
+                    79,
+                    74,
+                    22,
+                    41,
+                    65,
+                    72,
+                    60,
+                    55,
+                    50,
+                    19,
+                    58,
+                    45,
+                    34,
+                    70,
+                    79,
+                    80,
+                    73,
+                    73,
+                    20,
+                    29,
+                    49,
+                    74,
+                    64,
+                    16,
+                    66,
+                    65,
+                    23,
+                    78,
+                    51,
+                    61,
+                    57,
+                    78,
+                    57,
+                    28,
+                    78,
+                    27,
+                    9,
+                    38,
+                    32,
+                    75,
+                    47,
+                    6,
+                    47,
+                    45,
+                    15,
+                    75,
+                    13,
+                    40,
+                    76,
+                    18,
+                    31,
+                    4,
+                    58,
+                    40,
+                    5,
+                    57,
+                    13,
+                    20,
+                    18,
+                    41,
+                    57,
+                    29,
+                    28,
+                    58,
+                    50,
+                    70,
+                    43,
+                    51,
+                    16,
+                    40,
+                    77,
+                    79,
+                    76,
+                    32,
+                    5,
+                    46,
+                    45,
+                    64,
+                    27,
+                    9,
+                    57,
+                    50,
+                    1,
+                    75,
+                    23,
+                    72,
+                    6,
+                    7,
+                    44,
+                    34,
+                    20,
+                    15,
+                    29,
+                    9,
+                    49,
+                    79,
+                    15,
+                    65,
+                    22,
+                    50,
+                    75,
+                    74,
+                    59,
+                    44,
+                    6,
+                    55,
+                    64,
+                    36,
+                    77,
+                    13,
+                    35,
+                    19,
+                    41,
+                    58,
+                    44,
+                    0,
+                    0,
+                    48,
+                    53,
+                    75,
+                    41,
+                    20,
+                    65,
+                    71,
+                    12,
+                    10,
+                    23,
+                    64,
+                    32,
+                    32,
+                    69,
+                    59,
+                    27,
+                    3,
+                    58,
+                    79,
+                    41,
+                    40,
+                    64,
+                    60,
+                    73,
+                    15,
+                    72,
+                    44,
+                    1,
+                    20,
+                    54,
+                    46,
+                    16,
+                    50,
+                    2,
+                    5,
+                    73,
+                    9,
+                    79,
+                    32,
+                    55,
+                    46,
+                    76,
+                    25,
+                    19,
+                    8,
+                    71,
+                    19,
+                    52,
+                    34,
+                    65,
+                    8,
+                    62,
+                    9,
+                    73,
+                    53,
+                    70,
+                    55,
+                    9,
+                    66,
+                    62,
+                    61,
+                    76,
+                    23,
+                    27,
+                    9,
+                    50,
+                    31,
+                    70,
+                    11,
+                    51,
+                    53,
+                    34,
+                    80,
+                    52,
+                    61,
+                    39,
+                    34,
+                    52,
+                    12,
+                    76,
+                    25,
+                    58,
+                    60,
+                    38,
+                    19,
+                    35,
+                    60,
+                    29,
+                    44,
+                    78,
+                    38,
+                    25,
+                    16,
+                    17,
+                    16,
+                    47,
+                    63,
+                    26,
+                    54,
+                    48,
+                    2
+                ],
                 names: [
                     '08-15',
                     '08-07',
@@ -887,8 +1266,58 @@
                 ]
             }
             this.today = {
-                nums:[28,3,4,20,2,47,3,36,24,17,17,46,49,24,44,36,44,1,11,4,28,9,34,40],
-                names:["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"]
+                nums: [
+                    28,
+                    3,
+                    4,
+                    20,
+                    2,
+                    47,
+                    3,
+                    36,
+                    24,
+                    17,
+                    17,
+                    46,
+                    49,
+                    24,
+                    44,
+                    36,
+                    44,
+                    1,
+                    11,
+                    4,
+                    28,
+                    9,
+                    34,
+                    40
+                ],
+                names: [
+                    '0',
+                    '1',
+                    '2',
+                    '3',
+                    '4',
+                    '5',
+                    '6',
+                    '7',
+                    '8',
+                    '9',
+                    '10',
+                    '11',
+                    '12',
+                    '13',
+                    '14',
+                    '15',
+                    '16',
+                    '17',
+                    '18',
+                    '19',
+                    '20',
+                    '21',
+                    '22',
+                    '23'
+                ]
             }
             this.option = {
                 color: ['#3ba1ff'],
@@ -920,7 +1349,9 @@
                     top: '12%',
                     left: '2%',
                     right: '10%',
-                    containLabel: true
+                    // bottom: '0%',
+                    containLabel: true,
+                    width: 'auto'
                 },
                 xAxis: [
                     {
@@ -945,6 +1376,7 @@
                 dataZoom: [
                     {
                         show: true,
+                        type: 'slider',
                         start: 94,
                         end: 100
                     },
@@ -955,6 +1387,7 @@
                     },
                     {
                         show: true,
+                        type: 'slider',
                         yAxisIndex: 0,
                         filterMode: 'empty',
                         width: 30,
@@ -976,6 +1409,14 @@
             this.$nextTick(() => {
                 // console.log(this.$refs.graph.children[0].children.style="")
             })
+            window.addEventListener("resize",() =>{
+                this.myChart.resize();
+            });
+
+            new XScrollbar(document.querySelector('.survey'))
+            new XScrollbar(document.querySelector('.msgStatus-nums'),{
+                onlyHorizontal:true
+            })
         }
     }
 </script>
@@ -987,7 +1428,7 @@
         border: 1px solid #ddd;
         padding: 20px;
         height: calc(100vh - 140px);
-        overflow: hidden;
+        overflow: auto;
     }
     .msgLeft {
         /* border-bottom: 1px solid #ddd; */
@@ -1001,12 +1442,18 @@
         border-bottom: 1px solid #ddd;
     }
     .msgStatus-left {
+        
         padding-top: 30px;
+        min-width: 70px;
         /* color: #888; */
     }
     .msgStatus-nums {
         padding-top: 25px;
         overflow: auto;
+        min-width: 600px;
+    }
+    .ant-steps-item {
+        min-width: 120px;
     }
     .msgGraph {
         padding: 20px 5px;
@@ -1017,7 +1464,8 @@
     }
     .msgGraph .graph {
         /* background-color: red; */
-        height: calc(100vh - 670px);
+        /* height: calc(100vh - 670px); */
+        height: 250px;
     }
     .labelSpan {
         display: inline-block;
@@ -1089,7 +1537,7 @@
         background-color: #f0f2f5;
         border-radius: 10px;
         width: 20px;
-        
+
         text-align: center;
     }
 </style>

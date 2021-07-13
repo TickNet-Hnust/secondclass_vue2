@@ -1316,7 +1316,7 @@
                     limit: option.limit
                 }).then(value => {
                     this.planData = value.data.list
-                    console.log(value.data.list)
+                    console.log(value.data.list,'cxyh')
                     this.$forceUpdate()
                     this.loading = false
                 })
@@ -1626,7 +1626,7 @@
                 console.log(value, '1000')
 
                 //学年Id映射其下培养方案数组
-                value.data.list.forEach(item => {
+                value.rows.forEach(item => {
                     this.schoolYearIdMapProgramArray.rows[item.schoolYearId]
                         ? this.schoolYearIdMapProgramArray.rows[
                               item.schoolYearId

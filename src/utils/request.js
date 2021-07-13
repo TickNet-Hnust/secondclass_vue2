@@ -67,11 +67,13 @@ service.interceptors.response.use(
                     cancelButtonText: '取消',
                     type: 'warning'
                 }
-            ).then(() => {
-                store.dispatch('LogOut').then(() => {
-                    location.href = '/index'
+            )
+                .then(() => {
+                    store.dispatch('LogOut').then(() => {
+                        location.href = '/index'
+                    })
                 })
-            })
+                .catch(() => {})
         } else if (code === 500) {
             Message({
                 message: msg,

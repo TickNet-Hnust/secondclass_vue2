@@ -21,7 +21,7 @@ import App from './App'
 import store from './store'
 import router from './router'
 import permission from './directive/permission'
-
+import XScrollbar from 'x-scrollbar';
 import './assets/icons' // icon
 import './permission' // permission control
 // import { getDicts } from '@/api/system/dict/data'
@@ -51,6 +51,8 @@ Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
+
+Vue.prototype.XScrollbar = XScrollbar
 
 Vue.prototype.alertDialog = alertDialog
 

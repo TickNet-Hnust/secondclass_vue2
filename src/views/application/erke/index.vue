@@ -110,4 +110,9 @@
     .main-container {
         padding-right: 10px;
     }
+        @media screen and (max-width: 1600px) {
+        .main-container {
+            width: 1350px;
+        }
+    }
 </style>

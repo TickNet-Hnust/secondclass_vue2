@@ -967,27 +967,28 @@
                 console.log(value, 'schoolYearList')
                 this.list.rows = value.rows
                 this.list.value = -1
+                
             })
             /* 批量修改学年 */
-            await schoolYearMulti({
-                deleteIds: [6, 7],
-                schoolYearList: [
-                    {
-                        id: 11,
-                        nowYear: 5,
-                        sort: 43,
-                        yearName: '2022'
-                    },
-                    {
-                        id: 12,
-                        nowYear: 5,
-                        sort: 43,
-                        yearName: '2023'
-                    }
-                ]
-            }).then(value => {
-                console.log(value, 'schoolYearMulti')
-            })
+            // await schoolYearMulti({
+            //     deleteIds: [6, 7],
+            //     schoolYearList: [
+            //         {
+            //             id: 11,
+            //             nowYear: 5,
+            //             sort: 43,
+            //             yearName: '2022'
+            //         },
+            //         {
+            //             id: 12,
+            //             nowYear: 5,
+            //             sort: 43,
+            //             yearName: '2023'
+            //         }
+            //     ]
+            // }).then(value => {
+            //     console.log(value, 'schoolYearMulti')
+            // })
 
             trainingProgramFindClassNumber({
                 schoolYearName: 'das',
@@ -1017,12 +1018,13 @@
                 console.log(value, 'trainingProgramId')
             })
             /* 查询培养方案分页 */
-            await trainingProgramList().then(value => {
-                this.planData = value.data.list
-                this.queryParams.totalCount = value.data.totalCount
-                this.queryParams.totalPage = value.data.totalPage
-                this.queryParams.pageSize = value.data.pageSize
-                this.queryParams.currPage = value.data.currPage
+            await trainingProgramList({schoolYearId:5}).then(value => {
+                
+                this.planData = value.rows
+                // this.queryParams.totalCount = value.data.totalCount
+                // this.queryParams.totalPage = value.data.totalPage
+                // this.queryParams.pageSize = value.data.pageSize
+                // this.queryParams.currPage = value.data.currPage
                 console.log(value, 'trainingProgramList')
             })
             this.loading = false

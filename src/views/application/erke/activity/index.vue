@@ -82,7 +82,9 @@
         <div class="erke-bottom">
             <el-row>
                 <el-col class="operation" :span="5">
-                    <el-button type="primary">新增</el-button>
+                    <el-button type="primary" @click="handleImport"
+                        >新增</el-button
+                    >
                     <el-button>导出</el-button>
                 </el-col>
                 <el-col class="filterRadio" :span="19">
@@ -231,10 +233,14 @@
                 @pagination="getList($event)"
             />
         </div>
+
+        <!-- this is add dialog -->
+        <addDialog ref="addActivity"></addDialog>
     </div>
 </template>
 
 <script>
+    import addDialog from './addDialog'
     import formatDate from '@/utils/formatDate.js'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
     import horwheel from 'horwheel'
@@ -242,8 +248,13 @@
 
     export default {
         name: 'activity',
+        components: {
+            addDialog
+        },
         data() {
             return {
+                /*标签 */
+                //报名范围
                 /* 单选条件 */
                 status: '全部',
                 queryParams: {
@@ -274,6 +285,9 @@
             }
         },
         methods: {
+            handleImport() {
+                this.$refs.addActivity.showDialog()
+            },
             sureClass(status) {
                 if ([0, 8, 4].includes(status)) {
                     return 'textGray'
@@ -496,7 +510,15 @@
             ]
             console.log(this.dict_sc_activity_status)
         },
-        mounted() {}
+        mounted() {
+            this.$nextTick(() => {
+
+                // new XScrollbar(document.querySelector('.el-table--scrollable-x .el-table__body-wrapper'),{
+                //     onlyHorizontal:true,
+                //     preventDefault:false
+                // })
+            })
+        }
     }
 </script>
 
