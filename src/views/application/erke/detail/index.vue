@@ -127,8 +127,8 @@
                     </div>
                     <div class="erke-buttom-right">
                         <div class="operate">
-                            <el-row :gutter="10" style="height: 50px">
-                                <el-col :span="1.5">
+                            <el-row :gutter="10" style="flexWrap:wrap" type="flex" justify="space-around">
+                                <el-col :span="1" style="min-width:80px">
                                     <el-select
                                         style="width: 80px"
                                         v-model="value"
@@ -138,7 +138,7 @@
                                         <el-option value="排序"></el-option>
                                     </el-select>
                                 </el-col>
-                                <el-col :span="1.5">
+                                <el-col :span="1" style="min-width:200px">
                                     <el-input
                                         suffix-icon="el-icon-search"
                                         placeholder="课程名称"
@@ -147,9 +147,9 @@
                                     </el-input>
                                 </el-col>
 
-                                <el-col :span="1.5">
+                                <el-col :span="1" style="min-width:100px">
                                     <el-select
-                                        style="width: 120px"
+                                        style="width: 100px"
                                         v-model="queryDetail.joinType"
                                         placeholder="加入方式"
                                     >
@@ -161,9 +161,9 @@
                                     </el-select>
                                 </el-col>
 
-                                <el-col :span="1.5">
+                                <el-col :span="1" style="min-width:100px">
                                     <el-select
-                                        style="width: 120px"
+                                        style="width: 100px"
                                         v-model="queryDetail.neccessary"
                                         placeholder="必修课"
                                     >
@@ -175,7 +175,7 @@
                                     </el-select>
                                 </el-col>
 
-                                <el-col :span="1.5">
+                                <el-col :span="1" style="min-width:120px">
                                     <el-select
                                         style="width: 120px"
                                         v-model="queryDetail.term"
@@ -192,7 +192,7 @@
                                     </el-select>
                                 </el-col>
 
-                                <el-col :span="1.5">
+                                <el-col :span="1" style="min-width:120px">
                                     <el-select
                                         style="width: 120px"
                                         v-model="value"
@@ -206,7 +206,7 @@
                                     </el-select>
                                 </el-col>
 
-                                <el-col :span="1.5">
+                                <el-col :span="1"  style="min-width:120px">
                                     <el-select
                                         style="width: 120px"
                                         v-model="value"
@@ -220,7 +220,7 @@
                                     </el-select>
                                 </el-col>
 
-                                <el-col :span="1.5">
+                                <el-col :span="1" style="min-width:340px">
                                     <el-radio-group
                                         v-model="statusRadio"
                                         size="small"
@@ -1745,6 +1745,9 @@
         padding: 16px;
         border: 1px solid #ddd;
         border-radius: 5px;
+    }
+    .operate >>> .el-col{
+        height: 58px;
     }
     .el-input {
         width: 200px;

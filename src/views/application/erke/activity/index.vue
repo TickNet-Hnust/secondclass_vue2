@@ -5,8 +5,8 @@
                 <span> <i>✈</i> 活动管理</span>
             </div>
             <div class="erke-top-foot">
-                <el-row>
-                    <el-col :span="4.5">
+                <el-row :gutter="15" type="flex" justify="space-around">
+                    <el-col :span="1" style="min-width:295px">
                         学年度：
                         <el-select value="2021-2022学年">
                             <el-option value="2021-2022学年 "></el-option>
@@ -14,28 +14,28 @@
                             <el-option value="2023-2024学年"></el-option>
                         </el-select>
                     </el-col>
-                    <el-col :span="5">
+                    <el-col :span="1" style="min-width:330px">
                         学院/二级单位:
                         <el-select value="资源环境与安全工程学院">
                             <el-option value="计算机科学与工程学院"></el-option>
                             <el-option value="商学院"></el-option>
                         </el-select>
                     </el-col>
-                    <el-col :span="4.5">
+                    <el-col :span="1" style="min-width:270px;">
                         活动名称：
-                        <el-input></el-input>
+                        <el-input style="width:180px"></el-input>
                     </el-col>
-                    <el-col :span="4.5">
+                    <el-col :span="1" style="min-width:140px">
                         活动ID：
-                        <el-input></el-input>
+                        <el-input style="width:60px"></el-input>
                     </el-col>
-                    <el-col :span="4.5">
+                    <el-col :span="1" style="min-width:245px">
                         主办方：
-                        <el-input></el-input>
+                        <el-input style="width:160px"></el-input>
                     </el-col>
                 </el-row>
-                <el-row style="margin-top: 15px" :gutter="10">
-                    <el-col :span="4.5">
+                <el-row style="margin-top: 15px" :gutter="10"  type="flex" justify="space-between">
+                    <el-col :span="1" style="min-width:165px">
                         录取方式：
                         <el-select value="全部" style="width: 80px">
                             <el-option value="全部"></el-option>
@@ -43,7 +43,7 @@
                             <el-option value="审核"></el-option>
                         </el-select>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="1" style="min-width:380px">
                         发布事件:
                         <el-date-picker
                             type="monthrange"
@@ -53,7 +53,7 @@
                         >
                         </el-date-picker>
                     </el-col>
-                    <el-col :span="4.5">
+                    <el-col :span="1" style="min-width:350px">
                         活动分类：
                         <el-select value="全部" style="width: 120px">
                             <el-option value="全部"></el-option>
@@ -67,11 +67,11 @@
                             <el-option value="审核"></el-option>
                         </el-select>
                     </el-col>
-                    <el-col :span="3">
+                    <el-col :span="1" style="min-width:140px">
                         推荐活动：
                         <el-switch></el-switch>
                     </el-col>
-                    <el-col :span="5">
+                    <el-col :span="1" style="min-width:135px">
                         <el-button type="primary" size="mini">查询</el-button>
                         <el-button size="mini">重置</el-button>
                     </el-col>
@@ -581,4 +581,5 @@
     .textBlue {
         color: #1890ff;
     }
+
 </style>

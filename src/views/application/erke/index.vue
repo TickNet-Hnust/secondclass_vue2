@@ -112,7 +112,7 @@
     }
         @media screen and (max-width: 1600px) {
         .main-container {
-            width: 1350px;
+            width: 1320px;
         }
     }
 </style>

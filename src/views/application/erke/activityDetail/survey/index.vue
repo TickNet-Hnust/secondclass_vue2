@@ -1451,6 +1451,7 @@
         padding-top: 25px;
         overflow: auto;
         min-width: 600px;
+        padding-bottom: 20px;
     }
     .ant-steps-item {
         min-width: 120px;
