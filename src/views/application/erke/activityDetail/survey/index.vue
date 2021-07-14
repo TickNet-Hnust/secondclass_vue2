@@ -3,7 +3,7 @@
         <el-row>
             <el-col :span="16" class="msgLeft">
                 <div class="msgDetail">
-                    <el-row style="margin-bottom: 15px">
+                    <el-row class="textRow">
                         <el-col :span="12" style="min-width:405px">
                             <span class="labelSpan" style="marginRight:65px">
                                 主办方：</span
@@ -18,7 +18,7 @@
                         </el-col>
                     </el-row>
 
-                    <el-row style="margin-bottom: 15px">
+                    <el-row class="textRow">
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan" style="marginRight:65px">
                                 发布人：</span
@@ -33,7 +33,7 @@
                         </el-col>
                     </el-row>
 
-                    <el-row style="margin-bottom: 15px">
+                    <el-row class="textRow">
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 指导单位：</span>
                             <span class="textSpan">机电工程学院</span>
@@ -44,7 +44,7 @@
                         </el-col>
                     </el-row>
 
-                    <el-row style="margin-bottom: 15px">
+                    <el-row class="textRow">
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 指导老师：</span>
                             <span class="textSpan">---</span>
@@ -57,7 +57,7 @@
                         </el-col>
                     </el-row>
 
-                    <el-row style="margin-bottom: 15px">
+                    <el-row class="textRow">
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan">活动级别：</span>
                             <span class="textSpan">院级</span>
@@ -68,7 +68,7 @@
                         </el-col>
                     </el-row>
 
-                    <el-row style="margin-bottom: 15px">
+                    <el-row class="textRow">
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 活动标签：</span>
                             <span class="textSpan">创新创业</span>
@@ -79,7 +79,7 @@
                         </el-col>
                     </el-row>
 
-                    <el-row style="margin-bottom: 15px">
+                    <el-row class="textRow">
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 活动分类：</span>
                             <span class="textSpan"
@@ -94,7 +94,7 @@
                         </el-col>
                     </el-row>
 
-                    <el-row style="margin-bottom: 15px">
+                    <el-row class="textRow">
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 报名时间：</span>
                             <span class="textSpan"
@@ -109,7 +109,7 @@
                         </el-col>
                     </el-row>
 
-                    <el-row style="margin-bottom: 15px">
+                    <el-row class="textRow">
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 活动时间：</span>
                             <span class="textSpan"
@@ -190,7 +190,7 @@
                             </div>
                             <div class="graph" ref="graph"></div>
                         </el-col>
-                        <el-col :span="7">
+                        <el-col :span="7" class="rank">
                             <el-date-picker style="float:right">
                             </el-date-picker>
                             <div class="Ratetitle">
@@ -276,7 +276,6 @@
 
 <script>
     import * as echarts from 'echarts'
-    import XScrollbar from 'x-scrollbar';
     export default {
         data() {
             return {
@@ -1406,16 +1405,16 @@
             }
             this.myChart = echarts.init(this.$refs.graph)
             this.myChart.setOption(this.option)
-            this.$nextTick(() => {
-                // console.log(this.$refs.graph.children[0].children.style="")
+            // this.$nextTick(() => {
+            //     // console.log(this.$refs.graph.children[0].children.style="")
+            // })
+            window.addEventListener('resize', () => {
+                this.myChart.resize()
             })
-            window.addEventListener("resize",() =>{
-                this.myChart.resize();
-            });
 
-            new XScrollbar(document.querySelector('.survey'))
-            new XScrollbar(document.querySelector('.msgStatus-nums'),{
-                onlyHorizontal:true
+            new this.XScrollbar(document.querySelector('.survey'))
+            new this.XScrollbar(document.querySelector('.msgStatus-nums'), {
+                onlyHorizontal: true
             })
         }
     }
@@ -1442,7 +1441,6 @@
         border-bottom: 1px solid #ddd;
     }
     .msgStatus-left {
-        
         padding-top: 30px;
         min-width: 70px;
         /* color: #888; */
@@ -1457,7 +1455,7 @@
         min-width: 120px;
     }
     .msgGraph {
-        padding: 20px 5px;
+        padding: 20px 5px 0 5px;
     }
     .msgGraph .graphTitle {
         margin-bottom: 10px;
@@ -1524,6 +1522,29 @@
     }
     .groupRateRow {
         margin: 15px 0;
+    }
+    .textRow {
+        margin-bottom: 15px;
+    }
+    @media screen and (min-height: 950px) {
+        .msgGraph .graph {
+            height: calc(100vh - 680px);
+        }
+
+        .rank {
+            height: calc(100vh - 800px);
+        }
+        .groupRateRow {
+            height: 20%;
+        }
+
+        .lisRight-buttom {
+            height: calc(100vh - 280px) !important;
+            /* background-color: red; */
+        }
+        .listRowButtom {
+            height: 3.3%;
+        }
     }
     .circleBlack {
         display: inline-block;

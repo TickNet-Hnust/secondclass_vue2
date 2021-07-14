@@ -967,7 +967,6 @@
                 console.log(value, 'schoolYearList')
                 this.list.rows = value.rows
                 this.list.value = -1
-                
             })
             /* 批量修改学年 */
             // await schoolYearMulti({
@@ -1018,8 +1017,7 @@
                 console.log(value, 'trainingProgramId')
             })
             /* 查询培养方案分页 */
-            await trainingProgramList({schoolYearId:5}).then(value => {
-                
+            await trainingProgramList({ schoolYearId: 5 }).then(value => {
                 this.planData = value.rows
                 // this.queryParams.totalCount = value.data.totalCount
                 // this.queryParams.totalPage = value.data.totalPage

@@ -5,36 +5,83 @@
 
             <!--用户数据-->
             <el-col :span="24" :xs="24">
-                <div class="erke-top">
-                    <div class="erke-top-foot">
-                        <div style="margin-bottom: 10px"></div>
-
-                        <div style="margin-bottom: 10px"></div>
-                    </div>
-                </div>
-
                 <div class="erke-bottom">
                     <div class="erke-buttom-left">
-                        <ul></ul>
+                        <ul>
+                            <li>全部</li>
+                            <li>资源环境与安全工程学院</li>
+                            <li>土木工程学院</li>
+                            <li>机械工程学院</li>
+                            <li>计算机科学与工程学院</li>
+                        </ul>
                     </div>
                     <div class="erke-buttom-right">
                         <div class="operate">
-                            <el-row :gutter="10" style="height: 50px">
-                                <el-col :span="1.5"> </el-col>
-                                <el-col :span="1.5"> </el-col>
-
-                                <el-col :span="1.5"> </el-col>
-
-                                <el-col :span="1.5"> </el-col>
-
-                                <el-col :span="1.5"> </el-col>
-
-                                <el-col :span="1.5"> </el-col>
-
-                                <el-col :span="1.5"> </el-col>
-
-                                <el-col :span="1.5"> </el-col>
-                            </el-row>
+                            <el-form :inline="true">
+                                <el-row
+                                    :gutter="10"
+                                    type="flex"
+                                    justify="start"
+                                    style="flexWrap:wrap"
+                                >
+                                    <el-col :span="1" style="min-width: 90px">
+                                        <el-form-item label="">
+                                            <el-select
+                                                value="操作"
+                                                style="width:80px"
+                                            >
+                                                <el-option
+                                                    label="操作"
+                                                ></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="1" style="min-width: 185px">
+                                        <el-form-item label="学号：">
+                                            <el-input data-text></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="1" style="min-width: 185px">
+                                        <el-form-item label="姓名：">
+                                            <el-input data-text></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="1" style="min-width: 180px">
+                                        <el-form-item label="请假状态">
+                                            <el-select
+                                                value="全部"
+                                                style="width:90px"
+                                            >
+                                                <el-option
+                                                    value="全部"
+                                                ></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="1" style="min-width: 340px">
+                                        <el-form-item label="请假时间">
+                                            <el-date-picker
+                                                align="right"
+                                                type="datetimerange"
+                                                range-separator="至"
+                                            >
+                                            </el-date-picker>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="1" style="min-width:150px">
+                                        <el-form-item label="">
+                                            <el-button
+                                                type="primary"
+                                                size="mini"
+                                                >查询</el-button
+                                            >
+                                            <el-button size="mini"
+                                                >重置</el-button
+                                            >
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                            </el-form>
                         </div>
 
                         <pagination
@@ -119,10 +166,10 @@
         overflow: hidden;
     }
     .erke-buttom-left {
-        width: 220px;
+        width: 300px;
         float: left;
         padding: 16px;
-        height: calc(100vh - 270px);
+        height: calc(100vh - 140px);
         background-color: #fff;
         border: 1px solid #ddd;
         border-radius: 5px;
@@ -135,7 +182,6 @@
         position: relative;
         list-style: none;
         font-size: 13px;
-        width: 192px;
         height: 40px;
         padding: 0 20px;
         color: #979797;
@@ -156,10 +202,19 @@
     }
     .erke-buttom-right {
         background-color: #fff;
-        margin-left: 225px;
-        height: calc(100vh - 270px);
+        margin-left: 305px;
+        height: calc(100vh - 140px);
         padding: 16px;
         border: 1px solid #ddd;
         border-radius: 5px;
+    }
+    .operate >>> .el-input__inner[data-text] {
+        width: 110px;
+    }
+    .operate >>> .el-date-editor {
+        width: 250px;
+    }
+    .el-row {
+        height: initial;
     }
 </style>

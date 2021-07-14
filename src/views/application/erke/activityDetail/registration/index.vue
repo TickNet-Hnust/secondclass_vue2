@@ -89,13 +89,17 @@
                                     justify="space-around"
                                     style="flexWrap:wrap"
                                 >
-                                    <el-col :span="1" style="min-width:80px">
-                                        <el-select
-                                            value="操作"
-                                            style="width:80px"
-                                        >
-                                            <el-option label="操作"></el-option>
-                                        </el-select>
+                                    <el-col :span="1" style="min-width:90px">
+                                        <el-form-item label="">
+                                            <el-select
+                                                value="操作"
+                                                style="width:80px"
+                                            >
+                                                <el-option
+                                                    label="操作"
+                                                ></el-option>
+                                            </el-select>
+                                        </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:165px">

@@ -5,7 +5,7 @@
                 <span> <i>✈</i> 活动管理</span>
             </div>
             <div class="erke-top-foot">
-                <el-row :gutter="15" type="flex" justify="space-around">
+                <el-row :gutter="15" type="flex" justify="start">
                     <el-col :span="1" style="min-width:295px">
                         学年度：
                         <el-select value="2021-2022学年">
@@ -34,7 +34,12 @@
                         <el-input style="width:160px"></el-input>
                     </el-col>
                 </el-row>
-                <el-row style="margin-top: 15px" :gutter="10"  type="flex" justify="space-between">
+                <el-row
+                    style="margin-top: 15px"
+                    :gutter="10"
+                    type="flex"
+                    justify="start"
+                >
                     <el-col :span="1" style="min-width:165px">
                         录取方式：
                         <el-select value="全部" style="width: 80px">
@@ -53,15 +58,15 @@
                         >
                         </el-date-picker>
                     </el-col>
-                    <el-col :span="1" style="min-width:350px">
+                    <el-col :span="1" style="min-width:470px">
                         活动分类：
-                        <el-select value="全部" style="width: 120px">
+                        <el-select value="全部" style="width: 180px">
                             <el-option value="全部"></el-option>
                             <el-option value="报名"></el-option>
                             <el-option value="审核"></el-option>
                         </el-select>
                         --
-                        <el-select value="全部" style="width: 120px">
+                        <el-select value="全部" style="width: 180px">
                             <el-option value="全部"></el-option>
                             <el-option value="报名"></el-option>
                             <el-option value="审核"></el-option>
@@ -512,7 +517,6 @@
         },
         mounted() {
             this.$nextTick(() => {
-
                 // new XScrollbar(document.querySelector('.el-table--scrollable-x .el-table__body-wrapper'),{
                 //     onlyHorizontal:true,
                 //     preventDefault:false
@@ -581,5 +585,4 @@
     .textBlue {
         color: #1890ff;
     }
-
 </style>

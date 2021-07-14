@@ -37,15 +37,23 @@
                 </el-col>
                 <el-col :span="1" style="min-width:130px">
                     <el-button icon="el-icon-edit" circle></el-button>
-                    <el-button icon="el-icon-refresh" circle></el-button>
-                    <el-button icon="el-icon-close" circle></el-button>
+                    <el-button
+                        icon="el-icon-refresh"
+                        circle
+                        @click="refresh"
+                    ></el-button>
+                    <el-button
+                        icon="el-icon-close"
+                        circle
+                        @click="back"
+                    ></el-button>
                 </el-col>
             </el-row>
         </div>
 
         <!-- <keep-alive> -->
         <transition name="fade-transform" mode="out-in">
-            <component :is="aliveComponent"></component>
+            <component v-if="hackReset" :is="aliveComponent"></component>
         </transition>
         <!-- </keep-alive> -->
         <!-- <div class="erke-bottom"> -->
@@ -82,6 +90,7 @@
         },
         data() {
             return {
+                hackReset: true,
                 /* 单选条件 */
                 status: 'survey',
                 queryParams: {
@@ -96,6 +105,15 @@
         methods: {
             switchStatus(target) {
                 this.aliveComponent = target
+            },
+            refresh() {
+                this.hackReset = false
+                this.$nextTick(() => {
+                    this.hackReset = true
+                })
+            },
+            back() {
+                this.$router.push('/application/erke/activity')
             }
         }
     }

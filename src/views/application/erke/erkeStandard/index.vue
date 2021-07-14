@@ -98,12 +98,15 @@
                                             hasChildren: 'hasChildren'
                                         }"
                                     >
-                                        <el-table-column
+                                        <el-table-column type="index">
+                                        </el-table-column>
+
+                                        <!-- <el-table-column
                                             prop="id"
                                             label="ID"
                                             width="150"
-                                        >
-                                        </el-table-column>
+                                        > -->
+                                        <!-- </el-table-column> -->
                                         <el-table-column
                                             prop="name"
                                             label="项目名称"

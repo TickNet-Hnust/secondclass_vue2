@@ -7,10 +7,27 @@
             append-to-body
             class="addActivity"
         >
-            <el-tabs class="addActivity" tab-position="left">
-                <el-tab-pane label="概要">
-                    <el-form label-position="left" label-width="100px">
-                        <el-form-item label="概要" class="bold"></el-form-item>
+            <el-row>
+                <el-col :span="5" style="padding-left:10px">
+                    <a-anchor
+                        :target-offset="targetOffset"
+                        :getContainer="getContainer"
+                        :bounds="-100"
+                    >
+                        <a-anchor-link href="#gy" title="概要" />
+                        <a-anchor-link href="#bm" title="报名信息" />
+                        <a-anchor-link href="#hd" title="活动信息" />
+                    </a-anchor>
+                </el-col>
+                <el-col :span="19">
+                    <el-form
+                        label-position="left"
+                        label-width="100px"
+                        class="formDetail"
+                    >
+                        <el-form-item label="概要" class="bold"
+                            ><a id="gy"></a
+                        ></el-form-item>
 
                         <el-form-item label="活动名称：">
                             <el-input></el-input>
@@ -36,9 +53,8 @@
                             <el-input></el-input>
                         </el-form-item>
 
-                        <el-form-item
-                            label="报名信息"
-                            class="bold"
+                        <el-form-item label="报名信息" class="bold"
+                            ><a id="bm"></a
                         ></el-form-item>
 
                         <el-form-item label="报名时间">
@@ -127,9 +143,8 @@
 
                         <el-form-item label="报名须知"> </el-form-item>
 
-                        <el-form-item
-                            label="活动信息"
-                            class="bold"
+                        <el-form-item label="活动信息" class="bold"
+                            ><a id="hd"></a
                         ></el-form-item>
 
                         <el-form-item label="活动级别">
@@ -233,14 +248,16 @@
                         </el-form-item>
 
                         <el-form-item label="活动地点：">
-                            <el-link 
-                                type="primary" 
+                            <el-link
+                                type="primary"
                                 @click="openMap"
                                 v-if="!mapDialog.lat"
-                            >点击打开地图</el-link>
+                                >点击打开地图</el-link
+                            >
                             <div v-else>
-                                经度：{{this.mapDialog.lat}}
-                                纬度：{{this.mapDialog.lng}}
+                                经度：{{ this.mapDialog.lat }} 纬度：{{
+                                    this.mapDialog.lng
+                                }}
                             </div>
                         </el-form-item>
 
@@ -258,7 +275,7 @@
                             </el-radio-group>
                         </el-form-item>
 
-                         <el-form-item label="签到距离">
+                        <el-form-item label="签到距离">
                             <el-radio-group>
                                 <el-radio label="1">不限</el-radio>
                                 <el-radio label="2">
@@ -325,28 +342,32 @@
                                 >+</el-button
                             >
                         </el-form-item>
-
                     </el-form>
+                </el-col>
+            </el-row>
+
+            <!-- <el-tabs class="addActivity" tab-position="left">
+                <el-tab-pane label="概要">
+                    
                 </el-tab-pane>
                 <el-tab-pane label="报名信息" style="padding: 30px">
                 </el-tab-pane>
                 <el-tab-pane label="活动信息" style="padding: 30px">
                 </el-tab-pane>
-            </el-tabs>
+            </el-tabs> -->
             <div slot="footer" class="dialog-footer">
                 <el-button>关闭</el-button>
                 <el-button type="primary">确 定</el-button>
             </div>
         </el-dialog>
 
-        <el-dialog
-            :title="mapDialog.title"
-            :visible.sync="mapDialog.open"
-        >
+        <el-dialog :title="mapDialog.title" :visible.sync="mapDialog.open">
             <div id="mapContainer"></div>
             <div slot="footer" class="dialog-footer">
                 <el-button>关闭</el-button>
-                <el-button type="primary" @click="comfirmPlace">确 定</el-button>
+                <el-button type="primary" @click="comfirmPlace"
+                    >确 定</el-button
+                >
             </div>
         </el-dialog>
     </div>
@@ -357,12 +378,13 @@
         props: ['title', 'open'],
         data() {
             return {
+                targetOffset: undefined,
                 //map
-                mapDialog:{
+                mapDialog: {
                     title: '地图',
                     open: false,
                     lat: '', //j
-                    lng: '', //w
+                    lng: '' //w
                 },
                 //积分类别
                 integral: '',
@@ -399,11 +421,14 @@
                 }
             }
         },
+        computed: {},
         methods: {
+            getContainer() {
+                return document.querySelector('.formDetail')
+            },
             groupHandleClose(tag) {
                 this.groupTags.dynamicTags.splice(
-                    this.groupTags.dynamicTags.indexOf(tag),
-                    
+                    this.groupTags.dynamicTags.indexOf(tag)
                 )
             },
 
@@ -424,8 +449,7 @@
             //people
             peopleHandleClose(tag) {
                 this.peopleTags.dynamicTags.splice(
-                    this.peopleTags.dynamicTags.indexOf(tag),
-                    
+                    this.peopleTags.dynamicTags.indexOf(tag)
                 )
             },
 
@@ -446,8 +470,7 @@
             //actiove
             activityHandleClose(tag) {
                 this.activityTags.dynamicTags.splice(
-                    this.activityTags.dynamicTags.indexOf(tag),
-                    
+                    this.activityTags.dynamicTags.indexOf(tag)
                 )
             },
 
@@ -516,92 +539,80 @@
                 this.addActivity.open = true
             },
             openMap() {
-                this.mapDialog.open = true;
+                this.mapDialog.open = true
                 this.$nextTick(() => {
+                    let map = new BMapGL.Map('mapContainer') // 创建Map实例
+                    map.centerAndZoom(
+                        new BMapGL.Point(112.927988, 27.908385),
+                        17
+                    ) // 初始化地图,设置中心点坐标和地图级别
+                    map.enableScrollWheelZoom(true) // 开启鼠标滚轮缩放
+                    let marker2
+                    let menu = new BMapGL.ContextMenu()
+                    let txtMenuItem = [
+                        {
+                            text: '放大一级',
+                            callback: function() {
+                                map.zoomIn()
+                            }
+                        },
+                        {
+                            text: '缩小一级',
+                            callback: function() {
+                                map.zoomOut()
+                            }
+                        }
+                    ]
+                    for (let i = 0; i < txtMenuItem.length; i++) {
+                        menu.addItem(
+                            new BMapGL.MenuItem(
+                                txtMenuItem[i].text,
+                                txtMenuItem[i].callback,
+                                100
+                            )
+                        )
+                    }
+                    map.addEventListener('click', e => {
+                        if (marker2) {
+                            this.mapDialog.lng = e.latlng.lng
+                            this.mapDialog.lat = e.latlng.lat
+                            this.$forceUpdate()
+                            return
+                        }
+                        let status = confirm('您确定该地为活动地点吗？')
+                        console.log(e)
 
-                    
-                
-                let map = new BMapGL.Map('mapContainer'); // 创建Map实例
-                map.centerAndZoom(new BMapGL.Point(112.927988, 27.908385), 17); // 初始化地图,设置中心点坐标和地图级别
-                map.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
-                let marker2
-                let menu = new BMapGL.ContextMenu();
-                let txtMenuItem = [{
-                    text: '放大一级',
-                    callback: function() {
-                        map.zoomIn();
-                    }
-                }, {
-                    text: '缩小一级',
-                    callback: function() {
-                        map.zoomOut();
-                    }
-                }];
-                for (let i = 0; i < txtMenuItem.length; i++) {
-                    menu.addItem(new BMapGL.MenuItem(txtMenuItem[i].text, txtMenuItem[i].callback, 100));
-                }
-                map.addEventListener('click', (e) => {
-                    if(marker2) {
-                        this.mapDialog.lng = e.latlng.lng
-                        this.mapDialog.lat = e.latlng.lat
-                        this.$forceUpdate()
-                        return 
-                    } 
-                    let status = confirm('您确定该地为活动地点吗？');
-                    console.log(e)
-                    
-                    if(status) {
-                        marker2 = new BMapGL.Marker(new BMapGL.Point(e.latlng.lng, e.latlng.lat), {
-                        enableDragging: true
+                        if (status) {
+                            marker2 = new BMapGL.Marker(
+                                new BMapGL.Point(e.latlng.lng, e.latlng.lat),
+                                {
+                                    enableDragging: true
+                                }
+                            )
+                            map.addOverlay(marker2)
+                            this.mapDialog.lng = e.latlng.lng
+                            this.mapDialog.lat = e.latlng.lat
+                            this.$forceUpdate()
+                        }
                     })
-                        map.addOverlay(marker2)
-                        this.mapDialog.lng = e.latlng.lng
-                        this.mapDialog.lat = e.latlng.lat
-                        this.$forceUpdate()
-                    } 
-                });
                 })
             },
             comfirmPlace() {
-                this.mapDialog.open = false;
+                this.mapDialog.open = false
             }
+        },
+        mounted() {
+            this.targetOffset = window.innerHeight / 2
         }
     }
 </script>
 
 <style scoped>
-    .addActivity >>> .el-tabs__item {
-        text-align: left;
-    }
-    .addActivity,
-    .addActivity >>> .el-tabs__nav-scroll {
-        overflow: visible !important;
-    }
-    .addActivity >>> .el-tabs__nav-wrap {
-        position: relative;
-        overflow: visible !important;
-    }
-    .addActivity >>> .el-tabs__nav-wrap::after {
-        content: '';
-        position: absolute;
-        top: 0px;
-        right: 0;
-        width: 1px;
-        background-color: #ddd;
-        height: 550px !important;
-    }
-    .addActivity >>> .el-tabs__active-bar {
-        display: none;
-    }
-    .addActivity >>> .el-tabs__content {
-        padding: 0 10px 10px 10px;
-    }
     .addActivity >>> .el-input__inner {
         width: 300px;
     }
     .addActivity >>> .el-row {
         margin: 12px 0;
-        /* line-height: 30px; */
         overflow: hidden;
     }
     .addActivity >>> .el-form {
@@ -649,26 +660,17 @@
         vertical-align: bottom;
     }
     #mapContainer {
-            overflow: hidden;
-            width: 100%;
-            /* height: 100%; */
-            height: 600px;
-            margin: 0;
-            font-family: "微软雅黑";
-        }
-        
-        .info {
-            z-index: 999;
-            width: auto;
-            min-width: 22rem;
-            padding: .75rem 1.25rem;
-            margin-left: 1.25rem;
-            position: fixed;
-            top: 1rem;
-            background-color: #fff;
-            border-radius: .25rem;
-            font-size: 14px;
-            color: #666;
-            box-shadow: 0 2px 6px 0 rgba(27, 142, 236, 0.5);
-        }
+        overflow: hidden;
+        width: 100%;
+        /* height: 100%; */
+        height: 600px;
+        margin: 0;
+        font-family: '微软雅黑';
+    }
+    .addActivity >>> .ant-anchor-ink::before {
+        left: 100px !important;
+    }
+    .addActivity >>> .ant-anchor-ink-ball {
+        left: 101px !important;
+    }
 </style>

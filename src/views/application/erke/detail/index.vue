@@ -127,7 +127,12 @@
                     </div>
                     <div class="erke-buttom-right">
                         <div class="operate">
-                            <el-row :gutter="10" style="flexWrap:wrap" type="flex" justify="space-around">
+                            <el-row
+                                :gutter="10"
+                                style="flexWrap:wrap"
+                                type="flex"
+                                justify="space-around"
+                            >
                                 <el-col :span="1" style="min-width:80px">
                                     <el-select
                                         style="width: 80px"
@@ -206,7 +211,7 @@
                                     </el-select>
                                 </el-col>
 
-                                <el-col :span="1"  style="min-width:120px">
+                                <el-col :span="1" style="min-width:120px">
                                     <el-select
                                         style="width: 120px"
                                         v-model="value"
@@ -1316,7 +1321,7 @@
                     limit: option.limit
                 }).then(value => {
                     this.planData = value.data.list
-                    console.log(value.data.list,'cxyh')
+                    console.log(value.data.list, 'cxyh')
                     this.$forceUpdate()
                     this.loading = false
                 })
@@ -1650,6 +1655,13 @@
             this.initTableData(this.$route.params.sid)
             this.loading = false
 
+            this.$nextTick(() => {
+                console.log(
+                    48,
+                    document.querySelector('.erke-buttom-right .el-table')
+                )
+                // new this.XScrollbar(document.querySelector('.erke-buttom-right .el-table'))
+            })
             //not a good way to mounted
             // setTimeout(() => {
             //     let view = document.querySelectorAll(
@@ -1746,7 +1758,7 @@
         border: 1px solid #ddd;
         border-radius: 5px;
     }
-    .operate >>> .el-col{
+    .operate >>> .el-col {
         height: 58px;
     }
     .el-input {
