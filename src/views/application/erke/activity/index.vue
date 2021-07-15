@@ -306,6 +306,7 @@
                 await Promise.all([getDict('sc_activity_status')]).then(
                     value => {
                         let tempArr = ['dict_sc_activity_status']
+                        // console.log(value,7878)
                         value.forEach((item, index) => {
                             this[tempArr[index]] = item.data
                         })
