@@ -1,3 +1,10 @@
+<!--
+ * @Descripttion: 培养方案
+ * @Author: 林舒恒
+ * @Date: 2021-06-03 13:04:02
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-07-16 21:43:55
+-->
 <template>
     <div class="app-container">
         <div class="erke-top">
@@ -70,6 +77,8 @@
                     <el-input
                         size="mini"
                         suffix-icon="el-icon-search"
+                        v-model="FuzzyInput"
+                        @input="findFuzzyName"
                     ></el-input>
                 </el-col>
 
@@ -146,7 +155,7 @@
                     label="操作"
                 >
                     <template slot-scope="scope">
-                        <el-link type="primary">修改</el-link>
+                        <el-link type="primary" @click="updateTrainingProgram(scope.row,scope.$index)">修改</el-link>
                         <router-link
                             type="info"
                             :to="
@@ -169,7 +178,7 @@
             <pagination
                 v-show="queryParams.totalPage > 0"
                 :total="queryParams.totalCount"
-                :page.sync="queryParams.pageCount"
+                :page.sync="queryParams.pageNum"
                 :limit.sync="queryParams.pageSize"
                 @pagination="getList($event)"
             />
@@ -198,7 +207,12 @@
                             >
                         </template>
                     </el-table-column>
-                    <el-table-column prop="sort" label="排序" width="80">
+                    <el-table-column 
+                        prop="sort" 
+                        label="排序" 
+                        width="80"
+                        sortable
+                    >
                         <template slot-scope="scope">
                             <el-input
                                 class="sortInput"
@@ -235,6 +249,7 @@
                     </el-table-column>
                 </el-table>
             </el-form>
+
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">关闭</el-button>
                 <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -389,7 +404,7 @@
                 <el-button @click="cancel">关闭</el-button>
             </div>
         </el-dialog>
-
+        
         <!-- this is addButton -->
         <el-dialog
             :title="addPlanDialog.title"
@@ -399,7 +414,15 @@
             class="addPlanDialog"
         >
             <el-form ref="addPlanDialog" label-width="80px">
-                <el-table :data="planData" height="350" stripe>
+                
+                <el-table 
+                    :data="preAddplanData" 
+                    height="350" 
+                    stripe
+                >
+                    <template v-slot:empty>
+                        暂无新增数据，点击左上角 + 号新增
+                    </template>
                     <el-table-column
                         lable="sdf"
                         width="40"
@@ -474,6 +497,49 @@
                 <el-button type="primary" @click="submitForm">确 定</el-button>
             </div>
         </el-dialog>
+
+        <!-- this is updateButton -->
+        <el-dialog
+            :title="updatePlanDialog.title"
+            :visible.sync="updatePlanDialog.open"
+            width="635px"
+            append-to-body
+            class="updatePlanDialog"
+        >
+            <el-form ref="updatePlanDialog" label-width="120px" label-position="left">
+                <el-form-item label="批次ID：">
+                    {{updatePlanDialog.config.id}}
+                </el-form-item>
+                <el-form-item label="学年：">
+                    {{this.schoolYearIdMapName[updatePlanDialog.config.schoolYearId]}}
+                </el-form-item>
+                <el-form-item label="培养方案名称：">
+                    <el-input v-model="updatePlanDialog.config.name"></el-input>
+                </el-form-item>
+                <el-form-item label="级别：">
+                    <el-select 
+                        v-model="updatePlanDialog.config.rank"
+                        >
+                        <el-option
+                            v-for="(item,index) in dict_sc_train_program_rank"
+                            :key="index"
+                            :value="+item.dictValue"
+                            :label="item.dictLabel"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="启用：">
+                    <el-switch 
+                        :value="Boolean(updatePlanDialog.config.status)"
+                        @change="updatePlanDialog.config.status = Number($event)"
+                    ></el-switch>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancelUpdate">关闭</el-button>
+                <el-button type="primary" @click="submitUpdateForm">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -500,10 +566,12 @@
         name: 'erkePlan',
         data() {
             return {
+                //用于模糊查询
+                FuzzyInput: '',
                 //表格加载的loading
                 loading: false,
                 //学年id =>学年名称
-                schoolMap: [],
+                schoolYearIdMapName: [],
                 //记录的分页状态
                 t: {},
                 /* 培养方案级别字典 */
@@ -528,7 +596,8 @@
                         }
                     ]
                 },
-
+                //预增加的数据
+                preAddplanData: [],
                 //导入弹窗里面的数据
                 importDialog: {
                     title: '导入方案',
@@ -541,8 +610,19 @@
                             classNumber: 84
                         }
                     ]
+                },                
+                updatePlanDialog:{
+                    open: false,
+                    title: '编辑',
+                    index: '',
+                    config: {
+                        id: 0,
+                        schoolYearId: 0,
+                        name: '',
+                        rank: 0,
+                        status: 0,
+                    }
                 },
-
                 //导出弹窗里面的数据
                 exportDialog: {
                     title: '',
@@ -578,7 +658,7 @@
                 managerDialog: {
                     title: '',
                     open: false,
-                    radio: '0', //当前学年
+                    radio: '0', //当前学年 在学年列表里的下标
                     config: [
                         {
                             sort: '1',
@@ -634,23 +714,25 @@
                 },
                 // 查询参数
                 queryParams: {
+                    //总共多少页,需要计算得出
+                    totalPage: 0,
+                    //总共多少条
                     totalCount: 0,
-                    totalPage: 50,
-                    pageCount: 1,
-                    pageSize: 4
+                    //第几页
+                    pageNum: 1,
+                    // 一页多少条
+                    pageSize: 10
                 }
             }
         },
         computed: {
+            //新增时的级别下拉框
             rankSelect() {
                 return index => {
                     if (index == null) return null
                     return this.dict_sc_train_program_rank[index].dictLabel
                 }
             }
-        },
-        created() {
-            this.getList()
         },
         methods: {
             nameChanged(row, value) {
@@ -686,54 +768,62 @@
                     }
                 })
             },
+            /**
+             * @description:  学年改变触发，重新渲染表格数据
+             * @param {*} value 学年id， -1为全部学年
+             */            
             async schoolYearChange(value) {
                 console.log(value)
-                //如果value为-1则查询全部，否则查询对应的value
-                await (function(that) {
-                    if (value == -1) {
-                        return trainingProgramList({
-                            page: that.t.page ? that.t.page : 1,
-                            limit: that.t.limit ? that.t.limit : 10
-                        })
-                    } else {
-                        return trainingProgramList({
-                            page: that.t.page ? that.t.page : 1,
-                            limit: that.t.limit ? that.t.limit : 10,
-                            schoolYearId: value
-                        })
-                    }
-                })(this)
-                    .then(value => {
-                        this.queryParams.pageSize = value.data.pageSize
-                        this.queryParams.totalCount = value.data.totalCount
-                        this.queryParams.totalPage = value.data.totalPage
-                        this.planData = value.data.list
-                        this.$forceUpdate()
-                        this.loading = false
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
+            
+                let option = {
+                    pageNum: 1,
+                    pageSize: 10,
+                }
+                value != -1 && (option.schoolYearId = value)
+
+                this.queryParams.pageNum = 1
+                this.queryParams.pageSize = 10
+                await this.getTrainingProgramList(option)
+
             },
+            /**
+             * @description: 表格 学年 id转化name
+             * @param {*} cellValue 要转换的数据
+             */            
             formatSchoolYearName(row, column, cellValue) {
-                return cellValue != null && this.schoolMap[cellValue]
+                return cellValue != null && this.schoolYearIdMapName[cellValue]
             },
+            /**
+             * @description: 表格 日期 格式化
+             * @param {*} cellValue 要转换的数据
+             */
             formatUpdateTime(row, column, cellValue) {
-                return cellValue && formatDate(cellValue)
+                return cellValue != null && formatDate(cellValue)
             },
+            /**
+             * @description: 表格 状态 字典转化
+             * @param {*} cellValue 要转换的数据
+             */            
             formatStatus(row, column, cellValue) {
-                // console.log(cellValue)
                 return (
                     cellValue != null &&
                     this.dict_sc_train_program_status[cellValue].dictLabel
                 )
             },
+            /** 
+             * @description: 表格 级别 字典转化
+             * @param {*} cellValue 要转换的数据
+             */            
             formatRank(row, column, cellValue) {
                 return (
                     cellValue != null &&
                     this.dict_sc_train_program_rank[cellValue].dictLabel
                 )
             },
+            /**
+             * @description: 新增 表头 渲染+
+             * @param {*} h 
+             */            
             renderHeader(h) {
                 return h(
                     'span',
@@ -746,6 +836,10 @@
                     '+'
                 )
             },
+            /**
+             * @description: 管理 表头 渲染+
+             * @param {*} h
+             */            
             renderSchoolYear(h) {
                 return h(
                     'span',
@@ -766,13 +860,14 @@
             },
             async addtrainingProgram() {
                 let data = {
-                    schoolYearId: this.list.rows[this.managerDialog.radio].id,
+                    schoolYearId: this.list.value,
                     name: '',
                     rank: null,
                     status: 0
                 }
-                this.newAddList.push(data) //先存在提交数据里面
-                this.planData.push(data) //为了展示视图，也添加
+                this.preAddplanData.push(data)
+                // this.newAddList.push(data) //先存在提交数据里面
+                // this.planData.push(data) //为了展示视图，也添加
                 this.$nextTick(() => {
                     let tableBody = document.querySelector(
                         '.addPlanDialog .el-table__body-wrapper'
@@ -788,7 +883,13 @@
                 //     }
                 // })
             },
+            /**
+             * @description: 只有预添加的数据才能删除
+             * @param {*} row 
+             * @param {*} index
+             */            
             async deletePlanDialog(row, index) {
+                this.preAddplanData.splice(index,1) ;return 
                 //删除预添加的数据，需要同时在欲添加/实际两个数组中删除
                 if (row.id == undefined) {
                     this.newAddList.splice(
@@ -815,13 +916,29 @@
                     page: option.page,
                     limit: option.limit
                 }).then(value => {
+                    alert(565)
                     this.planData = value.data.list
-                    console.log(value.data.list)
+                    console.log(value.data.list,'list7777')
                     this.$forceUpdate()
                     this.loading = false
                 })
             },
-            // 筛选节点
+            /**
+             * @description: 打开修改的弹窗
+             */            
+            updateTrainingProgram(row,index) {
+                console.log(row)
+                this.updatePlanDialog.open = true
+                this.updatePlanDialog.index = index
+                this.updatePlanDialog.config = {
+                    id: row.id,
+                    schoolYearId: row.schoolYearId,
+                    name: row.name,
+                    rank: row.rank,
+                    status: row.status
+                }
+            },
+            /** 筛选节点 */ 
             filterNode(value, data) {
                 if (!value) return true
                 return data.label.indexOf(value) !== -1
@@ -872,20 +989,25 @@
                 this.managerDialog.open = true
                 this.managerDialog.title = '学年配置'
             },
-            /* 关闭添加按钮 */
+            /** 关闭添加按钮 */
             cancelAdd() {
                 this.addPlanDialog.open = false
-                this.planData.splice(
-                    this.planData.length - this.newAddList.length
-                )
-                this.newAddList = []
-                this.updateList = []
+                this.preAddplanData = []
+                // this.planData.splice(
+                //     this.planData.length - this.newAddList.length
+                // )
+                // this.newAddList = []
+                // this.updateList = []
                 this.$forceUpdate()
             },
-            /** 添加按钮 */
+            /** 关闭修改按钮 */
+            cancelUpdate() {
+                this.updatePlanDialog.open = false
+            },
+            /** 新增培养方案 */          
             async submitForm() {
                 console.log(this.newAddList)
-                let msgFull = this.newAddList.every(item => {
+                let msgFull = this.preAddplanData.every(item => {
                     if (item.name == '' || item.rank == null) return false
                     return true
                 })
@@ -894,7 +1016,7 @@
                     return
                 }
                 //等待后端优化，批量添加
-                this.newAddList.forEach(async item => {
+                this.preAddplanData.forEach(async item => {
                     await trainingProgram(item).then(value => {
                         this.msgSuccess('添加成功')
                     })
@@ -918,6 +1040,29 @@
                 //     this.$message.success('添加成功')
                 //     this.schoolYearChange(this.list.value)
                 // })
+            },
+            async submitUpdateForm() {
+                await trainingProgramMulti({
+                    trainingProgramList: [this.updatePlanDialog.config]
+                }).then(value => {
+                    Object.assign(this.planData[this.updatePlanDialog.index],this.updatePlanDialog.config)
+                    this.msgSuccess('修改成功')
+                    console.log(this.updatePlanDialog.config)
+                    this.$forceUpdate()
+                    this.cancelUpdate()
+                })
+            },
+            /**
+             * @description:  模糊查询培养方案名字
+             */            
+            async findFuzzyName() {
+                let option = {
+                    name: this.FuzzyInput,
+                    pageNum:1,
+                    pageSize: 10
+                }
+                this.list.value != -1 && (option.schoolYearId = this.list.value)
+                await this.getTrainingProgramList(option)
             },
             /** 删除按钮操作 */
             handleDelete(row) {
@@ -950,92 +1095,81 @@
                 this.importDialog.open = true
             },
 
-            // 提交上传文件
-            submitFileForm() {
-                this.$refs.upload.submit()
+            /** 获取学年列表 */
+            async getSchoolYearList() {
+                    await schoolYearList().then(value => {
+                    value.rows.forEach(item => {
+                        /** 这里还需要改进，否则数组到后面将会很大，影响性能 */
+                        this.schoolYearIdMapName[item.id] = item.yearName
+                    })
+                    //默认选中学年的第一个
+                    // this.managerDialog.radio = value.rows[0].id
+                    console.log(value, 'schoolYearList')
+                    this.list.rows = value.rows
+                    this.list.value = -1
+                })
+            },
+            /** @description 查询培养方案分页
+             *  @param name 模糊查询方案名称
+             *  @param schoolYearId 学年id
+             *  @param pageNum 第几页
+             *  @param pageSize 限制每页的条数
+             */                                                    
+            async getTrainingProgramList(option) {
+                
+                await trainingProgramList(option).then(value => {
+                    this.planData = value.rows
+                    this.queryParams.totalCount = value.total
+                    this.queryParams.totalPage = value.total / this.queryParams.pageSize
+                    console.log(value, 'trainingProgramList')
+                    console.log(this.queryParams)
+                })
+            },
+            /**
+             * @description:  初始化字典
+             */            
+            async initDict() {
+                await Promise.all([
+                    getDict('sc_train_program_rank'),
+                    getDict('sc_train_program_status')
+                ]).then(value => {
+                    let temp = [
+                        'dict_sc_train_program_rank',
+                        'dict_sc_train_program_status'
+                    ]
+                    temp.forEach((item,index) => {
+                        this[item] = value[index].data
+                    })
+                })
             }
         },
         async created() {
-            this.loading = true
-            /* 获取学年列表over */
-            await schoolYearList().then(value => {
-                value.rows.forEach(item => {
-                    this.schoolMap[item.id] = item.yearName
-                })
-                //默认选中学年的第一个
-                // this.managerDialog.radio = value.rows[0].id
-                console.log(value, 'schoolYearList')
-                this.list.rows = value.rows
-                this.list.value = -1
-            })
-            /* 批量修改学年 */
-            // await schoolYearMulti({
-            //     deleteIds: [6, 7],
-            //     schoolYearList: [
-            //         {
-            //             id: 11,
-            //             nowYear: 5,
-            //             sort: 43,
-            //             yearName: '2022'
-            //         },
-            //         {
-            //             id: 12,
-            //             nowYear: 5,
-            //             sort: 43,
-            //             yearName: '2023'
-            //         }
-            //     ]
-            // }).then(value => {
-            //     console.log(value, 'schoolYearMulti')
-            // })
+            //字典初始化
+            await this.initDict()
 
-            trainingProgramFindClassNumber({
-                schoolYearName: 'das',
-                trainingName: 4
-            }).then(value => {
-                console.log(value, 'traningProgramFindClassNumber')
+            //表格加载
+            this.loading = true
+            /* 调用 获取学年列表 */
+            await this.getSchoolYearList()
+            
+            /** 这里可以对schoolYear排序，并赋值让radio为最新的年度 */
+
+            this.queryParams.pageNum = 1
+            this.queryParams.pageSize = 10
+            /* 调用 查询培养方案分页 */
+            await this.getTrainingProgramList({
+                // schoolYearId: this.list.rows[this.managerDialog.radio].id,
+                pageNum: 1,
+                pageSize: 10
             })
-            trainingProgramMulti({
-                deleteIds: [6, 7],
-                schoolYearList: [
-                    {
-                        id: 11,
-                        nowYear: 5,
-                        sort: 43,
-                        yearName: '2022'
-                    },
-                    {
-                        nowYear: 5,
-                        sort: 43,
-                        yearName: '2023'
-                    }
-                ]
-            }).then(value => {
-                console.log(value, 'trainingProgramMulti')
-            })
-            trainingProgramId(2).then(value => {
-                console.log(value, 'trainingProgramId')
-            })
-            /* 查询培养方案分页 */
-            await trainingProgramList({ schoolYearId: 5 }).then(value => {
-                this.planData = value.rows
-                // this.queryParams.totalCount = value.data.totalCount
-                // this.queryParams.totalPage = value.data.totalPage
-                // this.queryParams.pageSize = value.data.pageSize
-                // this.queryParams.currPage = value.data.currPage
-                console.log(value, 'trainingProgramList')
-            })
+            //表格加载完成
             this.loading = false
+            
+            
         },
         async mounted() {
-            await getDict('sc_train_program_rank').then(value => {
-                console.log(value)
-                this.dict_sc_train_program_rank = value.data
-            })
-            await getDict('sc_train_program_status').then(value => {
-                console.log(value)
-                this.dict_sc_train_program_status = value.data
-            })
+
+            /** 横向滚动条 */
             let view = document.querySelector(
                 '.erkePlanMainTable .el-table__body-wrapper'
             )
@@ -1186,6 +1320,9 @@
     }
     .exportDialog >>> .el-tabs__item {
         text-align: left;
+    }
+    .updatePlanDialog >>> .el-dialog__body {
+        border-top: 1px solid #ddd;
     }
     .planExport {
         position: relative;
