@@ -1,3 +1,10 @@
+<!--
+ * @Descripttion: 培养方案详情
+ * @Author: 林舒恒
+ * @Date: 2021-06-03 16:39:52
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-07-17 22:45:09
+-->
 <template>
     <div class="app-container">
         <el-row :gutter="20">
@@ -18,13 +25,13 @@
                     <div class="erke-top-foot">
                         <div style="margin-bottom: 10px">
                             学年度：<el-select
-                                v-model="list.value"
+                                v-model="schoolYearList.value"
                                 placeholder="请选择"
                                 @change="schoolYearChange"
                             >
                                 <!-- <el-option :key="-1" label="全部" :value="-1"> </el-option> -->
                                 <el-option
-                                    v-for="item in list.rows"
+                                    v-for="item in schoolYearList.rows"
                                     :key="item.id"
                                     :label="item.yearName"
                                     :value="item.id"
@@ -33,15 +40,12 @@
                             </el-select>
 
                             培养方案：<el-select
-                                :value="schoolYearIdMapProgramArray.value"
-                                @change="
-                                    schoolYearIdMapProgramArray.value = $event
-                                "
+                                v-model="trainingProgramList.value"
+                                @change="fuzzyQuery"
                                 placeholder="请选择"
                             >
                                 <el-option
-                                    v-for="item in schoolYearIdMapProgramArray
-                                        .rows[list.value]"
+                                    v-for="item in trainingProgramList.rows"
                                     :key="item.id"
                                     :label="item.name"
                                     :value="item.id"
@@ -115,7 +119,19 @@
 
                 <div class="erke-bottom">
                     <div class="erke-buttom-left">
-                        <ul>
+                        <el-menu
+                            default-active="0"
+                            class="el-menu-vertical-demo"
+                            @select="handleSelect"
+                        >
+                            <el-menu-item
+                                v-for="(item,index) in classificationList.rows"
+                                :key="index"
+                                :index="index+''">
+                                <span slot="title">{{ item.name }}</span>
+                            </el-menu-item>
+                        </el-menu>
+                        <!-- <ul>
                             <li
                                 v-for="(item, index) in classificationList"
                                 :key="index"
@@ -123,7 +139,7 @@
                             >
                                 {{ item.name }}
                             </li>
-                        </ul>
+                        </ul> -->
                     </div>
                     <div class="erke-buttom-right">
                         <div class="operate">
@@ -147,7 +163,8 @@
                                     <el-input
                                         suffix-icon="el-icon-search"
                                         placeholder="课程名称"
-                                        v-model="queryDetail.courseName"
+                                        v-model="queryList.courseName"
+                                        @input="fuzzyQuery"
                                     >
                                     </el-input>
                                 </el-col>
@@ -155,35 +172,51 @@
                                 <el-col :span="1" style="min-width:100px">
                                     <el-select
                                         style="width: 100px"
-                                        v-model="queryDetail.joinType"
-                                        placeholder="加入方式"
+                                        v-model="queryList.joinType"
+                                        placeholder="加入方式:不限"
+                                        @change="fuzzyQuery"
                                     >
                                         <el-option
-                                            value="加入方式：不限"
+                                            value=""
+                                            label="加入方式:不限"
                                         ></el-option>
-                                        <el-option value="预设"></el-option>
-                                        <el-option value="临增"></el-option>
+                                        <el-option
+                                            v-for="(item,index) in dict_sc_course_join_type"
+                                            :key="index"
+                                            :value="item.dictValue"
+                                            :label="item.dictLabel"
+                                        ></el-option>
+                                        <!-- <el-option value="预设"></el-option> -->
+                                        <!-- <el-option value="临增"></el-option> -->
                                     </el-select>
                                 </el-col>
 
                                 <el-col :span="1" style="min-width:100px">
                                     <el-select
                                         style="width: 100px"
-                                        v-model="queryDetail.neccessary"
-                                        placeholder="必修课"
+                                        v-model="queryList.necessary"
+                                        placeholder="必修课：不限"
+                                        @change="fuzzyQuery"
                                     >
                                         <el-option
-                                            value="必修课：不限"
+                                            value=""
+                                            label="必修课：不限"
                                         ></el-option>
-                                        <el-option value="是"></el-option>
-                                        <el-option value="否"></el-option>
+                                        <el-option
+                                            v-for="(item,index) in dict_sc_course_necessary"
+                                            :key="index"
+                                            :value="item.dictValue"
+                                            :label="item.dictLabel"
+                                        ></el-option>
+                                        <!-- <el-option value="是"></el-option>
+                                        <el-option value="否"></el-option> -->
                                     </el-select>
                                 </el-col>
 
                                 <el-col :span="1" style="min-width:120px">
                                     <el-select
                                         style="width: 120px"
-                                        v-model="queryDetail.term"
+                                        v-model="queryList.term"
                                         placeholder="开课学期：不限"
                                     >
                                         <el-option
@@ -200,12 +233,14 @@
                                 <el-col :span="1" style="min-width:120px">
                                     <el-select
                                         style="width: 120px"
-                                        v-model="value"
+                                        v-model="queryList.departmentId"
                                         placeholder="发布单位：不限"
                                     >
                                         <el-option
-                                            value="发布单位：不限"
+                                            value="0"
+                                            label="发布单位：不限"
                                         ></el-option>
+                                        
                                         <el-option value="保卫处"></el-option>
                                         <el-option value="网络中心"></el-option>
                                     </el-select>
@@ -214,27 +249,40 @@
                                 <el-col :span="1" style="min-width:120px">
                                     <el-select
                                         style="width: 120px"
-                                        v-model="value"
+                                        v-model="queryList.type"
                                         placeholder="课程性质：不限"
+                                        @change="fuzzyQuery"
                                     >
                                         <el-option
-                                            value="课程性质：不限"
+                                            value=""
+                                            label="课程性质：不限"
                                         ></el-option>
-                                        <el-option value="活动"></el-option>
-                                        <el-option value="竞赛"></el-option>
+                                        <el-option
+                                            v-for="(item,index) in dict_sc_course_type"
+                                            :key="index"
+                                            :value="item.dictValue"
+                                            :label="item.dictLabel"
+                                        ></el-option>
+                                        <!-- <el-option value="活动"></el-option>
+                                        <el-option value="竞赛"></el-option> -->
                                     </el-select>
                                 </el-col>
 
                                 <el-col :span="1" style="min-width:340px">
                                     <el-radio-group
-                                        v-model="statusRadio"
-                                        size="small"
+                                        v-model="queryList.status"
+                                        size="mini"
+                                        @change="radioChange"
                                     >
                                         <el-radio-button
                                             label="全部"
-                                            value="0"
                                         ></el-radio-button>
                                         <el-radio-button
+                                            v-for="(item,index) in dict_sc_course_status"
+                                            :key="index"
+                                            :label="item.dictLabel"
+                                        ></el-radio-button>
+                                        <!-- <el-radio-button
                                             label="申请中"
                                             value="1"
                                         ></el-radio-button>
@@ -249,7 +297,7 @@
                                         <el-radio-button
                                             label="无效"
                                             value="4"
-                                        ></el-radio-button>
+                                        ></el-radio-button> -->
                                     </el-radio-group>
                                 </el-col>
                                 <!-- <el-col :span="1.5">
@@ -275,7 +323,7 @@
                             </el-row>
                         </div>
                         <el-table
-                            :data="planData"
+                            :data="courseList"
                             v-loading="loading"
                             class="detailMainTable"
                         >
@@ -405,7 +453,7 @@
                             <el-table-column prop="updateUserId" label="修改人">
                             </el-table-column>
 
-                            <el-table-column prop="remark" label="备注">
+                            <el-table-column prop="remark" label="备注" min-width="200">
                             </el-table-column>
 
                             <el-table-column
@@ -502,7 +550,7 @@
                         <el-row>
                             <el-col :span="5">学年：</el-col>
                             <el-col :span="19">{{
-                                schoolMap[list.value]
+                                schoolYearIdMapName[list.value]
                             }}</el-col>
                         </el-row>
                     </el-col>
@@ -908,6 +956,34 @@
         components: { Treeselect },
         data() {
             return {
+                /** 学年度列表 */
+                schoolYearList: {
+                    value: Number(this.$route.params.sid),
+                    rows: []
+                },
+                /** 培养方案列表 */
+                trainingProgramList: {
+                    value: Number(this.$route.params.tid),
+                    rows: []
+                },
+                /** 分类列表 */
+                classificationList: {
+                    value: '',
+                    rows: []
+                },
+                /** 课程列表 */
+                courseList: [],
+                queryList:{
+                    courseName: '',
+                    departmentId: '',
+                    joinType: '',
+                    necessary: '',
+                    status: '',
+                    term: '',
+                    type: '',
+                    page: '',
+                    limit: '',
+                },
                 //课程加入方式
                 dict_sc_course_join_type: [],
                 //是否必修
@@ -934,8 +1010,6 @@
                 },
                 //培养方案
                 trainingProgramIdMapname: [],
-                /* 左下侧分类列表以及其子列表 */
-                classificationList: [],
                 /* 方便分类挂载其子列表，分类id => 分类数组所在index */
                 classificationIdMapIndex: new Map(),
                 /* 分类Id映射Name */
@@ -955,7 +1029,7 @@
                     type: ''
                 },
                 //学年id =>学年名称
-                schoolMap: [],
+                schoolYearIdMapName: [],
                 queryParams: {
                     totalCount: 0,
                     totalPage: 50,
@@ -1114,9 +1188,6 @@
                     }
                 ],
                 value: '',
-
-                // 遮罩层
-                loading: true,
                 // 导出遮罩层
                 exportLoading: false,
                 // 选中数组
@@ -1210,10 +1281,10 @@
         },
         methods: {
             formatDate(row, column, cellValue) {
-                return cellValue && formaterDate(cellValue)
+                return cellValue!=null && formaterDate(cellValue)
             },
             formatClassificationId(row, column, cellValue) {
-                return cellValue && this.classificationIdMapName[cellValue]
+                return cellValue!=null && this.classificationList.rows[this.classificationList.value-1].name
             },
             formatClassificationDetail(row, column, cellValue) {
                 // console.log(this.dict_sc_course_classification_type,cellValue,'formatClassificationDetail')
@@ -1224,33 +1295,35 @@
             },
             formatStatus(row, column, cellValue) {
                 return (
-                    cellValue && this.dict_sc_course_status[cellValue].dictLabel
+                    cellValue!=null && this.dict_sc_course_status[cellValue].dictLabel
                 )
             },
             formatType(row, column, cellValue) {
                 return (
-                    cellValue && this.dict_sc_course_type[cellValue].dictLabel
+                    cellValue!=null && this.dict_sc_course_type[cellValue].dictLabel
                 )
             },
             formatNecessary(row, column, cellValue) {
+            
                 return (
-                    cellValue &&
+                    cellValue!=null &&
                     this.dict_sc_course_necessary[cellValue].dictLabel
                 )
             },
             formatJoinType(row, column, cellValue) {
                 return (
-                    cellValue &&
+                    cellValue != null && 
                     this.dict_sc_course_join_type[cellValue].dictLabel
                 )
             },
             formatTrainingProgram(row, column, cellValue) {
-                return cellValue && this.trainingProgramIdMapname[cellValue]
+                
+                return cellValue!=null && this.trainingProgramIdMapname[cellValue]
             },
             async addDetail() {
                 this.addDetailDialog.config.schoolYearId = this.list.value
                 this.addDetailDialog.config.trainingProgramId = this.schoolYearIdMapProgramArray.value
-                this.addDetailDialog.config.schoolYearName = this.schoolMap[
+                this.addDetailDialog.config.schoolYearName = this.schoolYearIdMapName[
                     this.list.value
                 ]
 
@@ -1262,41 +1335,7 @@
             refresh() {
                 this.$forceUpdate()
             },
-            async schoolYearChange(value) {
-                console.log(value)
-                this.list.value = value
-                this.loading = true
-                await this.initTableData(value)
-                this.loading = false
-                if (!!this.schoolYearIdMapProgramArray.rows[value]) {
-                    this.schoolYearIdMapProgramArray.value = this.schoolYearIdMapProgramArray.rows[
-                        value
-                    ][0].id
-                } else {
-                    this.schoolYearIdMapProgramArray.value = '无数据'
-                }
-
-                console.log(this.schoolYearIdMapProgramArray)
-
-                await trainingProgramList({
-                    page: this.t.page ? this.t.page : 1,
-                    limit: this.t.limit ? this.t.limit : 10,
-                    schoolYearId: value
-                })
-                    .then(value => {
-                        console.log(value, '培养方案详细')
-                        this.queryParams.pageSize = value.data.pageSize
-                        this.queryParams.totalCount = value.data.totalCount
-                        this.queryParams.totalPage = value.data.totalPage
-                        this.planData = value.data.list
-                        console.log(this.planData, 7777)
-                        this.$forceUpdate()
-                        this.loading = false
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
-            },
+            
             sureClass(row) {
                 if (row.status == 0) {
                     //ing
@@ -1315,7 +1354,7 @@
             /** 查询用户列表 */
             async getList(option) {
                 this.t = option
-                this.loading = true
+                // this.loading = true
                 await trainingProgramList({
                     page: option.page,
                     limit: option.limit
@@ -1323,7 +1362,7 @@
                     this.planData = value.data.list
                     console.log(value.data.list, 'cxyh')
                     this.$forceUpdate()
-                    this.loading = false
+                    // this.loading = false
                 })
             },
             /** 查询部门下拉树结构 */
@@ -1535,6 +1574,7 @@
                     console.log(value)
                 })
             },
+
             //得到当前学年的培养方案详细信息
             async initTableData(schoolYearId) {
                 await trainingProgramDetail({
@@ -1554,7 +1594,7 @@
                         failCount,
                         validCount
                     }
-                    console.log(value, 'trainingProgramDetail')
+                    console.log(value, 'trainingProgramDetail',787878)
                     this.classificationList = value.data.classificationList
                     console.log(this.classificationList, 8988)
                     value.data.classificationList.forEach((item, index) => {
@@ -1584,6 +1624,38 @@
                     )
                 })
             },
+            /** 状态改变 */
+            radioChange(value) {
+                let map = new Map([
+                    ['全部',''],
+                    ['申请中','0'],
+                    ['有效','1'],
+                    ['无效','2'],
+                    ['未通过','3']
+                ])
+                this.queryList.status = map.get(value)
+                console.log(value,this.queryList.status)
+                this.fuzzyQuery()
+            },
+            /** 学年改变 */
+            async schoolYearChange(value) {
+                await this.getTrainingProgramList({
+                    schoolYearId: this.schoolYearList.value
+                })
+                this.trainingProgramList.value = this.trainingProgramList.rows[0].id
+                this.fuzzyQuery()
+            },
+            /** 培养方案改变 */
+            trainingProgramChange(value) {
+                // this.trainingProgramList.value = value
+                this.fuzzyQuery()
+            },
+            /** 分类改变 */
+            handleSelect(index) {
+                this.classificationList.value = this.classificationList.rows[index].id
+                this.fuzzyQuery()
+            },
+            /** 初始化字典 */
             async initDict() {
                 // getDict
                 await Promise.all([
@@ -1601,76 +1673,123 @@
                         'dict_sc_course_type',
                         'dict_sc_course_classification_type'
                     ]
-                    value.forEach((item, index) => {
-                        this[tempArr[index]] = item.data
+                    tempArr.forEach((item,index) => {
+                        this[item] = value[index].data
+                        console.log(item,value[index])
                     })
                 })
+            },
+            /** @description 查询培养方案分页
+             *  @param name 模糊查询方案名称
+             *  @param schoolYearId 学年id
+             *  @param pageNum 第几页
+             *  @param pageSize 限制每页的条数
+             */                                                    
+            async getTrainingProgramList(option) {
+                
+                await trainingProgramList(option).then(value => {
+                    this.trainingProgramList.rows = value.rows
+                    this.queryParams.totalCount = value.total
+                    this.queryParams.totalPage = value.total / this.queryParams.pageSize
+                    console.log(value, 'trainingProgramList')
+                    value.rows.forEach((item,index)=> {
+                        this.trainingProgramIdMapname[item.id] = item.name
+                    })
+                    console.log(this.queryParams)
+                })
+            },
+            /**
+             * @description: 查询课程
+             * @param classificationId 分类id
+             * @param courseName 课程名字
+             * @param departmentId 部门id
+             * @param joinType 加入方式
+             * @param necessary 是必修课吗
+             * @param schoolYearId 学年id
+             * @param status 状态
+             * @param term 学期
+             * @param trainingProgramId 培养方案id
+             * @param type 
+             * @param page 第几页
+             * @param limit 限制多少条
+             */            
+            async getTrainingProgramDetail(option) {
+                this.loading = true
+                await trainingProgramDetail(option).then(value => {
+                    this.classificationList.rows = value.data.classificationList
+                    console.log(value,'classificationList')
+                    const {
+                        applyingCount,
+                        courseCount,
+                        failCount,
+                        validCount
+                    } = value.data
+                    this.countState = {
+                        applyingCount,
+                        courseCount,
+                        failCount,
+                        validCount
+                    }
+                    this.courseList  = value.data.pageData.list
+                    console.log(this.courseList,'courseList')
+                    this.loading = false
+                })
+            },
+            async fuzzyQuery() {
+                let option = {
+                    schoolYearId: this.schoolYearList.value,
+                    trainingProgramId: this.trainingProgramList.value,
+                    classificationId: this.classificationList.value,
+                    courseName: this.queryList.courseName,
+                    departmentId: '',
+                    joinType: this.queryList.joinType,
+                    necessary: this.queryList.necessary,
+                    status: this.queryList.status,
+                    term: '',
+                    type: this.queryList.type,
+                    page: '',
+                    limit: '',
+                }
+                console.log(option)
+                await this.getTrainingProgramDetail(option)
             }
         },
         async created() {
             //初始化字典
             await this.initDict()
 
+            /** 获得所有学年 */
             await schoolYearList().then(value => {
-                console.log(value)
                 value.rows.forEach(item => {
                     //学年id映射name
-                    this.schoolMap[item.id] = item.yearName
+                    this.schoolYearIdMapName[item.id] = item.yearName
                 })
 
                 console.log(value, 'schoolYearList')
                 //记录所有学年，用于学年度展示
-                this.list.rows = value.rows
+                this.schoolYearList.rows = value.rows
             })
+
+            /** 获得当前学年所有的培养方案列表 */
+            await this.getTrainingProgramList({
+                schoolYearId: this.$route.params.sid,
+            })
+
+            /** 获得当前学年下 当前培养方案下 所有的课程分类列表 */
+            await this.getTrainingProgramDetail({
+                schoolYearId: 0
+            })
+            /** 默认展示第一行的分类 */
+            this.classificationList.value = this.classificationList.rows[0].id
+
+            /** 获得当前学年下 当前培养方案下 当前课程分类下 课程列表 */
+            await this.fuzzyQuery()
         },
         async beforeMount() {
-            //拿到所有培养方案
-            await trainingProgramList({
-                limit: 1000
-            }).then(value => {
-                console.log(value, '1000')
-
-                //学年Id映射其下培养方案数组
-                value.rows.forEach(item => {
-                    this.schoolYearIdMapProgramArray.rows[item.schoolYearId]
-                        ? this.schoolYearIdMapProgramArray.rows[
-                              item.schoolYearId
-                          ].push(item)
-                        : (this.schoolYearIdMapProgramArray.rows[
-                              item.schoolYearId
-                          ] = [item])
-                    //培养方案Id映射名字
-                    this.trainingProgramIdMapname[item.id] = item.name
-                })
-                console.log(
-                    this.schoolYearIdMapProgramArray,
-                    '学年Id映射其下培养方案数组'
-                )
-                console.log(this.trainingProgramIdMapname, '培养方案Id映射名字')
-            })
+        
         },
         async mounted() {
-            console.log(this.$route.params, 77)
-            this.loading = true
-            this.initTableData(this.$route.params.sid)
-            this.loading = false
-
-            this.$nextTick(() => {
-                console.log(
-                    48,
-                    document.querySelector('.erke-buttom-right .el-table')
-                )
-                // new this.XScrollbar(document.querySelector('.erke-buttom-right .el-table'))
-            })
-            //not a good way to mounted
-            // setTimeout(() => {
-            //     let view = document.querySelectorAll(
-            //         '.detailMainTable .el-table__body-wrapper'
-            //     )
-            //     view.forEach(item => {
-            //         item && horwheel(item)
-            //     })
-            // }, 1000)
+            
         }
     }
 </script>
@@ -1709,11 +1828,11 @@
         line-height: 28px;
         background-color: #1890ff;
     }
-    .erke-bottom {
-        /* background-color: #fff; */
+    /* .erke-bottom {
+        
 
         overflow: hidden;
-    }
+    } */
     .erke-buttom-left {
         width: 220px;
         float: left;
@@ -1723,7 +1842,7 @@
         border: 1px solid #ddd;
         border-radius: 5px;
     }
-    .erke-buttom-left ul {
+    /* .erke-buttom-left ul {
         margin: 0;
         padding: 0;
     }
@@ -1749,7 +1868,7 @@
         width: 20px;
         text-align: center;
         top: 0;
-    }
+    } */
     .erke-buttom-right {
         background-color: #fff;
         margin-left: 225px;
@@ -1923,45 +2042,8 @@
         margin: 5px 20px !important;
         width: 320px;
     }
-
-    .erke-bottom >>> .el-tabs__header {
-        background-color: #fff;
-        width: 220px;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-        height: calc(100vh - 270px);
-        margin-right: 10px;
-        padding: 15px;
-    }
-    .erke-bottom >>> .el-tabs__content {
-        padding: 15px !important;
-        background-color: #fff;
+    .detailMainTable >>> .el-table__body-wrapper {
         overflow: auto;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-        height: calc(100vh - 270px);
-    }
-    .erke-bottom >>> .el-tabs__item {
-        text-align: left;
-
-        border-bottom: 1px dashed #ddd;
-    }
-    .erke-bottom,
-    .erke-bottom >>> .el-tabs__nav-scroll {
-        overflow: visible !important;
-    }
-    .erke-bottom >>> .el-tabs__nav-wrap {
-        position: relative;
-        overflow: visible !important;
-    }
-    .erke-bottom >>> .el-tabs__nav-wrap::after {
-        content: '';
-        width: 0;
-    }
-    .erke-bottom >>> .el-tabs__active-bar {
-        display: none;
-    }
-    .erke-bottom >>> .el-tabs__content {
-        padding: 0 10px 10px 10px;
+        background-color: red !important;
     }
 </style>

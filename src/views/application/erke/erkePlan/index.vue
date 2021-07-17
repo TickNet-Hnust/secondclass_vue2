@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-16 21:43:55
+ * @LastEditTime: 2021-07-17 19:04:49
 -->
 <template>
     <div class="app-container">
@@ -231,13 +231,13 @@
                     </el-table-column>
                     <el-table-column prop="id" label="ID" align="center">
                     </el-table-column>
-                    <el-table-column
+                    <!-- <el-table-column
                         prop="learnYearNo"
                         label="当前学年"
                         align="center"
                     >
                         <template slot-scope="scope">
-                            <!-- <el-radio :label="scope.$index" v-model="managerDialog.radio">&nbsp;</el-radio> -->
+                            
                             <input
                                 type="radio"
                                 name="isNow"
@@ -246,7 +246,7 @@
                                 @change="tt"
                             />
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                 </el-table>
             </el-form>
 
@@ -438,14 +438,14 @@
                             >
                         </template>
                     </el-table-column>
-                    <el-table-column prop="sort" label="排序" width="80">
+                    <!-- <el-table-column prop="sort" label="排序" width="80">
                         <template slot-scope="scope">
                             <el-input
                                 class="sortInput"
                                 v-model="scope.row.sort"
                             ></el-input>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column
                         prop="name"
                         label="培养方案名称"
@@ -910,18 +910,16 @@
             },
             /** 操作分页触发的事件 */
             async getList(option) {
-                this.t = option
-                this.loading = true
-                await trainingProgramList({
-                    page: option.page,
-                    limit: option.limit
-                }).then(value => {
-                    alert(565)
-                    this.planData = value.data.list
-                    console.log(value.data.list,'list7777')
-                    this.$forceUpdate()
-                    this.loading = false
-                })
+                console.log(option)
+                let temp = {
+                    pageNum: option.page,
+                    pageSize: option.limit,
+                }
+                this.list.value != -1 && (temp.schoolYearId = this.list.value)
+
+                // this.queryParams.pageNum = 1
+                // this.queryParams.pageSize = 10
+                await this.getTrainingProgramList(temp)
             },
             /**
              * @description: 打开修改的弹窗
