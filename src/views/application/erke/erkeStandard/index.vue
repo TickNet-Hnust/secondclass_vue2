@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-17 19:56:15
+ * @LastEditTime: 2021-07-18 15:52:58
 -->
 <template>
     <div class="app-container">
@@ -93,7 +93,7 @@
                             <el-tab-pane
                                 :label="item.name"
                                 :key="item.id"
-                                :name="item.name"
+                                :name="item.id+''"
                             >
                                 <div class="erke-buttom-right">
                                     <el-table
@@ -152,8 +152,10 @@
                                             width="120"
                                         >
                                             <template slot-scope="scope">
-                                                <el-link type="primary"
-                                                    >修改</el-link
+                                                <el-link 
+                                                    type="primary"
+                                                    @click="updateData(scope.row,scope.$index)"
+                                                >修改</el-link
                                                 >
                                                 <el-link type="info"
                                                     >排序</el-link
@@ -274,22 +276,7 @@
                         :props="{ checkStrictly: true }"
                         :show-all-levels="false"
                         @change="handleNodeChange"
-                    >
-                        <!-- <template slot-scope="{ node, data }">
-                            <span>{{ data.name }}</span>
-                            <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-                        </template> -->
-                    </el-cascader>
-
-                    <!-- <el-select v-model="activeName" class="longSelect">
-                        <el-option
-                            v-for="item in datadata"    
-                            :key="item.id"
-                            :value="item.name"
-                            :label="item.name"    
-                        >
-                        </el-option>
-                    </el-select> -->
+                    ></el-cascader>
                 </el-col>
             </el-row>
             <el-row>
@@ -440,10 +427,6 @@
             return {
                 loading: false,
                 postCourseClassification: {
-                    createTime: null,
-                    createUserId: null,
-                    deleteTime: null,
-                    daleteUserId: null,
                     // id:
                     integralType: 0,
                     integrationRange: 5,
@@ -453,13 +436,13 @@
                     remark: 'elit cod sdf s',
                     sort: 0,
                     type: 0,
-                    updateTime: null,
-                    updateUserId: null
+                    path: ''
                 },
                 /* 弹窗 -> 类型  */
                 label: '',
                 /* tab栏 */
-                activeName: '思想政治与人文素养',
+                datadata: [],
+                activeName: '1',
                 dict_sc_integral_type: {},
                 dict_sc_course_classification_type: {},
                 exportDialog: {
@@ -543,7 +526,6 @@
                         }
                     ]
                 },
-                datadata: [],
                 count: {
                     classCount: 50,
                     apyling: 5,
@@ -830,6 +812,7 @@
             handleNodeChange(value) {
                 this.postCourseClassification.pid = value[value.length - 1]
                 this.postCourseClassification.layer = value.length
+                this.postCourseClassification.path = value.join(',')
                 console.log(value)
             },
             /* 新增积分类别 */
@@ -843,7 +826,7 @@
                         this.getCourseClassificationList()
                     }
                 )
-                // console.log()
+                console.log()
             },
             formatIntegralType(row, column, cellValue) {
                 if (cellValue != null) {
@@ -852,17 +835,12 @@
                 return cellValue
             },
             formatType(row, column, cellValue) {
-                if (cellValue != null) {
-                    return this.dict_sc_course_classification_type[cellValue]
+                return cellValue != null && this.dict_sc_course_classification_type[cellValue]
                         .dictLabel
-                }
-                return cellValue
             },
             formatUpdateTime(row, column, cellValue) {
-                if (cellValue != null) {
-                    return formatDate(cellValue)
-                }
-                return cellValue
+                return cellValue != null &&  formatDate(cellValue)
+                
             },
             renderHeader(h) {
                 return h(
@@ -1092,36 +1070,68 @@
             submitFileForm() {
                 this.$refs.upload.submit()
             },
-            //根据参数查询二课课程分类列表
-            async getCourseClassificationList() {
+            /**
+             * @description:  表格 操作 修改触发
+             */            
+            updateData(row,index) {
+                console.log(row,index)
+                // this.addStardardDialog.open = true
+            },
+            /**
+             * @description: 根据参数查询二课课程分类列表
+             * @param name 积分标准分类名称
+             * @param type 类型
+             * @param integralType 积分类别 
+             */            
+            async getCourseClassificationList(option) {
                 this.loading = true
-                await courseClassificationList().then(value => {
-                    /* 保证value存在且唯一 */
+                await courseClassificationList(option).then(value => {
+                    /* value保证存在且唯一 */
                     /* label保证渲染视图 */
+                    console.log(value,'courseClassificationList')
                     value.data = value.data.map(item => ({
                         ...item,
                         value: item.id,
                         label: item.name
                     }))
                     this.datadata = filterCourseClassificationList(value)
-                    console.log(this.datadata)
+                    console.log(this.datadata,'datadata')
                 })
                 this.loading = false
-            }
+            },
+            /**
+             * @description:  初始化字典
+             */            
+            async initDict() {
+                await Promise.all([
+                    getDict('sc_course_classification_type'),
+                    getDict('sc_integral_type')
+                ]).then(value => {
+                    let temp = [
+                        'dict_sc_course_classification_type',
+                        'dict_sc_integral_type'
+                    ]
+                    temp.forEach((item,index) => {
+                        this[item] = value[index].data
+                        console.log(item,value[index])
+                    })
+                })
+            },
         },
+        
         async created() {
-            await getDict('sc_course_classification_type').then(value => {
-                console.log(value, 'sc_course_classification_type')
-                this.dict_sc_course_classification_type = value.data
-                this.label = this.dict_sc_course_classification_type[0].dictLabel
-            })
+            //字典初始化
+            await this.initDict()
+            //挂载算法
+            await this.getCourseClassificationList({})
+            this.label = this.dict_sc_course_classification_type[0].dictLabel
         },
         async mounted() {
-            this.getCourseClassificationList()
-            await getDict('sc_integral_type').then(value => {
-                console.log(value, 'sc_integral_type')
-                this.dict_sc_integral_type = value.data
-            })
+            
+            // await getDict('sc_integral_type').then(value => {
+            //     console.log(value, 'sc_integral_type')
+            //     this.dict_sc_integral_type = value.data
+            // })
         }
     }
 </script>

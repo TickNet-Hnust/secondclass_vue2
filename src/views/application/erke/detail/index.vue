@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-17 22:45:09
+ * @LastEditTime: 2021-07-18 13:36:32
 -->
 <template>
     <div class="app-container">
@@ -163,7 +163,7 @@
                                     <el-input
                                         suffix-icon="el-icon-search"
                                         placeholder="课程名称"
-                                        v-model="queryList.courseName"
+                                        v-model="queryList.name"
                                         @input="fuzzyQuery"
                                     >
                                     </el-input>
@@ -974,7 +974,7 @@
                 /** 课程列表 */
                 courseList: [],
                 queryList:{
-                    courseName: '',
+                    name: '',
                     departmentId: '',
                     joinType: '',
                     necessary: '',
@@ -1284,7 +1284,7 @@
                 return cellValue!=null && formaterDate(cellValue)
             },
             formatClassificationId(row, column, cellValue) {
-                return cellValue!=null && this.classificationList.rows[this.classificationList.value-1].name
+                return cellValue!=null && this.classificationList.rows[this.classificationList.value]?.name
             },
             formatClassificationDetail(row, column, cellValue) {
                 // console.log(this.dict_sc_course_classification_type,cellValue,'formatClassificationDetail')
@@ -1633,6 +1633,7 @@
                     ['无效','2'],
                     ['未通过','3']
                 ])
+                /** 因为按钮获得的值只能是label，所以需要自己转换为对应的value */
                 this.queryList.status = map.get(value)
                 console.log(value,this.queryList.status)
                 this.fuzzyQuery()
@@ -1701,7 +1702,7 @@
             /**
              * @description: 查询课程
              * @param classificationId 分类id
-             * @param courseName 课程名字
+             * @param name 课程名字
              * @param departmentId 部门id
              * @param joinType 加入方式
              * @param necessary 是必修课吗
@@ -1732,15 +1733,17 @@
                     }
                     this.courseList  = value.data.pageData.list
                     console.log(this.courseList,'courseList')
+                    
                     this.loading = false
                 })
             },
+            /** 模糊查询 */
             async fuzzyQuery() {
                 let option = {
                     schoolYearId: this.schoolYearList.value,
                     trainingProgramId: this.trainingProgramList.value,
                     classificationId: this.classificationList.value,
-                    courseName: this.queryList.courseName,
+                    name: this.queryList.name,
                     departmentId: '',
                     joinType: this.queryList.joinType,
                     necessary: this.queryList.necessary,
@@ -1837,7 +1840,7 @@
         width: 220px;
         float: left;
         padding: 16px;
-        height: calc(100vh - 270px);
+        height: calc(100vh - 260px);
         background-color: #fff;
         border: 1px solid #ddd;
         border-radius: 5px;
@@ -1872,10 +1875,11 @@
     .erke-buttom-right {
         background-color: #fff;
         margin-left: 225px;
-        height: calc(100vh - 270px);
+        height: calc(100vh - 260px);
         padding: 16px;
         border: 1px solid #ddd;
         border-radius: 5px;
+        overflow: auto;
     }
     .operate >>> .el-col {
         height: 58px;
@@ -2043,7 +2047,6 @@
         width: 320px;
     }
     .detailMainTable >>> .el-table__body-wrapper {
-        overflow: auto;
-        background-color: red !important;
+        /* overflow: auto; */
     }
 </style>
