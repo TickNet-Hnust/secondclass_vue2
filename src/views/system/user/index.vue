@@ -2,7 +2,7 @@
     <div class="app-container">
         <el-row :gutter="20">
             <!--部门数据-->
-            <el-col :span="4" :xs="24">
+            <el-col :span="4" :xs="24" >
                 <div class="head-container">
                     <el-input
                         v-model="deptName"
@@ -638,10 +638,10 @@
         created() {
             this.getList()
             this.getTreeselect()
-            this.getDicts('sys_normal_disable').then(response => {
+            this.getDict('sys_normal_disable').then(response => {
                 this.statusOptions = response.data
             })
-            this.getDicts('sys_user_sex').then(response => {
+            this.getDict('sys_user_sex').then(response => {
                 this.sexOptions = response.data
             })
             this.getConfigKey('sys.user.initPassword').then(response => {
@@ -756,7 +756,7 @@
                 this.getTreeselect()
                 const userId = row.userId || this.ids
                 getUser(userId).then(response => {
-                    this.form = response.data
+                    this.form = response.data.user
                     this.postOptions = response.posts
                     this.roleOptions = response.roles
                     this.form.postIds = response.postIds
@@ -868,3 +868,16 @@
         }
     }
 </script>
+
+<style scoped>
+    .app-container {
+        background-color: #fff !important;
+        padding: 15px;
+        border: 1px solid #ddd;
+        max-height: calc(100vh - 50px);
+        border-radius: 5px;
+    }
+    .el-form > .el-row {
+        height: initial;
+    }
+</style>

@@ -1,59 +1,45 @@
+<!--
+ * @Descripttion: 
+ * @Author: 林舒恒
+ * @Date: 2021-07-18 16:03:22
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-07-24 17:38:22
+-->
 <template>
-    <div
-        :class="classObj"
-        class="app-wrapper"
-        :style="{ '--current-color': theme }"
-    >
+    <div>
+        <Menubar />
         <div
-            v-if="device === 'mobile' && sidebar.opened"
-            class="drawer-bg"
-            @click="handleClickOutside"
-        />
-        <sidebar
-            class="sidebar-container"
-            :style="{
-                backgroundColor:
-                    sideTheme === 'theme-dark'
-                        ? variables.menuBg
-                        : variables.menuLightBg
-            }"
-        />
-
-        <!-- <div
             style=" ;"
             :class="{ hasTagsView: needTagsView }"
             class="main-container"
         >
             <div :class="{ 'fixed-header': fixedHeader }">
-                <!-- <navbar /> -->
                 <tags-view v-if="needTagsView" />
             </div>
+
             <app-main />
-            <right-panel v-if="showSettings">
-                <settings />
-            </right-panel>
-        </div> -->
+        </div>
     </div>
 </template>
 
 <script>
+    import Menubar from './systemMenubar'
     import RightPanel from '@/components/RightPanel'
-    import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
-    import ResizeMixin from './mixin/ResizeHandler'
+    import { AppMain, Navbar, TagsView } from '@/layout/components'
+    // import ResizeMixin from '../mixin/ResizeHandler'
     import { mapState } from 'vuex'
     import variables from '@/assets/styles/variables.scss'
 
     export default {
-        name: 'Layout',
+        name: 'erke',
         components: {
+            Menubar,
             AppMain,
             Navbar,
-            RightPanel,
-            Settings,
-            Sidebar,
+
             TagsView
         },
-        mixins: [ResizeMixin],
+        // mixins: [ResizeMixin],
         computed: {
             ...mapState({
                 theme: state => state.settings.theme,
@@ -127,5 +113,13 @@
 
     .mobile .fixed-header {
         width: 100%;
+    }
+    .main-container {
+        padding-right: 10px;
+    }
+    @media screen and (max-width: 1600px) {
+        .main-container {
+            width: 1320px;
+        }
     }
 </style>

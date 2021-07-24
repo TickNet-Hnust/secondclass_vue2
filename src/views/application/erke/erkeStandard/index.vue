@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-18 15:52:58
+ * @LastEditTime: 2021-07-24 16:40:18
 -->
 <template>
     <div class="app-container">
@@ -100,6 +100,7 @@
                                         :data="item.children"
                                         row-key="id"
                                         v-loading="loading"
+                                        default-expand-all
                                         :tree-props="{
                                             children: 'children',
                                             hasChildren: 'hasChildren'
@@ -275,6 +276,7 @@
                         :options="datadata"
                         :props="{ checkStrictly: true }"
                         :show-all-levels="false"
+                        :value="postCourseClassification.path.split(',').map(item=> +item)"
                         @change="handleNodeChange"
                     ></el-cascader>
                 </el-col>
@@ -295,8 +297,8 @@
                     <el-select v-model="postCourseClassification.type">
                         <el-option
                             v-for="item in dict_sc_course_classification_type"
-                            :key="item.dictCode"
-                            :value="item.dictSort"
+                            :key="item.dictvalue"
+                            :value="item.dictValue"
                             :label="item.dictLabel"
                         >
                         </el-option>
@@ -306,43 +308,55 @@
             </el-row>
             <el-row>
                 <el-col :span="4"> 分值： </el-col>
+                
                 <el-col :span="20">
                     <el-row>
                         <el-radio
-                            v-model="addStardardDialog.radio"
+                            v-model="postCourseClassification.integralType"
                             :label="0"
+                            @change="handleIntegralType"
+                            >无</el-radio
+                        >
+                    </el-row>
+                    <el-row>
+                        <el-radio
+                            :disabled="computeType"
+                            v-model="postCourseClassification.integralType"
+                            :label="1"
                             @change="handleIntegralType"
                             >定值</el-radio
                         >
                         <el-input
                             v-model="addStardardDialog.fixed"
-                            :disabled="isFixed"
+                            :disabled="computeFixed"
                             @change="handleFixed"
                         ></el-input>
                     </el-row>
                     <el-row>
                         <el-radio
-                            v-model="addStardardDialog.radio"
-                            :label="1"
+                        :disabled="computeType"
+                            v-model="postCourseClassification.integralType"
+                            :label="2"
                             @change="handleIntegralType"
                             >范围</el-radio
                         >
                         <el-input
                             v-model="addStardardDialog.start"
-                            :disabled="isRange"
+                            :disabled="computeRange"
                             @change="handleRange"
                         ></el-input>
                         至
                         <el-input
                             v-model="addStardardDialog.end"
-                            :disabled="isRange"
+                            :disabled="computeRange"
                             @change="handleRange"
                         ></el-input>
                     </el-row>
                     <el-row>
                         <el-radio
-                            v-model="addStardardDialog.radio"
-                            :label="2"
+                            :disabled="computeType"
+                            v-model="postCourseClassification.integralType"
+                            :label="3"
                             @change="handleIntegralType"
                             >不定值</el-radio
                         >
@@ -402,6 +416,7 @@
     } from '@/api/application/secondClass/courseClassification.js'
     import filterCourseClassificationList from '@/utils/filterCourseClassificationList'
     import formatDate from '@/utils/formatDate.js'
+    import removeChild from '@/utils/removeChild.js'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
     import {
@@ -429,13 +444,13 @@
                 postCourseClassification: {
                     // id:
                     integralType: 0,
-                    integrationRange: 5,
+                    integrationRange: null,
                     layer: 1,
                     name: '',
                     pid: 1,
-                    remark: 'elit cod sdf s',
+                    remark: '',
                     sort: 0,
-                    type: 0,
+                    type: '0',
                     path: ''
                 },
                 /* 弹窗 -> 类型  */
@@ -476,7 +491,6 @@
                 addStardardDialog: {
                     title: '新增/编辑',
                     open: false,
-                    radio: 0,
                     fixed: '',
                     start: '',
                     end: ''
@@ -746,11 +760,15 @@
             }
         },
         computed: {
-            isFixed() {
-                return this.addStardardDialog.radio != 0
+            /* 还需要优化选择时候的UI界面 */
+            computeType() { 
+                return this.postCourseClassification.type == 0
             },
-            isRange() {
-                return this.addStardardDialog.radio != 1
+            computeFixed() {
+                return this.postCourseClassification.integralType != 1
+            },
+            computeRange() {
+                return this.postCourseClassification.integralType != 2
             }
         },
         watch: {
@@ -774,6 +792,7 @@
         },
         methods: {
             async deleteCourseClassificaiton(row) {
+                
                 this.$alert('您确定要删除吗吗', '提示框', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -786,6 +805,7 @@
                                 .then(value => {
                                     console.log(value)
                                     this.$message.success('删除成功')
+                                    // removeChild(this.datadata,row.path,row.id)
                                     this.getCourseClassificationList()
                                 })
                                 .catch(err => {
@@ -805,20 +825,24 @@
                     this.addStardardDialog.end
             },
             handleIntegralType(value) {
-                this.postCourseClassification.integralType = value + 1
-                console.log(this.postCourseClassification.integralType)
+                // this.postCourseClassification.integralType = value + 1
+                // console.log(this.postCourseClassification.integralType)
             },
             /* 选择上级节点触发的事件 */
             handleNodeChange(value) {
+                this.postCourseClassification.path = value.join(',')
                 this.postCourseClassification.pid = value[value.length - 1]
                 this.postCourseClassification.layer = value.length
-                this.postCourseClassification.path = value.join(',')
                 console.log(value)
             },
             /* 新增积分类别 */
             async addCourseClassification() {
                 console.log(this.postCourseClassification)
-                await courseClassification(this.postCourseClassification).then(
+                await courseClassificationMulti({
+                    courseClassificationEntityList:[
+                        this.postCourseClassification
+                    ]
+                }).then(
                     value => {
                         console.log(value, 777)
                         this.addStardardDialog.open = false
@@ -826,11 +850,23 @@
                         this.getCourseClassificationList()
                     }
                 )
+                this.postCourseClassification =  {
+                    // id:
+                    integralType: 0,
+                    integrationRange: null,
+                    layer: 1,
+                    name: '',
+                    pid: 1,
+                    remark: '',
+                    sort: 0,
+                    type: '0',
+                    path: ''
+                },
                 console.log()
             },
             formatIntegralType(row, column, cellValue) {
                 if (cellValue != null) {
-                    return this.dict_sc_integral_type[cellValue].remark
+                    return this.dict_sc_integral_type[cellValue].dictLabel
                 }
                 return cellValue
             },
@@ -928,6 +964,7 @@
             cancel() {
                 this.open = false
                 this.reset()
+                alert(12)
             },
             // 表单重置
             reset() {
@@ -966,6 +1003,7 @@
             },
             /** 新增按钮操作 */
             handleAdd() {
+                this.clearForm()
                 this.addStardardDialog.open = true
             },
             /** 修改按钮操作 */
@@ -1070,12 +1108,50 @@
             submitFileForm() {
                 this.$refs.upload.submit()
             },
+            /** 清空表单 */
+            clearForm() {
+                this.addStardardDialog.fixed = this.addStardardDialog.start = this.addStardardDialog.end = ''
+                this.postCourseClassification = {
+                    // id:
+                    integralType: 0,
+                    integrationRange: null,
+                    layer: 1,
+                    name: '',
+                    pid: 1,
+                    remark: '',
+                    sort: 0,
+                    type: '0',
+                    path: ''
+                }
+            },
             /**
              * @description:  表格 操作 修改触发
+             * @param row 某行数据
+             * @param index 某行下标
              */            
-            updateData(row,index) {
+            async updateData(row,index) {
                 console.log(row,index)
-                // this.addStardardDialog.open = true
+                this.addStardardDialog.open = true
+                this.clearForm()
+                this.postCourseClassification = {
+                    id:row.id,
+                    integralType: row.integralType,
+                    layer: row.layer,
+                    name:row.name,
+                    pid:row.pid,
+                    remark: row.remark,
+                    path:row.path,
+                    sort:row.sort,
+                    type:row.type + '', //需是字符串
+                }
+                if(row.integralType == 1) {
+                    this.addStardardDialog.fixed = row.integrationRange
+                }
+                if(row.integralType == 2) {
+                    this.addStardardDialog.start = row.integrationRange.split(':')[0]
+                    this.addStardardDialog.end = row.integrationRange.split(':')[1]
+                }
+                this.$forceUpdate()
             },
             /**
              * @description: 根据参数查询二课课程分类列表

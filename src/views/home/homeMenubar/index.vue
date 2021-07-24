@@ -1,3 +1,10 @@
+<!--
+ * @Descripttion: 
+ * @Author: 林舒恒
+ * @Date: 2021-07-18 16:03:22
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-07-24 17:52:53
+-->
 <template>
     <div class="menubar">
         <div class="menubar-title">
@@ -15,6 +22,38 @@
                 <i class="el-icon-menu"></i>
                 <span slot="title">首页</span>
             </el-menu-item>
+
+            <el-menu-item index="/systemManage">
+                <template slot="title">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">系统管理</span>
+                </template>
+                <!-- <el-menu-item index="/system/user">
+                    <template slot="title">用户管理</template>
+                </el-menu-item>
+                <el-menu-item index="/system/role">
+                    <template slot="title">角色管理</template>
+                </el-menu-item>
+                <el-menu-item index="/system/menu">
+                    <template slot="title">菜单管理</template>
+                </el-menu-item>
+                <el-menu-item index="/system/dept">
+                    <template slot="title">部门管理</template>
+                </el-menu-item>
+                <el-menu-item index="/system/post">
+                    <template slot="title">岗位管理</template>
+                </el-menu-item>
+                <el-menu-item index="/system/dict">
+                    <template slot="title">字典管理</template>
+                </el-menu-item>
+                <el-menu-item index="/system/config">
+                    <template slot="title">参数管理</template>
+                </el-menu-item>
+                <el-menu-item index="/system/notice">
+                    <template slot="title">通知管理</template>
+                </el-menu-item> -->
+            </el-menu-item>
+
             <el-submenu index="/application">
                 <template slot="title">
                     <i class="el-icon-menu"></i>

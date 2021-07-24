@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Message, Loading } from 'element-ui'
 import { getToken } from '@/utils/auth'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
-export const baseURL = 'http://localhost:8080'
+export const baseURL = 'http://192.168.124.8:8080'
 
 const instance = axios.create({
     baseURL,

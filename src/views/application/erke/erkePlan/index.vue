@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-17 19:04:49
+ * @LastEditTime: 2021-07-24 14:13:16
 -->
 <template>
     <div class="app-container">
@@ -192,11 +192,11 @@
             append-to-body
             class="managerDialog"
         >
-            <el-form ref="managerDialog" label-width="80px" height="250">
+            <!-- <el-form ref="managerDialog"  height="250"> -->
                 <el-table :data="list.rows" stripe>
                     <el-table-column
                         lable="sdf"
-                        width="40"
+                        min-width="40"
                         :render-header="renderSchoolYear"
                     >
                         <template slot-scope="scope">
@@ -206,12 +206,13 @@
                                 >-</span
                             >
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column 
                         prop="sort" 
                         label="排序" 
                         width="80"
                         sortable
+                        :sort-orders="['ascending','descending']"
                     >
                         <template slot-scope="scope">
                             <el-input
@@ -229,9 +230,13 @@
                             <el-input v-model="scope.row.yearName"> </el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="id" label="ID" align="center">
-                    </el-table-column>
-                    <!-- <el-table-column
+                    <el-table-column 
+                        prop="id" 
+                        label="ID" 
+                        align="center" 
+                        
+                    ></el-table-column>
+                     <!-- <el-table-column
                         prop="learnYearNo"
                         label="当前学年"
                         align="center"
@@ -246,9 +251,9 @@
                                 @change="tt"
                             />
                         </template>
-                    </el-table-column> -->
+                    </el-table-column>  -->
                 </el-table>
-            </el-form>
+            <!-- </el-form> -->
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">关闭</el-button>
@@ -853,9 +858,15 @@
                 )
             },
             async addSchoolYear() {
-                this.list.row.push({
-                    creteTime: null,
-                    delateTime: null
+                this.list.rows.push({
+                    yearName: '',
+                    sort: ''
+                })
+                this.$nextTick(() => {
+                    let tableBody = document.querySelector(
+                        '.managerDialog .el-table__body-wrapper'
+                    )
+                    tableBody.scrollTop = 9999
                 })
             },
             async addtrainingProgram() {
@@ -1225,16 +1236,12 @@
         overflow: hidden;
     }
     .sortInput >>> .el-input__inner {
-        width: 40px !important;
-    }
-    .managerDialog >>> .el-dialog__body {
-        /* overflow: auto; */
-        height: 350px;
+        width: 50px !important;
     }
     .managerDialog >>> .el-table__body-wrapper {
-        overflow: auto;
+        overflow-y: auto;
         height: 250px;
-    }
+    } 
     .managerDialog >>> .el-table__row td {
         padding: 5px 0;
     }

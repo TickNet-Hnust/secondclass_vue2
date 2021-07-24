@@ -35,20 +35,29 @@
                 :collapse-transition="false"
                 mode="vertical"
             >
-                <sidebar-item
+                <!-- <sidebar-item
                     v-for="(route, index) in sidebarRouters"
                     :key="route.path + index"
                     :item="route"
                     :kk="route.path + index"
                     :base-path="route.path"
-                />
+                /> -->
 
                 <sidebar-item
                     :item="home"
                     :key="44646"
                     :base-path="home.path"
                 />
-                <sidebar-item :item="app" :key="count" :base-path="app.path" />
+                <sidebar-item 
+                    :item="application" 
+                    :key="count" 
+                    :base-path="application.path" 
+                />
+                <sidebar-item 
+                    :item="system" 
+                    :key="564" 
+                    :base-path="system.path" 
+                />
             </el-menu>
         </el-scrollbar>
     </div>
@@ -69,17 +78,15 @@
                     name: 'Home',
                     path: '/home',
                     hidden: false,
-
                     meta: {
                         title: '首页',
                         icon: 'system',
                         noCache: false
                     }
                 },
-                app: {
+                application: {
                     name: 'Application',
                     path: '/application',
-                    redirect: 'noRedirect',
                     alwaysShow: true,
                     meta: {
                         title: '应用',
@@ -128,6 +135,16 @@
                             }
                         }
                     ]
+                },
+                system:{
+                    name: 'System',
+                    path: '/system',
+                    hidden: false,
+                    meta: {
+                        title: '系统管理',
+                        icon: 'system',
+                        noCache: false
+                    }
                 }
             }
         },

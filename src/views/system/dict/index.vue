@@ -471,3 +471,12 @@
         }
     }
 </script>
+<style scoped>
+    .app-container {
+        background-color: #fff !important;
+        padding: 15px;
+        border: 1px solid #ddd;
+        max-height: calc(100vh - 50px);
+        border-radius: 5px;
+    }
+</style>
