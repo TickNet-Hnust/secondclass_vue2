@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-24 20:07:18
+ * @LastEditTime: 2021-07-24 22:56:08
 -->
 <template>
     <div class="app-container">
@@ -807,43 +807,54 @@
             })
         },
         methods: {
-            async deleteCourseClassificaiton(row) {
-                this.$alert('您确定要删除吗吗', '提示框', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    customClass: 'message_box_alert',
-                    callback: async action => {
-                        if (action == 'cancel') {
-                            this.$message.info('取消删除')
-                        } else {
-                            await courseClassificationIds(row.id)
-                                .then(value => {
-                                    console.log(value)
-                                    this.$message.success('删除成功')
-                                    // removeChild(this.datadata,row.path,row.id)
-                                    this.getCourseClassificationList()
-                                })
-                                .catch(err => {
-                                    this.$message.error('删除失败')
-                                })
-                        }
+            /**
+             * @description: 删除积分分类
+             * @param {*} row 对应积分分类
+             */            
+            deleteCourseClassificaiton(row) {
+                this.alertDialog.call(this,'删除',{
+                    confirm: ()=> {
+                        courseClassificationMulti({
+                            deleteIds:[row.id],
+                            courseClassificationEntityList:[]
+                        }).then(value => {
+                            console.log(value)
+                            this.$message.success('删除成功')
+                                // removeChild(this.datadata,row.path,row.id)
+                            this.getCourseClassificationList()
+                        }).catch(err => {
+                            this.$message.error('删除失败')
+                        })
                     }
                 })
             },
+            /**
+             * @description: 积分分类是否是 定值
+             */            
             handleFixed() {
                 this.postCourseClassification.integrationRange = this.addStardardDialog.fixed
             },
+            /**
+             * @description: 积分分类是否是 范围
+             */ 
             handleRange() {
                 this.postCourseClassification.integrationRange =
                     this.addStardardDialog.start +
                     ':' +
                     this.addStardardDialog.end
             },
+            /**
+             * @description: 积分分类改变时触发
+             * @param 
+             */            
             handleIntegralType(value) {
                 // this.postCourseClassification.integralType = value + 1
                 // console.log(this.postCourseClassification.integralType)
             },
-            /* 选择上级节点触发的事件 */
+            /**
+             * @description: 选择上级节点触发的事件
+             * @param value 上级节点数组，例如[1,2,4]
+             */            
             handleNodeChange(value) {
                 this.postCourseClassification.path = value.join(',')
                 this.postCourseClassification.pid = value[value.length - 1]

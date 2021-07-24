@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-24 20:08:34
+ * @LastEditTime: 2021-07-24 22:46:08
 -->
 <template>
     <div class="app-container">
@@ -223,13 +223,13 @@
                 >
                     <template slot-scope="scope">
                         <span
-                            @click="deleteManagerDialog(scope.row)"
+                            @click="deleteManagerDialog(scope.row,scope.$index)"
                             class="addOrMinus"
                             >-</span
                         >
                     </template>
                 </el-table-column>
-                -->
+                
                 <el-table-column
                     prop="sort"
                     label="排序"
@@ -279,7 +279,7 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">关闭</el-button>
-                <el-button type="primary" @click="submitForm">确 定</el-button>
+                <el-button type="primary" @click="multiSchoolYear">确 定</el-button>
             </div>
         </el-dialog>
         <!-- this is importButton -->
@@ -598,6 +598,8 @@
         name: 'erkePlan',
         data() {
             return {
+                //批量操作
+                deleteIds:[],
                 //用于模糊查询
                 FuzzyInput: '',
                 //表格加载的loading
@@ -894,7 +896,7 @@
                     yearName: '',
                     sort: ''
                 })
-                this.preAddSchoolYear()
+                // this.preAddSchoolYear()
                 this.$nextTick(() => {
                     let tableBody = document.querySelector(
                         '.managerDialog .el-table__body-wrapper'
@@ -919,13 +921,34 @@
                     tableBody.scrollTop = 9999
                 })
             },
-            async deleteManagerDialog() {
-                // this.alertDialog.call(this,'删除',{
-                //     confirm: ()=> {
-                //         trainingProgramMulti
-                //         this.msgSuccess('删除成功')
-                //     }
-                // })
+            async deleteManagerDialog(row,index) {
+                this.alertDialog.call(this,'预删除',{
+                    confirm: ()=> {
+                        this.deleteIds.push(row.id)
+                        this.list.rows.splice(index,1)
+                    }
+                })
+            },
+            /**
+             * @description: 批量操作学年
+             */            
+            multiSchoolYear() {
+                console.log(this.list.rows)
+                let isFull = this.list.rows.every(item => {
+                    return item.yearName && item.sort
+                })
+                if(!isFull) {
+                    this.msgInfo('请填写完整信息')
+                    return
+                }
+                schoolYearMulti({
+                    deleteIds:this.deleteIds,
+                    schoolYearList:this.list.rows
+                }).then(value => {
+                    console.log(value)
+                    this.getSchoolYearList()
+                    this.msgSuccess('修改成功')
+                })
             },
             /**
              * @description: 只有预添加的数据才能删除

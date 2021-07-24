@@ -49,14 +49,14 @@
                     :base-path="home.path"
                 />
                 <sidebar-item
-                    :item="application"
-                    :key="count"
-                    :base-path="application.path"
-                />
-                <sidebar-item
                     :item="system"
                     :key="564"
                     :base-path="system.path"
+                />
+                <sidebar-item
+                    :item="application"
+                    :key="count"
+                    :base-path="application.path"
                 />
             </el-menu>
         </el-scrollbar>
@@ -80,7 +80,7 @@
                     hidden: false,
                     meta: {
                         title: '首页',
-                        icon: 'system',
+                        icon: 'nested',
                         noCache: false
                     }
                 },
@@ -90,7 +90,7 @@
                     alwaysShow: true,
                     meta: {
                         title: '应用',
-                        icon: 'system',
+                        icon: 'list',
                         noCache: false
                     },
                     children: [
@@ -100,7 +100,7 @@
                             hidden: false,
                             meta: {
                                 title: '第二课堂成绩单',
-                                icon: 'peoples',
+                                icon: 'list',
                                 noCache: false
                             }
                         },
