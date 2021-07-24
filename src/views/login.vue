@@ -76,7 +76,9 @@
                 </el-button>
             </el-form-item>
         </el-form>
-        <!--  底部  -->
+      <!-- 微信登录 -->
+      <div id="wxLogin"></div>
+      <!--  底部  -->
         <div class="el-login-footer">
             <span>Copyright © 2018-2021 ruoyi.vip All Rights Reserved.</span>
         </div>
@@ -92,7 +94,12 @@
         name: 'Login',
         data() {
             return {
-                codeUrl: '',
+              wx: {
+                appid: "1000034", // TODO 更改
+                scope: 'snsapi_login',
+                redirect_uri: 'http://test.mingyuefusu.cn',
+              },
+              codeUrl: '',
                 cookiePassword: '',
                 loginForm: {
                     username: 'admin',
@@ -129,10 +136,44 @@
                 captchaEnabled: false
             }
         },
-        watch: {
+      mounted() {
+        // TODO Update
+        WwLogin({
+          "id" : "wxLogin",
+          "appid" : "wx1eedf3f9bb7f47b0",
+          "agentid" : "1000034",
+          "redirect_uri" :encodeURIComponent(window.location.href),
+          "state" : "",
+          "href" : "",
+        });
+      },
+      watch: {
             $route: {
                 handler: function(route) {
                     this.redirect = route.query && route.query.redirect
+                    const query = route.query;
+                    if (query) {
+                      this.redirect = query.redirect;
+                      let code = query.code;
+                      console.log("code:", code)
+                      if(code) {
+                        this.$store
+                          .dispatch('LoginByCode', code)
+                          .then(() => {
+                            this.$router
+                              .push({ path: this.redirect || '/' })
+                              .catch(err => {console.log(err)})
+                          })
+                          .catch(() => {
+                            this.loading = false
+                          })
+                        let newQuery = JSON.parse(JSON.stringify(this.$route.query)) // 深拷贝
+                        delete newQuery.code
+                        delete newQuery.state;
+                        delete newQuery.appid;
+                        this.$router.replace({ query: newQuery })
+                      }
+                    }
                 },
                 immediate: true
             }
