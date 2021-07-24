@@ -5,8 +5,6 @@
 
             <!--用户数据-->
             <el-col :span="24" :xs="24">
-
-
                 <div class="erke-bottom">
                     <div class="erke-buttom-left">
                         <ul>
@@ -20,11 +18,21 @@
                     <div class="erke-buttom-right">
                         <div class="operate">
                             <el-form :inline="true">
-                                <el-row :gutter="10" type="flex" justify="start" style="flexWrap:wrap">
-                                    <el-col :span="1"  style="min-width: 90px">
+                                <el-row
+                                    :gutter="10"
+                                    type="flex"
+                                    justify="start"
+                                    style="flexWrap:wrap"
+                                >
+                                    <el-col :span="1" style="min-width: 90px">
                                         <el-form-item label="">
-                                            <el-select value="操作" style="width:80px">
-                                                <el-option label="操作" ></el-option>
+                                            <el-select
+                                                value="操作"
+                                                style="width:80px"
+                                            >
+                                                <el-option
+                                                    label="操作"
+                                                ></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -38,29 +46,39 @@
                                             <el-input data-text></el-input>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="1"  style="min-width: 180px">
+                                    <el-col :span="1" style="min-width: 180px">
                                         <el-form-item label="请假状态">
-                                            <el-select value="全部" style="width:90px">
-                                                <el-option value="全部"></el-option>
+                                            <el-select
+                                                value="全部"
+                                                style="width:90px"
+                                            >
+                                                <el-option
+                                                    value="全部"
+                                                ></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="1"  style="min-width: 340px">
+                                    <el-col :span="1" style="min-width: 340px">
                                         <el-form-item label="请假时间">
                                             <el-date-picker
                                                 align="right"
                                                 type="datetimerange"
                                                 range-separator="至"
-                                                >
+                                            >
                                             </el-date-picker>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="1" style="min-width:150px">
                                         <el-form-item label="">
-                                            <el-button type="primary" size="mini">查询</el-button>
-                                            <el-button size="mini">重置</el-button>
+                                            <el-button
+                                                type="primary"
+                                                size="mini"
+                                                >查询</el-button
+                                            >
+                                            <el-button size="mini"
+                                                >重置</el-button
+                                            >
                                         </el-form-item>
-                                        
                                     </el-col>
                                 </el-row>
                             </el-form>

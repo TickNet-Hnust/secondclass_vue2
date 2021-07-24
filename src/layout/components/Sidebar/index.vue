@@ -48,15 +48,15 @@
                     :key="44646"
                     :base-path="home.path"
                 />
-                <sidebar-item 
-                    :item="application" 
-                    :key="count" 
-                    :base-path="application.path" 
+                <sidebar-item
+                    :item="application"
+                    :key="count"
+                    :base-path="application.path"
                 />
-                <sidebar-item 
-                    :item="system" 
-                    :key="564" 
-                    :base-path="system.path" 
+                <sidebar-item
+                    :item="system"
+                    :key="564"
+                    :base-path="system.path"
                 />
             </el-menu>
         </el-scrollbar>
@@ -136,7 +136,7 @@
                         }
                     ]
                 },
-                system:{
+                system: {
                     name: 'System',
                     path: '/system',
                     hidden: false,

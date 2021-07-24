@@ -124,3 +124,7 @@ textarea {
     height: 30px;
     padding: 0 10px !important;
 }
+
+.el-button [class*='el-icon-'] + span {
+    margin-left: 0 !important;
+}

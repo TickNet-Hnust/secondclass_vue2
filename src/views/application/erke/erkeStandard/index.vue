@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-24 16:40:18
+ * @LastEditTime: 2021-07-24 20:07:18
 -->
 <template>
     <div class="app-container">
@@ -93,7 +93,7 @@
                             <el-tab-pane
                                 :label="item.name"
                                 :key="item.id"
-                                :name="item.id+''"
+                                :name="item.id + ''"
                             >
                                 <div class="erke-buttom-right">
                                     <el-table
@@ -150,25 +150,37 @@
                                         <el-table-column
                                             label="操作"
                                             fixed="right"
-                                            width="120"
+                                            width="180"
                                         >
                                             <template slot-scope="scope">
-                                                <el-link 
-                                                    type="primary"
-                                                    @click="updateData(scope.row,scope.$index)"
-                                                >修改</el-link
+                                                <el-button
+                                                    size="mini"
+                                                    type="text"
+                                                    icon="el-icon-edit"
+                                                    @click="
+                                                        updateData(
+                                                            scope.row,
+                                                            scope.$index
+                                                        )
+                                                    "
+                                                    >修改</el-button
                                                 >
-                                                <el-link type="info"
-                                                    >排序</el-link
+                                                <el-button
+                                                    size="mini"
+                                                    type="text"
+                                                    icon="el-icon-key"
+                                                    >排序</el-button
                                                 >
-                                                <el-link
-                                                    type="info"
+                                                <el-button
+                                                    size="mini"
+                                                    type="text"
+                                                    icon="el-icon-delete"
                                                     @click="
                                                         deleteCourseClassificaiton(
                                                             scope.row
                                                         )
                                                     "
-                                                    >删除</el-link
+                                                    >删除</el-button
                                                 >
                                             </template>
                                         </el-table-column>
@@ -276,7 +288,11 @@
                         :options="datadata"
                         :props="{ checkStrictly: true }"
                         :show-all-levels="false"
-                        :value="postCourseClassification.path.split(',').map(item=> +item)"
+                        :value="
+                            postCourseClassification.path
+                                .split(',')
+                                .map(item => +item)
+                        "
                         @change="handleNodeChange"
                     ></el-cascader>
                 </el-col>
@@ -308,7 +324,7 @@
             </el-row>
             <el-row>
                 <el-col :span="4"> 分值： </el-col>
-                
+
                 <el-col :span="20">
                     <el-row>
                         <el-radio
@@ -334,7 +350,7 @@
                     </el-row>
                     <el-row>
                         <el-radio
-                        :disabled="computeType"
+                            :disabled="computeType"
                             v-model="postCourseClassification.integralType"
                             :label="2"
                             @change="handleIntegralType"
@@ -761,7 +777,7 @@
         },
         computed: {
             /* 还需要优化选择时候的UI界面 */
-            computeType() { 
+            computeType() {
                 return this.postCourseClassification.type == 0
             },
             computeFixed() {
@@ -792,7 +808,6 @@
         },
         methods: {
             async deleteCourseClassificaiton(row) {
-                
                 this.$alert('您确定要删除吗吗', '提示框', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -839,18 +854,16 @@
             async addCourseClassification() {
                 console.log(this.postCourseClassification)
                 await courseClassificationMulti({
-                    courseClassificationEntityList:[
+                    courseClassificationEntityList: [
                         this.postCourseClassification
                     ]
-                }).then(
-                    value => {
-                        console.log(value, 777)
-                        this.addStardardDialog.open = false
-                        this.$message.success('添加成功')
-                        this.getCourseClassificationList()
-                    }
-                )
-                this.postCourseClassification =  {
+                }).then(value => {
+                    console.log(value, 777)
+                    this.addStardardDialog.open = false
+                    this.$message.success('添加成功')
+                    this.getCourseClassificationList()
+                })
+                ;(this.postCourseClassification = {
                     // id:
                     integralType: 0,
                     integrationRange: null,
@@ -861,8 +874,8 @@
                     sort: 0,
                     type: '0',
                     path: ''
-                },
-                console.log()
+                }),
+                    console.log()
             },
             formatIntegralType(row, column, cellValue) {
                 if (cellValue != null) {
@@ -871,12 +884,13 @@
                 return cellValue
             },
             formatType(row, column, cellValue) {
-                return cellValue != null && this.dict_sc_course_classification_type[cellValue]
-                        .dictLabel
+                return (
+                    cellValue != null &&
+                    this.dict_sc_course_classification_type[cellValue].dictLabel
+                )
             },
             formatUpdateTime(row, column, cellValue) {
-                return cellValue != null &&  formatDate(cellValue)
-                
+                return cellValue != null && formatDate(cellValue)
             },
             renderHeader(h) {
                 return h(
@@ -1110,7 +1124,8 @@
             },
             /** 清空表单 */
             clearForm() {
-                this.addStardardDialog.fixed = this.addStardardDialog.start = this.addStardardDialog.end = ''
+                this.addStardardDialog.fixed = this.addStardardDialog.start = this.addStardardDialog.end =
+                    ''
                 this.postCourseClassification = {
                     // id:
                     integralType: 0,
@@ -1128,28 +1143,33 @@
              * @description:  表格 操作 修改触发
              * @param row 某行数据
              * @param index 某行下标
-             */            
-            async updateData(row,index) {
-                console.log(row,index)
+             */
+
+            async updateData(row, index) {
+                console.log(row, index)
                 this.addStardardDialog.open = true
                 this.clearForm()
                 this.postCourseClassification = {
-                    id:row.id,
+                    id: row.id,
                     integralType: row.integralType,
                     layer: row.layer,
-                    name:row.name,
-                    pid:row.pid,
+                    name: row.name,
+                    pid: row.pid,
                     remark: row.remark,
-                    path:row.path,
-                    sort:row.sort,
-                    type:row.type + '', //需是字符串
+                    path: row.path,
+                    sort: row.sort,
+                    type: row.type + '' //需是字符串
                 }
-                if(row.integralType == 1) {
+                if (row.integralType == 1) {
                     this.addStardardDialog.fixed = row.integrationRange
                 }
-                if(row.integralType == 2) {
-                    this.addStardardDialog.start = row.integrationRange.split(':')[0]
-                    this.addStardardDialog.end = row.integrationRange.split(':')[1]
+                if (row.integralType == 2) {
+                    this.addStardardDialog.start = row.integrationRange.split(
+                        ':'
+                    )[0]
+                    this.addStardardDialog.end = row.integrationRange.split(
+                        ':'
+                    )[1]
                 }
                 this.$forceUpdate()
             },
@@ -1157,27 +1177,29 @@
              * @description: 根据参数查询二课课程分类列表
              * @param name 积分标准分类名称
              * @param type 类型
-             * @param integralType 积分类别 
-             */            
+             * @param integralType 积分类别
+             */
+
             async getCourseClassificationList(option) {
                 this.loading = true
                 await courseClassificationList(option).then(value => {
                     /* value保证存在且唯一 */
                     /* label保证渲染视图 */
-                    console.log(value,'courseClassificationList')
+                    console.log(value, 'courseClassificationList')
                     value.data = value.data.map(item => ({
                         ...item,
                         value: item.id,
                         label: item.name
                     }))
                     this.datadata = filterCourseClassificationList(value)
-                    console.log(this.datadata,'datadata')
+                    console.log(this.datadata, 'datadata')
                 })
                 this.loading = false
             },
             /**
              * @description:  初始化字典
-             */            
+             */
+
             async initDict() {
                 await Promise.all([
                     getDict('sc_course_classification_type'),
@@ -1187,14 +1209,14 @@
                         'dict_sc_course_classification_type',
                         'dict_sc_integral_type'
                     ]
-                    temp.forEach((item,index) => {
+                    temp.forEach((item, index) => {
                         this[item] = value[index].data
-                        console.log(item,value[index])
+                        console.log(item, value[index])
                     })
                 })
-            },
+            }
         },
-        
+
         async created() {
             //字典初始化
             await this.initDict()
@@ -1203,7 +1225,6 @@
             this.label = this.dict_sc_course_classification_type[0].dictLabel
         },
         async mounted() {
-            
             // await getDict('sc_integral_type').then(value => {
             //     console.log(value, 'sc_integral_type')
             //     this.dict_sc_integral_type = value.data

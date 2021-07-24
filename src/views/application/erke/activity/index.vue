@@ -213,16 +213,17 @@
                     min-width="120"
                 ></el-table-column>
 
-                <el-table-column label="操作" fixed="right" min-width="310">
+                <el-table-column label="操作" fixed="right" min-width="350">
                     <template slot-scope="scope">
-                        <el-link
+                        <el-button
                             v-for="(item, index) in operation[scope.row.status]"
                             :key="index"
-                            type="info"
-                            style="marginRight:10px"
+                            type="text"
+                            size="mini"
+                            :icon="item.icon"
                         >
-                            {{ item }}
-                        </el-link>
+                            {{ item.title }}
+                        </el-button>
                         <!-- <el-link type="info">修改</el-link> -->
                         <!-- <el-link type="info">申请发布</el-link> -->
                         <!-- <el-link type="info">管理员发布</el-link> -->
@@ -277,15 +278,44 @@
                 dict_sc_activity_status: [],
                 //操作映射
                 operation: [
-                    ['修改', '申请发布', '管理员发布', '取消'],
-                    ['审批', '撤回'],
-                    ['启动报名', '撤回', '取消'],
-                    ['修改', '取消'],
-                    ['恢复'],
-                    ['结束报名', '启动报名', '暂停报名', '撤回'],
-                    ['启动活动', '恢复报名'],
-                    ['结束活动', '暂停活动'],
-                    ['取消', '回复活动']
+                    [
+                        { title: '修改', icon: 'el-icon-edit' },
+                        { title: '申请发布', icon: 'el-icon-s-release' },
+                        { title: '管理员发布', icon: 'el-icon-s-release' },
+                        { title: '取消', icon: 'el-icon-circle-close' }
+                    ],
+                    [
+                        { title: '审批', icon: 'el-icon-s-check' },
+                        { title: '撤回', icon: 'el-icon-d-arrow-right' }
+                    ],
+                    [
+                        { title: '启动报名', icon: 'el-icon-caret-right' },
+                        { title: '撤回', icon: 'el-icon-d-arrow-right' },
+                        { title: '取消', icon: 'el-icon-circle-close' }
+                    ],
+                    [
+                        { title: '修改', icon: 'el-icon-edit' },
+                        { title: '取消', icon: 'el-icon-circle-close' }
+                    ],
+                    [{ title: '恢复', icon: 'el-icon-refresh-right' }],
+                    [
+                        { title: '结束报名', icon: 'el-icon-video-pause' },
+                        { title: '启动报名', icon: 'el-icon-caret-right' },
+                        { title: '暂停报名', icon: 'el-icon-video-pause' },
+                        { title: '撤回', icon: 'el-icon-d-arrow-right' }
+                    ],
+                    [
+                        { title: '启动活动', icon: 'el-icon-caret-right' },
+                        { title: '恢复报名', icon: 'el-icon-refresh-right' }
+                    ],
+                    [
+                        { title: '结束活动', icon: 'el-icon-video-pause' },
+                        { title: '暂停活动', icon: 'el-icon-video-pause' }
+                    ],
+                    [
+                        { title: '取消', icon: 'el-icon-circle-close' },
+                        { title: '恢复活动', icon: 'el-icon-refresh-right' }
+                    ]
                 ]
             }
         },

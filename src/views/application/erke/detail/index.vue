@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-18 13:36:32
+ * @LastEditTime: 2021-07-24 20:18:13
 -->
 <template>
     <div class="app-container">
@@ -125,9 +125,10 @@
                             @select="handleSelect"
                         >
                             <el-menu-item
-                                v-for="(item,index) in classificationList.rows"
+                                v-for="(item, index) in classificationList.rows"
                                 :key="index"
-                                :index="index+''">
+                                :index="index + ''"
+                            >
                                 <span slot="title">{{ item.name }}</span>
                             </el-menu-item>
                         </el-menu>
@@ -181,7 +182,8 @@
                                             label="加入方式:不限"
                                         ></el-option>
                                         <el-option
-                                            v-for="(item,index) in dict_sc_course_join_type"
+                                            v-for="(item,
+                                            index) in dict_sc_course_join_type"
                                             :key="index"
                                             :value="item.dictValue"
                                             :label="item.dictLabel"
@@ -203,7 +205,8 @@
                                             label="必修课：不限"
                                         ></el-option>
                                         <el-option
-                                            v-for="(item,index) in dict_sc_course_necessary"
+                                            v-for="(item,
+                                            index) in dict_sc_course_necessary"
                                             :key="index"
                                             :value="item.dictValue"
                                             :label="item.dictLabel"
@@ -240,7 +243,7 @@
                                             value="0"
                                             label="发布单位：不限"
                                         ></el-option>
-                                        
+
                                         <el-option value="保卫处"></el-option>
                                         <el-option value="网络中心"></el-option>
                                     </el-select>
@@ -258,7 +261,8 @@
                                             label="课程性质：不限"
                                         ></el-option>
                                         <el-option
-                                            v-for="(item,index) in dict_sc_course_type"
+                                            v-for="(item,
+                                            index) in dict_sc_course_type"
                                             :key="index"
                                             :value="item.dictValue"
                                             :label="item.dictLabel"
@@ -278,7 +282,8 @@
                                             label="全部"
                                         ></el-radio-button>
                                         <el-radio-button
-                                            v-for="(item,index) in dict_sc_course_status"
+                                            v-for="(item,
+                                            index) in dict_sc_course_status"
                                             :key="index"
                                             :label="item.dictLabel"
                                         ></el-radio-button>
@@ -453,7 +458,11 @@
                             <el-table-column prop="updateUserId" label="修改人">
                             </el-table-column>
 
-                            <el-table-column prop="remark" label="备注" min-width="200">
+                            <el-table-column
+                                prop="remark"
+                                label="备注"
+                                min-width="200"
+                            >
                             </el-table-column>
 
                             <el-table-column
@@ -463,17 +472,29 @@
                                 width="200"
                             >
                                 <template>
-                                    <el-link
+                                    <el-button
+                                        size="mini"
+                                        type="text"
+                                        icon="el-icon-edit"
+                                        >修改/详情</el-button
+                                    >
+                                    <!-- <el-link
                                         style="margin-right: 10px"
                                         type="primary"
                                         >修改/详情</el-link
+                                    > -->
+                                    <el-button
+                                        size="mini"
+                                        type="text"
+                                        icon="el-icon-s-check"
+                                        >审核</el-button
                                     >
-                                    <el-link
-                                        style="margin-right: 10px"
-                                        type="info"
-                                        >审核</el-link
+                                    <el-button
+                                        size="mini"
+                                        type="text"
+                                        icon="el-icon-delete"
+                                        >删除</el-button
                                     >
-                                    <el-link type="info">删除</el-link>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -973,7 +994,7 @@
                 },
                 /** 课程列表 */
                 courseList: [],
-                queryList:{
+                queryList: {
                     name: '',
                     departmentId: '',
                     joinType: '',
@@ -982,7 +1003,7 @@
                     term: '',
                     type: '',
                     page: '',
-                    limit: '',
+                    limit: ''
                 },
                 //课程加入方式
                 dict_sc_course_join_type: [],
@@ -1281,10 +1302,14 @@
         },
         methods: {
             formatDate(row, column, cellValue) {
-                return cellValue!=null && formaterDate(cellValue)
+                return cellValue != null && formaterDate(cellValue)
             },
             formatClassificationId(row, column, cellValue) {
-                return cellValue!=null && this.classificationList.rows[this.classificationList.value]?.name
+                return (
+                    cellValue != null &&
+                    this.classificationList.rows[this.classificationList.value]
+                        ?.name
+                )
             },
             formatClassificationDetail(row, column, cellValue) {
                 // console.log(this.dict_sc_course_classification_type,cellValue,'formatClassificationDetail')
@@ -1295,30 +1320,33 @@
             },
             formatStatus(row, column, cellValue) {
                 return (
-                    cellValue!=null && this.dict_sc_course_status[cellValue].dictLabel
+                    cellValue != null &&
+                    this.dict_sc_course_status[cellValue].dictLabel
                 )
             },
             formatType(row, column, cellValue) {
                 return (
-                    cellValue!=null && this.dict_sc_course_type[cellValue].dictLabel
+                    cellValue != null &&
+                    this.dict_sc_course_type[cellValue].dictLabel
                 )
             },
             formatNecessary(row, column, cellValue) {
-            
                 return (
-                    cellValue!=null &&
+                    cellValue != null &&
                     this.dict_sc_course_necessary[cellValue].dictLabel
                 )
             },
             formatJoinType(row, column, cellValue) {
                 return (
-                    cellValue != null && 
+                    cellValue != null &&
                     this.dict_sc_course_join_type[cellValue].dictLabel
                 )
             },
             formatTrainingProgram(row, column, cellValue) {
-                
-                return cellValue!=null && this.trainingProgramIdMapname[cellValue]
+                return (
+                    cellValue != null &&
+                    this.trainingProgramIdMapname[cellValue]
+                )
             },
             async addDetail() {
                 this.addDetailDialog.config.schoolYearId = this.list.value
@@ -1335,7 +1363,7 @@
             refresh() {
                 this.$forceUpdate()
             },
-            
+
             sureClass(row) {
                 if (row.status == 0) {
                     //ing
@@ -1594,7 +1622,7 @@
                         failCount,
                         validCount
                     }
-                    console.log(value, 'trainingProgramDetail',787878)
+                    console.log(value, 'trainingProgramDetail', 787878)
                     this.classificationList = value.data.classificationList
                     console.log(this.classificationList, 8988)
                     value.data.classificationList.forEach((item, index) => {
@@ -1627,15 +1655,15 @@
             /** 状态改变 */
             radioChange(value) {
                 let map = new Map([
-                    ['全部',''],
-                    ['申请中','0'],
-                    ['有效','1'],
-                    ['无效','2'],
-                    ['未通过','3']
+                    ['全部', ''],
+                    ['申请中', '0'],
+                    ['有效', '1'],
+                    ['无效', '2'],
+                    ['未通过', '3']
                 ])
                 /** 因为按钮获得的值只能是label，所以需要自己转换为对应的value */
                 this.queryList.status = map.get(value)
-                console.log(value,this.queryList.status)
+                console.log(value, this.queryList.status)
                 this.fuzzyQuery()
             },
             /** 学年改变 */
@@ -1653,7 +1681,9 @@
             },
             /** 分类改变 */
             handleSelect(index) {
-                this.classificationList.value = this.classificationList.rows[index].id
+                this.classificationList.value = this.classificationList.rows[
+                    index
+                ].id
                 this.fuzzyQuery()
             },
             /** 初始化字典 */
@@ -1674,9 +1704,9 @@
                         'dict_sc_course_type',
                         'dict_sc_course_classification_type'
                     ]
-                    tempArr.forEach((item,index) => {
+                    tempArr.forEach((item, index) => {
                         this[item] = value[index].data
-                        console.log(item,value[index])
+                        console.log(item, value[index])
                     })
                 })
             },
@@ -1685,15 +1715,16 @@
              *  @param schoolYearId 学年id
              *  @param pageNum 第几页
              *  @param pageSize 限制每页的条数
-             */                                                    
+             */
+
             async getTrainingProgramList(option) {
-                
                 await trainingProgramList(option).then(value => {
                     this.trainingProgramList.rows = value.rows
                     this.queryParams.totalCount = value.total
-                    this.queryParams.totalPage = value.total / this.queryParams.pageSize
+                    this.queryParams.totalPage =
+                        value.total / this.queryParams.pageSize
                     console.log(value, 'trainingProgramList')
-                    value.rows.forEach((item,index)=> {
+                    value.rows.forEach((item, index) => {
                         this.trainingProgramIdMapname[item.id] = item.name
                     })
                     console.log(this.queryParams)
@@ -1710,15 +1741,16 @@
              * @param status 状态
              * @param term 学期
              * @param trainingProgramId 培养方案id
-             * @param type 
+             * @param type
              * @param page 第几页
              * @param limit 限制多少条
-             */            
+             */
+
             async getTrainingProgramDetail(option) {
                 this.loading = true
                 await trainingProgramDetail(option).then(value => {
                     this.classificationList.rows = value.data.classificationList
-                    console.log(value,'classificationList')
+                    console.log(value, 'classificationList')
                     const {
                         applyingCount,
                         courseCount,
@@ -1731,9 +1763,9 @@
                         failCount,
                         validCount
                     }
-                    this.courseList  = value.data.pageData.list
-                    console.log(this.courseList,'courseList')
-                    
+                    this.courseList = value.data.pageData.list
+                    console.log(this.courseList, 'courseList')
+
                     this.loading = false
                 })
             },
@@ -1751,7 +1783,7 @@
                     term: '',
                     type: this.queryList.type,
                     page: '',
-                    limit: '',
+                    limit: ''
                 }
                 console.log(option)
                 await this.getTrainingProgramDetail(option)
@@ -1775,7 +1807,7 @@
 
             /** 获得当前学年所有的培养方案列表 */
             await this.getTrainingProgramList({
-                schoolYearId: this.$route.params.sid,
+                schoolYearId: this.$route.params.sid
             })
 
             /** 获得当前学年下 当前培养方案下 所有的课程分类列表 */
@@ -1788,12 +1820,8 @@
             /** 获得当前学年下 当前培养方案下 当前课程分类下 课程列表 */
             await this.fuzzyQuery()
         },
-        async beforeMount() {
-        
-        },
-        async mounted() {
-            
-        }
+        async beforeMount() {},
+        async mounted() {}
     }
 </script>
 

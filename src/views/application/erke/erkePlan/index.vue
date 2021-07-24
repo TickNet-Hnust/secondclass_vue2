@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-24 14:13:16
+ * @LastEditTime: 2021-07-24 20:08:34
 -->
 <template>
     <div class="app-container">
@@ -150,13 +150,33 @@
                 </el-table-column>
                 <el-table-column
                     fixed="right"
-                    width="150"
+                    width="180"
                     prop="oprator"
                     label="操作"
                 >
                     <template slot-scope="scope">
-                        <el-link type="primary" @click="updateTrainingProgram(scope.row,scope.$index)">修改</el-link>
-                        <router-link
+                        <el-button
+                            size="mini"
+                            type="text"
+                            icon="el-icon-edit"
+                            @click="
+                                updateTrainingProgram(scope.row, scope.$index)
+                            "
+                            >修改</el-button
+                        >
+                        <el-button size="mini" type="text" icon="el-icon-view">
+                            <router-link
+                                type="info"
+                                :to="
+                                    '/application/erke/detail/' +
+                                        scope.row.schoolYearId +
+                                        '/' +
+                                        scope.row.id
+                                "
+                                >详情</router-link
+                            >
+                        </el-button>
+                        <!-- <router-link
                             type="info"
                             :to="
                                 '/application/erke/detail/' +
@@ -165,11 +185,13 @@
                                     scope.row.id
                             "
                             >详情</router-link
-                        >
-                        <el-link
-                            type="info"
+                        > -->
+                        <el-button
+                            size="mini"
+                            type="text"
+                            icon="el-icon-delete"
                             @click="deletePlan(scope.row, scope.$index)"
-                            >删除</el-link
+                            >删除</el-button
                         >
                     </template>
                 </el-table-column>
@@ -193,50 +215,50 @@
             class="managerDialog"
         >
             <!-- <el-form ref="managerDialog"  height="250"> -->
-                <el-table :data="list.rows" stripe>
-                    <el-table-column
-                        lable="sdf"
-                        min-width="40"
-                        :render-header="renderSchoolYear"
-                    >
-                        <template slot-scope="scope">
-                            <span
-                                @click="deleteManagerDialog(scope.row)"
-                                class="addOrMinus"
-                                >-</span
-                            >
-                        </template>
-                    </el-table-column> -->
-                    <el-table-column 
-                        prop="sort" 
-                        label="排序" 
-                        width="80"
-                        sortable
-                        :sort-orders="['ascending','descending']"
-                    >
-                        <template slot-scope="scope">
-                            <el-input
-                                class="sortInput"
-                                v-model="scope.row.sort"
-                            ></el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="yearName"
-                        label="分类名称"
-                        min-width="250"
-                    >
-                        <template slot-scope="scope">
-                            <el-input v-model="scope.row.yearName"> </el-input>
-                        </template>
-                    </el-table-column>
-                    <el-table-column 
-                        prop="id" 
-                        label="ID" 
-                        align="center" 
-                        
-                    ></el-table-column>
-                     <!-- <el-table-column
+            <el-table :data="list.rows" stripe>
+                <el-table-column
+                    lable="sdf"
+                    min-width="40"
+                    :render-header="renderSchoolYear"
+                >
+                    <template slot-scope="scope">
+                        <span
+                            @click="deleteManagerDialog(scope.row)"
+                            class="addOrMinus"
+                            >-</span
+                        >
+                    </template>
+                </el-table-column>
+                -->
+                <el-table-column
+                    prop="sort"
+                    label="排序"
+                    width="80"
+                    sortable
+                    :sort-orders="['ascending', 'descending']"
+                >
+                    <template slot-scope="scope">
+                        <el-input
+                            class="sortInput"
+                            v-model="scope.row.sort"
+                        ></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="yearName"
+                    label="分类名称"
+                    min-width="250"
+                >
+                    <template slot-scope="scope">
+                        <el-input v-model="scope.row.yearName"> </el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="id"
+                    label="ID"
+                    align="center"
+                ></el-table-column>
+                <!-- <el-table-column
                         prop="learnYearNo"
                         label="当前学年"
                         align="center"
@@ -252,7 +274,7 @@
                             />
                         </template>
                     </el-table-column>  -->
-                </el-table>
+            </el-table>
             <!-- </el-form> -->
 
             <div slot="footer" class="dialog-footer">
@@ -409,7 +431,7 @@
                 <el-button @click="cancel">关闭</el-button>
             </div>
         </el-dialog>
-        
+
         <!-- this is addButton -->
         <el-dialog
             :title="addPlanDialog.title"
@@ -419,12 +441,7 @@
             class="addPlanDialog"
         >
             <el-form ref="addPlanDialog" label-width="80px">
-                
-                <el-table 
-                    :data="preAddplanData" 
-                    height="350" 
-                    stripe
-                >
+                <el-table :data="preAddplanData" height="350" stripe>
                     <template v-slot:empty>
                         暂无新增数据，点击左上角 + 号新增
                     </template>
@@ -511,22 +528,28 @@
             append-to-body
             class="updatePlanDialog"
         >
-            <el-form ref="updatePlanDialog" label-width="120px" label-position="left">
+            <el-form
+                ref="updatePlanDialog"
+                label-width="120px"
+                label-position="left"
+            >
                 <el-form-item label="批次ID：">
-                    {{updatePlanDialog.config.id}}
+                    {{ updatePlanDialog.config.id }}
                 </el-form-item>
                 <el-form-item label="学年：">
-                    {{this.schoolYearIdMapName[updatePlanDialog.config.schoolYearId]}}
+                    {{
+                        this.schoolYearIdMapName[
+                            updatePlanDialog.config.schoolYearId
+                        ]
+                    }}
                 </el-form-item>
                 <el-form-item label="培养方案名称：">
                     <el-input v-model="updatePlanDialog.config.name"></el-input>
                 </el-form-item>
                 <el-form-item label="级别：">
-                    <el-select 
-                        v-model="updatePlanDialog.config.rank"
-                        >
+                    <el-select v-model="updatePlanDialog.config.rank">
                         <el-option
-                            v-for="(item,index) in dict_sc_train_program_rank"
+                            v-for="(item, index) in dict_sc_train_program_rank"
                             :key="index"
                             :value="+item.dictValue"
                             :label="item.dictLabel"
@@ -534,15 +557,19 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="启用：">
-                    <el-switch 
+                    <el-switch
                         :value="Boolean(updatePlanDialog.config.status)"
-                        @change="updatePlanDialog.config.status = Number($event)"
+                        @change="
+                            updatePlanDialog.config.status = Number($event)
+                        "
                     ></el-switch>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancelUpdate">关闭</el-button>
-                <el-button type="primary" @click="submitUpdateForm">确 定</el-button>
+                <el-button type="primary" @click="submitUpdateForm"
+                    >确 定</el-button
+                >
             </div>
         </el-dialog>
     </div>
@@ -615,8 +642,8 @@
                             classNumber: 84
                         }
                     ]
-                },                
-                updatePlanDialog:{
+                },
+                updatePlanDialog: {
                     open: false,
                     title: '编辑',
                     index: '',
@@ -625,7 +652,7 @@
                         schoolYearId: 0,
                         name: '',
                         rank: 0,
-                        status: 0,
+                        status: 0
                     }
                 },
                 //导出弹窗里面的数据
@@ -776,25 +803,26 @@
             /**
              * @description:  学年改变触发，重新渲染表格数据
              * @param {*} value 学年id， -1为全部学年
-             */            
+             */
+
             async schoolYearChange(value) {
                 console.log(value)
-            
+
                 let option = {
                     pageNum: 1,
-                    pageSize: 10,
+                    pageSize: 10
                 }
                 value != -1 && (option.schoolYearId = value)
 
                 this.queryParams.pageNum = 1
                 this.queryParams.pageSize = 10
                 await this.getTrainingProgramList(option)
-
             },
             /**
              * @description: 表格 学年 id转化name
              * @param {*} cellValue 要转换的数据
-             */            
+             */
+
             formatSchoolYearName(row, column, cellValue) {
                 return cellValue != null && this.schoolYearIdMapName[cellValue]
             },
@@ -808,17 +836,19 @@
             /**
              * @description: 表格 状态 字典转化
              * @param {*} cellValue 要转换的数据
-             */            
+             */
+
             formatStatus(row, column, cellValue) {
                 return (
                     cellValue != null &&
                     this.dict_sc_train_program_status[cellValue].dictLabel
                 )
             },
-            /** 
+            /**
              * @description: 表格 级别 字典转化
              * @param {*} cellValue 要转换的数据
-             */            
+             */
+
             formatRank(row, column, cellValue) {
                 return (
                     cellValue != null &&
@@ -827,8 +857,9 @@
             },
             /**
              * @description: 新增 表头 渲染+
-             * @param {*} h 
-             */            
+             * @param {*} h
+             */
+
             renderHeader(h) {
                 return h(
                     'span',
@@ -844,7 +875,8 @@
             /**
              * @description: 管理 表头 渲染+
              * @param {*} h
-             */            
+             */
+
             renderSchoolYear(h) {
                 return h(
                     'span',
@@ -862,6 +894,7 @@
                     yearName: '',
                     sort: ''
                 })
+                this.preAddSchoolYear()
                 this.$nextTick(() => {
                     let tableBody = document.querySelector(
                         '.managerDialog .el-table__body-wrapper'
@@ -896,11 +929,13 @@
             },
             /**
              * @description: 只有预添加的数据才能删除
-             * @param {*} row 
+             * @param {*} row
              * @param {*} index
-             */            
+             */
+
             async deletePlanDialog(row, index) {
-                this.preAddplanData.splice(index,1) ;return 
+                this.preAddplanData.splice(index, 1)
+                return
                 //删除预添加的数据，需要同时在欲添加/实际两个数组中删除
                 if (row.id == undefined) {
                     this.newAddList.splice(
@@ -924,7 +959,7 @@
                 console.log(option)
                 let temp = {
                     pageNum: option.page,
-                    pageSize: option.limit,
+                    pageSize: option.limit
                 }
                 this.list.value != -1 && (temp.schoolYearId = this.list.value)
 
@@ -934,8 +969,9 @@
             },
             /**
              * @description: 打开修改的弹窗
-             */            
-            updateTrainingProgram(row,index) {
+             */
+
+            updateTrainingProgram(row, index) {
                 console.log(row)
                 this.updatePlanDialog.open = true
                 this.updatePlanDialog.index = index
@@ -947,7 +983,8 @@
                     status: row.status
                 }
             },
-            /** 筛选节点 */ 
+            /** 筛选节点 */
+
             filterNode(value, data) {
                 if (!value) return true
                 return data.label.indexOf(value) !== -1
@@ -1013,7 +1050,8 @@
             cancelUpdate() {
                 this.updatePlanDialog.open = false
             },
-            /** 新增培养方案 */          
+            /** 新增培养方案 */
+
             async submitForm() {
                 console.log(this.newAddList)
                 let msgFull = this.preAddplanData.every(item => {
@@ -1054,7 +1092,10 @@
                 await trainingProgramMulti({
                     trainingProgramList: [this.updatePlanDialog.config]
                 }).then(value => {
-                    Object.assign(this.planData[this.updatePlanDialog.index],this.updatePlanDialog.config)
+                    Object.assign(
+                        this.planData[this.updatePlanDialog.index],
+                        this.updatePlanDialog.config
+                    )
                     this.msgSuccess('修改成功')
                     console.log(this.updatePlanDialog.config)
                     this.$forceUpdate()
@@ -1063,11 +1104,12 @@
             },
             /**
              * @description:  模糊查询培养方案名字
-             */            
+             */
+
             async findFuzzyName() {
                 let option = {
                     name: this.FuzzyInput,
-                    pageNum:1,
+                    pageNum: 1,
                     pageSize: 10
                 }
                 this.list.value != -1 && (option.schoolYearId = this.list.value)
@@ -1106,7 +1148,7 @@
 
             /** 获取学年列表 */
             async getSchoolYearList() {
-                    await schoolYearList().then(value => {
+                await schoolYearList().then(value => {
                     value.rows.forEach(item => {
                         /** 这里还需要改进，否则数组到后面将会很大，影响性能 */
                         this.schoolYearIdMapName[item.id] = item.yearName
@@ -1123,20 +1165,22 @@
              *  @param schoolYearId 学年id
              *  @param pageNum 第几页
              *  @param pageSize 限制每页的条数
-             */                                                    
+             */
+
             async getTrainingProgramList(option) {
-                
                 await trainingProgramList(option).then(value => {
                     this.planData = value.rows
                     this.queryParams.totalCount = value.total
-                    this.queryParams.totalPage = value.total / this.queryParams.pageSize
+                    this.queryParams.totalPage =
+                        value.total / this.queryParams.pageSize
                     console.log(value, 'trainingProgramList')
                     console.log(this.queryParams)
                 })
             },
             /**
              * @description:  初始化字典
-             */            
+             */
+
             async initDict() {
                 await Promise.all([
                     getDict('sc_train_program_rank'),
@@ -1146,7 +1190,7 @@
                         'dict_sc_train_program_rank',
                         'dict_sc_train_program_status'
                     ]
-                    temp.forEach((item,index) => {
+                    temp.forEach((item, index) => {
                         this[item] = value[index].data
                     })
                 })
@@ -1160,7 +1204,7 @@
             this.loading = true
             /* 调用 获取学年列表 */
             await this.getSchoolYearList()
-            
+
             /** 这里可以对schoolYear排序，并赋值让radio为最新的年度 */
 
             this.queryParams.pageNum = 1
@@ -1173,11 +1217,8 @@
             })
             //表格加载完成
             this.loading = false
-            
-            
         },
         async mounted() {
-
             /** 横向滚动条 */
             let view = document.querySelector(
                 '.erkePlanMainTable .el-table__body-wrapper'
@@ -1241,7 +1282,7 @@
     .managerDialog >>> .el-table__body-wrapper {
         overflow-y: auto;
         height: 250px;
-    } 
+    }
     .managerDialog >>> .el-table__row td {
         padding: 5px 0;
     }
