@@ -85,12 +85,12 @@
         </div>
 
         <div class="erke-bottom">
-            <el-row>
+            <el-row style="margin-bottom:10px">
                 <el-col class="operation" :span="5">
-                    <el-button type="primary" @click="handleImport"
+                    <el-button size="small" type="primary" @click="handleImport"
                         >新增</el-button
                     >
-                    <el-button>导出</el-button>
+                    <el-button size="small" plain>导出</el-button>
                 </el-col>
                 <el-col class="filterRadio" :span="19">
                     <el-radio-group
@@ -239,7 +239,7 @@
                 @pagination="getList($event)"
             />
         </div>
-
+        
         <!-- this is add dialog -->
         <addDialog ref="addActivity"></addDialog>
     </div>

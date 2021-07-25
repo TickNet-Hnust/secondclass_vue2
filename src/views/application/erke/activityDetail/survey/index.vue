@@ -450,8 +450,10 @@
                     grid: {
                         top: '12%',
                         left: '2%',
-                        right: '10%',
-                        containLabel: true
+                        right: '3%',
+                        bottom: '3%',
+                        containLabel: true,
+                        width: 'auto'
                     },
                     xAxis: [
                         {
@@ -475,24 +477,10 @@
                     ],
                     dataZoom: [
                         {
-                            show: true,
-                            start: 94,
-                            end: 100
-                        },
-                        {
                             type: 'inside',
                             start: 94,
                             end: 100
                         },
-                        {
-                            show: true,
-                            yAxisIndex: 0,
-                            filterMode: 'empty',
-                            width: 30,
-                            height: '80%',
-                            showDataShadow: false,
-                            left: '93%'
-                        }
                     ],
                     series: [
                         {
@@ -1347,8 +1335,8 @@
                 grid: {
                     top: '12%',
                     left: '2%',
-                    right: '10%',
-                    // bottom: '0%',
+                    right: '5%',
+                    bottom: '5%',
                     containLabel: true,
                     width: 'auto'
                 },
@@ -1373,27 +1361,27 @@
                     }
                 ],
                 dataZoom: [
-                    {
-                        show: true,
-                        type: 'slider',
-                        start: 94,
-                        end: 100
-                    },
+                    // {
+                    //     show: true,
+                    //     type: 'slider',
+                    //     start: 94,
+                    //     end: 100
+                    // },
                     {
                         type: 'inside',
                         start: 94,
                         end: 100
                     },
-                    {
-                        show: true,
-                        type: 'slider',
-                        yAxisIndex: 0,
-                        filterMode: 'empty',
-                        width: 30,
-                        height: '80%',
-                        showDataShadow: false,
-                        left: '93%'
-                    }
+                    // {
+                    //     show: true,
+                    //     type: 'slider',
+                    //     yAxisIndex: 0,
+                    //     filterMode: 'empty',
+                    //     width: 30,
+                    //     height: '80%',
+                    //     showDataShadow: false,
+                    //     left: '93%'
+                    // }
                 ],
                 series: [
                     {

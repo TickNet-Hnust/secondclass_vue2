@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-24 20:18:13
+ * @LastEditTime: 2021-07-25 23:43:25
 -->
 <template>
     <div class="app-container">
@@ -93,7 +93,7 @@
                             plain
                             icon="el-icon-plus"
                             size="mini"
-                            @click="handleAdd"
+                            @click="addCourse"
                             v-hasPermi="['system:user:add']"
                             >新增</el-button
                         >
@@ -274,7 +274,7 @@
 
                                 <el-col :span="1" style="min-width:340px">
                                     <el-radio-group
-                                        v-model="queryList.status"
+                                        v-model="radioType"
                                         size="mini"
                                         @change="radioChange"
                                     >
@@ -282,8 +282,7 @@
                                             label="全部"
                                         ></el-radio-button>
                                         <el-radio-button
-                                            v-for="(item,
-                                            index) in dict_sc_course_status"
+                                            v-for="(item,index) in dict_sc_course_status"
                                             :key="index"
                                             :label="item.dictLabel"
                                         ></el-radio-button>
@@ -471,18 +470,14 @@
                                 fixed="right"
                                 width="200"
                             >
-                                <template>
+                                <template slot-scope="scope">
                                     <el-button
                                         size="mini"
                                         type="text"
                                         icon="el-icon-edit"
+                                        @click="updateCourse(scope.row)"
                                         >修改/详情</el-button
                                     >
-                                    <!-- <el-link
-                                        style="margin-right: 10px"
-                                        type="primary"
-                                        >修改/详情</el-link
-                                    > -->
                                     <el-button
                                         size="mini"
                                         type="text"
@@ -493,6 +488,7 @@
                                         size="mini"
                                         type="text"
                                         icon="el-icon-delete"
+                                        @click="deleteCourse(scope.row)"
                                         >删除</el-button
                                     >
                                 </template>
@@ -571,7 +567,7 @@
                         <el-row>
                             <el-col :span="5">学年：</el-col>
                             <el-col :span="19">{{
-                                schoolYearIdMapName[list.value]
+                                schoolYearIdMapName[schoolYearList.value]
                             }}</el-col>
                         </el-row>
                     </el-col>
@@ -607,7 +603,7 @@
                             <el-col :span="5">培养方案</el-col>
                             <el-col :span="19">{{
                                 trainingProgramIdMapname[
-                                    schoolYearIdMapProgramArray.value
+                                    trainingProgramList.value
                                 ]
                             }}</el-col>
                         </el-row>
@@ -674,7 +670,7 @@
                                     class="sortClass"
                                 >
                                     <el-option
-                                        v-for="it in classificationList"
+                                        v-for="it in classificationList.rows"
                                         :key="it.id"
                                         :label="it.name"
                                         :value="it.id"
@@ -715,62 +711,19 @@
                 <el-row :gutter="4">
                     <el-col :span="3"> 分类明细： </el-col>
                     <el-col :span="5.5">
-                        <el-select
-                            v-model="addDetailDialog.classSort"
-                            class="classSort"
-                        >
-                            <el-option
-                                label="思想政治和人文素养"
-                                value="1"
-                            ></el-option>
-                            <el-option
-                                label="思想政治和人文素养"
-                                value="2"
-                            ></el-option>
-                            <el-option
-                                label="思想政治和人文素养"
-                                value="3"
-                            ></el-option>
-                        </el-select>
+                        <el-cascader
+                        :options="datadata"
+                        :props="{ checkStrictly: true }"
+                        
+                        :value="
+                            addDetailDialog.config.classificationIdPath
+                                .split(',')
+                                .map(item => +item)
+                        "
+                        @change="handleNodeChange"
+                    ></el-cascader>
                     </el-col>
-                    <el-col :span="9.5">
-                        <el-select
-                            v-model="addDetailDialog.activitySort"
-                            class="activitySort"
-                        >
-                            <el-option
-                                label="思想政治和人文素养"
-                                value="1"
-                            ></el-option>
-                            <el-option
-                                label="思想政治和人文素养"
-                                value="2"
-                            ></el-option>
-                            <el-option
-                                label="思想政治和人文素养"
-                                value="3"
-                            ></el-option>
-                        </el-select>
-                    </el-col>
-                    <el-col :span="3">
-                        <el-select
-                            v-model="addDetailDialog.rankSort"
-                            class="rankSort"
-                        >
-                            <el-option
-                                label="思想政治和人文素养"
-                                value="1"
-                            ></el-option>
-                            <el-option
-                                label="思想政治和人文素养"
-                                value="2"
-                            ></el-option>
-                            <el-option
-                                label="思想政治和人文素养"
-                                value="3"
-                            ></el-option>
-                        </el-select>
-                    </el-col>
+                    
                 </el-row>
 
                 <el-row>
@@ -780,99 +733,48 @@
                     </el-col>
                 </el-row>
 
-                <el-row style="height: 80px">
+                <el-row >
                     <el-col :span="3"> 积分下限要求： </el-col>
                     <el-col :span="21">
-                        <el-row :gutter="5" style="margin-bottom: 12px">
+                        <el-row
+                            class="mb10"
+                            v-for="(item,index) in addDetailDialog.lowestValueArray"
+                            :key="index"
+                            :gutter="5"
+                        >
                             <el-col :span="5.5">
                                 <el-select
-                                    v-model="addDetailDialog.unitValue"
+                                    v-model="item[0]"
                                     class="shoutInput"
                                 >
                                     <el-option
-                                        label="预设"
-                                        value="1"
-                                    ></el-option>
-                                    <el-option
-                                        label="预设2"
-                                        value="2"
-                                    ></el-option>
-                                    <el-option
-                                        label="预设3"
-                                        value="3"
+                                        v-for="n in 10"
+                                        :key="n"
+                                        :label="`第${n}学期`"
+                                        :value="n"
                                     ></el-option>
                                 </el-select>
                             </el-col>
                             <el-col :span="5.5">
                                 <el-select
-                                    v-model="addDetailDialog.unitValue"
+                                    v-model="item[1]"
                                     class="shoutInput"
                                 >
                                     <el-option
-                                        label="预设"
-                                        value="1"
-                                    ></el-option>
-                                    <el-option
-                                        label="预设2"
-                                        value="2"
-                                    ></el-option>
-                                    <el-option
-                                        label="预设3"
-                                        value="3"
+                                        v-for="n in 10"
+                                        :key="n"
+                                        :label="n"
+                                        :value="n"
                                     ></el-option>
                                 </el-select>
                             </el-col>
 
-                            <el-col :span="5.5">
-                                <span class="addOrMine">-</span>
-                            </el-col>
-                        </el-row>
-                        <el-row :gutter="5">
-                            <el-col :span="5.5">
-                                <el-select
-                                    v-model="addDetailDialog.unitValue"
-                                    class="shoutInput"
-                                >
-                                    <el-option
-                                        label="预设"
-                                        value="1"
-                                    ></el-option>
-                                    <el-option
-                                        label="预设2"
-                                        value="2"
-                                    ></el-option>
-                                    <el-option
-                                        label="预设3"
-                                        value="3"
-                                    ></el-option>
-                                </el-select>
-                            </el-col>
-                            <el-col :span="5.5">
-                                <el-select
-                                    v-model="addDetailDialog.unitValue"
-                                    class="shoutInput"
-                                >
-                                    <el-option
-                                        label="预设"
-                                        value="1"
-                                    ></el-option>
-                                    <el-option
-                                        label="预设2"
-                                        value="2"
-                                    ></el-option>
-                                    <el-option
-                                        label="预设3"
-                                        value="3"
-                                    ></el-option>
-                                </el-select>
+                            <el-col :span="5.5" >
+                                <span class="addOrMine" @click="mineLowest(index)">-</span>
                             </el-col>
 
                             <el-col :span="5.5">
-                                <span class="addOrMine">-</span>
-                            </el-col>
-
-                            <el-col :span="5.5">
-                                <span class="addOrMine">+</span>
+                                <span class="addOrMine" @click="addLowest(index)">+</span>
                             </el-col>
                         </el-row>
                     </el-col>
@@ -945,12 +847,16 @@
         schoolYearList,
         schoolYearMulti
     } from '@/api/application/secondClass/schoolYear'
+    import filterCourseClassificationList from '@/utils/filterCourseClassificationList'
     import {
         courseId,
         coursePost,
-        courstPut,
+        coursePut,
         courseDelete
     } from '@/api/application/secondClass/course'
+    import {
+        courseClassificationList
+    } from '@/api/application/secondClass/courseClassification.js'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
     import formaterDate from '@/utils/formatDate.js'
@@ -967,6 +873,7 @@
         changeUserStatus,
         importTemplate
     } from '@/api/system/user'
+
     import { getToken } from '@/utils/auth'
     import { treeselect } from '@/api/system/dept'
     import Treeselect from '@riophae/vue-treeselect'
@@ -994,6 +901,7 @@
                 },
                 /** 课程列表 */
                 courseList: [],
+                radioType: '全部',
                 queryList: {
                     name: '',
                     departmentId: '',
@@ -1098,14 +1006,25 @@
                     title: '新增课程',
                     open: false,
                     config: {
-                        necessary: 1,
-                        name: '',
-                        joinType: '0',
+                        id:null,      
+                        schoolYearId: 0,
+                        schoolYearName: "",
+                        trainingProgramId: 8,
+                        name: "",
                         classificationId: 1,
-                        type: '0',
-                        remark: '',
-                        status: 0
+                        classificationIdPath: "1",
+                        joinType: "0",
+                        necessary: 1,
+                        type: "0",
+                        status: 0,
+                        lowestValue: "",
+                        remark: ""
                     },
+                    lowestValueArray:[
+                        [1,1]
+                    ],
+
+
                     yearOfLean: '2021-2022学年',
                     unitValue: '1',
                     //second line
@@ -1124,59 +1043,9 @@
                     integral: '5'
                 },
                 textareaContent: '',
+                /** 分类树 */
                 datadata: [
-                    {
-                        ID: 1,
-                        className: '青年马克思主义者培养工程',
-                        trainPlan: '湖南科技大学',
-                        termLearn: '2021-2022学年',
-                        classsort: '思想政治与人文素养',
-                        joinWay: '预设',
-                        classMust: '是',
-                        TermDown: '1:3,3:3,5:3,7:3',
-                        state: '申请中',
-                        modifyTime: '2021-03-02',
-                        operate: ''
-                    },
-                    {
-                        ID: 2,
-                        className: '明月讲坛',
-                        trainPlan: '湖南科技大学',
-                        termLearn: '2021-2022学年',
-                        classsort: '思想政治与人文素养预设',
-                        joinWay: '预设',
-                        classMust: '是',
-                        TermDown: '1:3,3:3,5:3,7:3',
-                        state: '有效',
-                        modifyTime: '2021-03-02',
-                        operate: ''
-                    },
-                    {
-                        ID: 3,
-                        className: '诚信教育活动月',
-                        trainPlan: '湖南科技大学',
-                        termLearn: '2021-2022学年﹑',
-                        classsort: '思想政治与人文素养―预设',
-                        joinWay: '预设',
-                        classMust: '是',
-                        TermDown: '1:3,3:3,5:3,7:3',
-                        state: '有效',
-                        modifyTime: '2021-03-02',
-                        operate: ''
-                    },
-                    {
-                        ID: 4,
-                        className: '文明校园行系列活动',
-                        trainPlan: '湖南科技大学',
-                        termLearn: '2021-2022学年',
-                        classsort: '思想政治与人文素养临增',
-                        joinWay: '预设',
-                        classMust: '是',
-                        TermDown: '1:3,3:3,5:3,7:3',
-                        state: '审核未通过',
-                        modifyTime: '2021-03-02',
-                        operate: ''
-                    }
+                    
                 ],
                 count: {
                     classCount: 50,
@@ -1271,7 +1140,7 @@
             computedStatus() {
                 return temp => {
                     // console.log(this.dict_sc_course_status,temp,333)
-                    return this.dict_sc_course_status[temp].dictLabel
+                    return this.dict_sc_course_status[temp]?.dictLabel
                 }
             }
         },
@@ -1307,8 +1176,8 @@
             formatClassificationId(row, column, cellValue) {
                 return (
                     cellValue != null &&
-                    this.classificationList.rows[this.classificationList.value]
-                        ?.name
+                    this.classificationIdMapName[cellValue]
+                        
                 )
             },
             formatClassificationDetail(row, column, cellValue) {
@@ -1321,25 +1190,25 @@
             formatStatus(row, column, cellValue) {
                 return (
                     cellValue != null &&
-                    this.dict_sc_course_status[cellValue].dictLabel
+                    this.dict_sc_course_status[cellValue]?.dictLabel
                 )
             },
             formatType(row, column, cellValue) {
                 return (
                     cellValue != null &&
-                    this.dict_sc_course_type[cellValue].dictLabel
+                    this.dict_sc_course_type[cellValue]?.dictLabel
                 )
             },
             formatNecessary(row, column, cellValue) {
                 return (
                     cellValue != null &&
-                    this.dict_sc_course_necessary[cellValue].dictLabel
+                    this.dict_sc_course_necessary[cellValue]?.dictLabel
                 )
             },
             formatJoinType(row, column, cellValue) {
                 return (
                     cellValue != null &&
-                    this.dict_sc_course_join_type[cellValue].dictLabel
+                    this.dict_sc_course_join_type[cellValue]?.dictLabel
                 )
             },
             formatTrainingProgram(row, column, cellValue) {
@@ -1348,22 +1217,15 @@
                     this.trainingProgramIdMapname[cellValue]
                 )
             },
-            async addDetail() {
-                this.addDetailDialog.config.schoolYearId = this.list.value
-                this.addDetailDialog.config.trainingProgramId = this.schoolYearIdMapProgramArray.value
-                this.addDetailDialog.config.schoolYearName = this.schoolYearIdMapName[
-                    this.list.value
-                ]
-
-                console.log(this.addDetailDialog.config, 999)
-                await coursePost(this.addDetailDialog.config).then(value => {
-                    console.log(value, 789789)
-                })
-            },
+            
             refresh() {
                 this.$forceUpdate()
             },
-
+            handleNodeChange(value) {
+                this.addDetailDialog.config.classificationIdPath = value.join(',')
+                this.addDetailDialog.config.layer = value.length
+                console.log(value)
+            },
             sureClass(row) {
                 if (row.status == 0) {
                     //ing
@@ -1380,10 +1242,10 @@
                 }
             },
             /** 查询用户列表 */
-            async getList(option) {
+            getList(option) {
                 this.t = option
                 // this.loading = true
-                await trainingProgramList({
+                trainingProgramList({
                     page: option.page,
                     limit: option.limit
                 }).then(value => {
@@ -1439,21 +1301,23 @@
             },
             // 表单重置
             reset() {
-                this.form = {
-                    userId: undefined,
-                    deptId: undefined,
-                    userName: undefined,
-                    nickName: undefined,
-                    password: undefined,
-                    phonenumber: undefined,
-                    email: undefined,
-                    sex: undefined,
-                    status: '0',
-                    remark: undefined,
-                    postIds: [],
-                    roleIds: []
+                this.addDetailDialog.config = {
+                    id:null,      
+                    schoolYearId: 0,
+                    schoolYearName: "",
+                    trainingProgramId: 8,
+                    name: "",
+                    classificationId: 1,
+                    classificationIdPath: "1",
+                    joinType: "0",
+                    necessary: 1,
+                    type: "0",
+                    status: 0,
+                    lowestValue: "",
+                    remark: ""
                 }
-                this.resetForm('form')
+                this.addDetailDialog.lowestValueArray=[[1,1]]
+                
             },
             /** 搜索按钮操作 */
             handleQuery() {
@@ -1472,10 +1336,7 @@
                 this.single = selection.length != 1
                 this.multiple = !selection.length
             },
-            /** 新增按钮操作 */
-            handleAdd() {
-                this.addDetailDialog.open = true
-            },
+            
             /** 修改按钮操作 */
             handleUpdate(row) {
                 this.reset()
@@ -1604,8 +1465,8 @@
             },
 
             //得到当前学年的培养方案详细信息
-            async initTableData(schoolYearId) {
-                await trainingProgramDetail({
+            initTableData(schoolYearId) {
+                trainingProgramDetail({
                     schoolYearId,
                     limit: 99
                 }).then(value => {
@@ -1652,6 +1513,95 @@
                     )
                 })
             },
+            /**
+             * @description: 点击新增触发
+             */            
+            addCourse() {
+                this.reset()
+                this.addDetailDialog.title = '新增'
+                this.addDetailDialog.open = true
+
+                this.addDetailDialog.config.schoolYearId = this.schoolYearList.value
+                this.addDetailDialog.config.trainingProgramId = this.trainingProgramList.value
+                this.addDetailDialog.config.schoolYearName = this.schoolYearIdMapName[
+                    this.schoolYearList.value
+                ]
+            },
+            /**
+             * @description: 新增
+             */            
+            addDetail() {
+                
+                this.addDetailDialog.config.lowestValue = this.addDetailDialog.lowestValueArray.map(item=> {return item.join(':')}).join(',')
+                console.log(this.addDetailDialog.config, 999)
+                (function(that) {
+                    if(that.addDetailDialog.title == '新增') 
+                        return  coursePost(that.addDetailDialog.config)
+                    else 
+                        return  coursePut(that.addDetailDialog.config)
+                    
+                })(this).then(value => {
+                    console.log(value, 789789)
+                    this.addDetailDialog.open = false
+                    this.fuzzyQuery()
+                })
+            },
+            /**
+             * @description: 点击修改触发
+             * @param {*} row 数据
+             */            
+            updateCourse(row) {
+                console.log(row)
+                this.addDetailDialog.config = {
+                    id:row.id,
+                    schoolYearId:row.schoolYearId,
+                    schoolYearName:row.schoolYearName,
+                    trainingProgramId:row.trainingProgramId,
+                    name:row.name,
+                    classificationId:row.classificationId,
+                    classificationIdPath:row.classificationIdPath,
+                    joinType:row.joinType+'',
+                    necessary:row.necessary,
+                    type:row.type+'',
+                    status:row.status,
+                    // lowestValue:row.lowestValue,
+                    remark:row.remark
+                }
+                //"2:3,3:4" => [[2,3],[3,4]]
+                this.addDetailDialog.lowestValueArray = 
+                    row.lowestValue
+                        .split(',')
+                        .map(item=> item?.split(':'))
+                        .map(item=> [+item[0],+item[1]])
+                        
+                this.addDetailDialog.title = '修改'
+                this.addDetailDialog.open = true
+            },
+            /** + */
+            mineLowest(index) {
+                this.addDetailDialog.lowestValueArray.splice(index,1)
+            },
+            /** - */
+            addLowest(index) {
+                this.addDetailDialog.lowestValueArray.splice(index,0,[1,1])
+            },
+            /**
+             * @description: 删除课程
+             * @param row 对应的课程
+             */            
+            deleteCourse(row) {
+                this.alertDialog.call(this,'删除',{
+                    confirm:() => {
+                        courseDelete(row.id).then(value => {
+                            this.msgSuccess('删除成功')
+                            this.fuzzyQuery()
+                        }).catch(err => {
+                            this.msgError('删除失败')
+                        })          
+                    }
+                })
+        
+            },
             /** 状态改变 */
             radioChange(value) {
                 let map = new Map([
@@ -1667,8 +1617,8 @@
                 this.fuzzyQuery()
             },
             /** 学年改变 */
-            async schoolYearChange(value) {
-                await this.getTrainingProgramList({
+            schoolYearChange(value) {
+                this.getTrainingProgramList({
                     schoolYearId: this.schoolYearList.value
                 })
                 this.trainingProgramList.value = this.trainingProgramList.rows[0].id
@@ -1681,15 +1631,14 @@
             },
             /** 分类改变 */
             handleSelect(index) {
-                this.classificationList.value = this.classificationList.rows[
-                    index
-                ].id
+                this.classificationList.value = this.classificationList.rows[index].id
+                console.log(this.classificationList.value)
                 this.fuzzyQuery()
             },
             /** 初始化字典 */
-            async initDict() {
+            initDict() {
                 // getDict
-                await Promise.all([
+                Promise.all([
                     getDict('sc_course_join_type'),
                     getDict('sc_course_necessary'),
                     getDict('sc_course_status'),
@@ -1717,8 +1666,8 @@
              *  @param pageSize 限制每页的条数
              */
 
-            async getTrainingProgramList(option) {
-                await trainingProgramList(option).then(value => {
+            getTrainingProgramList(option) {
+                trainingProgramList(option).then(value => {
                     this.trainingProgramList.rows = value.rows
                     this.queryParams.totalCount = value.total
                     this.queryParams.totalPage =
@@ -1765,12 +1714,15 @@
                     }
                     this.courseList = value.data.pageData.list
                     console.log(this.courseList, 'courseList')
-
+                    value.data.classificationList.forEach(item => {
+                        this.classificationIdMapName[item.id] = item.name
+                    })
+                    console.log(this.classificationIdMapName, 'classificationLis77777777')
                     this.loading = false
                 })
             },
             /** 模糊查询 */
-            async fuzzyQuery() {
+             fuzzyQuery() {
                 let option = {
                     schoolYearId: this.schoolYearList.value,
                     trainingProgramId: this.trainingProgramList.value,
@@ -1782,19 +1734,33 @@
                     status: this.queryList.status,
                     term: '',
                     type: this.queryList.type,
-                    page: '',
-                    limit: ''
+                    page: 1,
+                    limit: 10
                 }
                 console.log(option)
-                await this.getTrainingProgramDetail(option)
+                this.getTrainingProgramDetail(option)
+            },
+            getCourseClassificationList(option) {
+                courseClassificationList(option).then(value => {
+                    /* value保证存在且唯一 */
+                    /* label保证渲染视图 */
+                    console.log(value, 'courseClassificationList')
+                    value.data = value.data.map(item => ({
+                        ...item,
+                        value: item.id,
+                        label: item.name
+                    }))
+                    this.datadata = filterCourseClassificationList(value)
+                    console.log(this.datadata, 'datadata')
+                })
             }
         },
         async created() {
             //初始化字典
-            await this.initDict()
+            this.initDict()
 
             /** 获得所有学年 */
-            await schoolYearList().then(value => {
+            schoolYearList().then(value => {
                 value.rows.forEach(item => {
                     //学年id映射name
                     this.schoolYearIdMapName[item.id] = item.yearName
@@ -1818,7 +1784,10 @@
             this.classificationList.value = this.classificationList.rows[0].id
 
             /** 获得当前学年下 当前培养方案下 当前课程分类下 课程列表 */
-            await this.fuzzyQuery()
+            this.fuzzyQuery()
+
+            this.getCourseClassificationList()
+            
         },
         async beforeMount() {},
         async mounted() {}
@@ -2011,21 +1980,19 @@
         width: 690px !important;
         border: 1px solid #aaa !important;
     }
-    .addDetailDialog .el-dialog__body {
+    .addDetailDialog >>> .el-dialog__body {
         height: 500px;
         overflow: auto;
     }
     .addDetailDialog .el-form > .el-row {
         margin: 13px 0 !important;
     }
-    .addDetailDialog .el-dialog__body {
-        padding-top: 15px;
-    }
 
     .addDetailDialog .el-dialog__header {
         border-bottom: 1px solid #ddd;
     }
     .addOrMine {
+        cursor: pointer;
         display: inline-block;
         height: 30px;
         width: 30px;
@@ -2076,5 +2043,11 @@
     }
     .detailMainTable >>> .el-table__body-wrapper {
         /* overflow: auto; */
+    }
+    .mb10 {
+        margin-bottom: 10px;
+    }
+    .el-form .el-row {
+        height: initial;
     }
 </style>

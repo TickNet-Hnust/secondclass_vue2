@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-05-31 20:38:44
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-16 16:01:49
+ * @LastEditTime: 2021-07-25 09:27:05
 -->
 <template>
     <div id="app">
@@ -17,3 +17,9 @@
         mounted() {}
     }
 </script>
+
+<style scoped>
+    #app {
+        overflow: auto; /** 防止缩小的时候背景显示不完全 */
+    }
+</style>

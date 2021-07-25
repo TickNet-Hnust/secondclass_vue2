@@ -549,4 +549,7 @@
         max-height: calc(100vh - 50px);
         border-radius: 5px;
     }
+    .el-form .el-row {
+        height: initial;
+    }
 </style>

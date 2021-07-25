@@ -1,3 +1,10 @@
+/*
+ * @Descripttion: 
+ * @Author: 林舒恒
+ * @Date: 2021-07-18 16:03:21
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-07-25 14:57:15
+ */
 import request from '@/utils/request.bak.js'
 
 /* GET查询课程详细 */
@@ -18,7 +25,7 @@ export function coursePost(data) {
 }
 
 /* PUT修改课程 */
-export function courstPut(data) {
+export function coursePut(data) {
     return request({
         url: '/secondClass/course',
         method: 'put',

@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-24 22:56:08
+ * @LastEditTime: 2021-07-25 23:28:52
 -->
 <template>
     <div class="app-container">
@@ -853,7 +853,7 @@
             },
             /**
              * @description: 选择上级节点触发的事件
-             * @param value 上级节点数组，例如[1,2,4]
+             * @param value 父节点数组，例如：[1,2,4]
              */            
             handleNodeChange(value) {
                 this.postCourseClassification.path = value.join(',')
@@ -862,9 +862,9 @@
                 console.log(value)
             },
             /* 新增积分类别 */
-            async addCourseClassification() {
+            addCourseClassification() {
                 console.log(this.postCourseClassification)
-                await courseClassificationMulti({
+                courseClassificationMulti({
                     courseClassificationEntityList: [
                         this.postCourseClassification
                     ]
@@ -1191,9 +1191,9 @@
              * @param integralType 积分类别
              */
 
-            async getCourseClassificationList(option) {
+            getCourseClassificationList(option) {
                 this.loading = true
-                await courseClassificationList(option).then(value => {
+                courseClassificationList(option).then(value => {
                     /* value保证存在且唯一 */
                     /* label保证渲染视图 */
                     console.log(value, 'courseClassificationList')
@@ -1211,8 +1211,8 @@
              * @description:  初始化字典
              */
 
-            async initDict() {
-                await Promise.all([
+            initDict() {
+                Promise.all([
                     getDict('sc_course_classification_type'),
                     getDict('sc_integral_type')
                 ]).then(value => {
@@ -1224,18 +1224,19 @@
                         this[item] = value[index].data
                         console.log(item, value[index])
                     })
+                    this.label = this.dict_sc_course_classification_type[0].dictLabel
                 })
             }
         },
 
-        async created() {
+        created() {
             //字典初始化
-            await this.initDict()
+            this.initDict()
             //挂载算法
-            await this.getCourseClassificationList({})
-            this.label = this.dict_sc_course_classification_type[0].dictLabel
+            this.getCourseClassificationList({})
+            
         },
-        async mounted() {
+        mounted() {
             // await getDict('sc_integral_type').then(value => {
             //     console.log(value, 'sc_integral_type')
             //     this.dict_sc_integral_type = value.data
