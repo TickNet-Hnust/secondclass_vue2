@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-25 23:43:25
+ * @LastEditTime: 2021-07-26 13:41:44
 -->
 <template>
     <div class="app-container">
@@ -44,6 +44,10 @@
                                 @change="fuzzyQuery"
                                 placeholder="请选择"
                             >
+                                <el-option
+                                    value=""
+                                    label="全部"
+                                ></el-option>
                                 <el-option
                                     v-for="item in trainingProgramList.rows"
                                     :key="item.id"
@@ -120,10 +124,15 @@
                 <div class="erke-bottom">
                     <div class="erke-buttom-left">
                         <el-menu
-                            default-active="0"
+                            default-active=""
                             class="el-menu-vertical-demo"
                             @select="handleSelect"
                         >
+                            <el-menu-item
+                                index=""
+                            >
+                                <span slot="title">全部</span>
+                            </el-menu-item>
                             <el-menu-item
                                 v-for="(item, index) in classificationList.rows"
                                 :key="index"
@@ -221,14 +230,17 @@
                                         style="width: 120px"
                                         v-model="queryList.term"
                                         placeholder="开课学期：不限"
+                                        @change="fuzzyQuery"
                                     >
                                         <el-option
-                                            value="开课学期：不限"
+                                            value=""
+                                            label="开课学期：不限"
                                         ></el-option>
                                         <el-option
                                             v-for="it in 8"
                                             :key="it"
-                                            :value="'第' + it + '学期'"
+                                            :label="'第' + it + '学期'"
+                                            :value="it"
                                         ></el-option>
                                     </el-select>
                                 </el-col>
@@ -497,7 +509,7 @@
                         <pagination
                             v-show="queryParams.totalPage > 0"
                             :total="queryParams.totalCount"
-                            :page.sync="queryParams.pageCount"
+                            :page.sync="queryParams.pageNum"
                             :limit.sync="queryParams.pageSize"
                             @pagination="getList($event)"
                         />
@@ -961,13 +973,9 @@
                 schoolYearIdMapName: [],
                 queryParams: {
                     totalCount: 0,
-                    totalPage: 50,
-                    pageCount: 1,
-                    pageSize: 4,
-                    userName: undefined,
-                    phonenumber: undefined,
-                    status: undefined,
-                    deptId: undefined
+                    totalPage: 0,
+                    pageNum: 1,
+                    pageSize: 10,
                 },
                 list: {
                     value: Number(this.$route.params.sid),
@@ -1156,19 +1164,6 @@
                 this.$refs.tree.filter(val)
             }
         },
-        created() {
-            this.getList()
-            this.getTreeselect()
-            this.getDicts('sys_normal_disable').then(response => {
-                this.statusOptions = response.data
-            })
-            this.getDicts('sys_user_sex').then(response => {
-                this.sexOptions = response.data
-            })
-            this.getConfigKey('sys.user.initPassword').then(response => {
-                this.initPassword = response.msg
-            })
-        },
         methods: {
             formatDate(row, column, cellValue) {
                 return cellValue != null && formaterDate(cellValue)
@@ -1241,19 +1236,11 @@
                     return 'textRed'
                 }
             },
-            /** 查询用户列表 */
+            /** 操作分页触发的事件 */
             getList(option) {
-                this.t = option
-                // this.loading = true
-                trainingProgramList({
-                    page: option.page,
-                    limit: option.limit
-                }).then(value => {
-                    this.planData = value.data.list
-                    console.log(value.data.list, 'cxyh')
-                    this.$forceUpdate()
-                    // this.loading = false
-                })
+                this.queryParams.pageNum = option.page
+                this.queryParams.pageSize = option.limit
+                this.fuzzyQuery()
             },
             /** 查询部门下拉树结构 */
             getTreeselect() {
@@ -1266,11 +1253,6 @@
             filterNode(value, data) {
                 if (!value) return true
                 return data.label.indexOf(value) !== -1
-            },
-            // 节点单击事件
-            handleNodeClick(data) {
-                this.queryParams.deptId = data.id
-                this.getList()
             },
             // 用户状态修改
             handleStatusChange(row) {
@@ -1319,11 +1301,6 @@
                 this.addDetailDialog.lowestValueArray=[[1,1]]
                 
             },
-            /** 搜索按钮操作 */
-            handleQuery() {
-                this.queryParams.page = 1
-                this.getList()
-            },
             /** 重置按钮操作 */
             resetQuery() {
                 this.dateRange = []
@@ -1366,46 +1343,6 @@
                     })
                     .catch(() => {})
             },
-            /** 提交按钮 */
-            submitForm: function() {
-                this.$refs['form'].validate(valid => {
-                    if (valid) {
-                        if (this.form.userId != undefined) {
-                            updateUser(this.form).then(response => {
-                                this.msgSuccess('修改成功')
-                                this.open = false
-                                this.getList()
-                            })
-                        } else {
-                            addUser(this.form).then(response => {
-                                this.msgSuccess('新增成功')
-                                this.open = false
-                                this.getList()
-                            })
-                        }
-                    }
-                })
-            },
-            /** 删除按钮操作 */
-            handleDelete(row) {
-                const userIds = row.userId || this.ids
-                this.$confirm(
-                    '是否确认删除用户编号为"' + userIds + '"的数据项?',
-                    '警告',
-                    {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }
-                )
-                    .then(function() {
-                        return delUser(userIds)
-                    })
-                    .then(() => {
-                        this.getList()
-                        this.msgSuccess('删除成功')
-                    })
-            },
             /** 导出按钮操作 */
             handleExport() {
                 this.exportDialog.open = true
@@ -1424,6 +1361,7 @@
                 //         this.exportLoading = false
                 //     })
             },
+            submitForm() {},
             /** 导入按钮操作 */
             handleImport() {
                 this.upload.title = '用户导入'
@@ -1441,13 +1379,7 @@
             },
             // 文件上传成功处理
             handleFileSuccess(response, file, fileList) {
-                this.upload.open = false
-                this.upload.isUploading = false
-                this.$refs.upload.clearFiles()
-                this.$alert(response.msg, '导入结果', {
-                    dangerouslyUseHTMLString: true
-                })
-                this.getList()
+
             },
             // 提交上传文件
             submitFileForm() {
@@ -1621,7 +1553,6 @@
                 this.getTrainingProgramList({
                     schoolYearId: this.schoolYearList.value
                 })
-                this.trainingProgramList.value = this.trainingProgramList.rows[0].id
                 this.fuzzyQuery()
             },
             /** 培养方案改变 */
@@ -1631,7 +1562,11 @@
             },
             /** 分类改变 */
             handleSelect(index) {
-                this.classificationList.value = this.classificationList.rows[index].id
+                if(this.classificationList.rows[index]) {
+                    this.classificationList.value = this.classificationList.rows[index].id
+                }else {
+                    this.classificationList.value = ''
+                }
                 console.log(this.classificationList.value)
                 this.fuzzyQuery()
             },
@@ -1669,14 +1604,16 @@
             getTrainingProgramList(option) {
                 trainingProgramList(option).then(value => {
                     this.trainingProgramList.rows = value.rows
+                    this.trainingProgramList.value = ''
+                    
                     this.queryParams.totalCount = value.total
-                    this.queryParams.totalPage =
-                        value.total / this.queryParams.pageSize
-                    console.log(value, 'trainingProgramList')
+                    this.queryParams.totalPage = value.total / this.queryParams.pageSize
+
                     value.rows.forEach((item, index) => {
                         this.trainingProgramIdMapname[item.id] = item.name
                     })
-                    console.log(this.queryParams)
+                    
+                    console.log(value, 'trainingProgramList')
                 })
             },
             /**
@@ -1691,38 +1628,40 @@
              * @param term 学期
              * @param trainingProgramId 培养方案id
              * @param type
-             * @param page 第几页
-             * @param limit 限制多少条
+             * @param pageNum 第几页
+             * @param pageSize 限制多少条
              */
 
-            async getTrainingProgramDetail(option) {
+            getTrainingProgramDetail(option) {
                 this.loading = true
-                await trainingProgramDetail(option).then(value => {
+                trainingProgramDetail(option).then(value => {
+                    
+                    /** 总共多少条，总共多少页 */
+                    this.queryParams.totalCount  = value.data.pageData.totalCount
+                    this.queryParams.totalPage = value.data.pageData.totalPage
+                    
+                    /** 左侧分类获取/默认值/字典映射 */
                     this.classificationList.rows = value.data.classificationList
-                    console.log(value, 'classificationList')
-                    const {
-                        applyingCount,
-                        courseCount,
-                        failCount,
-                        validCount
-                    } = value.data
-                    this.countState = {
-                        applyingCount,
-                        courseCount,
-                        failCount,
-                        validCount
-                    }
-                    this.courseList = value.data.pageData.list
-                    console.log(this.courseList, 'courseList')
+                    // this.classificationList.value = this.classificationList.rows[0].id
                     value.data.classificationList.forEach(item => {
                         this.classificationIdMapName[item.id] = item.name
                     })
-                    console.log(this.classificationIdMapName, 'classificationLis77777777')
+                    
+                    //课程总数-申请中-审核通过-审核未通过
+                    this.countState = {
+                        applyingCount:value.data.applyingCount,
+                        courseCount:value.data.courseCount,
+                        failCount:value.data.failCount,
+                        validCoun:value.data.validCount
+                    }
+                    this.courseList = value.data.pageData.list
+    
                     this.loading = false
+                    
                 })
             },
             /** 模糊查询 */
-             fuzzyQuery() {
+            fuzzyQuery() {
                 let option = {
                     schoolYearId: this.schoolYearList.value,
                     trainingProgramId: this.trainingProgramList.value,
@@ -1732,14 +1671,20 @@
                     joinType: this.queryList.joinType,
                     necessary: this.queryList.necessary,
                     status: this.queryList.status,
-                    term: '',
+                    term: this.queryList.term,
                     type: this.queryList.type,
-                    page: 1,
-                    limit: 10
+                    pageNum: this.queryParams.pageNum,
+                    pageSize: this.queryParams.pageSize
                 }
                 console.log(option)
                 this.getTrainingProgramDetail(option)
             },
+            /**
+             * @description: 根据参数查询二课课程分类列表
+             * @param name
+             * @param type 
+             * @param integralType
+             */            
             getCourseClassificationList(option) {
                 courseClassificationList(option).then(value => {
                     /* value保证存在且唯一 */
@@ -1752,6 +1697,7 @@
                     }))
                     this.datadata = filterCourseClassificationList(value)
                     console.log(this.datadata, 'datadata')
+                    
                 })
             }
         },
@@ -1772,16 +1718,17 @@
             })
 
             /** 获得当前学年所有的培养方案列表 */
-            await this.getTrainingProgramList({
+            this.getTrainingProgramList({
                 schoolYearId: this.$route.params.sid
             })
 
             /** 获得当前学年下 当前培养方案下 所有的课程分类列表 */
-            await this.getTrainingProgramDetail({
-                schoolYearId: 0
-            })
+            // await trainingProgramDetail().then(value => {
+            //     this.classificationList.rows = value.data.classificationList
+            //     this.classificationList.value = this.classificationList.rows[0].id
+            // })
             /** 默认展示第一行的分类 */
-            this.classificationList.value = this.classificationList.rows[0].id
+            
 
             /** 获得当前学年下 当前培养方案下 当前课程分类下 课程列表 */
             this.fuzzyQuery()

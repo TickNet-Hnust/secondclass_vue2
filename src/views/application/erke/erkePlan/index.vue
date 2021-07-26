@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-25 23:23:06
+ * @LastEditTime: 2021-07-26 11:09:23
 -->
 <template>
     <div class="app-container">
@@ -31,9 +31,12 @@
                     circle
                     icon="el-icon-refresh"
                 ></el-button>
-                <el-button style="margin-left: 10px" @click="handleManager"
-                    >管理</el-button
-                >
+                <el-button 
+                    style="margin:0 10px" 
+                    @click="handleManager"
+                >管理</el-button>
+                <el-tag>当前学年：{{this.list.rows[this.managerDialog.radio]?
+                    this.list.rows[this.managerDialog.radio].yearName:undefined}}</el-tag>
             </div>
         </div>
 
@@ -260,7 +263,7 @@
                     label="ID"
                     align="center"
                 ></el-table-column>
-                <!-- <el-table-column
+                <el-table-column
                         prop="learnYearNo"
                         label="当前学年"
                         align="center"
@@ -272,10 +275,10 @@
                                 name="isNow"
                                 :value="scope.$index"
                                 v-model="managerDialog.radio"
-                                @change="tt"
+                                @change="tt(scope.row)"
                             />
                         </template>
-                    </el-table-column>  -->
+                    </el-table-column> 
             </el-table>
             <!-- </el-form> -->
 
@@ -696,7 +699,7 @@
                 managerDialog: {
                     title: '',
                     open: false,
-                    radio: '0', //当前学年 在学年列表里的下标
+                    radio: '', //当前学年 在学年列表里的下标
                     config: [
                         {
                             sort: '1',
@@ -786,6 +789,7 @@
                 row.status = Number(value)
             },
             tt(q) {
+                
                 console.log(this.managerDialog.radio)
             },
             async deletePlan(row, index) {
@@ -910,7 +914,7 @@
             },
             async addtrainingProgram() {
                 let data = {
-                    schoolYearId: this.list.value,
+                    schoolYearId: this.list.rows[this.managerDialog.radio].id,
                     name: '',
                     rank: null,
                     status: 0
@@ -946,6 +950,8 @@
                     this.msgInfo('请填写完整信息')
                     return
                 }
+                this.list.rows.forEach(item => item.nowYear=0)
+                this.list.rows[this.managerDialog.radio].nowYear = 1
                 schoolYearMulti({
                     deleteIds: this.deleteIds,
                     schoolYearList: this.list.rows
@@ -953,6 +959,7 @@
                     console.log(value)
                     this.getSchoolYearList()
                     this.msgSuccess('修改成功')
+                    this.managerDialog.open = false
                 })
             },
             /**
@@ -1143,26 +1150,7 @@
                 this.list.value != -1 && (option.schoolYearId = this.list.value)
                  this.getTrainingProgramList(option)
             },
-            /** 删除按钮操作 */
-            handleDelete(row) {
-                const userIds = row.userId || this.ids
-                this.$confirm(
-                    '是否确认删除用户编号为"' + userIds + '"的数据项?',
-                    '警告',
-                    {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }
-                )
-                    .then(function() {
-                        return delUser(userIds)
-                    })
-                    .then(() => {
-                        this.getList()
-                        this.msgSuccess('删除成功')
-                    })
-            },
+            
             /** 导出按钮操作 */
             handleExport() {
                 this.exportDialog.title = '导出数据'
@@ -1174,12 +1162,15 @@
                 this.importDialog.open = true
             },
 
-            /** 获取学年列表 */
-             getSchoolYearList() {
+            /**
+             * @description: 获取学年列表
+             */            
+            getSchoolYearList() {
                  schoolYearList().then(value => {
-                    value.rows.forEach(item => {
+                    value.rows.forEach((item,index) => {
                         /** 这里还需要改进，否则数组到后面将会很大，影响性能 */
                         this.schoolYearIdMapName[item.id] = item.yearName
+                        item.nowYear && (this.managerDialog.radio = index)//记录当前学年下标
                     })
                     //默认选中学年的第一个
                     // this.managerDialog.radio = value.rows[0].id
@@ -1231,7 +1222,7 @@
             //表格加载
             this.loading = true
             /* 调用 获取学年列表 */
-             this.getSchoolYearList()
+            await this.getSchoolYearList()
 
             /** 这里可以对schoolYear排序，并赋值让radio为最新的年度 */
 
