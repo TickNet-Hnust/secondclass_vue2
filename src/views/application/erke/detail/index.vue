@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-26 13:41:44
+ * @LastEditTime: 2021-07-27 13:05:05
 -->
 <template>
     <div class="app-container">
@@ -94,6 +94,7 @@
 
                         <el-button
                             type="primary"
+                            :disabled="trainingProgramList.value == ''"
                             plain
                             icon="el-icon-plus"
                             size="mini"
@@ -494,6 +495,7 @@
                                         size="mini"
                                         type="text"
                                         icon="el-icon-s-check"
+                                        @click="examCourse(scope.row)"
                                         >审核</el-button
                                     >
                                     <el-button
@@ -738,13 +740,6 @@
                     
                 </el-row>
 
-                <el-row>
-                    <el-col :span="3"> 积分标准号 </el-col>
-                    <el-col :span="21">
-                        {{ addDetailDialog.integral }}
-                    </el-col>
-                </el-row>
-
                 <el-row >
                     <el-col :span="3"> 积分下限要求： </el-col>
                     <el-col :span="21">
@@ -803,6 +798,16 @@
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
+            
+            <el-radio-group 
+                v-if="addDetailDialog.title=='审核'"
+                v-model="addDetailDialog.config.status" 
+                style="float:left;margin-top:15px"
+            >
+                <el-radio :label="1">审核通过</el-radio>
+                <el-radio :label="3">审核未通过</el-radio>
+            </el-radio-group>
+
                 <el-button @click="cancel">关闭</el-button>
                 <el-button type="primary" @click="addDetail">确 定</el-button>
             </div>
@@ -885,7 +890,7 @@
         changeUserStatus,
         importTemplate
     } from '@/api/system/user'
-
+    import request from '@/utils/request.js'
     import { getToken } from '@/utils/auth'
     import { treeselect } from '@/api/system/dept'
     import Treeselect from '@riophae/vue-treeselect'
@@ -944,31 +949,12 @@
                     failCount: 0,
                     validCount: 0
                 },
-                //学年度id映射培养方案/方便下拉列表
-                schoolYearIdMapProgramArray: {
-                    value: Number(this.$route.params.tid),
-                    rows: []
-                },
                 //培养方案
                 trainingProgramIdMapname: [],
                 /* 方便分类挂载其子列表，分类id => 分类数组所在index */
                 classificationIdMapIndex: new Map(),
                 /* 分类Id映射Name */
                 classificationIdMapName: [],
-                statusRadio: '全部',
-                /* 查询详情的条件 */
-                queryDetail: {
-                    classification: '',
-                    courseName: '',
-                    departmentId: '',
-                    joinType: '',
-                    necessary: '',
-                    shoolYearId: '',
-                    status: '',
-                    term: '',
-                    trainingProgramId: '',
-                    type: ''
-                },
                 //学年id =>学年名称
                 schoolYearIdMapName: [],
                 queryParams: {
@@ -977,12 +963,7 @@
                     pageNum: 1,
                     pageSize: 10,
                 },
-                list: {
-                    value: Number(this.$route.params.sid),
-                    rows: []
-                },
-
-                t: {},
+                /** 导出弹窗 */
                 exportDialog: {
                     title: '',
                     open: false,
@@ -1013,6 +994,7 @@
                 addDetailDialog: {
                     title: '新增课程',
                     open: false,
+                    radio:'',
                     config: {
                         id:null,      
                         schoolYearId: 0,
@@ -1031,101 +1013,17 @@
                     lowestValueArray:[
                         [1,1]
                     ],
-
-
-                    yearOfLean: '2021-2022学年',
+                    //发布单位，现在没用
                     unitValue: '1',
-                    //second line
-                    planOfgrain: '湖南科技大学',
-                    isRequire: true,
-                    //thrid
-                    wayValue: '1',
-                    //fouth
-                    sortClass: '1',
-                    nature: '1',
-                    //fiv
-                    classSort: '1',
-                    activitySort: '1',
-                    rankSort: '1',
-                    //
-                    integral: '5'
                 },
-                textareaContent: '',
                 /** 分类树 */
-                datadata: [
-                    
-                ],
-                count: {
-                    classCount: 50,
-                    apyling: 5,
-                    haspass: 40,
-                    nopass: 5
-                },
-                planData: [],
-                value: '1',
-                options: [
-                    {
-                        value: '1',
-                        label: '全部'
-                    },
-                    {
-                        value: '选项2',
-                        label: '2021-2022学年'
-                    },
-                    {
-                        value: '选项3',
-                        label: '2020-2021学年'
-                    },
-                    {
-                        value: '选项4',
-                        label: '2019-2021学年'
-                    },
-                    {
-                        value: '选项5',
-                        label: '北京烤鸭'
-                    }
-                ],
+                datadata: [],
+                //下拉操作
                 value: '',
                 // 导出遮罩层
                 exportLoading: false,
-                // 选中数组
-                ids: [],
-                // 非单个禁用
-                single: true,
-                // 非多个禁用
-                multiple: true,
-                // 显示搜索条件
-                showSearch: true,
-                // 总条数
-                total: 0,
-                // 用户表格数据
-                userList: null,
-                // 弹出层标题
-                title: '',
-                // 部门树选项
-                deptOptions: undefined,
-                // 是否显示弹出层
-                open: false,
-                // 部门名称
-                deptName: undefined,
-                // 默认密码
-                initPassword: undefined,
-                // 日期范围
-                dateRange: [],
-                // 状态数据字典
-                statusOptions: [],
-                // 性别状态字典
-                sexOptions: [],
-                // 岗位选项
-                postOptions: [],
-                // 角色选项
-                roleOptions: [],
-                // 表单参数
+                // 表单参数，以后有用
                 form: {},
-                defaultProps: {
-                    children: 'children',
-                    label: 'label'
-                },
                 // 用户导入参数
                 upload: {
                     // 是否显示弹出层（用户导入）
@@ -1150,18 +1048,6 @@
                     // console.log(this.dict_sc_course_status,temp,333)
                     return this.dict_sc_course_status[temp]?.dictLabel
                 }
-            }
-        },
-        watch: {
-            schoolYearIdMapProgramArray: {
-                handler(newV, oldV) {
-                    console.log(newV, 111111111111)
-                },
-                deep: true
-            },
-            // 根据名称筛选部门树
-            deptName(val) {
-                this.$refs.tree.filter(val)
             }
         },
         methods: {
@@ -1212,15 +1098,24 @@
                     this.trainingProgramIdMapname[cellValue]
                 )
             },
-            
+            //没啥用
             refresh() {
                 this.$forceUpdate()
             },
+            /**
+             * @description: 处理路径
+             * @param {*} value 例如：[1,2,4]
+             */            
             handleNodeChange(value) {
+                this.addDetailDialog.config.classificationId = value[0]
                 this.addDetailDialog.config.classificationIdPath = value.join(',')
                 this.addDetailDialog.config.layer = value.length
                 console.log(value)
             },
+            /**
+             * @description: 确定CSS类
+             * @param {*} row
+             */            
             sureClass(row) {
                 if (row.status == 0) {
                     //ing
@@ -1241,40 +1136,6 @@
                 this.queryParams.pageNum = option.page
                 this.queryParams.pageSize = option.limit
                 this.fuzzyQuery()
-            },
-            /** 查询部门下拉树结构 */
-            getTreeselect() {
-                treeselect().then(response => {
-                    console.log(response)
-                    this.deptOptions = response.data
-                })
-            },
-            // 筛选节点
-            filterNode(value, data) {
-                if (!value) return true
-                return data.label.indexOf(value) !== -1
-            },
-            // 用户状态修改
-            handleStatusChange(row) {
-                let text = row.status === '0' ? '启用' : '停用'
-                this.$confirm(
-                    '确认要"' + text + '""' + row.userName + '"用户吗?',
-                    '警告',
-                    {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }
-                )
-                    .then(function() {
-                        return changeUserStatus(row.userId, row.status)
-                    })
-                    .then(() => {
-                        this.msgSuccess(text + '成功')
-                    })
-                    .catch(function() {
-                        row.status = row.status === '0' ? '1' : '0'
-                    })
             },
             // 取消按钮
             cancel() {
@@ -1301,67 +1162,14 @@
                 this.addDetailDialog.lowestValueArray=[[1,1]]
                 
             },
-            /** 重置按钮操作 */
-            resetQuery() {
-                this.dateRange = []
-                this.resetForm('queryForm')
-                this.handleQuery()
-            },
-            // 多选框选中数据
-            handleSelectionChange(selection) {
-                this.ids = selection.map(item => item.userId)
-                this.single = selection.length != 1
-                this.multiple = !selection.length
-            },
-            
-            /** 修改按钮操作 */
-            handleUpdate(row) {
-                this.reset()
-                this.getTreeselect()
-                const userId = row.userId || this.ids
-                getUser(userId).then(response => {
-                    this.form = response.data
-                    this.postOptions = response.posts
-                    this.roleOptions = response.roles
-                    this.form.postIds = response.postIds
-                    this.form.roleIds = response.roleIds
-                    this.open = true
-                    this.title = '修改用户'
-                    this.form.password = ''
-                })
-            },
-            /** 重置密码按钮操作 */
-            handleResetPwd(row) {
-                this.$prompt('请输入"' + row.userName + '"的新密码', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消'
-                })
-                    .then(({ value }) => {
-                        resetUserPwd(row.userId, value).then(response => {
-                            this.msgSuccess('修改成功，新密码是：' + value)
-                        })
-                    })
-                    .catch(() => {})
+            /** 导出数据 */
+            submitForm() {
+
             },
             /** 导出按钮操作 */
             handleExport() {
                 this.exportDialog.open = true
-                // const queryParams = this.queryParams
-                // this.$confirm('是否确认导出所有用户数据项?', '警告', {
-                //     confirmButtonText: '确定',
-                //     cancelButtonText: '取消',
-                //     type: 'warning'
-                // })
-                //     .then(() => {
-                //         this.exportLoading = true
-                //         return exportUser(queryParams)
-                //     })
-                //     .then(response => {
-                //         this.download(response.msg)
-                //         this.exportLoading = false
-                //     })
             },
-            submitForm() {},
             /** 导入按钮操作 */
             handleImport() {
                 this.upload.title = '用户导入'
@@ -1385,66 +1193,6 @@
             submitFileForm() {
                 this.$refs.upload.submit()
             },
-            //左
-            renderPlanData(id) {
-                console.log(id)
-                trainingProgramDetail({
-                    classification: id
-                }).then(value => {
-                    this.planData = value.data.pageData.list
-                    console.log(value)
-                })
-            },
-
-            //得到当前学年的培养方案详细信息
-            initTableData(schoolYearId) {
-                trainingProgramDetail({
-                    schoolYearId,
-                    limit: 99
-                }).then(value => {
-                    console.log(value, 88)
-                    const {
-                        applyingCount,
-                        courseCount,
-                        failCount,
-                        validCount
-                    } = value.data
-                    this.countState = {
-                        applyingCount,
-                        courseCount,
-                        failCount,
-                        validCount
-                    }
-                    console.log(value, 'trainingProgramDetail', 787878)
-                    this.classificationList = value.data.classificationList
-                    console.log(this.classificationList, 8988)
-                    value.data.classificationList.forEach((item, index) => {
-                        //分类id映射分类数组下标
-                        this.classificationIdMapIndex.set(item.id, index)
-                        //分类id映射Name
-                        this.classificationIdMapName[item.id] = item.name
-                    })
-
-                    value.data.pageData.list.forEach(item => {
-                        let index = this.classificationIdMapIndex.get(
-                            item.classificationId
-                        )
-                        /* 添加成员 */
-                        let { children } = this.classificationList[index]
-
-                        if (children) {
-                            children.push(item)
-                        } else {
-                            //增加属性
-                            this.classificationList[index].children = [item]
-                        }
-                    })
-                    console.log(
-                        this.classificationList,
-                        'trainingProgramDetail'
-                    )
-                })
-            },
             /**
              * @description: 点击新增触发
              */            
@@ -1463,27 +1211,25 @@
              * @description: 新增
              */            
             addDetail() {
-                
-                this.addDetailDialog.config.lowestValue = this.addDetailDialog.lowestValueArray.map(item=> {return item.join(':')}).join(',')
+                this.addDetailDialog.config.lowestValue = this.addDetailDialog.lowestValueArray.map(item=> {return item.join(':')}).join(',');
                 console.log(this.addDetailDialog.config, 999)
-                (function(that) {
+                ;(function(that) {
                     if(that.addDetailDialog.title == '新增') 
                         return  coursePost(that.addDetailDialog.config)
                     else 
                         return  coursePut(that.addDetailDialog.config)
                     
                 })(this).then(value => {
-                    console.log(value, 789789)
+                    // console.log(value, 789789)
                     this.addDetailDialog.open = false
                     this.fuzzyQuery()
                 })
             },
             /**
-             * @description: 点击修改触发
-             * @param {*} row 数据
+             * @description: 回显
+             * @param {*} row
              */            
-            updateCourse(row) {
-                console.log(row)
+            renderState(row) {
                 this.addDetailDialog.config = {
                     id:row.id,
                     schoolYearId:row.schoolYearId,
@@ -1505,9 +1251,25 @@
                         .split(',')
                         .map(item=> item?.split(':'))
                         .map(item=> [+item[0],+item[1]])
-                        
-                this.addDetailDialog.title = '修改'
+                
                 this.addDetailDialog.open = true
+            },
+            /**
+             * @description: 审核
+             * @param {*} row
+             */            
+            examCourse(row) {
+                this.renderState(row)
+                this.addDetailDialog.title = '审核'
+            },
+            /**
+             * @description: 点击修改触发
+             * @param {*} row 数据
+             */            
+            updateCourse(row) {
+                this.renderState(row)
+                this.addDetailDialog.title = '修改'
+                
             },
             /** + */
             mineLowest(index) {
@@ -1720,15 +1482,7 @@
             /** 获得当前学年所有的培养方案列表 */
             this.getTrainingProgramList({
                 schoolYearId: this.$route.params.sid
-            })
-
-            /** 获得当前学年下 当前培养方案下 所有的课程分类列表 */
-            // await trainingProgramDetail().then(value => {
-            //     this.classificationList.rows = value.data.classificationList
-            //     this.classificationList.value = this.classificationList.rows[0].id
-            // })
-            /** 默认展示第一行的分类 */
-            
+            })        
 
             /** 获得当前学年下 当前培养方案下 当前课程分类下 课程列表 */
             this.fuzzyQuery()
@@ -1737,13 +1491,14 @@
             
         },
         async beforeMount() {},
-        async mounted() {}
+        async mounted() {
+            
+        }
     }
 </script>
 
 <style scoped>
     .erke-top {
-        /* height: 120px; */
         padding: 15px;
         margin: 0 0 10px 0;
         background-color: #fff;
@@ -1775,11 +1530,6 @@
         line-height: 28px;
         background-color: #1890ff;
     }
-    /* .erke-bottom {
-        
-
-        overflow: hidden;
-    } */
     .erke-buttom-left {
         width: 220px;
         float: left;
@@ -1789,33 +1539,6 @@
         border: 1px solid #ddd;
         border-radius: 5px;
     }
-    /* .erke-buttom-left ul {
-        margin: 0;
-        padding: 0;
-    }
-    .erke-buttom-left li {
-        position: relative;
-        list-style: none;
-        font-size: 13px;
-        width: 192px;
-        height: 40px;
-        padding: 0 20px;
-        color: #979797;
-        line-height: 40px;
-        border-bottom: 1px solid #ddd;
-    }
-    .erke-buttom-left li:hover {
-        background-color: #e6f7ff;
-        color: #0084d1;
-        cursor: pointer;
-    }
-    .erke-buttom-left li span {
-        position: absolute;
-        right: 10px;
-        width: 20px;
-        text-align: center;
-        top: 0;
-    } */
     .erke-buttom-right {
         background-color: #fff;
         margin-left: 225px;
