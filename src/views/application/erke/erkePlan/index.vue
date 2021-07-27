@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-26 11:09:23
+ * @LastEditTime: 2021-07-27 17:35:04
 -->
 <template>
     <div class="app-container">
@@ -275,7 +275,6 @@
                                 name="isNow"
                                 :value="scope.$index"
                                 v-model="managerDialog.radio"
-                                @change="tt(scope.row)"
                             />
                         </template>
                     </el-table-column> 
@@ -613,17 +612,16 @@
                 loading: false,
                 //学年id =>学年名称
                 schoolYearIdMapName: [],
-                //记录的分页状态
-                t: {},
                 /* 培养方案级别字典 */
                 dict_sc_train_program_rank: {},
                 /* 培养方案状态字典 */
                 dict_sc_train_program_status: {},
                 /* 某一学年度的列表，value为-1时为全部学年 */
                 list: {
-                    value: 7,
+                    value: -1,
                     rows: []
                 },
+                preAddData:[],
                 //新增弹窗里面的数据
                 addPlanDialog: {
                     title: '新增培养方案',
@@ -644,12 +642,6 @@
                     title: '导入方案',
                     open: false,
                     config: [
-                        {
-                            isChoose: true,
-                            nameOfPlan: '湖南科技大学',
-                            level: '校级',
-                            classNumber: 84
-                        }
                     ]
                 },
                 updatePlanDialog: {
@@ -716,26 +708,7 @@
                 //修改列表
                 updateList: [],
                 //培养方案表格数据
-                planData: [
-                    {
-                        pcid: 1,
-                        plan: '湖南科技大学',
-                        xnid: 1,
-                        xn: '2021-2022学年',
-                        jb: '校级',
-                        classCount: 30,
-                        state: '启用',
-                        createTime: '2021-03-01',
-                        createPerson: '袁建国',
-                        modifyTime: '2021-03-02',
-                        modifyPerson: '袁建国',
-                        oprator: {
-                            modify: '',
-                            detail: '/application/erke/datail',
-                            delete: ''
-                        }
-                    }
-                ],
+                planData: [],
 
                 // 用户导入参数
                 upload: {
@@ -787,10 +760,6 @@
             statusChanged(row, value) {
                 !this.updateList.includes(row) && this.updateList.push(row)
                 row.status = Number(value)
-            },
-            tt(q) {
-                
-                console.log(this.managerDialog.radio)
             },
             async deletePlan(row, index) {
                 console.log(row, index)
@@ -899,6 +868,9 @@
                     '+'
                 )
             },
+            /**
+             * @description: 新增 + 
+             */            
             async addSchoolYear() {
                 this.list.rows.push({
                     yearName: '',
@@ -912,6 +884,9 @@
                     tableBody.scrollTop = 9999
                 })
             },
+            /**
+             * @description: 管理 + 
+             */            
             async addtrainingProgram() {
                 let data = {
                     schoolYearId: this.list.rows[this.managerDialog.radio].id,
@@ -929,6 +904,11 @@
                     tableBody.scrollTop = 9999
                 })
             },
+            /**
+             * @description: 管理 - 
+             * @param {*} row
+             * @param {*} index
+             */            
             async deleteManagerDialog(row, index) {
                 this.alertDialog.call(this, '预删除', {
                     confirm: () => {
@@ -940,7 +920,6 @@
             /**
              * @description: 批量操作学年
              */
-
             multiSchoolYear() {
                 console.log(this.list.rows)
                 let isFull = this.list.rows.every(item => {
@@ -967,27 +946,8 @@
              * @param {*} row
              * @param {*} index
              */
-
             async deletePlanDialog(row, index) {
                 this.preAddplanData.splice(index, 1)
-                return
-                //删除预添加的数据，需要同时在欲添加/实际两个数组中删除
-                if (row.id == undefined) {
-                    this.newAddList.splice(
-                        this.newAddList.length -
-                            (this.planData.length - index - 1) -
-                            1,
-                        1
-                    )
-                    this.planData.splice(index, 1)
-                }
-                // console.log(row.id,555)
-                // this.alertDialog.call(this,'删除',{
-                //     confirm: ()=> {
-                //         trainingProgramMulti
-                //         this.msgSuccess('删除成功')
-                //     }
-                // })
             },
             /** 操作分页触发的事件 */
             async getList(option) {
@@ -998,14 +958,11 @@
                 }
                 this.list.value != -1 && (temp.schoolYearId = this.list.value)
 
-                // this.queryParams.pageNum = 1
-                // this.queryParams.pageSize = 10
                 this.getTrainingProgramList(temp)
             },
             /**
              * @description: 打开修改的弹窗
              */
-
             updateTrainingProgram(row, index) {
                 console.log(row)
                 this.updatePlanDialog.open = true
@@ -1018,17 +975,6 @@
                     status: row.status
                 }
             },
-            /** 筛选节点 */
-
-            filterNode(value, data) {
-                if (!value) return true
-                return data.label.indexOf(value) !== -1
-            },
-            // 节点单击事件
-            handleNodeClick(data) {
-                this.queryParams.deptId = data.id
-                this.getList()
-            },
             handleAdd() {
                 this.addPlanDialog.open = true
             },
@@ -1040,20 +986,8 @@
             // 表单重置
             reset() {
                 this.form = {
-                    userId: undefined,
-                    deptId: undefined,
-                    userName: undefined,
-                    nickName: undefined,
-                    password: undefined,
-                    phonenumber: undefined,
-                    email: undefined,
-                    sex: undefined,
-                    status: '0',
-                    remark: undefined,
-                    postIds: [],
-                    roleIds: []
+
                 }
-                this.resetForm('form')
             },
             /** 搜索按钮操作 */
             handleQuery() {
@@ -1063,10 +997,6 @@
             /** 新增按钮操作 */
             handleManager() {
                 this.reset()
-                // this.getTreeselect()
-
-                // this.postOptions = response.posts
-                // this.roleOptions = response.roles
                 this.managerDialog.open = true
                 this.managerDialog.title = '学年配置'
             },
@@ -1074,11 +1004,6 @@
             cancelAdd() {
                 this.addPlanDialog.open = false
                 this.preAddplanData = []
-                // this.planData.splice(
-                //     this.planData.length - this.newAddList.length
-                // )
-                // this.newAddList = []
-                // this.updateList = []
                 this.$forceUpdate()
             },
             /** 关闭修改按钮 */
@@ -1086,7 +1011,6 @@
                 this.updatePlanDialog.open = false
             },
             /** 新增培养方案 */
-
             submitForm() {
                 console.log(this.newAddList)
                 let msgFull = this.preAddplanData.every(item => {
@@ -1103,25 +1027,7 @@
                         this.msgSuccess('添加成功')
                     })
                 })
-                // this.updateList
-                // 这里等待后端修改
-                // await trainingProgramMulti({
-                //     schoolYearList: this.updateList
-                // }).then(value => {
-                //     this.msgSuccess('修改成功')
-                // })
                 this.cancelAdd()
-
-                // console.log(this.managerDialog.radio,445)
-                // let temp = this.planData
-                // delete temp[temp.length - 1].isUse
-                // console.log(temp[temp.length - 1])
-                // trainingProgram(temp[temp.length - 1]).then(value => {
-                //     console.log(value, 'trainingProgram')
-                //     this.addPlanDialog.open = false
-                //     this.$message.success('添加成功')
-                //     this.schoolYearChange(this.list.value)
-                // })
             },
              submitUpdateForm() {
                  trainingProgramMulti({
