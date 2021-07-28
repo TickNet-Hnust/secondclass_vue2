@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-27 17:28:37
+ * @LastEditTime: 2021-07-28 09:20:16
 -->
 <template>
     <div class="app-container">
@@ -53,19 +53,24 @@
                                     <el-input
                                         suffix-icon="el-icon-search"
                                         placeholder="课程名称"
+                                        v-model="queryList.name"
                                     >
                                     </el-input>
                                 </el-col>
-                                <el-col :span="1.5">
+                                <!-- <el-col :span="1.5">
                                     <el-select
-                                        v-model="value"
-                                        placeholder="选择"
+                                        v-model="queryList.type"
+                                        placeholder="类型：不限"
                                     >
                                         <el-option
-                                            v-for="item in options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value"
+                                            label="类型：不限"
+                                            value=""
+                                        ></el-option>
+                                        <el-option
+                                            v-for="item in dict_sc_course_classification_type"
+                                            :key="item.dictValue"
+                                            :label="item.dictLabel"
+                                            :value="item.dictValue"
                                         >
                                         </el-option>
                                     </el-select>
@@ -73,18 +78,22 @@
 
                                 <el-col :span="1.5">
                                     <el-select
-                                        v-model="value"
-                                        placeholder="选择"
+                                        v-model="queryList.integralType"
+                                        placeholder="积分类别：不限"
                                     >
                                         <el-option
-                                            v-for="item in options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value"
+                                            label="积分类别：不限"
+                                            value=""
+                                        ></el-option>
+                                        <el-option
+                                            v-for="item in dict_sc_integral_type"
+                                            :key="item.dictValue"
+                                            :label="item.dictLabel"
+                                            :value="item.dictValue"
                                         >
                                         </el-option>
                                     </el-select>
-                                </el-col>
+                                </el-col> -->
                             </el-row>
                         </div>
                         <!-- 表单下面 -->
@@ -97,7 +106,7 @@
                             >
                                 <div class="erke-buttom-right">
                                     <el-table
-                                        :data="item.children"
+                                        :data="filterData(item.children)"
                                         row-key="id"
                                         v-loading="loading"
                                         default-expand-all
@@ -169,6 +178,7 @@
                                                     size="mini"
                                                     type="text"
                                                     icon="el-icon-key"
+                                                    @click="sortData(scope.row)"
                                                     >排序</el-button
                                                 >
                                                 <el-button
@@ -415,6 +425,43 @@
                 <el-button @click="cancel">关闭</el-button>
             </div>
         </el-dialog>
+
+        <el-dialog
+            :title="sortDialog.title"
+            :visible.sync="sortDialog.open"
+            width="635px"
+            append-to-body
+            class="sortDialog"
+        >
+        <el-table
+            :data="sortDialog.config"
+            stripe
+        >
+            <el-table-column
+                label="排序"
+                width="80"
+            >
+                <template slot-scope="scope">
+                    <el-input
+                        v-model="scope.row.sort"
+                        class="sortInput"
+                    ></el-input>
+                </template>
+            </el-table-column>
+
+            <el-table-column
+                label="项目名称"
+                prop="name"
+            >
+            </el-table-column>
+        </el-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel"
+                    >关闭</el-button
+                >
+                <el-button type="primary" @click="updateSort">确定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -428,6 +475,7 @@
         courseClassification
     } from '@/api/application/secondClass/courseClassification.js'
     import filterCourseClassificationList from '@/utils/filterCourseClassificationList'
+    import filterNameAndType from '@/utils/filterNameAndType'
     import formatDate from '@/utils/formatDate.js'
     import removeChild from '@/utils/removeChild.js'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
@@ -462,6 +510,11 @@
                     type: '0',
                     path: ''
                 },
+                queryList:{
+                    name:'',
+                    type:'',
+                    integralType:''
+                },
                 deleteIds:[],
                 /* 弹窗 -> 类型  */
                 label: '',
@@ -470,6 +523,11 @@
                 activeName: 0,
                 dict_sc_integral_type: {},
                 dict_sc_course_classification_type: {},
+                sortDialog:{
+                    title: '',
+                    open: false,
+                    config:[]
+                },
                 exportDialog: {
                     title: '',
                     open: false,
@@ -546,6 +604,19 @@
             }
         },
         computed: {
+            filterData() {
+                return (data) => {
+                    if(!data) {return []}
+                    console.log(data,11)
+                    let temp = filterNameAndType(
+                        data,
+                        this.queryList.name
+                    )
+                    console.log(temp,12)
+                    return temp
+                    
+                }
+            },
             /* 还需要优化选择时候的UI界面 */
             computeType() {
                 return this.postCourseClassification.type == 0
@@ -558,6 +629,7 @@
             }
         },
         methods: {
+            
             /**
              * @description: 删除积分分类
              * @param {*} row 对应积分分类
@@ -785,6 +857,22 @@
                     path: ''
                 }
             },
+            /** 确定修改排序 */
+            updateSort() {
+                this.sortDialog.config.forEach(item => {
+                    item.children && delete item.children
+                    item.__parent__ && delete item.__parent__
+                })
+                courseClassificationMulti({
+                    courseClassificationEntityList:this.sortDialog.config
+                }).then(value => {
+                    console.log(value)
+                    return this.getCourseClassificationList()
+                }).then(value => {
+                    this.msgSuccess('修改成功')
+                    this.sortDialog.open = false
+                })
+            },
             /** 
              * @description: 配置根级分类
              */ 
@@ -806,13 +894,20 @@
                     courseClassificationEntityList:this.datadata
                 }).then(value => {
                     console.log(value)
-                    return this.getCourseClassificationList({})
+                    return this.getCourseClassificationList()
                 }).then(value => {
                     this.msgSuccess('修改成功')
-                    this.managerDialog.option = false
+                    this.managerDialog.open = false
                 })
             },
-
+            /**
+             * @description:  表格 操作 排序
+             */            
+            sortData(row) {
+                this.sortDialog.title = '同级排序'
+                this.sortDialog.open = true
+                this.sortDialog.config = row.__parent__.children
+            },
             /**
              * @description:  表格 操作 修改触发
              * @param row 某行数据
@@ -894,7 +989,7 @@
             //字典初始化
             this.initDict()
             //数据初始化
-            this.getCourseClassificationList({})
+            this.getCourseClassificationList()
         },
         mounted() {
         }
@@ -1039,7 +1134,7 @@
         border-bottom: 1px solid #ddd;
     }
     .sortInput >>> .el-input__inner {
-        width: 40px !important;
+        width: 50px !important;
     }
     .managerDialog >>> .el-dialog__body {
         height: 350px;
@@ -1047,6 +1142,13 @@
 
     .managerDialog >>> .el-table__row td {
         padding: 5px 0;
+    }
+    .sortDialog >>> .el-table__row td {
+        padding: 5px 0;
+    }
+    .sortDialog >>> .el-dialog__body {
+        height: 350px;
+        overflow-y: auto;
     }
     .addStardardDialog .el-row {
         margin: 16px 0;
