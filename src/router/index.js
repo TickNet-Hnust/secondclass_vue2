@@ -160,7 +160,7 @@ export const constantRoutes = [{
                             }
                         },
                         {
-                            path: '/application/erke/activityDetail/:id',
+                            path: '/application/erke/activityDetail/:aid',
                             component: activityDetail,
                             // redirect: '/application/erke/activityDetail/:id/survey',
                             name: 'activityDetail',
