@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-25 23:28:52
+ * @LastEditTime: 2021-07-28 09:20:16
 -->
 <template>
     <div class="app-container">
@@ -18,7 +18,7 @@
                     </div>
                 </div>
 
-                <div class="erke-bottom">
+                <div class="erke-bottom standard">
                     <div class="typeSet" @click="handleSetting">
                         <i class="el-icon-setting"></i>
                     </div>
@@ -53,19 +53,24 @@
                                     <el-input
                                         suffix-icon="el-icon-search"
                                         placeholder="课程名称"
+                                        v-model="queryList.name"
                                     >
                                     </el-input>
                                 </el-col>
-                                <el-col :span="1.5">
+                                <!-- <el-col :span="1.5">
                                     <el-select
-                                        v-model="value"
-                                        placeholder="选择"
+                                        v-model="queryList.type"
+                                        placeholder="类型：不限"
                                     >
                                         <el-option
-                                            v-for="item in options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value"
+                                            label="类型：不限"
+                                            value=""
+                                        ></el-option>
+                                        <el-option
+                                            v-for="item in dict_sc_course_classification_type"
+                                            :key="item.dictValue"
+                                            :label="item.dictLabel"
+                                            :value="item.dictValue"
                                         >
                                         </el-option>
                                     </el-select>
@@ -73,31 +78,35 @@
 
                                 <el-col :span="1.5">
                                     <el-select
-                                        v-model="value"
-                                        placeholder="选择"
+                                        v-model="queryList.integralType"
+                                        placeholder="积分类别：不限"
                                     >
                                         <el-option
-                                            v-for="item in options"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value"
+                                            label="积分类别：不限"
+                                            value=""
+                                        ></el-option>
+                                        <el-option
+                                            v-for="item in dict_sc_integral_type"
+                                            :key="item.dictValue"
+                                            :label="item.dictLabel"
+                                            :value="item.dictValue"
                                         >
                                         </el-option>
                                     </el-select>
-                                </el-col>
+                                </el-col> -->
                             </el-row>
                         </div>
                         <!-- 表单下面 -->
-                        <template v-for="item in datadata">
+                        <template v-for="(item,index) in datadata">
                             <!-- default-expand-all -->
                             <el-tab-pane
                                 :label="item.name"
-                                :key="item.id"
-                                :name="item.id + ''"
+                                :key="index"
+                                :name="index+''"
                             >
                                 <div class="erke-buttom-right">
                                     <el-table
-                                        :data="item.children"
+                                        :data="filterData(item.children)"
                                         row-key="id"
                                         v-loading="loading"
                                         default-expand-all
@@ -169,6 +178,7 @@
                                                     size="mini"
                                                     type="text"
                                                     icon="el-icon-key"
+                                                    @click="sortData(scope.row)"
                                                     >排序</el-button
                                                 >
                                                 <el-button
@@ -185,13 +195,6 @@
                                             </template>
                                         </el-table-column>
                                     </el-table>
-                                    <pagination
-                                        v-show="total > 0"
-                                        :total="total"
-                                        :page.sync="queryParams.pageNum"
-                                        :limit.sync="queryParams.pageSize"
-                                        @pagination="getList"
-                                    />
                                 </div>
                             </el-tab-pane>
                         </template>
@@ -214,7 +217,11 @@
                 :rules="rules"
                 label-width="80px"
             >
-                <el-table :data="managerDialog.config" stripe>
+                <el-table 
+                    :data="datadata" 
+                    stripe
+                    :default-sort = "{prop: 'sort'}"
+                >
                     <el-table-column
                         lable="sdf"
                         width="40"
@@ -222,7 +229,7 @@
                     >
                         <template slot-scope="scope">
                             <span
-                                @click="deleteManagerDialog(scope.row)"
+                                @click="deleteManagerDialog(scope.row,scope.$index)"
                                 class="addOrMinus"
                                 >-</span
                             >
@@ -237,39 +244,39 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                        prop="nameOflearn"
-                        label="学年名称"
+                        prop="name"
+                        label="分类名称"
                         min-width="250"
                     >
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.nameOflearn">
+                            <el-input v-model="scope.row.name">
                             </el-input>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        prop="idOfLearnYear"
-                        label="学年ID"
+                        prop="id"
+                        label="ID"
                         align="center"
                     >
                     </el-table-column>
-                    <el-table-column
-                        prop="learnYearNo"
-                        label="当前学年"
+                    <!-- <el-table-column
+                        prop="id"
+                        label="启用"
                         align="center"
                     >
-                        <template slot-scope="">
+                        <template slot-scope="scope">
                             <input
                                 type="checkbox"
                                 name="isNow"
-                                value="scope.row.learnYearNo"
+                                :value="scope.row.id"
                             />
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                 </el-table>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">关闭</el-button>
-                <el-button type="primary" @click="submitForm">确 定</el-button>
+                <el-button type="primary" @click="updateClassification">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -418,6 +425,43 @@
                 <el-button @click="cancel">关闭</el-button>
             </div>
         </el-dialog>
+
+        <el-dialog
+            :title="sortDialog.title"
+            :visible.sync="sortDialog.open"
+            width="635px"
+            append-to-body
+            class="sortDialog"
+        >
+        <el-table
+            :data="sortDialog.config"
+            stripe
+        >
+            <el-table-column
+                label="排序"
+                width="80"
+            >
+                <template slot-scope="scope">
+                    <el-input
+                        v-model="scope.row.sort"
+                        class="sortInput"
+                    ></el-input>
+                </template>
+            </el-table-column>
+
+            <el-table-column
+                label="项目名称"
+                prop="name"
+            >
+            </el-table-column>
+        </el-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel"
+                    >关闭</el-button
+                >
+                <el-button type="primary" @click="updateSort">确定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -431,6 +475,7 @@
         courseClassification
     } from '@/api/application/secondClass/courseClassification.js'
     import filterCourseClassificationList from '@/utils/filterCourseClassificationList'
+    import filterNameAndType from '@/utils/filterNameAndType'
     import formatDate from '@/utils/formatDate.js'
     import removeChild from '@/utils/removeChild.js'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
@@ -447,13 +492,9 @@
         importTemplate
     } from '@/api/system/user'
     import { getToken } from '@/utils/auth'
-    import { treeselect } from '@/api/system/dept'
-    import Treeselect from '@riophae/vue-treeselect'
-    import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
     export default {
         name: 'User',
-        components: { Treeselect },
         data() {
             return {
                 loading: false,
@@ -469,13 +510,24 @@
                     type: '0',
                     path: ''
                 },
+                queryList:{
+                    name:'',
+                    type:'',
+                    integralType:''
+                },
+                deleteIds:[],
                 /* 弹窗 -> 类型  */
                 label: '',
                 /* tab栏 */
                 datadata: [],
-                activeName: '1',
+                activeName: 0,
                 dict_sc_integral_type: {},
                 dict_sc_course_classification_type: {},
+                sortDialog:{
+                    title: '',
+                    open: false,
+                    config:[]
+                },
                 exportDialog: {
                     title: '',
                     open: false,
@@ -511,195 +563,24 @@
                     start: '',
                     end: ''
                 },
-                textareaContent: '',
-
                 managerDialog: {
                     title: '',
                     open: false,
                     radio: '1',
-                    config: [
-                        {
-                            sort: '1',
-                            nameOflearn: '思想政治与人文素养',
-                            idOfLearnYear: '1',
-                            learnYearNo: '1'
-                        },
-                        {
-                            sort: '2',
-                            nameOflearn: '学术科技与创新',
-                            idOfLearnYear: '2',
-                            learnYearNo: '2'
-                        },
-                        {
-                            sort: '3',
-                            nameOflearn: '社会实践与志愿公益',
-                            idOfLearnYear: '3',
-                            learnYearNo: '3'
-                        },
-                        {
-                            sort: '4',
-                            nameOflearn: '文化体育与艺术',
-                            idOfLearnYear: '4',
-                            learnYearNo: '4'
-                        },
-                        {
-                            sort: '5',
-                            nameOflearn: '社会工作与原历',
-                            idOfLearnYear: '5',
-                            learnYearNo: '4'
-                        },
-                        {
-                            sort: '6',
-                            nameOflearn: '职业技能与特长',
-                            idOfLearnYear: '6',
-                            learnYearNo: '4'
-                        }
-                    ]
+                    config: []
                 },
-                count: {
-                    classCount: 50,
-                    apyling: 5,
-                    haspass: 40,
-                    nopass: 5
-                },
-                planData: [
-                    {
-                        pcid: 1,
-                        plan: '湖南科技大学',
-                        xnid: 1,
-                        xn: '2021-2022学年',
-                        jb: '校级',
-                        classCount: 30,
-                        state: '启用',
-                        createTime: '2021-03-01',
-                        createPerson: '袁建国',
-                        modifyTime: '2021-03-02',
-                        modifyPerson: '袁建国',
-                        oprator: {
-                            modify: '',
-                            detail: '/application/erke/erkePlan/datail',
-                            delete: ''
-                        }
-                    },
-                    {
-                        pcid: 1,
-                        plan: '湖南科技大学',
-                        xnid: 1,
-                        xn: '2021-2022学年',
-                        jb: '校级',
-                        classCount: 30,
-                        state: '启用',
-                        createTime: '2021-03-01',
-                        createPerson: '袁建国',
-                        modifyTime: '2021-03-02',
-                        modifyPerson: '袁建国',
-                        oprator: {
-                            modify: '',
-                            detail: '/application/erke/erkePlan/datail',
-                            delete: ''
-                        }
-                    },
-                    {
-                        pcid: 1,
-                        plan: '湖南科技大学',
-                        xnid: 1,
-                        xn: '2021-2022学年',
-                        jb: '校级',
-                        classCount: 30,
-                        state: '启用',
-                        createTime: '2021-03-01',
-                        createPerson: '袁建国',
-                        modifyTime: '2021-03-02',
-                        modifyPerson: '袁建国',
-                        oprator: {
-                            modify: '',
-                            detail: '/application/erke/erkePlan/datail',
-                            delete: ''
-                        }
-                    },
-                    {
-                        pcid: 1,
-                        plan: '湖南科技大学',
-                        xnid: 1,
-                        xn: '2021-2022学年',
-                        jb: '校级',
-                        classCount: 30,
-                        state: '启用',
-                        createTime: '2021-03-01',
-                        createPerson: '袁建国',
-                        modifyTime: '2021-03-02',
-                        modifyPerson: '袁建国',
-                        oprator: {
-                            modify: '',
-                            detail: '/application/erke/erkePlan/datail',
-                            delete: ''
-                        }
-                    }
-                ],
+                //模糊查询
                 value: '1',
                 options: [
                     {
                         value: '1',
                         label: '全部'
-                    },
-                    {
-                        value: '选项2',
-                        label: '2021-2022学年'
-                    },
-                    {
-                        value: '选项3',
-                        label: '2020-2021学年'
-                    },
-                    {
-                        value: '选项4',
-                        label: '2019-2021学年'
-                    },
-                    {
-                        value: '选项5',
-                        label: '北京烤鸭'
                     }
                 ],
-                value: '',
                 // 导出遮罩层
                 exportLoading: false,
-                // 选中数组
-                ids: [],
-                // 非单个禁用
-                single: true,
-                // 非多个禁用
-                multiple: true,
-                // 显示搜索条件
-                showSearch: true,
-                // 总条数
-                total: 0,
-                // 用户表格数据
-                userList: null,
-                // 弹出层标题
-                title: '',
-                // 部门树选项
-                deptOptions: undefined,
-                // 是否显示弹出层
-                open: false,
-                // 部门名称
-                deptName: undefined,
-                // 默认密码
-                initPassword: undefined,
-                // 日期范围
-                dateRange: [],
-                // 状态数据字典
-                statusOptions: [],
-                // 性别状态字典
-                sexOptions: [],
-                // 岗位选项
-                postOptions: [],
-                // 角色选项
-                roleOptions: [],
                 // 表单参数
                 form: {},
-                defaultProps: {
-                    children: 'children',
-                    label: 'label'
-                },
                 // 用户导入参数
                 upload: {
                     // 是否显示弹出层（用户导入）
@@ -716,66 +597,26 @@
                     url:
                         process.env.VUE_APP_BASE_API + '/system/user/importData'
                 },
-                // 查询参数
-                queryParams: {
-                    pageNum: 1,
-                    pageSize: 10,
-                    userName: undefined,
-                    phonenumber: undefined,
-                    status: undefined,
-                    deptId: undefined
-                },
-                // 列信息
-                columns: [
-                    { key: 0, label: `用户编号`, visible: true },
-                    { key: 1, label: `用户名称`, visible: true },
-                    { key: 2, label: `用户昵称`, visible: true },
-                    { key: 3, label: `部门`, visible: true },
-                    { key: 4, label: `手机号码`, visible: true },
-                    { key: 5, label: `状态`, visible: true },
-                    { key: 6, label: `创建时间`, visible: true }
-                ],
                 // 表单校验
                 rules: {
-                    userName: [
-                        {
-                            required: true,
-                            message: '用户名称不能为空',
-                            trigger: 'blur'
-                        }
-                    ],
-                    nickName: [
-                        {
-                            required: true,
-                            message: '用户昵称不能为空',
-                            trigger: 'blur'
-                        }
-                    ],
-                    password: [
-                        {
-                            required: true,
-                            message: '用户密码不能为空',
-                            trigger: 'blur'
-                        }
-                    ],
-                    email: [
-                        {
-                            type: 'email',
-                            message: "'请输入正确的邮箱地址",
-                            trigger: ['blur', 'change']
-                        }
-                    ],
-                    phonenumber: [
-                        {
-                            pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-                            message: '请输入正确的手机号码',
-                            trigger: 'blur'
-                        }
-                    ]
+                    
                 }
             }
         },
         computed: {
+            filterData() {
+                return (data) => {
+                    if(!data) {return []}
+                    console.log(data,11)
+                    let temp = filterNameAndType(
+                        data,
+                        this.queryList.name
+                    )
+                    console.log(temp,12)
+                    return temp
+                    
+                }
+            },
             /* 还需要优化选择时候的UI界面 */
             computeType() {
                 return this.postCourseClassification.type == 0
@@ -787,26 +628,8 @@
                 return this.postCourseClassification.integralType != 2
             }
         },
-        watch: {
-            // 根据名称筛选部门树
-            deptName(val) {
-                this.$refs.tree.filter(val)
-            }
-        },
-        created() {
-            this.getList()
-            this.getTreeselect()
-            this.getDicts('sys_normal_disable').then(response => {
-                this.statusOptions = response.data
-            })
-            this.getDicts('sys_user_sex').then(response => {
-                this.sexOptions = response.data
-            })
-            this.getConfigKey('sys.user.initPassword').then(response => {
-                this.initPassword = response.msg
-            })
-        },
         methods: {
+            
             /**
              * @description: 删除积分分类
              * @param {*} row 对应积分分类
@@ -915,16 +738,37 @@
                     '+'
                 )
             },
-            addManagerDialog() {},
+            /**
+             * @description: 类别配置 + 
+             */            
+            addManagerDialog() {
+                this.datadata.push({
+                    id:null,
+                    pid:0,
+                    sort: '',
+                    name: ''
+                })
+                this.$nextTick(() => {
+                    let tableBody = document.querySelector(
+                        '.managerDialog .el-table__body-wrapper'
+                    )
+                    tableBody.scrollTop = 9999
+                })
+            },
+            /**
+             * @description: 类别配置 - 
+             */            
+            deleteManagerDialog(row,index) {
+                this.alertDialog.call(this,'预删除',{
+                    confirm:() => {
+                        this.deleteIds.push(row.id)
+                        this.datadata.splice(index,1)
+                    }
+                })
+            },
             handleSetting() {
-                this.reset()
-                this.getTreeselect()
-
-                // this.postOptions = response.posts
-                // this.roleOptions = response.roles
                 this.managerDialog.open = true
-                this.managerDialog.title = '学年配置'
-                this.form.password = this.initPassword
+                this.managerDialog.title = '类别配置'
             },
             sureClass(row) {
                 if (row.state === '申请中') {
@@ -935,61 +779,9 @@
                     return 'textRed'
                 }
             },
-            /** 查询用户列表 */
-            getList() {
-                this.loading = true
-                listUser(
-                    this.addDateRange(this.queryParams, this.dateRange)
-                ).then(response => {
-                    this.userList = response.rows
-                    this.total = response.total
-                    this.loading = false
-                })
-            },
-            /** 查询部门下拉树结构 */
-            getTreeselect() {
-                treeselect().then(response => {
-                    console.log(response)
-                    this.deptOptions = response.data
-                })
-            },
-            // 筛选节点
-            filterNode(value, data) {
-                if (!value) return true
-                return data.label.indexOf(value) !== -1
-            },
-            // 节点单击事件
-            handleNodeClick(data) {
-                this.queryParams.deptId = data.id
-                this.getList()
-            },
-            // 用户状态修改
-            handleStatusChange(row) {
-                let text = row.status === '0' ? '启用' : '停用'
-                this.$confirm(
-                    '确认要"' + text + '""' + row.userName + '"用户吗?',
-                    '警告',
-                    {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }
-                )
-                    .then(function() {
-                        return changeUserStatus(row.userId, row.status)
-                    })
-                    .then(() => {
-                        this.msgSuccess(text + '成功')
-                    })
-                    .catch(function() {
-                        row.status = row.status === '0' ? '1' : '0'
-                    })
-            },
+
             // 取消按钮
             cancel() {
-                this.open = false
-                this.reset()
-                alert(12)
             },
             // 表单重置
             reset() {
@@ -1009,96 +801,13 @@
                 }
                 this.resetForm('form')
             },
-            /** 搜索按钮操作 */
-            handleQuery() {
-                this.queryParams.page = 1
-                this.getList()
-            },
-            /** 重置按钮操作 */
-            resetQuery() {
-                this.dateRange = []
-                this.resetForm('queryForm')
-                this.handleQuery()
-            },
-            // 多选框选中数据
-            handleSelectionChange(selection) {
-                this.ids = selection.map(item => item.userId)
-                this.single = selection.length != 1
-                this.multiple = !selection.length
-            },
             /** 新增按钮操作 */
             handleAdd() {
                 this.clearForm()
                 this.addStardardDialog.open = true
             },
-            /** 修改按钮操作 */
-            handleUpdate(row) {
-                this.reset()
-                this.getTreeselect()
-                const userId = row.userId || this.ids
-                getUser(userId).then(response => {
-                    this.form = response.data
-                    this.postOptions = response.posts
-                    this.roleOptions = response.roles
-                    this.form.postIds = response.postIds
-                    this.form.roleIds = response.roleIds
-                    this.open = true
-                    this.title = '修改用户'
-                    this.form.password = ''
-                })
-            },
-            /** 重置密码按钮操作 */
-            handleResetPwd(row) {
-                this.$prompt('请输入"' + row.userName + '"的新密码', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消'
-                })
-                    .then(({ value }) => {
-                        resetUserPwd(row.userId, value).then(response => {
-                            this.msgSuccess('修改成功，新密码是：' + value)
-                        })
-                    })
-                    .catch(() => {})
-            },
             /** 提交按钮 */
             submitForm: function() {
-                this.$refs['form'].validate(valid => {
-                    if (valid) {
-                        if (this.form.userId != undefined) {
-                            updateUser(this.form).then(response => {
-                                this.msgSuccess('修改成功')
-                                this.open = false
-                                this.getList()
-                            })
-                        } else {
-                            addUser(this.form).then(response => {
-                                this.msgSuccess('新增成功')
-                                this.open = false
-                                this.getList()
-                            })
-                        }
-                    }
-                })
-            },
-            /** 删除按钮操作 */
-            handleDelete(row) {
-                const userIds = row.userId || this.ids
-                this.$confirm(
-                    '是否确认删除用户编号为"' + userIds + '"的数据项?',
-                    '警告',
-                    {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }
-                )
-                    .then(function() {
-                        return delUser(userIds)
-                    })
-                    .then(() => {
-                        this.getList()
-                        this.msgSuccess('删除成功')
-                    })
             },
             /** 导出按钮操作 */
             handleExport() {
@@ -1129,11 +838,9 @@
                 })
                 this.getList()
             },
-            // 提交上传文件
-            submitFileForm() {
-                this.$refs.upload.submit()
-            },
-            /** 清空表单 */
+            /**
+             * @description: 清空新增表单
+             */            
             clearForm() {
                 this.addStardardDialog.fixed = this.addStardardDialog.start = this.addStardardDialog.end =
                     ''
@@ -1150,12 +857,62 @@
                     path: ''
                 }
             },
+            /** 确定修改排序 */
+            updateSort() {
+                this.sortDialog.config.forEach(item => {
+                    item.children && delete item.children
+                    item.__parent__ && delete item.__parent__
+                })
+                courseClassificationMulti({
+                    courseClassificationEntityList:this.sortDialog.config
+                }).then(value => {
+                    console.log(value)
+                    return this.getCourseClassificationList()
+                }).then(value => {
+                    this.msgSuccess('修改成功')
+                    this.sortDialog.open = false
+                })
+            },
+            /** 
+             * @description: 配置根级分类
+             */ 
+            updateClassification() {
+                let isFull = this.datadata.every(item => {
+                    console.log(item.sort, item.name)
+                    return item.sort!=undefined && item.name
+                })
+                if(!isFull) {
+                    this.msgInfo('请填写完整信息')
+                    return 
+                }
+                this.datadata.forEach(item => {
+                    console.log(item,11)
+                    !!item.children && this.$delete(item,item.children)
+                })
+                courseClassificationMulti({
+                    deleteIds:this.deleteIds,
+                    courseClassificationEntityList:this.datadata
+                }).then(value => {
+                    console.log(value)
+                    return this.getCourseClassificationList()
+                }).then(value => {
+                    this.msgSuccess('修改成功')
+                    this.managerDialog.open = false
+                })
+            },
+            /**
+             * @description:  表格 操作 排序
+             */            
+            sortData(row) {
+                this.sortDialog.title = '同级排序'
+                this.sortDialog.open = true
+                this.sortDialog.config = row.__parent__.children
+            },
             /**
              * @description:  表格 操作 修改触发
              * @param row 某行数据
              * @param index 某行下标
              */
-
             async updateData(row, index) {
                 console.log(row, index)
                 this.addStardardDialog.open = true
@@ -1193,7 +950,7 @@
 
             getCourseClassificationList(option) {
                 this.loading = true
-                courseClassificationList(option).then(value => {
+                return courseClassificationList(option).then(value => {
                     /* value保证存在且唯一 */
                     /* label保证渲染视图 */
                     console.log(value, 'courseClassificationList')
@@ -1202,15 +959,15 @@
                         value: item.id,
                         label: item.name
                     }))
+                    //挂载算法
                     this.datadata = filterCourseClassificationList(value)
                     console.log(this.datadata, 'datadata')
+                    this.loading = false
                 })
-                this.loading = false
             },
             /**
              * @description:  初始化字典
              */
-
             initDict() {
                 Promise.all([
                     getDict('sc_course_classification_type'),
@@ -1228,19 +985,13 @@
                 })
             }
         },
-
         created() {
             //字典初始化
             this.initDict()
-            //挂载算法
-            this.getCourseClassificationList({})
-            
+            //数据初始化
+            this.getCourseClassificationList()
         },
         mounted() {
-            // await getDict('sc_integral_type').then(value => {
-            //     console.log(value, 'sc_integral_type')
-            //     this.dict_sc_integral_type = value.data
-            // })
         }
     }
 </script>
@@ -1321,10 +1072,9 @@
         top: 0;
     }
     .typeSet {
-        margin-top: 10px;
+        margin-top: 15px;
         position: absolute;
         left: 17px;
-        top: 255px;
         z-index: 99;
         height: 40px;
         width: 186px;
@@ -1384,7 +1134,7 @@
         border-bottom: 1px solid #ddd;
     }
     .sortInput >>> .el-input__inner {
-        width: 40px !important;
+        width: 50px !important;
     }
     .managerDialog >>> .el-dialog__body {
         height: 350px;
@@ -1392,6 +1142,13 @@
 
     .managerDialog >>> .el-table__row td {
         padding: 5px 0;
+    }
+    .sortDialog >>> .el-table__row td {
+        padding: 5px 0;
+    }
+    .sortDialog >>> .el-dialog__body {
+        height: 350px;
+        overflow-y: auto;
     }
     .addStardardDialog .el-row {
         margin: 16px 0;
@@ -1497,5 +1254,12 @@
     }
     .erke-bottom >>> .el-input__inner {
         /* width: 300px; */
+    }
+    .standard >>> .el-tabs__nav {
+        top: 45px;
+    }
+    .managerDialog >>> .el-table__body-wrapper {
+        overflow-y: auto;
+        height: 250px;
     }
 </style>

@@ -23,7 +23,7 @@
                         <el-row style="margin-bottom: 15px">
                             <el-col :span="10" style="min-width:450px">
                                 <span class="labelSpan"> 录取方式：</span>
-                                <span class="textSpan">{{admissionWay}}</span>
+                                <span class="textSpan">{{computedAdmissionWay(admissionWay)}}</span>
                             </el-col>
                             <el-col :span="14">
                                 <span class="labelSpan"> 报名年纪：</span>
@@ -81,16 +81,18 @@
                             @select="handleSelect"
                         >
                             <el-menu-item
-                                index=""
+                                index=''
                             >
                                 <span slot="title">全部 <span class="numbers">{{enrollRecordsNumber}}</span></span>
                             </el-menu-item>
 
                             <el-menu-item
-                                v-for="(item, index) in deptList" :key="index"
+                                v-for="(item, index) in Object.entries(tabInfo)" :key="index"
                                 :index="index + ''"
+                                 
                             >
-                                <span slot="title">{{ item.deptName }} <span class="numbers">{{Object.values(tabInfo)[index]}}</span> </span>
+                            <span slot="title" >{{ deptIdMapDeptName[item[0]] }} <span class="numbers">{{item[1]}}</span> </span>
+                                
                             </el-menu-item>
 
                         </el-menu>
@@ -101,11 +103,26 @@
                                 <el-row
                                     :gutter="0"
                                     type="flex"
-                                    justify="space-around"
+                                    justify="space-between"
                                     style="flexWrap:wrap"
                                 >
-                                    <el-col :span="1" style="min-width:80px">
-                                        <el-form-item label="">
+                                <el-col :span="1" style="min-width:80px;" >
+                                    <el-tooltip 
+                                        class="item" 
+                                        effect="dark" 
+                                        content="清空查询条件" 
+                                        placement="right">
+                                    <el-button
+                                        circle
+                                        icon="el-icon-refresh"
+                                        @click="refresh"
+                                    >
+                                    </el-button>
+                                    </el-tooltip>
+
+                                </el-col> 
+                                    <el-col :span="1" style="min-width:150px;margin-left: -24px;" >
+                                        <el-form-item label="操作:">
                                             <el-select
                                                 v-model="action"
                                                 style="width:80px"
@@ -113,7 +130,6 @@
                                             >
                                                 <el-option value="批量修改"></el-option>
                                                 <el-option value="排序"></el-option>
-
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -123,6 +139,7 @@
                                             <el-input data-text
                                             placeholder="学号"
                                             v-model="queryList.userName"
+                                            @input="fuzzyQuery"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -132,6 +149,7 @@
                                             <el-input data-text
                                             placeholder="姓名"
                                             v-model="queryList.nickName"
+                                            @input="fuzzyQuery"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -143,10 +161,18 @@
                                                 v-model="queryList.enrollStatus"
                                                 placeholder="报名状态:不限"
                                                 style="width:120px"
+                                                @change="fuzzyQuery"
                                             >
                                                 <el-option
                                                     value=""
                                                     label="报名状态:不限"
+                                                ></el-option>
+                                                <el-option
+                                                    v-for="(item,
+                                                    index) in dict_sc_activity_enroll_status"
+                                                    :key="index"
+                                                    :value="item.dictValue"
+                                                    :label="item.dictLabel"
                                                 ></el-option>
 
                                             </el-select>
@@ -159,10 +185,18 @@
                                                 v-model="queryList.admissionStatus"
                                                 placeholder="录取状态:不限"
                                                 style="width:120px"
+                                                @change="fuzzyQuery"
                                             >
                                                 <el-option
                                                     value=""
                                                     label="录取状态:不限"
+                                                ></el-option>
+                                                <el-option
+                                                    v-for="(item,
+                                                    index) in dict_sc_activity_admission_status"
+                                                    :key="index"
+                                                    :value="item.dictValue"
+                                                    :label="item.dictLabel"
                                                 ></el-option>
 
                                             </el-select>
@@ -196,9 +230,10 @@
                        <el-table
                             :data="enrollList"
                             v-loading="loading"
-                            class="detailMainTable"
+                            class="enrollMainTable"
                         >
                             <el-table-column type="selection" min-width="55">
+
                             </el-table-column>
 
                             <el-table-column
@@ -210,118 +245,82 @@
 
                             <el-table-column
                                 prop="nickName"
-                                label="课程名称"
-                                min-width="200"
+                                label="姓名"
+                                min-width="80"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="userName"
                                 label="学号"
-                                min-width="150"
+                                min-width="100"
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                prop="className"
+                                label="所在班级"
+                                min-width="120"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="deptName"
-                                label="所在学院"
-                                min-width="120"
-                            >
-                            </el-table-column>
-
-                            <el-table-column
-                                prop=""
                                 label="群组"
-                                min-width="150"
-                                :formatter="formatClassificationId"
-                            >
-                            </el-table-column>
-
-                            <el-table-column
-                                prop="joinType"
-                                label="加入方式"
-                                min-width="80"
-                                :formatter="formatJoinType"
-                            >
-                            </el-table-column>
-
-                            <el-table-column
-                                prop="necessary"
-                                label="必修课"
-                                min-width="80"
-                                :formatter="formatNecessary"
-                            >
-                            </el-table-column>
-
-                            <el-table-column
-                                prop="lowestValue"
-                                label="学期积分下限要求"
-                                width="140"
-                            >
-                            </el-table-column>
-
-                            <el-table-column
-                                prop="status"
-                                label="状态"
                                 min-width="120"
-                                :formatter="formatStatus"
+                                
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                prop="enrollStatus"
+                                label="报名状态"
+                                min-width="100"
+                                :formatter="formatEnrollStatus"
                             >
                                 <template slot-scope="scope">
                                     <el-button
                                         size="mini"
                                         round
-                                        :class="sureClass(scope.row)"
+                                        :class="sureClassEnroll(scope.row)"
                                         >{{
-                                            computedStatus(scope.row.status)
+                                            computedEnrollStatus(scope.row.enrollStatus)
                                         }}</el-button
                                     >
                                 </template>
                             </el-table-column>
 
-                            <el-table-column
-                                prop="updateTime"
-                                label="修改时间"
-                                min-width="120"
-                                :formatter="formatDate"
+                           <el-table-column
+                                prop="admissionStatus"
+                                label="录取状态"
+                                min-width="100"
+                                :formatter="formatAdmissionStatus"
                             >
-                            </el-table-column>
-
-                            <el-table-column
-                                prop="departmentName"
-                                label="发布单位"
-                                min-width="120"
-                            >
-                            </el-table-column>
-
-                            <el-table-column
-                                prop="type"
-                                label="性质"
-                                min-width="80"
-                                :formatter="formatType"
-                            >
-                            </el-table-column>
-
-                            <el-table-column
-                                prop="classificationDetail"
-                                label="分类明细"
-                                min-width="180"
-                                :formatter="formatClassificationDetail"
-                            >
-                            </el-table-column>
+                                <template slot-scope="scope">
+                                    <el-button
+                                        size="mini"
+                                        round
+                                        :class="sureClassAdmission(scope.row)"
+                                        >{{
+                                            computedAdmissionStatus(scope.row.admissionStatus)
+                                        }}</el-button
+                                    >
+                                </template>
+                            </el-table-column>     
 
                             <el-table-column
                                 prop="createTime"
-                                label="创建时间"
-                                min-width="150"
-                                :formatter="formatDate"
+                                label="报名时间"
+                                min-width="100"
+                                
                             >
                             </el-table-column>
 
-
                             <el-table-column
-                                prop="remark"
-                                label="备注"
-                                min-width="200"
+                                prop="cancelTime"
+                                label="取消报名时间"
+                                min-width="100"
+                               
                             >
                             </el-table-column>
 
@@ -329,19 +328,21 @@
                                 prop="operate"
                                 label="操作"
                                 fixed="right"
-                                width="200"
+                                width="50"
                             >
                                 <template slot-scope="scope">
                                     <el-button
                                         size="mini"
                                         type="text"
                                         icon="el-icon-s-check"
-                                        @click="examCourse(scope.row)"
+                                        v-if="scope.row.enrollStatus==1"
+                                        @click="examEnrollOpenDialog(scope.row)"
                                         >审核</el-button
                                     >
                                    
                                 </template>
                             </el-table-column>
+
                         </el-table>
                         <pagination
                             v-show="queryParams.totalPage > 0"
@@ -354,14 +355,81 @@
                 </div>
             </el-col>
         </el-row>
+
+        <!-- 审核报名会话框 -->
+        <el-dialog
+            :title="examEnrollDialog.title"
+            :visible.sync="examEnrollDialog.open"
+            width="915px"
+            append-to-body
+            class="examEnrollDialog"
+        >
+            <el-form ref="form" :model="form" label-width="80px">
+                <el-row>
+                    <el-col :span="10">姓名：</el-col>
+                    <el-col :span="14">{{
+                        examEnrollDialog.data.nickName
+                    }}</el-col>
+                </el-row>
+                 <el-row>
+                    <el-col :span="10">学号：</el-col>
+                    <el-col :span="14">{{
+                        examEnrollDialog.data.userName
+                    }}</el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="10">所在班级：</el-col>
+                    <el-col :span="14">{{
+                        examEnrollDialog.data.className
+                    }}</el-col>
+                </el-row> 
+                <el-row>
+                    <el-col :span="10">群组：</el-col>
+                    <el-col :span="14">{{
+                        examEnrollDialog.data.deptName
+                    }}</el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="10">报名时间：</el-col>
+                    <el-col :span="14">{{
+                        examEnrollDialog.data.createTime
+                    }}</el-col>
+                </el-row>        
+
+                
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+            <el-radio-group 
+                v-if="examEnrollDialog.title=='报名审核'"
+                v-model="examEnrollDialog.post.status" 
+                style="float:left;margin-top:15px"
+            >
+                <el-radio :label="1">审核通过</el-radio>
+                <el-radio :label="0">审核未通过</el-radio>
+            </el-radio-group>
+
+            <el-input
+                type="textarea"
+                v-model="examEnrollDialog.post.content"
+                placeholder="填写指导意见"
+                rows=1
+                class="adviceText"
+            ></el-input>
+
+                <el-button @click="cancel">关闭</el-button>
+                <el-button type="primary" @click="examEnrollSubmit">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-    //导入活动相关接口
+    //导入活动报名相关接口
      import {
         activityEnroll,
         activityEnrollList,
+        activityEnrollVerify,
     } from '@/api/application/secondClass/activity'
 
     import { 
@@ -411,6 +479,30 @@
         components: { Treeselect },
         data() {
             return {
+                //单个审核报名会话框表单参数form
+                form:{},
+                //单个审核报名会话框数据
+                examEnrollDialog:{
+                     title:'报名审核',
+                     open:false,
+                     data:{
+                        nickName:'',
+                        userName:'',
+                        className:'',
+                        deptName:'',
+                        createTime:'',
+                     },
+                     post:{
+                         activityId:1,
+                         content:'',
+                         ids:'',
+                         status:0,
+                         userIds:'',
+                     }
+                 },
+                //  批量审核 会话框数据数组
+                mutiExamEnrollDialogDataList:[],
+       
                 //活动报名开始时间
                 enrollStartTime: '暂无数据',
                 //活动报名结束时间
@@ -420,7 +512,7 @@
                 //报名年级
                 enrollGrade:[2018,2019],
                 //录取方式
-                admissionWay:'评审',
+                admissionWay:'',
                 //报名年级范围
                 enrollYearRange: [2018, 2019],
                 //最大录取人数:
@@ -442,6 +534,8 @@
                 deptList:[
 
                 ],
+                //部门id转部门名字
+                deptIdMapDeptName:[],
                 //部门id 用于模糊查询
                 deptId:'',
                 //分页请求参数
@@ -456,15 +550,16 @@
                 action:'',
                 //模糊查询请求列表
                 queryList:{
-                  userName:'',
-                  nickName:'',
-                  enrollStatus:'',
-                  admissionStatus:'',
+                    userName:'',
+                    nickName:'',
+                    enrollStatus:'',
+                    admissionStatus:'',
+                    //学生开始报名时间
+                    beginCreateTime:'',
+                    //学生取消报名时间
+                    endCreateTime:'',
                 },
-                //学生报名开始时间
-                beginCreateTime:'',
-                //学生报名结束时间
-                endCreateTime:'',
+                
                 //报名列表
                 enrollList:[],
                 //DateTimePicker
@@ -496,32 +591,221 @@
                 }]
                 },
                 value2: '',
+                //报名状态字典数组
+                dict_sc_activity_enroll_status:[],
+                //录取状态字典数组
+                dict_sc_activity_admission_status:[],
+                //录取状态方式数组
+                dict_sc_activity_admission_way:[],
 
             }
         },
+        computed: {
+           //取报名状态计算方法 
+           computedEnrollStatus(){
+                return value => {
+                    // console.log(this.dict_sc_course_status,temp,333)
+                    // console.log(value)
+                    return this.dict_sc_activity_enroll_status[value]?.dictLabel;
+                }
+            },
+            //取录取状态字典计算方法
+            computedAdmissionStatus(){
+                
+                    return value => {
+                    // console.log(this.dict_sc_course_status,temp,333)
+                    // console.log(value)
+                    return this.dict_sc_activity_admission_status[value]?.dictLabel;
+                }
+                
+            },
+
+            //取录取方式字典计算方法
+            computedAdmissionWay(){
+
+                return value => {
+                    // console.log(this.dict_sc_course_status,temp,333)
+                    // console.log(value)
+                    return this.dict_sc_activity_admission_way[value]?.dictLabel;
+                }
+            },
+        },
         methods:{
+            //操作分页触发的事件
+            getList(option){
+                this.queryParams.pageNum = option.page
+                this.queryParams.pageSize = option.limit
+                this.fuzzyQuery()
+            },
+            //清空查询条件
+            refresh() {
+                this.queryList={
+                    userName:'',
+                    nickName:'',
+                    enrollStatus:'',
+                    admissionStatus:'',
+                    beginCreateTime:'',
+                    endCreateTime:'',
+                }
+                this.value2='',
+                this.fuzzyQuery()
+            },
+            //格式化群组 要使用群组字典
+            formatGroup(row, column, cellValue) {
+                // console.log(cellValue);
+            },
+            // 格式化报名状态 要使用报名方式字典
+            formatEnrollStatus(row, column, cellValue) {
+                return (
+                    cellValue != null &&
+                    this.dict_sc_activity_enroll_status[cellValue]?.dictLabel
+                )
+            },
+            //格式化录取状态 要使用录取状态字典
+            formatAdmissionStatus(row, column, cellValue) {
+                return (
+                    cellValue != null &&
+                    this.dict_sc_activity_admission_status[cellValue]?.dictLabel
+                )
+            },
+            /**
+             * @description: 确定CSS类
+             * @param {*} row
+             */            
+            sureClassEnroll(row) {
+                
+                   if (row.enrollStatus == 0) {
+                    //ing
+                    return 'textPlain'
+                } else if (row.enrollStatus == 1) {
+                    //yes
+                    return 'textgreen'
+                } else if (row.enrollStatus == 2) {
+                    //no
+                    return 'textyellow'
+                } else {
+                    //unpass
+                    return 'textRed'
+                } 
+            },
+            sureClassAdmission(row) {
+                
+                   if (row.admissionStatus == 0) {
+                    //ing
+                    return 'textPlain'
+                } else if (row.admissionStatus == 1) {
+                    //yes
+                    return 'textgreen'
+                } else if (row.admissionStatus == 2) {
+                    //no
+                    return 'textyellow'
+                } else {
+                    //unpass
+                    return 'textRed'
+                } 
+            },
+            //审核点击事件 开打会话框
+            examEnrollOpenDialog(row){
+                console.log('open');
+                //渲染会话框数据
+                this.renderState(row)
+    
+                this.examEnrollDialog.title='报名审核'
+                // this.alertDialog.call(this,'审核',{
+                //     confirm:() => {
+                //         console.log(row);
+                //         option = {
+                //             ids:[],
+                //             status:[],
+                //             userIds:[],
+                //             activityId:[],
+                //             content:[],
+                //         }
+                //         // activityEnrollVerify()
+                //         this.msgSuccess('审核成功')
+                //     }
+                // })
+                // console.log(row);
+            },
+            //渲染会话框数据 打开会话框
+            renderState(row){
+                console.log(row);
+                this.examEnrollDialog.data={
+                  nickName:row.nickName,
+                  userName:row.userName,
+                  className:row.className,
+                  deptName:row.deptName,
+                  createTime:row.createTime,
+                };
+
+                this.examEnrollDialog.post={
+                  activityId:row.activityId,
+                  content:'',
+                  ids:row.id,
+                  status:row.admissionStatus,
+                  userIds:row.userId,
+  
+                };
+                
+                console.log(this.examEnrollDialog.post);
+                this.examEnrollDialog.open = true;
+
+            },
+            //会话审核确定
+            examEnrollSubmit(){
+                console.log(this.examEnrollDialog.post);
+                activityEnrollVerify(this.examEnrollDialog.post).then(value=>{
+                    console.log(value);
+                    this.examEnrollDialog.open = false
+                    this.fuzzyQuery()
+                })
+            },
+            //会话框取消
+            cancel() {
+                this.examEnrollDialog.open = false
+                this.reset()
+            },
+            //会话框数据重置
+            reset(){
+               this.examEnrollDialog.data={
+                  nickName:'',
+                  userName:'',
+                  className:'',
+                  deptName:'',
+                  createTime:'',
+                  admissionStatus:0,
+               }
+            },
+            //格式化时间
+            formatDate(row, column, cellValue) {
+                return cellValue != null && formaterDate(cellValue)
+            },
             //筛选报名事件触发的事件
             enrollDateChange(){
-               console.log(this.value2[0]);
-               console.log(this.value2[1]);
-               this.beginCreateTime = this.value2[0];
-               this.endCreateTime = this.value2[1];
+               //发送时间的格式还需要调整一下
+               if(this.value2!=null)
+               {
+                    this.queryList.beginCreateTime = this.value2[0];
+                    this.queryList.endCreateTime = this.value2[1];
+                    this.fuzzyQuery();
+               }
+               
             },
             //点击左小角部门触发的事件
             handleSelect(index){
-               if(this.deptList[index])
+                console.log(index);
+               if(index!='')
                {
-                  this.deptId = this.deptList[index].deptId
+                  this.deptId = Object.entries(this.tabInfo)[index][0];
                }else{
                   this.deptId=''
                }
-               console.log(this.deptId)
                this.fuzzyQuery()
             },
             //通过活动id获取当前活动报名信息函数
             getActivityEnroll(option){
                activityEnroll(option).then(async value => {
-
+                console.log(value,'活动总信息');
                 this.enrollStartTime = value.data.enrollStartTime;
                 this.enrollEndTime = value.data.enrollEndTime;
                 this.enrollRange = value.data.enrollRange;
@@ -536,20 +820,27 @@
                 this.tabInfo = value.data.tabInfo;
                 let {data} = await listDept() 
                 this.deptList = data;
+                console.log(this.deptList,'deptList传来的数据');
+                this.deptList.forEach(item=>{
+                    //deptId映射deptName字典
+                    this.deptIdMapDeptName[item.deptId]=item.deptName;
+                })
+                console.log(this.deptIdMapDeptName[100],'deptid和deptname字典');
+                
              
             })
            },
            /**获得当前情况下的报名管理列表  模糊查询 */
             fuzzyQuery() {
                 let option = {
-                    depId:this.deptId,
+                    deptId:this.deptId,
                     userName:this.queryList.userName,
                     nickName: this.queryList.nickName,
                     enrollStatus:this.queryList.enrollStatus,
                     admissionStatus:this.queryList.admissionStatus,
                     // params:{
-                    beginCreateTime:this.beginCreateTime,
-                    endCreateTime:this.endCreateTime,
+                    beginCreateTime:this.queryList.beginCreateTime,
+                    endCreateTime:this.queryList.endCreateTime,
                     // },
                     page: this.queryParams.pageCount,
                     limit: this.queryParams.pageSize,
@@ -557,13 +848,13 @@
                     orderByColumn:'',
                     isAsc:''
                 }
-                console.log(option)
+                console.log(option,'发送的数据')
                 this.getEnrollList(option)
             },
             
             getEnrollList(option){
-                this.loading = true
-                activityEnrollList(option).then(value => {
+                 this.loading = true
+                 activityEnrollList(option).then(value => {
 
                     // console.log(value);
                     /** 总共多少条，总共多少页 */
@@ -573,15 +864,35 @@
                     // this.queryParams.currPage = value.data.currPage
                     this.queryParams.pageCount = Math.ceil(this.queryParams.totalCount/this.queryParams.pageSize);
                     this.enrollList = value.rows;
-                    console.log(this.enrollList);
+                    console.log(this.enrollList,'传来的数据');
                     this.loading = false
                     
+                })
+            },
+            initDict(){
+              // getDict
+                Promise.all([
+                    getDict('sc_activity_enroll_status'),
+                    getDict('sc_activity_admission_status'),
+                    getDict('sc_activity_admission_way'),             
+                ]).then(value => {
+                    console.log(value, 'initDict')
+                    let tempArr = [
+                        'dict_sc_activity_enroll_status',
+                        'dict_sc_activity_admission_status',
+                        'dict_sc_activity_admission_way',
+                    ]
+                    tempArr.forEach((item, index) => {
+                        this[item] = value[index].data
+                        console.log(value[index].data, '这是所有字典！！！')
+                    })
                 })
             },
 
         },
          async created() {
-
+            //初始化字典
+            this.initDict()
             /** 通过活动id获取当前活动报名信息，aid代码活动id*/
             this.getActivityEnroll({
                 activityId: this.$route.params.aid
@@ -594,6 +905,21 @@
 </script>
 
 <style scoped>
+   .adviceText{
+       margin: 10px 0px;
+   }
+   .textRed {
+        color: #de3c50;
+    }
+    .textgreen {
+        color: #54d7b4;
+    }
+    .textyellow {
+        color: yellow;
+    }
+    .textPlain {
+        color: #8b8b8b;
+    }
     .erke-top {
         /* height: 120px; */
         padding: 30px;

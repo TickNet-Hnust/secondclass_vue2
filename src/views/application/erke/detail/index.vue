@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-07-27 20:47:56
+ * @LastEditTime: 2021-07-29 09:50:32
 -->
 <template>
     <div class="app-container">
@@ -58,10 +58,10 @@
                             </el-select>
                         </div>
 
-                        <div style="margin-bottom: 10px">
+                        <div style="margin-bottom: 10px" class="noneInput">
                             <el-input
                                 style="margin-right: 10px"
-                                placeholder="请输入内容"
+                                placeholder="0"
                                 :value="countState.courseCount"
                             >
                                 <template slot="prepend">课程总数</template>
@@ -69,7 +69,7 @@
 
                             <el-input
                                 style="margin-right: 10px"
-                                placeholder="请输入内容"
+                                placeholder="0"
                                 :value="countState.applyingCount"
                             >
                                 <template slot="prepend">申请中</template>
@@ -77,7 +77,7 @@
 
                             <el-input
                                 style="margin-right: 10px"
-                                placeholder="请输入内容"
+                                placeholder="0"
                                 :value="countState.validCount"
                             >
                                 <template slot="prepend">审核通过</template>
@@ -85,13 +85,13 @@
 
                             <el-input
                                 style="margin-right: 10px"
-                                placeholder="请输入内容"
+                                placeholder="0"
                                 :value="countState.failCount"
                             >
                                 <template slot="prepend">审核未通过</template>
                             </el-input>
                         </div>
-
+                        
                         <el-button
                             type="primary"
                             :disabled="trainingProgramList.value == ''"
@@ -100,8 +100,8 @@
                             size="mini"
                             @click="addCourse"
                             v-hasPermi="['system:user:add']"
-                            >新增</el-button
-                        >
+                            >新增</el-button>
+
                         <el-button
                             type="warning"
                             plain
@@ -110,15 +110,18 @@
                             :load="exportLoading"
                             @click="handleExport"
                             v-hasPermi="['system:user:export']"
-                            >导出</el-button
-                        >
-
+                            >导出</el-button>
+                        <el-tooltip 
+                            effect="dark" 
+                            content="清空查询条件" 
+                            placement="right">
                         <el-button
                             circle
                             icon="el-icon-refresh"
                             @click="refresh"
                         >
                         </el-button>
+                        </el-tooltip>
                     </div>
                 </div>
 
@@ -300,44 +303,8 @@
                                             :key="index"
                                             :label="item.dictLabel"
                                         ></el-radio-button>
-                                        <!-- <el-radio-button
-                                            label="申请中"
-                                            value="1"
-                                        ></el-radio-button>
-                                        <el-radio-button
-                                            label="审核未通过"
-                                            value="2"
-                                        ></el-radio-button>
-                                        <el-radio-button
-                                            label="有效"
-                                            value="3"
-                                        ></el-radio-button>
-                                        <el-radio-button
-                                            label="无效"
-                                            value="4"
-                                        ></el-radio-button> -->
                                     </el-radio-group>
                                 </el-col>
-                                <!-- <el-col :span="1.5">
-                        <el-button size="mini" round
-                            >申请中</el-button
-                        >
-                    </el-col>
-                    <el-col :span="1.5">
-                        <el-button size="mini" round
-                            >审核未通过</el-button
-                        >
-                    </el-col>
-                    <el-col :span="1.5">
-                        <el-button size="mini" round
-                            >有效</el-button
-                        >
-                    </el-col>
-                    <el-col :span="1.5">
-                        <el-button size="mini" round
-                            >无效</el-button
-                        >
-                    </el-col> -->
                             </el-row>
                         </div>
                         <el-table
@@ -927,9 +894,7 @@
                     necessary: '',
                     status: '',
                     term: '',
-                    type: '',
-                    page: '',
-                    limit: ''
+                    type: ''
                 },
                 //课程加入方式
                 dict_sc_course_join_type: [],
@@ -1100,9 +1065,18 @@
                     this.trainingProgramIdMapname[cellValue]
                 )
             },
-            //没啥用
             refresh() {
-                this.$forceUpdate()
+                this.queryList={
+                    name: '',
+                    joinType: '',
+                    necessary: '',
+                    term: '',
+                    departmentId: '',
+                    status: '',
+                    type: '',
+                }
+                this.radioType = '全部'
+                this.fuzzyQuery()
             },
             /**
              * @description: 处理路径
@@ -1141,7 +1115,7 @@
             },
             // 取消按钮
             cancel() {
-                this.open = false
+                this.addDetailDialog.open = false
                 this.reset()
             },
             // 表单重置
@@ -1214,8 +1188,8 @@
              */            
             addDetail() {
                 this.addDetailDialog.config.lowestValue = this.addDetailDialog.lowestValueArray.map(item=> {return item.join(':')}).join(',');
-                console.log(this.addDetailDialog.config, 999)
-                ;(function(that) {
+                console.log(this.addDetailDialog.config, 999);
+                (function(that) {
                     if(that.addDetailDialog.title == '新增') 
                         return  coursePost(that.addDetailDialog.config)
                     else 
@@ -1368,7 +1342,7 @@
             getTrainingProgramList(option) {
                 trainingProgramList(option).then(value => {
                     this.trainingProgramList.rows = value.rows
-                    this.trainingProgramList.value = ''
+                    this.trainingProgramList.value = value.rows[0].id
                     
                     this.queryParams.totalCount = value.total
                     this.queryParams.totalPage = value.total / this.queryParams.pageSize

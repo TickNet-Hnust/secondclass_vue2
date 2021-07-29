@@ -1,3 +1,10 @@
+/*
+ * @Descripttion: 
+ * @Author: 林舒恒
+ * @Date: 2021-07-18 16:03:21
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-07-27 20:13:23
+ */
 import request from '@/utils/request.bak.js'
 /* PUT批量修改分类排序 */
 export function courseClassificationSortList(data) {
@@ -24,10 +31,11 @@ export function courseClassificationJudgeId(id) {
     })
 }
 /* GET根据参数查询二课课程分类列表 */
-export function courseClassificationList(id) {
+export function courseClassificationList(params) {
     return request({
         url: '/secondClass/courseClassification/list',
-        method: 'get'
+        method: 'get',
+        params
     })
 }
 /* GET子类别排序列表 */

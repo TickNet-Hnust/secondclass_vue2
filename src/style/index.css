@@ -112,6 +112,7 @@ textarea {
     display: none !important;
 }
 
+
 /* .graph>div:first-child {
     width: 100% !important;
 } */
@@ -125,6 +126,14 @@ textarea {
     padding: 0 10px !important;
 }
 
-.el-button [class*='el-icon-'] + span {
+.el-button [class*='el-icon-']+span {
     margin-left: 0 !important;
+}
+
+.noneInput .el-input__inner {
+    border: 1px solid #DCDFE6
+}
+
+.noneInput .el-input__inner:focus {
+    caret-color: transparent;
 }
