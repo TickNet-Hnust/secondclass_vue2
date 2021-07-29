@@ -6,7 +6,7 @@
             </div>
             <div class="erke-top-foot">
                 <el-row :gutter="15" type="flex" justify="start">
-                    <el-col :span="1" style="min-width:295px">
+                    <el-col :span="1" style="min-width:310px">
                         学年度：
                         <el-select value="2021-2022学年">
                             <el-option value="2021-2022学年 "></el-option>
@@ -14,7 +14,7 @@
                             <el-option value="2023-2024学年"></el-option>
                         </el-select>
                     </el-col>
-                    <el-col :span="1" style="min-width:330px">
+                    <el-col :span="1" style="min-width:340px">
                         学院/二级单位:
                         <el-select value="资源环境与安全工程学院">
                             <el-option value="计算机科学与工程学院"></el-option>
