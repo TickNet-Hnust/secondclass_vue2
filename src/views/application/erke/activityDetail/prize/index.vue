@@ -133,6 +133,11 @@
 </template>
 
 <script>
+    //导入活动奖项相关接口
+     import {
+        activityPrize,
+    } from '@/api/application/secondClass/activity'
+
     import {
         trainingProgramDetail,
         trainingProgramList,
@@ -174,10 +179,7 @@
         components: { Treeselect },
         data() {
             return {
-                enrollStartTime: '2021-10-2 08:00:00',
-                enrollEndTime: '2021-10-10 08:00:00',
-                enrollRange: ['计算机科学与工程学院', '商学院'],
-                enrollYearRange: [2018, 2019],
+                
                 queryParams: {
                     totalCount: 0,
                     totalPage: 50,
@@ -185,7 +187,30 @@
                     pageSize: 4
                 }
             }
-        }
+        },
+        methods:{
+            getActivityPrize(option){
+            //  后端接口还没写好，之后再写
+            //   activityPrize(option).then(value=>{
+            //       console.log(value);
+            //   })
+            }
+         
+        },
+        async created() {
+            //初始化字典
+            // this.initDict()
+
+            //获取活动奖项总信息
+            this.getActivityPrize({
+                activityId: this.$route.params.aid
+            });
+            /** 获得当前情况下的奖项管理列表 */
+            // this.fuzzyQuery()
+            
+        },
+        
+
     }
 </script>
 

@@ -99,6 +99,12 @@
 </template>
 
 <script>
+    //导入活动请假相关接口
+     import {
+        activityLeave,
+        activityLeaveList,
+        activityLeaveVerify,
+    } from '@/api/application/secondClass/activity' 
     import {
         trainingProgramDetail,
         trainingProgramList,
@@ -145,9 +151,66 @@
                     totalPage: 50,
                     pageCount: 1,
                     pageSize: 4
-                }
+                },
+                deptId:'',
+                queryList:{
+                    userName:'',
+                    nickName:'',
+                    leaveStatus:'',
+                    leaveStartTime:'',
+                    leaveEndTime:'',
+                },
             }
-        }
+        },
+        methods:{
+          //通过活动id获取当前活动请假信息
+           getActivityLeave(option){
+                activityLeave(option).then(value=>{
+                   console.log(value,'请假总信息');
+                });
+           },
+            /**获得当前情况下的请假管理列表  模糊查询 */
+            fuzzyQuery() {
+                let option = {
+                    deptId:this.deptId,
+                    userName:this.queryList.userName,
+                    nickName: this.queryList.nickName,
+                    leaveStatus:this.queryList.leaveStatus,
+                    // params:{
+                    leaveStartTime:this.queryList.leaveStartTime,
+                    leaveEndTime:this.queryList.leaveEndTime,
+                    // },
+                    page: this.queryParams.pageCount,
+                    limit: this.queryParams.pageSize,
+                    activityId:this.$route.params.aid,
+                    orderByColumn:'',
+                    isAsc:''
+                }
+                console.log(option,'发送的数据')
+                this.getLeaveList(option)
+            },
+            getLeaveList(option){
+                   this.loading = true
+                   activityLeaveList(option).then(value => {
+                    console.log(value,'传来的数据');
+                    this.loading = false
+                    
+                })
+            }
+        },
+        async created() {
+            //初始化字典
+            // this.initDict()
+
+            /** 通过活动id获取当前活动请假信息，aid代码活动id*/
+            this.getActivityLeave({
+                activityId: this.$route.params.aid
+            });
+            this.fuzzyQuery()
+            /** 获得当前情况下的报名管理列表 */
+            // this.fuzzyQuery()
+            
+        },
     }
 </script>
 

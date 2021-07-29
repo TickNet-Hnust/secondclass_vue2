@@ -2,8 +2,8 @@
  * @Descripttion: 培养方案详情
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-27 14:12:30
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-07-29 09:50:32
 -->
 <template>
     <div class="app-container">
@@ -111,7 +111,10 @@
                             @click="handleExport"
                             v-hasPermi="['system:user:export']"
                             >导出</el-button>
-<el-tooltip class="item" effect="dark" content="清空查询条件" placement="right">
+                        <el-tooltip 
+                            effect="dark" 
+                            content="清空查询条件" 
+                            placement="right">
                         <el-button
                             circle
                             icon="el-icon-refresh"
@@ -134,13 +137,14 @@
                             >
                                 <span slot="title">全部</span>
                             </el-menu-item>
+
                             <el-menu-item
-                                v-for="(item, index) in classificationList.rows"
-                                :key="index"
+                                v-for="(item, index) in classificationList.rows" :key="index"
                                 :index="index + ''"
                             >
                                 <span slot="title">{{ item.name }}</span>
                             </el-menu-item>
+
                         </el-menu>
                         <!-- <ul>
                             <li
@@ -919,6 +923,7 @@
                 classificationIdMapName: [],
                 //学年id =>学年名称
                 schoolYearIdMapName: [],
+                // 分页请求参数
                 queryParams: {
                     totalCount: 0,
                     totalPage: 0,
@@ -1183,8 +1188,8 @@
              */            
             addDetail() {
                 this.addDetailDialog.config.lowestValue = this.addDetailDialog.lowestValueArray.map(item=> {return item.join(':')}).join(',');
-                console.log(this.addDetailDialog.config, 999)
-                ;(function(that) {
+                console.log(this.addDetailDialog.config, 999);
+                (function(that) {
                     if(that.addDetailDialog.title == '新增') 
                         return  coursePost(that.addDetailDialog.config)
                     else 
@@ -1423,6 +1428,7 @@
                     /* value保证存在且唯一 */
                     /* label保证渲染视图 */
                     console.log(value, 'courseClassificationList')
+                    // 往value里面加value和label属性 用于级联展示课程分类
                     value.data = value.data.map(item => ({
                         ...item,
                         value: item.id,
