@@ -2,8 +2,8 @@
  * @Description: 
  * @Autor: 张津瑞
  * @Date: 2021-07-26 18:39:09
- * @LastEditors: 张津瑞
- * @LastEditTime: 2021-07-29 16:34:51
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-07-30 10:12:13
  */
 
 import request from '@/utils/request.js'
@@ -36,7 +36,7 @@ export function activityEnrollList(params) {
  * @description: 活动报名批量审核
  * @param {*} params
  */
- export function activityEnrollVerify(params) {
+export function activityEnrollVerify(params) {
     return request({
         url: '/secondClass/activity/enroll/verify',
         method: 'put',
@@ -49,7 +49,7 @@ export function activityEnrollList(params) {
  * @description: 获取活动奖项信息
  * @param {*} params
  */
- export function activityPrize(params) {
+export function activityPrize(params) {
     return request({
         url: '/secondClass/activity/prize',
         method: 'get',
@@ -61,7 +61,7 @@ export function activityEnrollList(params) {
  * @description: 获取活动请假信息
  * @param {*} params
  */
- export function activityLeave(params) {
+export function activityLeave(params) {
     return request({
         url: '/secondClass/activity/leave',
         method: 'get',
@@ -73,7 +73,7 @@ export function activityEnrollList(params) {
  * @description: 获取活动请假列表
  * @param {*} params
  */
- export function activityLeaveList(params) {
+export function activityLeaveList(params) {
     return request({
         url: '/secondClass/activity/leave/list',
         method: 'get',
@@ -85,7 +85,7 @@ export function activityEnrollList(params) {
  * @description: 请假批量审核
  * @param {*} params
  */
- export function activityLeaveVerify(params) {
+export function activityLeaveVerify(params) {
     return request({
         url: '/secondClass/activity/leave/verify',
         method: 'put',
@@ -93,3 +93,60 @@ export function activityEnrollList(params) {
     })
 }
 
+/** 活动管理起草开始 */
+/**
+ * @description: 条件查询活动分页
+ * @param {*} params
+ */
+export function activityList(params) {
+    return request({
+        url: '/secondClass/activity/list',
+        method: 'get',
+        params
+    })
+}
+/**
+ * @description: 新增活动
+ * @param {*} data
+ */
+export function activityPost(data) {
+    return request({
+        url: '/secondClass/activity',
+        method: 'post',
+        data
+    })
+}
+/**
+ * @description: 活动撤回
+ * @param {*} params
+ */
+export function activityCancel(params) {
+    return request({
+        url: '/secondClass/activityCancel',
+        method: 'get',
+        params
+    })
+}
+/**
+ * @description: 编辑活动
+ * @param {*} data
+ */
+export function activityPut(data) {
+    return request({
+        url: '/secondClass/activity',
+        method: 'put',
+        data
+    })
+}
+/**
+ * @description: 改变活动状态
+ * @param {*} id 当前id
+ * @param {*} nextStatus 下一个状态
+ */
+export function activityIdNextStatus({ id, nextStatus }) {
+    return request({
+        url: `/secondClass/activity/${id}/${nextStatus}`,
+        method: 'post'
+    })
+}
+/** 活动管理起草结束 */
