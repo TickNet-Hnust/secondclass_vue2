@@ -97,3 +97,8 @@
         }
     }
 </script>
+<style scoped>
+    .app-container {
+        background-color: #fff !important;
+    }
+</style>

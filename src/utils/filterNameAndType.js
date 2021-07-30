@@ -3,9 +3,9 @@
  * @Author: 林舒恒
  * @Date: 2021-07-27 21:48:25
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-28 09:17:57
+ * @LastEditTime: 2021-07-28 21:43:52
  */
-export default function(data, name, type, integralType) {
+export default function(data, name) {
     if (!name) return data
 
     let findParent = (node) => {
