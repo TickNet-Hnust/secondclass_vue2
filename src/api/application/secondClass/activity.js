@@ -3,7 +3,7 @@
  * @Autor: 张津瑞
  * @Date: 2021-07-26 18:39:09
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-30 10:12:13
+ * @LastEditTime: 2021-07-30 11:45:26
  */
 
 import request from '@/utils/request.js'
@@ -146,7 +146,7 @@ export function activityPut(data) {
 export function activityIdNextStatus({ id, nextStatus }) {
     return request({
         url: `/secondClass/activity/${id}/${nextStatus}`,
-        method: 'post'
+        method: 'put'
     })
 }
 /** 活动管理起草结束 */

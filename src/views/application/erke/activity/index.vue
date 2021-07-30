@@ -81,7 +81,7 @@
                         :props="{ checkStrictly: true }"
                         :show-all-levels="true"
                         class="activityCascader"
-                        
+                        @change="handChangeNode"
                     ></el-cascader>
                     </el-col>
                     <el-col :span="1" style="min-width:140px">
@@ -150,16 +150,21 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column prop="rankId" label="级别"></el-table-column>
+                <el-table-column 
+                    prop="rankId" 
+                    label="级别"
+                    :formatter="formatRank"
+                ></el-table-column>
 
                 <el-table-column
                     prop="schoolYearId"
                     label="学年"
                     min-width="120"
+                    :formatter="formatSchoolYear"
                 ></el-table-column>
 
                 <el-table-column
-                    prop="courseClassificationId"
+                    prop="courseClassificationName"
                     label="活动分类"
                     min-width="140"
                 ></el-table-column>
@@ -196,17 +201,13 @@
                 <el-table-column
                     prop="createTime"
                     label="发布时间"
-                    min-width="120"
-                ></el-table-column>
-
-                <el-table-column
-                    prop="applyRange"
-                    label="活动分类"
+                    min-width="160"
                 ></el-table-column>
 
                 <el-table-column
                     prop="admissionWay"
                     label="录取方式"
+                    :formatter="formatAdmissionWay"
                 ></el-table-column>
 
                 <el-table-column
@@ -217,14 +218,20 @@
                 <el-table-column
                     prop="activityStartTime"
                     label="开始时间"
-                    min-width="120"
+                    min-width="160"
                 ></el-table-column>
 
                 <el-table-column
                     prop="recommend"
                     label="是否为推荐活动"
                     min-width="120"
-                ></el-table-column>
+                >
+                    <template slot-scope="scope">
+                        {{
+                            scope.row.recommend == 1 ? '是' : '否'
+                        }}
+                    </template>
+                </el-table-column>
 
                 <el-table-column label="操作" fixed="right" min-width="350">
                     <template slot-scope="scope">
@@ -234,6 +241,7 @@
                             type="text"
                             size="mini"
                             :icon="item.icon"
+                            @click="changeStatus(scope.row.id,item.status)"
                         >
                             {{ item.title }}
                         </el-button>
@@ -260,7 +268,8 @@
 
 <script>
     import {
-        activityList
+        activityList,
+        activityIdNextStatus
     } from '@/api/application/secondClass/activity'
     import {
         schoolYearList
@@ -296,6 +305,7 @@
                     value: '',
                     rows:[]
                 },
+                schoolYearIdMapName:[],
                 /** 积分标准 */
                 datadata: [],
                 status: '全部',
@@ -310,50 +320,91 @@
                 dict_sc_activity_status: [],
                 //活动录取方式
                 dict_sc_activity_admission_way:[],
+                //培养方案级别
+                dict_sc_train_program_rank:[],
+                //活动录取方式
+                dict_sc_activity_admission_way: [],
                 //操作映射
                 operation: [
                     [
-                        { title: '修改', icon: 'el-icon-edit' },
-                        { title: '申请发布', icon: 'el-icon-s-release' },
-                        { title: '管理员发布', icon: 'el-icon-s-release' },
-                        { title: '取消', icon: 'el-icon-circle-close' }
+                        { title: '修改',status: 0, icon: 'el-icon-edit' },
+                        { title: '申请发布',status: 1, icon: 'el-icon-s-release' },
+                        { title: '管理员发布',status: 2, icon: 'el-icon-s-release' },
+                        { title: '取消',status: 4, icon: 'el-icon-circle-close' }
                     ],
                     [
-                        { title: '审批', icon: 'el-icon-s-check' },
-                        { title: '撤回', icon: 'el-icon-d-arrow-right' }
+                        { title: '审批',status: 2, icon: 'el-icon-s-check' },
+                        { title: '撤回',status: 0, icon: 'el-icon-d-arrow-right' }
                     ],
                     [
-                        { title: '启动报名', icon: 'el-icon-caret-right' },
-                        { title: '撤回', icon: 'el-icon-d-arrow-right' },
-                        { title: '取消', icon: 'el-icon-circle-close' }
+                        { title: '启动报名',status: 5, icon: 'el-icon-caret-right' },
+                        { title: '撤回',status: 0, icon: 'el-icon-d-arrow-right' },
+                        { title: '取消',status: 4, icon: 'el-icon-circle-close' }
                     ],
                     [
-                        { title: '修改', icon: 'el-icon-edit' },
-                        { title: '取消', icon: 'el-icon-circle-close' }
+                        { title: '修改',status: 0, icon: 'el-icon-edit' },
+                        { title: '取消',status: 4, icon: 'el-icon-circle-close' }
                     ],
-                    [{ title: '恢复', icon: 'el-icon-refresh-right' }],
+                    [{ title: '恢复',status: 0, icon: 'el-icon-refresh-right' }],
                     [
-                        { title: '结束报名', icon: 'el-icon-video-pause' },
-                        { title: '启动报名', icon: 'el-icon-caret-right' },
-                        { title: '暂停报名', icon: 'el-icon-video-pause' },
-                        { title: '撤回', icon: 'el-icon-d-arrow-right' }
-                    ],
-                    [
-                        { title: '启动活动', icon: 'el-icon-caret-right' },
-                        { title: '恢复报名', icon: 'el-icon-refresh-right' }
+                        { title: '结束报名',status: 6, icon: 'el-icon-video-pause' },
+                        { title: '启动活动',status: 7, icon: 'el-icon-caret-right' },
+                        { title: '暂停报名',status: 2, icon: 'el-icon-video-pause' },
+                        { title: '撤回',status: 0, icon: 'el-icon-d-arrow-right' }
                     ],
                     [
-                        { title: '结束活动', icon: 'el-icon-video-pause' },
-                        { title: '暂停活动', icon: 'el-icon-video-pause' }
+                        { title: '启动活动',status: 7, icon: 'el-icon-caret-right' },
+                        { title: '恢复报名',status: 5, icon: 'el-icon-refresh-right' }
                     ],
                     [
-                        { title: '取消', icon: 'el-icon-circle-close' },
-                        { title: '恢复活动', icon: 'el-icon-refresh-right' }
+                        { title: '结束活动',status: 8, icon: 'el-icon-video-pause' },
+                        { title: '暂停活动',status: 6, icon: 'el-icon-video-pause' }
+                    ],
+                    [
+                        { title: '取消',status: 4, icon: 'el-icon-circle-close' },
+                        { title: '恢复活动',status: 7, icon: 'el-icon-refresh-right' }
                     ]
                 ]
             }
         },
         methods: {
+            formatAdmissionWay(row,column,cellValue) {
+                return cellValue!= null && this.dict_sc_activity_admission_way[cellValue].dictLabel
+            },
+            formatRank(row,column,cellValue) {
+                return cellValue != null && this.dict_sc_train_program_rank[cellValue]?.dictLabel
+            },
+            formatSchoolYear(row,column,cellValue) {
+                return cellValue!=null && this.schoolYearIdMapName[cellValue]
+            },
+            handChangeNode(value) {
+                console.log(value)
+            },
+            changeStatus(id,nextStatus) {
+                console.log(id,nextStatus)
+                activityIdNextStatus({
+                    id,
+                    nextStatus
+                }).then(value => {
+                    console.log(value)
+                    this.getActivityList({
+                    schoolYearId: this.schoolYearList.value,
+                    departmentId: '',
+                    name: this.queryList.name,
+                    id: this.queryList.id,
+                    groupName: this.queryList.groupName,
+                    admissionWay: this.queryList.admissionWay,
+                    // createTime: this.queryList.createTime,
+                    activityClassificationId: this.queryList.activityClassificationId,
+                    recommend:this.queryList.recommend,
+                    activityStatusId: this.queryList.activityStatusId,
+                    pageNum: this.queryParams.pageNum,
+                    pageSize: this.queryParams.pageSize,
+                    beginCreateTime:'',
+                    endCreateTime: '2021-07-20 16:19:30'
+                })
+                })
+            },
             radioChange(val) {
                 console.log(val)
             },
@@ -375,11 +426,15 @@
             async initDict() {
                 await Promise.all([
                     getDict('sc_activity_status'),
+                    getDict('sc_activity_admission_way'),
+                    getDict('sc_train_program_rank'),
                     getDict('sc_activity_admission_way')
                 ]).then(
                     value => {
                         let tempArr = [
                             'dict_sc_activity_status',
+                            'dict_sc_activity_admission_way',
+                            'dict_sc_train_program_rank',
                             'dict_sc_activity_admission_way'
                         ]
                         
@@ -403,6 +458,9 @@
             getSchoolYearList() {
                 schoolYearList().then(value => {
                     this.schoolYearList.rows = value.rows
+                    value.rows.forEach(item => {
+                        this.schoolYearIdMapName[item.id] = item.yearName
+                    })
                 })
             },
             getActivityList(option) {
