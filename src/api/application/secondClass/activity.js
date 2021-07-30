@@ -3,7 +3,7 @@
  * @Autor: 张津瑞
  * @Date: 2021-07-26 18:39:09
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-07-29 16:34:51
+ * @LastEditTime: 2021-07-30 17:17:37
  */
 
 import request from '@/utils/request.js'
@@ -57,6 +57,49 @@ export function activityEnrollList(params) {
     })
 }
 
+
+/**
+ * @description: 获取活动签到信息
+ * @param {*} params
+ */
+ export function activityRegiste(params) {
+    return request({
+        url: '/secondClass/activity/registe',
+        method: 'get',
+        params
+    })
+}
+
+
+
+/**
+ * @description: 获取活动签到信息列表
+ * @param {*} params
+ */
+ export function activityRegisteList(params) {
+    return request({
+        url: '/secondClass/activity/registe/list',
+        method: 'get',
+        params
+    })
+}
+
+/**
+ * @description: 批量补签/取消
+ * @param {*} params
+ */
+ export function activityRegisteVerify(params) {
+    return request({
+        url: '/secondClass/activity/registe/verify',
+        method: 'put',
+        params
+    })
+}
+
+
+
+
+
 /**
  * @description: 获取活动请假信息
  * @param {*} params
@@ -68,6 +111,9 @@ export function activityEnrollList(params) {
         params
     })
 }
+
+
+
 
 /**
  * @description: 获取活动请假列表

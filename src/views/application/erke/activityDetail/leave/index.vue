@@ -7,13 +7,27 @@
             <el-col :span="24" :xs="24">
                 <div class="erke-bottom">
                     <div class="erke-buttom-left">
-                        <ul>
-                            <li>全部</li>
-                            <li>资源环境与安全工程学院</li>
-                            <li>土木工程学院</li>
-                            <li>机械工程学院</li>
-                            <li>计算机科学与工程学院</li>
-                        </ul>
+                        <el-menu
+                            default-active=""
+                            class="el-menu-vertical-demo"
+                            @select="handleSelect"
+                        >
+                            <el-menu-item
+                                index=''
+                            >
+                                <span slot="title">全部 <span class="numbers">{{recordsNumber}}</span></span>
+                            </el-menu-item>
+
+                            <el-menu-item
+                                v-for="(item, index) in Object.entries(tabInfo)" :key="index"
+                                :index="index + ''"
+                                 
+                            >
+                            <span slot="title" >{{ deptIdMapDeptName[item[0]] }} <span class="numbers">{{item[1]}}</span> </span>
+                                
+                            </el-menu-item>
+
+                        </el-menu>
                     </div>
                     <div class="erke-buttom-right">
                         <div class="operate">
@@ -24,65 +38,210 @@
                                     justify="start"
                                     style="flexWrap:wrap"
                                 >
+                                <el-col :span="1" style="min-width:80px;" >
+                                    <el-tooltip 
+                                        class="item" 
+                                        effect="dark" 
+                                        content="清空查询条件" 
+                                        placement="right">
+                                    <el-button
+                                        circle
+                                        icon="el-icon-refresh"
+                                        @click="refresh"
+                                    >
+                                    </el-button>
+                                    </el-tooltip>
+                                </el-col> 
                                     <el-col :span="1" style="min-width: 90px">
                                         <el-form-item label="">
                                             <el-select
-                                                value="操作"
+                                                v-model="action"
                                                 style="width:80px"
+                                                placeholder="操作"
                                             >
-                                                <el-option
-                                                    label="操作"
-                                                ></el-option>
+                                               <el-option value="批量修改"></el-option>
+                                                <el-option value="排序"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
+
                                     <el-col :span="1" style="min-width: 185px">
                                         <el-form-item label="学号：">
-                                            <el-input data-text></el-input>
+                                            <el-input data-text
+                                            placeholder="学号"
+                                            v-model="queryList.userName"
+                                            style="width:100px"
+                                            @input="fuzzyQuery"
+                                            >
+                                            </el-input>
                                         </el-form-item>
                                     </el-col>
+
                                     <el-col :span="1" style="min-width: 185px">
                                         <el-form-item label="姓名：">
-                                            <el-input data-text></el-input>
+                                            <el-input data-text
+                                            placeholder="姓名"
+                                            v-model="queryList.nickName"
+                                            style="width:100px"
+                                            @input="fuzzyQuery"
+                                            >
+
+                                            </el-input>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="1" style="min-width: 180px">
-                                        <el-form-item label="请假状态">
+
+                                    <el-col :span="1" style="min-width: 230px">
+                                        <el-form-item label="请假状态：">
+
                                             <el-select
-                                                value="全部"
-                                                style="width:90px"
+                                                v-model="queryList.status"
+                                                placeholder="请假状态:不限"
+                                                style="width:120px"
+                                                @change="fuzzyQuery"
                                             >
                                                 <el-option
-                                                    value="全部"
-                                                ></el-option>
+                                                    value=""
+                                                    label="请假状态:不限"   
+                                                >
+                                                </el-option>
+                                                <el-option
+                                                    v-for="(item,index) in dict_sc_activity_leave_status"
+                                                    :key="index"
+                                                    :value="item.dictValue"
+                                                    :label="item.dictLabel"
+                                                >
+                                                </el-option>
                                             </el-select>
+
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="1" style="min-width: 340px">
                                         <el-form-item label="请假时间">
                                             <el-date-picker
-                                                align="right"
+                                                v-model="value2"
                                                 type="datetimerange"
+                                                :picker-options="pickerOptions"
                                                 range-separator="至"
+                                                start-placeholder="开始日期"
+                                                end-placeholder="结束日期"
+                                                align="right"
+                                                @change="leaveDateChange"
                                             >
                                             </el-date-picker>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="1" style="min-width:150px">
-                                        <el-form-item label="">
-                                            <el-button
-                                                type="primary"
-                                                size="mini"
-                                                >查询</el-button
-                                            >
-                                            <el-button size="mini"
-                                                >重置</el-button
-                                            >
-                                        </el-form-item>
-                                    </el-col>
+        
                                 </el-row>
                             </el-form>
                         </div>
+
+                        <el-table
+                            :data="leaveList"
+                            v-loading="loading"
+                            class="enrollMainTable"
+                        >
+                            <el-table-column type="selection" min-width="55">
+
+                            </el-table-column>
+
+                            <el-table-column
+                                prop="id"
+                                label="ID"
+                                min-width="50"
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                prop="nickName"
+                                label="姓名"
+                                min-width="80"
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                prop="userName"
+                                label="学号"
+                                min-width="100"
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                prop="className"
+                                label="所在班级"
+                                min-width="120"
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                prop="groupName"
+                                label="群组"
+                                min-width="120"
+                                
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                prop="reason"
+                                label="请假理由"
+                                min-width="120"                          
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                prop="createTime"
+                                label="请假时间"
+                                min-width="120"                          
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                prop="status"
+                                label="请假状态"
+                                min-width="100"
+                                :formatter="formatLeaveStatus"
+                            >
+                                <template slot-scope="scope">
+                                    <el-button
+                                        size="mini"
+                                        round
+                                        :class="sureClassLeave(scope.row)"
+                                        >{{
+                                            computedLeaveStatus(scope.row.status)
+                                        }}</el-button
+                                    >
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column
+                                prop="approveNickName"
+                                label="批假人"
+                                min-width="100"
+                                
+                            >
+                            </el-table-column>
+
+                            
+
+                            <el-table-column
+                                prop="operate"
+                                label="操作"
+                                fixed="right"
+                                width="50"
+                            >
+                                <template slot-scope="scope">
+                                    <el-button
+                                        size="mini"
+                                        type="text"
+                                        icon="el-icon-s-check"
+                                        
+                                        @click="examLeaveOpenDialog(scope.row)"
+                                        >审核</el-button
+                                    >
+                                   
+                                </template>
+                            </el-table-column>
+
+                        </el-table>
 
                         <pagination
                             v-show="queryParams.totalPage > 0"
@@ -95,6 +254,72 @@
                 </div>
             </el-col>
         </el-row>
+        <!-- 审核请假会话框 -->
+        <el-dialog
+            :title="examLeaveDialog.title"
+            :visible.sync="examLeaveDialog.open"
+            width="915px"
+            append-to-body
+            class="examLeaveDialog"
+        >
+            <el-form ref="form" :model="form" label-width="80px">
+                <el-row>
+                    <el-col :span="10">姓名：</el-col>
+                    <el-col :span="14">{{
+                        examLeaveDialog.data.nickName
+                    }}</el-col>
+                </el-row>
+                 <el-row>
+                    <el-col :span="10">学号：</el-col>
+                    <el-col :span="14">{{
+                        examLeaveDialog.data.userName
+                    }}</el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="10">所在班级：</el-col>
+                    <el-col :span="14">{{
+                        examLeaveDialog.data.className
+                    }}</el-col>
+                </el-row> 
+                <el-row>
+                    <el-col :span="10">群组：</el-col>
+                    <el-col :span="14">{{
+                        examLeaveDialog.data.groupName
+                    }}</el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="10">请假时间：</el-col>
+                    <el-col :span="14">{{
+                        examLeaveDialog.data.createTime
+                    }}</el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col :span="10">请假理由：</el-col>
+                    <el-col :span="14">{{
+                        examLeaveDialog.data.reason
+                    }}</el-col>
+                </el-row>          
+
+                
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+            <el-radio-group 
+                v-if="examLeaveDialog.title=='请假审核'"
+                v-model="examLeaveDialog.post.status" 
+                style="float:left;margin-top:15px"
+            >
+                <el-radio :label="1">审核通过</el-radio>
+                <el-radio :label="2">审核未通过</el-radio>
+            </el-radio-group>
+
+
+                <el-button @click="cancel">关闭</el-button>
+                <el-button type="primary" @click="examLeaveSubmit">确 定</el-button>
+            </div>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -105,6 +330,12 @@
         activityLeaveList,
         activityLeaveVerify,
     } from '@/api/application/secondClass/activity' 
+    //导入获取dept信息函数
+    import { 
+        getDept,
+        listDeptExcludeChild,
+        listDept
+    } from '@/api/system/dept.js'
     import {
         trainingProgramDetail,
         trainingProgramList,
@@ -146,36 +377,245 @@
         components: { Treeselect },
         data() {
             return {
+                //单个审核请假会话框表单参数form
+                form:{},
+                //单个审核请假会话框数据
+                examLeaveDialog:{
+                     title:'请假审核',
+                     open:false,
+                     data:{
+                        nickName:'',
+                        userName:'',
+                        className:'',
+                        groupName:'',
+                        createTime:'',
+                        reason:'',
+                     },
+                     post:{
+                         ids:'',
+                         status:0,
+                     }
+                 },
+                 //  批量审核 会话框数据数组 以后应该会用到
+                mutiExamLeaveDialogDataList:[],
                 queryParams: {
                     totalCount: 0,
                     totalPage: 50,
                     pageCount: 1,
-                    pageSize: 4
+                    pageSize: 4,
+                    currPage: 1,
                 },
                 deptId:'',
                 queryList:{
                     userName:'',
                     nickName:'',
-                    leaveStatus:'',
+                    status:'',
                     leaveStartTime:'',
                     leaveEndTime:'',
                 },
+                //请假列表
+                leaveList:[],
+                //各学院请假情况 deptId:numbers的形式
+                tabInfo:[],
+                //请假记录全部人数
+                recordsNumber:'',
+                //请假状态字典数组
+                dict_sc_activity_leave_status:[],
+                //搜索框 操作
+                action:'',
+                //部门id转部门名字
+                deptIdMapDeptName:[],
+                //部门id 用于模糊查询
+                deptId:'',
+                //DateTimePicker
+                pickerOptions: {
+                shortcuts: [{
+                    text: '最近一周',
+                    onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit('pick', [start, end]);
+                    }
+                }, {
+                    text: '最近一个月',
+                    onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                    picker.$emit('pick', [start, end]);
+                    }
+                }, {
+                    text: '最近三个月',
+                    onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                    picker.$emit('pick', [start, end]);
+                    }
+                }]
+                },
+                //绑定请假时间
+                value2:''
+
+            }
+        },
+        computed:{
+            computedLeaveStatus(){
+                return value => {
+                    // console.log(this.dict_sc_course_status,temp,333)
+                    // console.log(value)
+                    return this.dict_sc_activity_leave_status[value]?.dictLabel;
+                }
             }
         },
         methods:{
+            //操作分页触发的事件
+            getList(option){
+                this.queryParams.pageNum = option.page
+                this.queryParams.pageSize = option.limit
+                this.fuzzyQuery()
+            },
+            //清空查询条件
+            refresh() {
+                this.action='',
+                this.queryList={
+                    userName:'',
+                    nickName:'',
+                    status:'',
+                    leaveStartTime:'',
+                    leaveEndTime:'',
+                }
+                this.value2='',
+                this.fuzzyQuery()
+            },
+            //筛选请假时间触发的事件
+            leaveDateChange(){
+               //发送时间的格式还需要调整一下
+               if(this.value2!=null)
+               {
+                    this.queryList.leaveStartTime = this.value2[0];
+                    this.queryList.leaveEndTime = this.value2[1];
+                    this.fuzzyQuery();
+               }
+               
+            },
+            //点击左下角部门触发的事件
+            handleSelect(index){
+                console.log(index);
+               if(index!='')
+               {
+                  this.deptId = Object.entries(this.tabInfo)[index][0];
+               }else{
+                  this.deptId=''
+               }
+               this.fuzzyQuery()
+            },
+            //格式化请假状态
+            formatLeaveStatus(row, column, cellValue){
+                return (
+                    cellValue != null &&
+                    this.dict_sc_activity_leave_status[cellValue]?.dictLabel
+                )
+            },
+             //审核点击事件 开打会话框
+            examLeaveOpenDialog(row){
+                //渲染会话框数据
+                this.renderState(row)
+                this.examLeaveDialog.title='请假审核'
+            },
+            //渲染会话框数据 打开会话框
+            renderState(row){
+                console.log(row);
+                this.examLeaveDialog.data={
+                  nickName:row.nickName,
+                  userName:row.userName,
+                  className:row.className,
+                  groupName:row.groupName,
+                  createTime:row.createTime,
+                  reason:row.reason,
+                };
+
+                this.examLeaveDialog.post={
+                  ids:row.id,
+                  status:row.status,
+                };
+                this.examLeaveDialog.open = true;
+                console.log(this.examLeaveDialog.post,'确认前发送的数据')
+
+            },
+            //会话审核确定
+            examLeaveSubmit(){
+                console.log(this.examLeaveDialog.post,'审核确定后发送的数据');
+                activityLeaveVerify(this.examLeaveDialog.post).then(value=>{
+                    console.log(value);
+                    this.examLeaveDialog.open = false
+                    this.fuzzyQuery()
+                })
+            },
+            //会话框取消
+            cancel() {
+                this.examLeaveDialog.open = false
+                this.reset()
+            },
+            //会话框数据重置
+            reset(){
+               this.examLeaveDialog.data={
+                  nickName:'',
+                  userName:'',
+                  className:'',
+                  groupName:'',
+                  createTime:'',
+                  admissionStatus:0,
+               }
+            },
+            /**
+             * @description: 确定CSS类
+             * @param {*} row
+             */            
+            sureClassLeave(row) {
+                
+                   if (row.status == 0) {
+                    //ing
+                    return 'textPlain'
+                } else if (row.status == 1) {
+                    //yes
+                    return 'textgreen'
+                } else if (row.status== 2) {
+                    //no
+                    return 'textyellow'
+                } else {
+                    //unpass
+                    return 'textRed'
+                } 
+            },
+           //请假审核点击 打开会话框 
           //通过活动id获取当前活动请假信息
            getActivityLeave(option){
-                activityLeave(option).then(value=>{
+                activityLeave(option).then(async value=>{
+
                    console.log(value,'请假总信息');
+                   this.recordsNumber = value.data.recordsNumber;
+                   this.tabInfo = value.data.tabInfo;
+
                 });
            },
+           getDeptIdMapDeptName(){
+               listDept().then(value=>{
+                    value.data.forEach(item=>{
+                    //deptId映射deptName字典
+                    this.deptIdMapDeptName[item.deptId]=item.deptName;
+                });
+                console.log(this.deptIdMapDeptName,'这是deptid和deptname的map');
+               })
+            },
             /**获得当前情况下的请假管理列表  模糊查询 */
             fuzzyQuery() {
                 let option = {
                     deptId:this.deptId,
                     userName:this.queryList.userName,
                     nickName: this.queryList.nickName,
-                    leaveStatus:this.queryList.leaveStatus,
+                    status:this.queryList.status,
                     // params:{
                     leaveStartTime:this.queryList.leaveStartTime,
                     leaveEndTime:this.queryList.leaveEndTime,
@@ -184,7 +624,7 @@
                     limit: this.queryParams.pageSize,
                     activityId:this.$route.params.aid,
                     orderByColumn:'',
-                    isAsc:''
+                    isAsc:'',
                 }
                 console.log(option,'发送的数据')
                 this.getLeaveList(option)
@@ -192,29 +632,64 @@
             getLeaveList(option){
                    this.loading = true
                    activityLeaveList(option).then(value => {
-                    console.log(value,'传来的数据');
+
+                    this.queryParams.totalCount  = value.total
+                    this.queryParams.pageCount = Math.ceil(this.queryParams.totalCount/this.queryParams.pageSize);
+                    this.leaveList = value.rows;
+                    console.log(this.leaveList,'传来的数据');
                     this.loading = false
                     
                 })
-            }
+            },
+             initDict(){
+              // getDict
+                Promise.all([
+                    getDict('sc_activity_leave_status'),            
+                ]).then(value => {
+              
+                    let tempArr = [
+                        'dict_sc_activity_leave_status',
+                    ]
+                    tempArr.forEach((item, index) => {
+                        this[item] = value[index].data
+                        console.log(value[index].data, '这是所有字典！！！')
+                    })
+                })
+            },
         },
         async created() {
             //初始化字典
-            // this.initDict()
+            this.initDict()
 
             /** 通过活动id获取当前活动请假信息，aid代码活动id*/
             this.getActivityLeave({
                 activityId: this.$route.params.aid
             });
             this.fuzzyQuery()
-            /** 获得当前情况下的报名管理列表 */
-            // this.fuzzyQuery()
+          
+            this.getDeptIdMapDeptName()
             
         },
     }
 </script>
 
 <style scoped>
+   /* 状态样式 */
+   .adviceText{
+       margin: 10px 0px;
+   }
+   .textRed {
+        color: #de3c50;
+    }
+    .textgreen {
+        color: #54d7b4;
+    }
+    .textyellow {
+        color: rgba(195, 0, 255, 0.329);
+    }
+    .textPlain {
+        color: #8b8b8b;
+    }
     .erke-top {
         /* height: 120px; */
         padding: 15px;
@@ -258,7 +733,13 @@
     }
     .erke-buttom-left li span {
         position: absolute;
-        right: 10px;
+        width: 20px;
+        text-align: center;
+        top: 0;
+    }
+    .erke-buttom-left .numbers {
+        position: absolute;
+        right: -220px;
         width: 20px;
         text-align: center;
         top: 0;

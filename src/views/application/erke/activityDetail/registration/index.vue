@@ -178,6 +178,13 @@
 </template>
 
 <script>
+   //导入活动签到相关接口
+     import {
+        activityRegiste,
+        activityRegisteList,
+        activityRegisteVerify,
+    } from '@/api/application/secondClass/activity'
+
     import {
         trainingProgramDetail,
         trainingProgramList,
@@ -219,10 +226,17 @@
         components: { Treeselect },
         data() {
             return {
-                enrollStartTime: '2021-10-2 08:00:00',
-                enrollEndTime: '2021-10-10 08:00:00',
-                enrollRange: ['计算机科学与工程学院', '商学院'],
-                enrollYearRange: [2018, 2019],
+                activityManager:'',
+                activityOrganizer:'',
+                activityPlaceName:'',
+                admissionNumber:'',
+                registeDistance:'',
+                registeStartTime:'',
+                registeEndTime:'',
+                registeLate:'',
+                registeYes:'',
+                registeNo:'',
+                tabInfo:'',
                 queryParams: {
                     totalCount: 0,
                     totalPage: 50,
@@ -230,7 +244,37 @@
                     pageSize: 4
                 }
             }
-        }
+        },
+        methods:{
+           getActivityRegiste(option){
+            console.log(option);
+            activityRegiste(option).then(value=>{ 
+                this.activityManager = value.data.activityManager;
+                this.activityOrganizer = value.data.activityOrganizer;
+                this.activityPlaceName = value.data.activityPlaceName;
+                this.admissionNumber = value.data.admissionNumber;
+                this.registeDistance = value.data.registeDistance;
+                this.registeStartTime = value.data.registeStartTime;
+                this.registeEndTime = value.data.registeEndTime;
+                this.registeLate = value.data.registeLate;
+                this.registeYes = value.data.registeYes;
+                this.registeNo = value.data.registeNo;
+                this.tabInfo = value.data.tabInfo;
+                console.log(value,'活动签到总信息');
+            })
+           }
+        },
+        async created() {
+            //初始化字典
+            // this.initDict()
+            /** 通过活动id获取当前活动签到信息，aid代码活动id*/
+            this.getActivityRegiste({
+                activityId: this.$route.params.aid
+            });
+            /** 获得当前情况下的报名管理列表 */
+            // this.fuzzyQuery()
+            
+        },
     }
 </script>
 
