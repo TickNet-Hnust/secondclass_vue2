@@ -458,3 +458,12 @@
         }
     }
 </script>
+
+<style scoped>
+    .app-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+</style>

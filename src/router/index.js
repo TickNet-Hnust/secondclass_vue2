@@ -267,7 +267,16 @@ export const constantRoutes = [{
                             meta: {
                                 title: '通知管理'
                             }
-                        }
+                        },
+                        {
+
+                            path: '/dict/type/data/:dictId(\\d+)',
+                            component: resolve =>
+                                require(['@/views/system/dict/data'], resolve),
+                            name: 'Data',
+                            meta: { title: '字典数据', icon: '' }
+
+                        },
                     ]
                 }]
             }
