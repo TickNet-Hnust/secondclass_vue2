@@ -3,14 +3,14 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-25 14:57:15
+ * @LastEditTime: 2021-07-31 15:24:30
  */
 import request from '@/utils/request.bak.js'
 
 /* GET查询课程详细 */
 export function courseId(id) {
     return request({
-        url: '/secondClass/course/' + id,
+        url: '/admin/secondClass/course/' + id,
         method: 'get'
     })
 }
@@ -18,7 +18,7 @@ export function courseId(id) {
 /* POST新增二课课程 */
 export function coursePost(data) {
     return request({
-        url: '/secondClass/course',
+        url: '/admin/secondClass/course',
         method: 'post',
         data
     })
@@ -27,7 +27,7 @@ export function coursePost(data) {
 /* PUT修改课程 */
 export function coursePut(data) {
     return request({
-        url: '/secondClass/course',
+        url: '/admin/secondClass/course',
         method: 'put',
         data
     })

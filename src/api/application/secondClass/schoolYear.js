@@ -3,7 +3,7 @@ import request from '@/utils/request.bak.js'
 /* GET获取学年列表 */
 export function schoolYearList() {
     return request({
-        url: '/secondClass/schoolYear/list',
+        url: '/admin/secondClass/schoolYear/list',
         method: 'get'
     })
 }
@@ -11,7 +11,7 @@ export function schoolYearList() {
 /* PUT批量修改学年 */
 export function schoolYearMulti(data) {
     return request({
-        url: '/secondClass/schoolYear/multi',
+        url: '/admin/secondClass/schoolYear/multi',
         method: 'put',
         data: data
     })
@@ -19,7 +19,7 @@ export function schoolYearMulti(data) {
 /* GET批量修改学年-测试能否删除 */
 export function schoolYearTestDeleteIds(ids) {
     return request({
-        url: '/secondClass/testDelete/' + ids,
+        url: '/admin/secondClass/testDelete/' + ids,
         method: 'get'
     })
 }

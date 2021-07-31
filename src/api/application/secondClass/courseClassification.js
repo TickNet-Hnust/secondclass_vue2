@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-27 20:13:23
+ * @LastEditTime: 2021-07-31 15:24:24
  */
 import request from '@/utils/request.bak.js'
 /* PUT批量修改分类排序 */
@@ -26,14 +26,14 @@ export function courseClassificationMulti(data) {
 /* GET判断能否删除积分类别 */
 export function courseClassificationJudgeId(id) {
     return request({
-        url: '/secondClass/courseClassification/' + id,
+        url: '/admin/secondClass/courseClassification/' + id,
         method: 'get'
     })
 }
 /* GET根据参数查询二课课程分类列表 */
 export function courseClassificationList(params) {
     return request({
-        url: '/secondClass/courseClassification/list',
+        url: '/admin/secondClass/courseClassification/list',
         method: 'get',
         params
     })
@@ -41,7 +41,7 @@ export function courseClassificationList(params) {
 /* GET子类别排序列表 */
 export function SortListClassificationId(classificationId) {
     return request({
-        url: '/secondClass/courseClassification/sort/list/' + classificationId,
+        url: '/admin/admin/secondClass/courseClassification/sort/list/' + classificationId,
         method: 'get'
     })
 }
@@ -49,7 +49,7 @@ export function SortListClassificationId(classificationId) {
 /* DELETE删除积分类别 */
 export function courseClassificationIds(ids) {
     return request({
-        url: '/secondClass/courseClassification/' + ids,
+        url: '/admin/secondClass/courseClassification/' + ids,
         method: 'delete'
     })
 }
@@ -57,7 +57,7 @@ export function courseClassificationIds(ids) {
 /* POST新增积分类别 */
 export function courseClassification(data) {
     return request({
-        url: '/secondClass/courseClassification',
+        url: '/admin/secondClass/courseClassification',
         method: 'post',
         data: data
     })
