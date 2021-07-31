@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-07-29 09:50:32
+ * @LastEditTime: 2021-07-30 17:18:35
 -->
 <template>
     <div class="app-container">
@@ -765,6 +765,7 @@
                     </el-col>
                 </el-row>
             </el-form>
+            
             <div slot="footer" class="dialog-footer">
             
             <el-radio-group 

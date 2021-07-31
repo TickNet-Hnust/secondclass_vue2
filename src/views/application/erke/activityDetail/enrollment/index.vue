@@ -156,7 +156,6 @@
 
                                     <el-col :span="1" style="min-width:205px">
                                         <el-form-item label="报名状态:">
-
                                             <el-select
                                                 v-model="queryList.enrollStatus"
                                                 placeholder="报名状态:不限"
@@ -265,7 +264,7 @@
                             </el-table-column>
 
                             <el-table-column
-                                prop="deptName"
+                                prop="groupName"
                                 label="群组"
                                 min-width="120"
                                 
@@ -386,7 +385,7 @@
                 <el-row>
                     <el-col :span="10">群组：</el-col>
                     <el-col :span="14">{{
-                        examEnrollDialog.data.deptName
+                        examEnrollDialog.data.groupName
                     }}</el-col>
                 </el-row>
                 <el-row>
@@ -489,7 +488,7 @@
                         nickName:'',
                         userName:'',
                         className:'',
-                        deptName:'',
+                        groupName:'',
                         createTime:'',
                      },
                      post:{
@@ -529,10 +528,6 @@
                 enrollRecordsNumber:0,
                 //各学院报名情况 deptId:numbers的形式
                 tabInfo:[
-                ],
-                //部门报名列表
-                deptList:[
-
                 ],
                 //部门id转部门名字
                 deptIdMapDeptName:[],
@@ -639,6 +634,7 @@
             },
             //清空查询条件
             refresh() {
+                this.action='',
                 this.queryList={
                     userName:'',
                     nickName:'',
@@ -734,7 +730,7 @@
                   nickName:row.nickName,
                   userName:row.userName,
                   className:row.className,
-                  deptName:row.deptName,
+                  groupName:row.groupName,
                   createTime:row.createTime,
                 };
 
@@ -753,7 +749,7 @@
             },
             //会话审核确定
             examEnrollSubmit(){
-                console.log(this.examEnrollDialog.post);
+                console.log(this.examEnrollDialog.post,'审核确定后发送的数据');
                 activityEnrollVerify(this.examEnrollDialog.post).then(value=>{
                     console.log(value);
                     this.examEnrollDialog.open = false
@@ -771,7 +767,7 @@
                   nickName:'',
                   userName:'',
                   className:'',
-                  deptName:'',
+                  groupName:'',
                   createTime:'',
                   admissionStatus:0,
                }
@@ -780,7 +776,7 @@
             formatDate(row, column, cellValue) {
                 return cellValue != null && formaterDate(cellValue)
             },
-            //筛选报名事件触发的事件
+            //筛选报名时间触发的事件
             enrollDateChange(){
                //发送时间的格式还需要调整一下
                if(this.value2!=null)
@@ -791,7 +787,7 @@
                }
                
             },
-            //点击左小角部门触发的事件
+            //点击左下角部门触发的事件
             handleSelect(index){
                 console.log(index);
                if(index!='')
@@ -804,7 +800,7 @@
             },
             //通过活动id获取当前活动报名信息函数
             getActivityEnroll(option){
-               activityEnroll(option).then(async value => {
+               activityEnroll(option).then(value => {
                 console.log(value,'活动总信息');
                 this.enrollStartTime = value.data.enrollStartTime;
                 this.enrollEndTime = value.data.enrollEndTime;
@@ -818,17 +814,18 @@
                 this.admissionNo =value.data.admissionNo;
                 this.enrollRecordsNumber = value.data.enrollRecordsNumber;
                 this.tabInfo = value.data.tabInfo;
-                let {data} = await listDept() 
-                this.deptList = data;
-                console.log(this.deptList,'deptList传来的数据');
-                this.deptList.forEach(item=>{
+            })
+           },
+           getDeptIdMapDeptName(){
+               listDept().then(value=>{
+                console.log(value,'listDept()接口传来的数据');
+                value.data.forEach(item=>{
                     //deptId映射deptName字典
                     this.deptIdMapDeptName[item.deptId]=item.deptName;
-                })
-                console.log(this.deptIdMapDeptName[100],'deptid和deptname字典');
+                });
+                console.log(this.deptIdMapDeptName,'这是deptid和deptname的map');
+               }) 
                 
-             
-            })
            },
            /**获得当前情况下的报名管理列表  模糊查询 */
             fuzzyQuery() {
@@ -899,7 +896,8 @@
             });
             /** 获得当前情况下的报名管理列表 */
             this.fuzzyQuery()
-            
+
+            this.getDeptIdMapDeptName()
         },
     }
 </script>
