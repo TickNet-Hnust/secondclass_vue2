@@ -119,8 +119,8 @@
                                     >
                                     </el-button>
                                     </el-tooltip>
-
                                 </el-col> 
+                                
                                     <el-col :span="1" style="min-width:150px;margin-left: -24px;" >
                                         <el-form-item label="操作:">
                                             <el-select
@@ -215,12 +215,6 @@
                                                 @change="enrollDateChange">
                                             </el-date-picker>
                                         </el-form-item>
-                                    </el-col>
-                                    <el-col :span="1" style="min-width:130px">
-                                        <el-button type="primary" size="mini"
-                                            >查询</el-button
-                                        >
-                                        <el-button size="mini">重置</el-button>
                                     </el-col>
                                 </el-row>
                             </el-form>
@@ -334,15 +328,15 @@
                                         size="mini"
                                         type="text"
                                         icon="el-icon-s-check"
-                                        v-if="scope.row.enrollStatus==1"
+                                        v-if="scope.row.enrollStatus==1&&admissionWay==1"
                                         @click="examEnrollOpenDialog(scope.row)"
                                         >审核</el-button
                                     >
                                    
                                 </template>
                             </el-table-column>
-
                         </el-table>
+                        
                         <pagination
                             v-show="queryParams.totalPage > 0"
                             :total="queryParams.totalCount"
