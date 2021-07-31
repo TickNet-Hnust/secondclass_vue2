@@ -3,7 +3,7 @@
  * @Autor: 张津瑞
  * @Date: 2021-07-26 18:39:09
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-31 15:26:06
+ * @LastEditTime: 2021-07-31 16:54:07
  */
 
 import request from '@/utils/request.js'
@@ -14,7 +14,7 @@ import request from '@/utils/request.js'
  */
 export function activityEnroll(params) {
     return request({
-        url: '/admin/secondClass/activity/enroll',
+        url: '/admins/secondClass/activity/enroll',
         method: 'get',
         params
     })
@@ -26,7 +26,7 @@ export function activityEnroll(params) {
  */
 export function activityEnrollList(params) {
     return request({
-        url: '/admin/secondClass/activity/enroll/list',
+        url: '/admins/secondClass/activity/enroll/list',
         method: 'get',
         params
     })
@@ -38,7 +38,7 @@ export function activityEnrollList(params) {
  */
 export function activityEnrollVerify(params) {
     return request({
-        url: '/admin/secondClass/activity/enroll/verify',
+        url: '/admins/secondClass/activity/enroll/verify',
         method: 'put',
         params
     })
@@ -51,7 +51,7 @@ export function activityEnrollVerify(params) {
  */
 export function activityPrize(params) {
     return request({
-        url: '/admin/secondClass/activity/prize',
+        url: '/admins/secondClass/activity/prize',
         method: 'get',
         params
     })
@@ -64,7 +64,7 @@ export function activityPrize(params) {
  */
 export function activityRegiste(params) {
     return request({
-        url: '/secondClass/activity/registe',
+        url: '/admins/secondClass/activity/registe',
         method: 'get',
         params
     })
@@ -78,7 +78,7 @@ export function activityRegiste(params) {
  */
 export function activityRegisteList(params) {
     return request({
-        url: '/secondClass/activity/registe/list',
+        url: '/admins/secondClass/activity/registe/list',
         method: 'get',
         params
     })
@@ -90,7 +90,7 @@ export function activityRegisteList(params) {
  */
 export function activityRegisteVerify(params) {
     return request({
-        url: '/secondClass/activity/registe/verify',
+        url: '/admins/secondClass/activity/registe/verify',
         method: 'put',
         params
     })
@@ -106,7 +106,7 @@ export function activityRegisteVerify(params) {
  */
 export function activityLeave(params) {
     return request({
-        url: '/admin/secondClass/activity/leave',
+        url: '/admins/secondClass/activity/leave',
         method: 'get',
         params
     })
@@ -121,7 +121,7 @@ export function activityLeave(params) {
  */
 export function activityLeaveList(params) {
     return request({
-        url: '/admin/secondClass/activity/leave/list',
+        url: '/admins/secondClass/activity/leave/list',
         method: 'get',
         params
     })
@@ -133,7 +133,7 @@ export function activityLeaveList(params) {
  */
 export function activityLeaveVerify(params) {
     return request({
-        url: '/admin/secondClass/activity/leave/verify',
+        url: '/admins/secondClass/activity/leave/verify',
         method: 'put',
         params
     })
@@ -146,7 +146,7 @@ export function activityLeaveVerify(params) {
  */
 export function activityList(params) {
     return request({
-        url: '/admin/secondClass/activity/list',
+        url: '/admins/secondClass/activity/list',
         method: 'get',
         params
     })
@@ -157,7 +157,7 @@ export function activityList(params) {
  */
 export function activityPost(data) {
     return request({
-        url: '/admin/secondClass/activity',
+        url: '/admins/secondClass/activity',
         method: 'post',
         data
     })
@@ -168,7 +168,7 @@ export function activityPost(data) {
  */
 export function activityCancel(params) {
     return request({
-        url: '/admin/secondClass/activityCancel',
+        url: '/admins/secondClass/activityCancel',
         method: 'get',
         params
     })
@@ -179,7 +179,7 @@ export function activityCancel(params) {
  */
 export function activityPut(data) {
     return request({
-        url: '/admin/secondClass/activity',
+        url: '/admins/secondClass/activity',
         method: 'put',
         data
     })
@@ -191,7 +191,7 @@ export function activityPut(data) {
  */
 export function activityIdNextStatus({ id, nextStatus }) {
     return request({
-        url: `/admin/secondClass/activity/${id}/${nextStatus}`,
+        url: `/admins/secondClass/activity/${id}/${nextStatus}`,
         method: 'put'
     })
 }
