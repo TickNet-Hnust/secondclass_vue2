@@ -17,22 +17,40 @@
                                 >
                                     <el-col :span="1" style="min-width: 185px">
                                         <el-form-item label="学号：">
-                                            <el-input data-text></el-input>
+                                            <el-input data-text
+                                            placeholder="学号"
+                                            v-model="queryList.userName"
+                                            @input="fuzzyQuery"
+                                            ></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="1" style="min-width: 185px">
                                         <el-form-item label="姓名：">
-                                            <el-input data-text></el-input>
+                                            <el-input data-text
+                                            placeholder="姓名"
+                                            v-model="queryList.nickName"
+                                            @input="fuzzyQuery"
+                                            ></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="1" style="min-width: 180px">
                                         <el-form-item label="花絮状态">
                                             <el-select
-                                                value="全部"
-                                                style="width:90px"
+                                                v-model="queryList.status"
+                                                placeholder="花絮状态:不限"
+                                                style="width:120px"
+                                                @change="fuzzyQuery"
                                             >
                                                 <el-option
-                                                    value="全部"
+                                                    value=""
+                                                    label="花絮状态:不限"
+                                                ></el-option>
+                                                <el-option
+                                                    v-for="(item,
+                                                    index) in dict_sc_activity_flower_status"
+                                                    :key="index"
+                                                    :value="item.dictValue"
+                                                    :label="item.dictLabel"
                                                 ></el-option>
                                             </el-select>
                                         </el-form-item>
@@ -63,7 +81,7 @@
                             </el-form>
                         </div>
                         <el-table
-                            :data="flocculus"
+                            :data="flowerList"
                             height="550"
                             class="msgTable"
                         >
@@ -74,17 +92,17 @@
                             >
                                 <template slot-scope="{ row }">
                                     <img
-                                        :src="row.avatar"
+                                        :src="row.userImage"
                                         alt=""
                                         class="avatar"
                                     />
-                                    <br />{{ row.name }} <br />{{ row.sno }}
+                                    <br />{{ row.nickName }} <br />{{ row.userName }}
                                 </template>
                             </el-table-column>
 
                             <el-table-column label="发布内容" width="800">
                                 <template slot-scope="{ row }">
-                                    {{ row.remark }}
+                                    {{ row.content }}
                                 </template>
                             </el-table-column>
 
@@ -95,7 +113,7 @@
                             >
                                 <template slot-scope="{ row }">
                                     <img
-                                        v-for="(item, index) in row.imgs"
+                                        v-for="(item, index) in row.picture"
                                         :key="index"
                                         :src="item"
                                         class="imgs"
@@ -109,7 +127,7 @@
                                 align="center"
                                 fixed="right"
                             >
-                                <template slot-scope="{ row }">
+                                <template>
                                     已发布<br />
                                     <el-button type="primary" size="mini"
                                         >同意发布</el-button
@@ -133,6 +151,11 @@
 </template>
 
 <script>
+    //导入活动花絮相关接口
+     import {
+        activityFlowerList,
+        activityFlowerVerify,
+    } from '@/api/application/secondClass/activity'
     import {
         trainingProgramDetail,
         trainingProgramList,
@@ -181,7 +204,16 @@
                     totalPage: 50,
                     pageCount: 1,
                     pageSize: 4
-                }
+                },
+                queryList:{
+                    userName:'',
+                    nickName: '',
+                    status:'',
+                    createStartTime:'',
+                    createEndTime:''
+                },
+                flowerList:[],
+                    
             }
         },
         computed: {
@@ -190,13 +222,56 @@
                 return this.maxLength * 150 + ''
             }
         },
+        
         methods: {
+            //操作分页触发的事件
+            getList(option){
+                this.queryParams.pageNum = option.page
+                this.queryParams.pageSize = option.limit
+                this.fuzzyQuery()
+            },
             initimgLength() {
                 this.flocculus.forEach(item => {
                     this.maxLength = Math.max(this.maxLength, item.imgs.length)
                 })
                 console.log('this.maxLength:', this.maxLength)
-            }
+            },
+             fuzzyQuery() {
+                let option = {
+                    activityId:this.$route.params.aid,
+                    userName:this.queryList.userName,
+                    nickName: this.queryList.nickName,
+                    status:this.queryList.status,
+                    // params:{
+                    createStartTime:this.queryList.createStartTime,
+                    createEndTime:this.queryList.createEndTime,
+                    // },
+                    page: this.queryParams.pageCount,
+                    limit: this.queryParams.pageSize,
+                    
+                    // orderByColumn:'',
+                    // isAsc:''
+                }
+                console.log(option,'fuzzyQuery发送的数据')
+                this.getFlowerList(option)
+            },
+            getFlowerList(option){
+                 this.loading = true
+                 activityFlowerList(option).then(value => {
+
+                    console.log(value);
+                    /** 总共多少条，总共多少页 */
+                    this.queryParams.totalCount  = value.total
+                    // this.queryParams.pageSize = value.data.pageSize
+                    // this.queryParams.totalPage = value.data.totalPage
+                    // this.queryParams.currPage = value.data.currPage
+                    this.queryParams.pageCount = Math.ceil(this.queryParams.totalCount/this.queryParams.pageSize);
+                    this.flowerList = value.rows;
+                    console.log(this.flowerList,'传来的数据');
+                    this.loading = false
+                    
+                })
+            },
         },
         mounted() {
             this.flocculus = [
@@ -235,7 +310,16 @@
             )
             view && horwheel(view) && console.log(view)
             // new this.XScrollbar(view)
-        }
+        },
+        async created() {
+            // 初始化字典
+            // this.initDict()
+    
+            /** 获得当前情况下的活动花絮管理列表 */
+            this.fuzzyQuery()
+
+        },
+        
     }
 </script>
 
