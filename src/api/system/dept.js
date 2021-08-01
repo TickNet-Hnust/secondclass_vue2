@@ -1,3 +1,10 @@
+/*
+ * @Descripttion: 
+ * @Author: 林舒恒
+ * @Date: 2021-07-18 16:03:21
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-07-31 18:43:30
+ */
 import request from '@/utils/request'
 
 // 查询部门列表
@@ -64,5 +71,14 @@ export function delDept(deptId) {
     return request({
         url: '/system/dept/' + deptId,
         method: 'delete'
+    })
+}
+
+// 根据类型查询部门 type数组，0为学校，1为学院，2为班级，3为学生社团
+export function deptListByType(params) {
+    return request({
+        url: '/system/dept/listByType',
+        method: 'get',
+        params
     })
 }

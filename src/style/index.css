@@ -137,3 +137,7 @@ textarea {
 .noneInput .el-input__inner:focus {
     caret-color: transparent;
 }
+
+.el-range-editor {
+    border: 1px solid #aaa !important;
+}

@@ -2,8 +2,8 @@
  * @Descripttion: 培养方案详情
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
- * @LastEditors: 张津瑞
- * @LastEditTime: 2021-07-30 17:18:35
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-08-01 23:14:15
 -->
 <template>
     <div class="app-container">
@@ -353,6 +353,15 @@
                             </el-table-column>
 
                             <el-table-column
+                                prop="classificationIdPath"
+                                label="分类明细"
+                                min-width="180"
+                                show-overflow-tooltip
+                                :formatter="formatClassificationDetail"
+                            >
+                            </el-table-column>
+
+                            <el-table-column
                                 prop="joinType"
                                 label="加入方式"
                                 min-width="80"
@@ -413,14 +422,6 @@
                                 label="性质"
                                 min-width="80"
                                 :formatter="formatType"
-                            >
-                            </el-table-column>
-
-                            <el-table-column
-                                prop="classificationDetail"
-                                label="分类明细"
-                                min-width="180"
-                                :formatter="formatClassificationDetail"
                             >
                             </el-table-column>
 
@@ -1030,10 +1031,10 @@
                 )
             },
             formatClassificationDetail(row, column, cellValue) {
-                // console.log(this.dict_sc_course_classification_type,cellValue,'formatClassificationDetail')
-                // if(cellValue != null) {
-                //     return this.dict_sc_course_classification_type[cellValue]
-                // }
+                if(cellValue != null) {
+                    let str = ''
+                    return cellValue.split(',').reduce((pre,cur) => `${pre}--${this.classificationIdMapName[cur]}`,'全部')
+                }
                 return cellValue
             },
             formatStatus(row, column, cellValue) {
@@ -1084,7 +1085,7 @@
              * @param {*} value 例如：[1,2,4]
              */            
             handleNodeChange(value) {
-                this.addDetailDialog.config.classificationId = value[0]
+                this.addDetailDialog.config.classificationId = value[value.length - 1]
                 this.addDetailDialog.config.classificationIdPath = value.join(',')
                 this.addDetailDialog.config.layer = value.length
                 console.log(value)
@@ -1382,9 +1383,7 @@
                     /** 左侧分类获取/默认值/字典映射 */
                     this.classificationList.rows = value.data.classificationList
                     // this.classificationList.value = this.classificationList.rows[0].id
-                    value.data.classificationList.forEach(item => {
-                        this.classificationIdMapName[item.id] = item.name
-                    })
+                    
                     
                     //课程总数-申请中-审核通过-审核未通过
                     this.countState = {
@@ -1426,6 +1425,10 @@
              */            
             getCourseClassificationList(option) {
                 courseClassificationList(option).then(value => {
+                    value.data.forEach(item => {
+                        this.classificationIdMapName[item.id] = item.name
+                    })
+
                     /* value保证存在且唯一 */
                     /* label保证渲染视图 */
                     console.log(value, 'courseClassificationList')
