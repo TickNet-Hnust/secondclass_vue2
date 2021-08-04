@@ -97,12 +97,12 @@
                             </el-row>
                         </div>
                         <!-- 表单下面 -->
-                        <template v-for="(item,index) in datadata">
+                        <template v-for="(item, index) in datadata">
                             <!-- default-expand-all -->
                             <el-tab-pane
                                 :label="item.name"
                                 :key="index"
-                                :name="index+''"
+                                :name="index + ''"
                             >
                                 <div class="erke-buttom-right">
                                     <el-table
@@ -217,10 +217,10 @@
                 :rules="rules"
                 label-width="80px"
             >
-                <el-table 
-                    :data="datadata" 
+                <el-table
+                    :data="datadata"
                     stripe
-                    :default-sort = "{prop: 'sort'}"
+                    :default-sort="{ prop: 'sort' }"
                 >
                     <el-table-column
                         lable="sdf"
@@ -229,7 +229,9 @@
                     >
                         <template slot-scope="scope">
                             <span
-                                @click="deleteManagerDialog(scope.row,scope.$index)"
+                                @click="
+                                    deleteManagerDialog(scope.row, scope.$index)
+                                "
                                 class="addOrMinus"
                                 >-</span
                             >
@@ -249,15 +251,10 @@
                         min-width="250"
                     >
                         <template slot-scope="scope">
-                            <el-input v-model="scope.row.name">
-                            </el-input>
+                            <el-input v-model="scope.row.name"> </el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column
-                        prop="id"
-                        label="ID"
-                        align="center"
-                    >
+                    <el-table-column prop="id" label="ID" align="center">
                     </el-table-column>
                     <!-- <el-table-column
                         prop="id"
@@ -276,7 +273,9 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="cancel">关闭</el-button>
-                <el-button type="primary" @click="updateClassification">确 定</el-button>
+                <el-button type="primary" @click="updateClassification"
+                    >确 定</el-button
+                >
             </div>
         </el-dialog>
 
@@ -433,32 +432,21 @@
             append-to-body
             class="sortDialog"
         >
-        <el-table
-            :data="sortDialog.config"
-            stripe
-        >
-            <el-table-column
-                label="排序"
-                width="80"
-            >
-                <template slot-scope="scope">
-                    <el-input
-                        v-model="scope.row.sort"
-                        class="sortInput"
-                    ></el-input>
-                </template>
-            </el-table-column>
+            <el-table :data="sortDialog.config" stripe>
+                <el-table-column label="排序" width="80">
+                    <template slot-scope="scope">
+                        <el-input
+                            v-model="scope.row.sort"
+                            class="sortInput"
+                        ></el-input>
+                    </template>
+                </el-table-column>
 
-            <el-table-column
-                label="项目名称"
-                prop="name"
-            >
-            </el-table-column>
-        </el-table>
+                <el-table-column label="项目名称" prop="name">
+                </el-table-column>
+            </el-table>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="cancel"
-                    >关闭</el-button
-                >
+                <el-button @click="cancel">关闭</el-button>
                 <el-button type="primary" @click="updateSort">确定</el-button>
             </div>
         </el-dialog>
@@ -510,12 +498,12 @@
                     type: '0',
                     path: ''
                 },
-                queryList:{
-                    name:'',
-                    type:'',
-                    integralType:''
+                queryList: {
+                    name: '',
+                    type: '',
+                    integralType: ''
                 },
-                deleteIds:[],
+                deleteIds: [],
                 /* 弹窗 -> 类型  */
                 label: '',
                 /* tab栏 */
@@ -523,10 +511,10 @@
                 activeName: 0,
                 dict_sc_integral_type: {},
                 dict_sc_course_classification_type: {},
-                sortDialog:{
+                sortDialog: {
                     title: '',
                     open: false,
-                    config:[]
+                    config: []
                 },
                 exportDialog: {
                     title: '',
@@ -598,23 +586,19 @@
                         process.env.VUE_APP_BASE_API + '/system/user/importData'
                 },
                 // 表单校验
-                rules: {
-                    
-                }
+                rules: {}
             }
         },
         computed: {
             filterData() {
-                return (data) => {
-                    if(!data) {return []}
-                    console.log(data,11)
-                    let temp = filterNameAndType(
-                        data,
-                        this.queryList.name
-                    )
-                    console.log(temp,12)
+                return data => {
+                    if (!data) {
+                        return []
+                    }
+                    console.log(data, 11)
+                    let temp = filterNameAndType(data, this.queryList.name)
+                    console.log(temp, 12)
                     return temp
-                    
                 }
             },
             /* 还需要优化选择时候的UI界面 */
@@ -629,37 +613,41 @@
             }
         },
         methods: {
-            
             /**
              * @description: 删除积分分类
              * @param {*} row 对应积分分类
-             */            
+             */
+
             deleteCourseClassificaiton(row) {
-                this.alertDialog.call(this,'删除',{
-                    confirm: ()=> {
+                this.alertDialog.call(this, '删除', {
+                    confirm: () => {
                         courseClassificationMulti({
-                            deleteIds:[row.id],
-                            courseClassificationEntityList:[]
-                        }).then(value => {
-                            console.log(value)
-                            this.$message.success('删除成功')
-                                // removeChild(this.datadata,row.path,row.id)
-                            this.getCourseClassificationList()
-                        }).catch(err => {
-                            this.$message.error('删除失败')
+                            deleteIds: [row.id],
+                            courseClassificationEntityList: []
                         })
+                            .then(value => {
+                                console.log(value)
+                                this.$message.success('删除成功')
+                                // removeChild(this.datadata,row.path,row.id)
+                                this.getCourseClassificationList()
+                            })
+                            .catch(err => {
+                                this.$message.error('删除失败')
+                            })
                     }
                 })
             },
             /**
              * @description: 积分分类是否是 定值
-             */            
+             */
+
             handleFixed() {
                 this.postCourseClassification.integrationRange = this.addStardardDialog.fixed
             },
             /**
              * @description: 积分分类是否是 范围
-             */ 
+             */
+
             handleRange() {
                 this.postCourseClassification.integrationRange =
                     this.addStardardDialog.start +
@@ -668,8 +656,9 @@
             },
             /**
              * @description: 积分分类改变时触发
-             * @param 
-             */            
+             * @param
+             */
+
             handleIntegralType(value) {
                 // this.postCourseClassification.integralType = value + 1
                 // console.log(this.postCourseClassification.integralType)
@@ -677,7 +666,8 @@
             /**
              * @description: 选择上级节点触发的事件
              * @param value 父节点数组，例如：[1,2,4]
-             */            
+             */
+
             handleNodeChange(value) {
                 this.postCourseClassification.path = value.join(',')
                 this.postCourseClassification.pid = value[value.length - 1]
@@ -739,12 +729,13 @@
                 )
             },
             /**
-             * @description: 类别配置 + 
-             */            
+             * @description: 类别配置 +
+             */
+
             addManagerDialog() {
                 this.datadata.push({
-                    id:null,
-                    pid:0,
+                    id: null,
+                    pid: 0,
                     sort: '',
                     name: ''
                 })
@@ -756,13 +747,14 @@
                 })
             },
             /**
-             * @description: 类别配置 - 
-             */            
-            deleteManagerDialog(row,index) {
-                this.alertDialog.call(this,'预删除',{
-                    confirm:() => {
+             * @description: 类别配置 -
+             */
+
+            deleteManagerDialog(row, index) {
+                this.alertDialog.call(this, '预删除', {
+                    confirm: () => {
                         this.deleteIds.push(row.id)
-                        this.datadata.splice(index,1)
+                        this.datadata.splice(index, 1)
                     }
                 })
             },
@@ -781,8 +773,7 @@
             },
 
             // 取消按钮
-            cancel() {
-            },
+            cancel() {},
             // 表单重置
             reset() {
                 this.form = {
@@ -807,8 +798,7 @@
                 this.addStardardDialog.open = true
             },
             /** 提交按钮 */
-            submitForm: function() {
-            },
+            submitForm: function() {},
             /** 导出按钮操作 */
             handleExport() {
                 this.exportDialog.open = true
@@ -840,7 +830,8 @@
             },
             /**
              * @description: 清空新增表单
-             */            
+             */
+
             clearForm() {
                 this.addStardardDialog.fixed = this.addStardardDialog.start = this.addStardardDialog.end =
                     ''
@@ -864,45 +855,51 @@
                     item.__parent__ && delete item.__parent__
                 })
                 courseClassificationMulti({
-                    courseClassificationEntityList:this.sortDialog.config
-                }).then(value => {
-                    console.log(value)
-                    return this.getCourseClassificationList()
-                }).then(value => {
-                    this.msgSuccess('修改成功')
-                    this.sortDialog.open = false
+                    courseClassificationEntityList: this.sortDialog.config
                 })
+                    .then(value => {
+                        console.log(value)
+                        return this.getCourseClassificationList()
+                    })
+                    .then(value => {
+                        this.msgSuccess('修改成功')
+                        this.sortDialog.open = false
+                    })
             },
-            /** 
+            /**
              * @description: 配置根级分类
-             */ 
+             */
+
             updateClassification() {
                 let isFull = this.datadata.every(item => {
                     console.log(item.sort, item.name)
-                    return item.sort!=undefined && item.name
+                    return item.sort != undefined && item.name
                 })
-                if(!isFull) {
+                if (!isFull) {
                     this.msgInfo('请填写完整信息')
-                    return 
+                    return
                 }
                 this.datadata.forEach(item => {
-                    console.log(item,11)
-                    !!item.children && this.$delete(item,item.children)
+                    console.log(item, 11)
+                    !!item.children && this.$delete(item, item.children)
                 })
                 courseClassificationMulti({
-                    deleteIds:this.deleteIds,
-                    courseClassificationEntityList:this.datadata
-                }).then(value => {
-                    console.log(value)
-                    return this.getCourseClassificationList()
-                }).then(value => {
-                    this.msgSuccess('修改成功')
-                    this.managerDialog.open = false
+                    deleteIds: this.deleteIds,
+                    courseClassificationEntityList: this.datadata
                 })
+                    .then(value => {
+                        console.log(value)
+                        return this.getCourseClassificationList()
+                    })
+                    .then(value => {
+                        this.msgSuccess('修改成功')
+                        this.managerDialog.open = false
+                    })
             },
             /**
              * @description:  表格 操作 排序
-             */            
+             */
+
             sortData(row) {
                 this.sortDialog.title = '同级排序'
                 this.sortDialog.open = true
@@ -991,8 +988,7 @@
             //数据初始化
             this.getCourseClassificationList()
         },
-        mounted() {
-        }
+        mounted() {}
     }
 </script>
 

@@ -140,12 +140,19 @@
             // TODO Update
             WwLogin({
                 id: 'wxLogin',
-                appid: 'wx1eedf3f9bb7f47b0',
-                agentid: '1000034',
-                redirect_uri: encodeURIComponent(window.location.href),
+                appid: 'ww0a8e41e741c02880',
+                agentid: '1000008',
+                scope: 'snsapi_login',
+                redirect_uri: encodeURIComponent('http://www.loxg.top/login?redirect=/system/user'),
+                // redirect_uri: encodeURIComponent('http://www.loxg.top/loginByCode/'),
                 state: '',
                 href: ''
-            })
+            }),
+            console.log(encodeURIComponent(window.location.href),'window.location.href的值');
+            console.log(window.location.href);
+            console.log('http://www.loxg.top/login?redirect=/home');
+            console.log(encodeURIComponent('http://www.loxg.top/loginByCode/'))
+            console.log('http://www.loxg.top/loginByCode/')
         },
         watch: {
             $route: {

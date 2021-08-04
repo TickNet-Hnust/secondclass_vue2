@@ -1,5 +1,5 @@
 /*
- * @Descripttion: 
+ * @Descripttion:
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 林舒恒
@@ -41,7 +41,9 @@ export function courseClassificationList(params) {
 /* GET子类别排序列表 */
 export function SortListClassificationId(classificationId) {
     return request({
-        url: '/admins/secondClass/courseClassification/sort/list/' + classificationId,
+        url:
+            '/admins/secondClass/courseClassification/sort/list/' +
+            classificationId,
         method: 'get'
     })
 }

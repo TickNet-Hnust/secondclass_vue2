@@ -51,11 +51,11 @@
             </el-row>
         </div>
 
-        <!-- <keep-alive> -->
         <transition name="fade-transform" mode="out-in">
+        <keep-alive>
             <component v-if="hackReset" :is="aliveComponent"></component>
+        </keep-alive>
         </transition>
-        <!-- </keep-alive> -->
         <!-- <div class="erke-bottom"> -->
         <!-- <router-view></router-view> -->
         <!-- </div> -->

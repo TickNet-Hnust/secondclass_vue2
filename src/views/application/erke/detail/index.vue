@@ -44,10 +44,7 @@
                                 @change="fuzzyQuery"
                                 placeholder="请选择"
                             >
-                                <el-option
-                                    value=""
-                                    label="全部"
-                                ></el-option>
+                                <el-option value="" label="全部"></el-option>
                                 <el-option
                                     v-for="item in trainingProgramList.rows"
                                     :key="item.id"
@@ -91,7 +88,7 @@
                                 <template slot="prepend">审核未通过</template>
                             </el-input>
                         </div>
-                        
+
                         <el-button
                             type="primary"
                             :disabled="trainingProgramList.value == ''"
@@ -100,7 +97,8 @@
                             size="mini"
                             @click="addCourse"
                             v-hasPermi="['system:user:add']"
-                            >新增</el-button>
+                            >新增</el-button
+                        >
 
                         <el-button
                             type="warning"
@@ -110,17 +108,19 @@
                             :load="exportLoading"
                             @click="handleExport"
                             v-hasPermi="['system:user:export']"
-                            >导出</el-button>
-                        <el-tooltip 
-                            effect="dark" 
-                            content="清空查询条件" 
-                            placement="right">
-                        <el-button
-                            circle
-                            icon="el-icon-refresh"
-                            @click="refresh"
+                            >导出</el-button
                         >
-                        </el-button>
+                        <el-tooltip
+                            effect="dark"
+                            content="清空查询条件"
+                            placement="right"
+                        >
+                            <el-button
+                                circle
+                                icon="el-icon-refresh"
+                                @click="refresh"
+                            >
+                            </el-button>
                         </el-tooltip>
                     </div>
                 </div>
@@ -132,19 +132,17 @@
                             class="el-menu-vertical-demo"
                             @select="handleSelect"
                         >
-                            <el-menu-item
-                                index=""
-                            >
+                            <el-menu-item index="">
                                 <span slot="title">全部</span>
                             </el-menu-item>
 
                             <el-menu-item
-                                v-for="(item, index) in classificationList.rows" :key="index"
+                                v-for="(item, index) in classificationList.rows"
+                                :key="index"
                                 :index="index + ''"
                             >
                                 <span slot="title">{{ item.name }}</span>
                             </el-menu-item>
-
                         </el-menu>
                         <!-- <ul>
                             <li
@@ -299,7 +297,8 @@
                                             label="全部"
                                         ></el-radio-button>
                                         <el-radio-button
-                                            v-for="(item,index) in dict_sc_course_status"
+                                            v-for="(item,
+                                            index) in dict_sc_course_status"
                                             :key="index"
                                             :label="item.dictLabel"
                                         ></el-radio-button>
@@ -695,34 +694,30 @@
                     <el-col :span="3"> 分类明细： </el-col>
                     <el-col :span="5.5">
                         <el-cascader
-                        :options="datadata"
-                        :props="{ checkStrictly: true }"
-                        
-                        :value="
-                            addDetailDialog.config.classificationIdPath
-                                .split(',')
-                                .map(item => +item)
-                        "
-                        @change="handleNodeChange"
-                    ></el-cascader>
+                            :options="datadata"
+                            :props="{ checkStrictly: true }"
+                            :value="
+                                addDetailDialog.config.classificationIdPath
+                                    .split(',')
+                                    .map(item => +item)
+                            "
+                            @change="handleNodeChange"
+                        ></el-cascader>
                     </el-col>
-                    
                 </el-row>
 
-                <el-row >
+                <el-row>
                     <el-col :span="3"> 积分下限要求： </el-col>
                     <el-col :span="21">
                         <el-row
                             class="mb10"
-                            v-for="(item,index) in addDetailDialog.lowestValueArray"
+                            v-for="(item,
+                            index) in addDetailDialog.lowestValueArray"
                             :key="index"
                             :gutter="5"
                         >
                             <el-col :span="5.5">
-                                <el-select
-                                    v-model="item[0]"
-                                    class="shoutInput"
-                                >
+                                <el-select v-model="item[0]" class="shoutInput">
                                     <el-option
                                         v-for="n in 10"
                                         :key="n"
@@ -732,10 +727,7 @@
                                 </el-select>
                             </el-col>
                             <el-col :span="5.5">
-                                <el-select
-                                    v-model="item[1]"
-                                    class="shoutInput"
-                                >
+                                <el-select v-model="item[1]" class="shoutInput">
                                     <el-option
                                         v-for="n in 10"
                                         :key="n"
@@ -745,12 +737,20 @@
                                 </el-select>
                             </el-col>
 
-                            <el-col :span="5.5" >
-                                <span class="addOrMine" @click="mineLowest(index)">-</span>
+                            <el-col :span="5.5">
+                                <span
+                                    class="addOrMine"
+                                    @click="mineLowest(index)"
+                                    >-</span
+                                >
                             </el-col>
 
                             <el-col :span="5.5">
-                                <span class="addOrMine" @click="addLowest(index)">+</span>
+                                <span
+                                    class="addOrMine"
+                                    @click="addLowest(index)"
+                                    >+</span
+                                >
                             </el-col>
                         </el-row>
                     </el-col>
@@ -766,17 +766,16 @@
                     </el-col>
                 </el-row>
             </el-form>
-            
+
             <div slot="footer" class="dialog-footer">
-            
-            <el-radio-group 
-                v-if="addDetailDialog.title=='审核'"
-                v-model="addDetailDialog.config.status" 
-                style="float:left;margin-top:15px"
-            >
-                <el-radio :label="1">审核通过</el-radio>
-                <el-radio :label="3">审核未通过</el-radio>
-            </el-radio-group>
+                <el-radio-group
+                    v-if="addDetailDialog.title == '审核'"
+                    v-model="addDetailDialog.config.status"
+                    style="float:left;margin-top:15px"
+                >
+                    <el-radio :label="1">审核通过</el-radio>
+                    <el-radio :label="3">审核未通过</el-radio>
+                </el-radio-group>
 
                 <el-button @click="cancel">关闭</el-button>
                 <el-button type="primary" @click="addDetail">确 定</el-button>
@@ -841,9 +840,7 @@
         coursePut,
         courseDelete
     } from '@/api/application/secondClass/course'
-    import {
-        courseClassificationList
-    } from '@/api/application/secondClass/courseClassification.js'
+    import { courseClassificationList } from '@/api/application/secondClass/courseClassification.js'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
     import formaterDate from '@/utils/formatDate.js'
@@ -930,7 +927,7 @@
                     totalCount: 0,
                     totalPage: 0,
                     pageNum: 1,
-                    pageSize: 10,
+                    pageSize: 10
                 },
                 /** 导出弹窗 */
                 exportDialog: {
@@ -963,27 +960,25 @@
                 addDetailDialog: {
                     title: '新增课程',
                     open: false,
-                    radio:'',
+                    radio: '',
                     config: {
-                        id:null,      
+                        id: null,
                         schoolYearId: 0,
-                        schoolYearName: "",
+                        schoolYearName: '',
                         trainingProgramId: 8,
-                        name: "",
+                        name: '',
                         classificationId: 1,
-                        classificationIdPath: "1",
-                        joinType: "0",
+                        classificationIdPath: '1',
+                        joinType: '0',
                         necessary: 1,
-                        type: "0",
+                        type: '0',
                         status: 0,
-                        lowestValue: "",
-                        remark: ""
+                        lowestValue: '',
+                        remark: ''
                     },
-                    lowestValueArray:[
-                        [1,1]
-                    ],
+                    lowestValueArray: [[1, 1]],
                     //发布单位，现在没用
-                    unitValue: '1',
+                    unitValue: '1'
                 },
                 /** 分类树 */
                 datadata: [],
@@ -1025,15 +1020,19 @@
             },
             formatClassificationId(row, column, cellValue) {
                 return (
-                    cellValue != null &&
-                    this.classificationIdMapName[cellValue]
-                        
+                    cellValue != null && this.classificationIdMapName[cellValue]
                 )
             },
             formatClassificationDetail(row, column, cellValue) {
-                if(cellValue != null) {
+                if (cellValue != null) {
                     let str = ''
-                    return cellValue.split(',').reduce((pre,cur) => `${pre}--${this.classificationIdMapName[cur]}`,'全部')
+                    return cellValue
+                        .split(',')
+                        .reduce(
+                            (pre, cur) =>
+                                `${pre}--${this.classificationIdMapName[cur]}`,
+                            '全部'
+                        )
                 }
                 return cellValue
             },
@@ -1068,14 +1067,14 @@
                 )
             },
             refresh() {
-                this.queryList={
+                this.queryList = {
                     name: '',
                     joinType: '',
                     necessary: '',
                     term: '',
                     departmentId: '',
                     status: '',
-                    type: '',
+                    type: ''
                 }
                 this.radioType = '全部'
                 this.fuzzyQuery()
@@ -1083,17 +1082,22 @@
             /**
              * @description: 处理路径
              * @param {*} value 例如：[1,2,4]
-             */            
+             */
+
             handleNodeChange(value) {
-                this.addDetailDialog.config.classificationId = value[value.length - 1]
-                this.addDetailDialog.config.classificationIdPath = value.join(',')
+                this.addDetailDialog.config.classificationId =
+                    value[value.length - 1]
+                this.addDetailDialog.config.classificationIdPath = value.join(
+                    ','
+                )
                 this.addDetailDialog.config.layer = value.length
                 console.log(value)
             },
             /**
              * @description: 确定CSS类
              * @param {*} row
-             */            
+             */
+
             sureClass(row) {
                 if (row.status == 0) {
                     //ing
@@ -1123,27 +1127,24 @@
             // 表单重置
             reset() {
                 this.addDetailDialog.config = {
-                    id:null,      
+                    id: null,
                     schoolYearId: 0,
-                    schoolYearName: "",
+                    schoolYearName: '',
                     trainingProgramId: 8,
-                    name: "",
+                    name: '',
                     classificationId: 1,
-                    classificationIdPath: "1",
-                    joinType: "0",
+                    classificationIdPath: '1',
+                    joinType: '0',
                     necessary: 1,
-                    type: "0",
+                    type: '0',
                     status: 0,
-                    lowestValue: "",
-                    remark: ""
+                    lowestValue: '',
+                    remark: ''
                 }
-                this.addDetailDialog.lowestValueArray=[[1,1]]
-                
+                this.addDetailDialog.lowestValueArray = [[1, 1]]
             },
             /** 导出数据 */
-            submitForm() {
-
-            },
+            submitForm() {},
             /** 导出按钮操作 */
             handleExport() {
                 this.exportDialog.open = true
@@ -1164,16 +1165,15 @@
                 this.upload.isUploading = true
             },
             // 文件上传成功处理
-            handleFileSuccess(response, file, fileList) {
-
-            },
+            handleFileSuccess(response, file, fileList) {},
             // 提交上传文件
             submitFileForm() {
                 this.$refs.upload.submit()
             },
             /**
              * @description: 点击新增触发
-             */            
+             */
+
             addCourse() {
                 this.reset()
                 this.addDetailDialog.title = '新增'
@@ -1187,16 +1187,19 @@
             },
             /**
              * @description: 新增
-             */            
+             */
+
             addDetail() {
-                this.addDetailDialog.config.lowestValue = this.addDetailDialog.lowestValueArray.map(item=> {return item.join(':')}).join(',');
-                console.log(this.addDetailDialog.config, 999);
-                (function(that) {
-                    if(that.addDetailDialog.title == '新增') 
-                        return  coursePost(that.addDetailDialog.config)
-                    else 
-                        return  coursePut(that.addDetailDialog.config)
-                    
+                this.addDetailDialog.config.lowestValue = this.addDetailDialog.lowestValueArray
+                    .map(item => {
+                        return item.join(':')
+                    })
+                    .join(',')
+                console.log(this.addDetailDialog.config, 999)
+                ;(function(that) {
+                    if (that.addDetailDialog.title == '新增')
+                        return coursePost(that.addDetailDialog.config)
+                    else return coursePut(that.addDetailDialog.config)
                 })(this).then(value => {
                     // console.log(value, 789789)
                     this.addDetailDialog.open = false
@@ -1206,36 +1209,37 @@
             /**
              * @description: 回显
              * @param {*} row
-             */            
+             */
+
             renderState(row) {
                 this.addDetailDialog.config = {
-                    id:row.id,
-                    schoolYearId:row.schoolYearId,
-                    schoolYearName:row.schoolYearName,
-                    trainingProgramId:row.trainingProgramId,
-                    name:row.name,
-                    classificationId:row.classificationId,
-                    classificationIdPath:row.classificationIdPath,
-                    joinType:row.joinType+'',
-                    necessary:row.necessary,
-                    type:row.type+'',
-                    status:row.status,
+                    id: row.id,
+                    schoolYearId: row.schoolYearId,
+                    schoolYearName: row.schoolYearName,
+                    trainingProgramId: row.trainingProgramId,
+                    name: row.name,
+                    classificationId: row.classificationId,
+                    classificationIdPath: row.classificationIdPath,
+                    joinType: row.joinType + '',
+                    necessary: row.necessary,
+                    type: row.type + '',
+                    status: row.status,
                     // lowestValue:row.lowestValue,
-                    remark:row.remark
+                    remark: row.remark
                 }
                 //"2:3,3:4" => [[2,3],[3,4]]
-                this.addDetailDialog.lowestValueArray = 
-                    row.lowestValue
-                        .split(',')
-                        .map(item=> item?.split(':'))
-                        .map(item=> [+item[0],+item[1]])
-                
+                this.addDetailDialog.lowestValueArray = row.lowestValue
+                    .split(',')
+                    .map(item => item?.split(':'))
+                    .map(item => [+item[0], +item[1]])
+
                 this.addDetailDialog.open = true
             },
             /**
              * @description: 审核
              * @param {*} row
-             */            
+             */
+
             examCourse(row) {
                 this.renderState(row)
                 this.addDetailDialog.title = '审核'
@@ -1243,36 +1247,38 @@
             /**
              * @description: 点击修改触发
              * @param {*} row 数据
-             */            
+             */
+
             updateCourse(row) {
                 this.renderState(row)
                 this.addDetailDialog.title = '修改'
-                
             },
             /** + */
             mineLowest(index) {
-                this.addDetailDialog.lowestValueArray.splice(index,1)
+                this.addDetailDialog.lowestValueArray.splice(index, 1)
             },
             /** - */
             addLowest(index) {
-                this.addDetailDialog.lowestValueArray.splice(index,0,[1,1])
+                this.addDetailDialog.lowestValueArray.splice(index, 0, [1, 1])
             },
             /**
              * @description: 删除课程
              * @param row 对应的课程
-             */            
+             */
+
             deleteCourse(row) {
-                this.alertDialog.call(this,'删除',{
-                    confirm:() => {
-                        courseDelete(row.id).then(value => {
-                            this.msgSuccess('删除成功')
-                            this.fuzzyQuery()
-                        }).catch(err => {
-                            this.msgError('删除失败')
-                        })          
+                this.alertDialog.call(this, '删除', {
+                    confirm: () => {
+                        courseDelete(row.id)
+                            .then(value => {
+                                this.msgSuccess('删除成功')
+                                this.fuzzyQuery()
+                            })
+                            .catch(err => {
+                                this.msgError('删除失败')
+                            })
                     }
                 })
-        
             },
             /** 状态改变 */
             radioChange(value) {
@@ -1302,9 +1308,11 @@
             },
             /** 分类改变 */
             handleSelect(index) {
-                if(this.classificationList.rows[index]) {
-                    this.classificationList.value = this.classificationList.rows[index].id
-                }else {
+                if (this.classificationList.rows[index]) {
+                    this.classificationList.value = this.classificationList.rows[
+                        index
+                    ].id
+                } else {
                     this.classificationList.value = ''
                 }
                 console.log(this.classificationList.value)
@@ -1345,14 +1353,15 @@
                 trainingProgramList(option).then(value => {
                     this.trainingProgramList.rows = value.rows
                     this.trainingProgramList.value = value.rows[0].id
-                    
+
                     this.queryParams.totalCount = value.total
-                    this.queryParams.totalPage = value.total / this.queryParams.pageSize
+                    this.queryParams.totalPage =
+                        value.total / this.queryParams.pageSize
 
                     value.rows.forEach((item, index) => {
                         this.trainingProgramIdMapname[item.id] = item.name
                     })
-                    
+
                     console.log(value, 'trainingProgramList')
                 })
             },
@@ -1375,27 +1384,24 @@
             getTrainingProgramDetail(option) {
                 this.loading = true
                 trainingProgramDetail(option).then(value => {
-                    
                     /** 总共多少条，总共多少页 */
-                    this.queryParams.totalCount  = value.data.pageData.totalCount
+                    this.queryParams.totalCount = value.data.pageData.totalCount
                     this.queryParams.totalPage = value.data.pageData.totalPage
-                    
+
                     /** 左侧分类获取/默认值/字典映射 */
                     this.classificationList.rows = value.data.classificationList
                     // this.classificationList.value = this.classificationList.rows[0].id
-                    
-                    
+
                     //课程总数-申请中-审核通过-审核未通过
                     this.countState = {
-                        applyingCount:value.data.applyingCount,
-                        courseCount:value.data.courseCount,
-                        failCount:value.data.failCount,
-                        validCoun:value.data.validCount
+                        applyingCount: value.data.applyingCount,
+                        courseCount: value.data.courseCount,
+                        failCount: value.data.failCount,
+                        validCoun: value.data.validCount
                     }
                     this.courseList = value.data.pageData.list
-    
+
                     this.loading = false
-                    
                 })
             },
             /** 模糊查询 */
@@ -1420,9 +1426,10 @@
             /**
              * @description: 根据参数查询二课课程分类列表
              * @param name
-             * @param type 
+             * @param type
              * @param integralType
-             */            
+             */
+
             getCourseClassificationList(option) {
                 courseClassificationList(option).then(value => {
                     value.data.forEach(item => {
@@ -1440,7 +1447,6 @@
                     }))
                     this.datadata = filterCourseClassificationList(value)
                     console.log(this.datadata, 'datadata')
-                    
                 })
             }
         },
@@ -1463,18 +1469,15 @@
             /** 获得当前学年所有的培养方案列表 */
             this.getTrainingProgramList({
                 schoolYearId: this.$route.params.sid
-            })        
+            })
 
             /** 获得当前学年下 当前培养方案下 当前课程分类下 课程列表 */
             this.fuzzyQuery()
 
             this.getCourseClassificationList()
-            
         },
         async beforeMount() {},
-        async mounted() {
-            
-        }
+        async mounted() {}
     }
 </script>
 

@@ -134,9 +134,7 @@
 
 <script>
     //导入活动奖项相关接口
-     import {
-        activityPrize,
-    } from '@/api/application/secondClass/activity'
+    import { activityPrize } from '@/api/application/secondClass/activity'
 
     import {
         trainingProgramDetail,
@@ -179,7 +177,6 @@
         components: { Treeselect },
         data() {
             return {
-                
                 queryParams: {
                     totalCount: 0,
                     totalPage: 50,
@@ -188,14 +185,13 @@
                 }
             }
         },
-        methods:{
-            getActivityPrize(option){
-            //  后端接口还没写好，之后再写
-            //   activityPrize(option).then(value=>{
-            //       console.log(value);
-            //   })
+        methods: {
+            getActivityPrize(option) {
+                //  后端接口还没写好，之后再写
+                //   activityPrize(option).then(value=>{
+                //       console.log(value);
+                //   })
             }
-         
         },
         async created() {
             //初始化字典
@@ -204,13 +200,10 @@
             //获取活动奖项总信息
             this.getActivityPrize({
                 activityId: this.$route.params.aid
-            });
+            })
             /** 获得当前情况下的奖项管理列表 */
             // this.fuzzyQuery()
-            
-        },
-        
-
+        }
     }
 </script>
 

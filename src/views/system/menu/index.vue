@@ -392,10 +392,10 @@
         },
         created() {
             this.getList()
-            this.getDicts('sys_show_hide').then(response => {
+            this.getDict('sys_show_hide').then(response => {
                 this.visibleOptions = response.data
             })
-            this.getDicts('sys_normal_disable').then(response => {
+            this.getDict('sys_normal_disable').then(response => {
                 this.statusOptions = response.data
             })
         },

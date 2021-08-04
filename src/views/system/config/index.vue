@@ -345,7 +345,7 @@
         },
         created() {
             this.getList()
-            this.getDicts('sys_yes_no').then(response => {
+            this.getDict('sys_yes_no').then(response => {
                 this.typeOptions = response.data
             })
         },

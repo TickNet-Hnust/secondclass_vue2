@@ -1,5 +1,5 @@
 /*
- * @Descripttion: 
+ * @Descripttion:
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 林舒恒
@@ -8,23 +8,23 @@
 function temp(obj) {
     //挂载子节点与父节点
     let filter = (father, layer) => {
-            let array = []
-            obj.data.forEach(item => {
-                if (item.pid === layer) {
-                    array.push(item)
-                }
-            })
-            array.forEach(item => {
-                let temp = filter(item, item.id)
-                if (temp.length != 0) {
-                    item.children = temp
-                }
-                item.__parent__ = father
-            })
-            return array
-        }
-        //排序
-    let sortWay = (array) => {
+        let array = []
+        obj.data.forEach(item => {
+            if (item.pid === layer) {
+                array.push(item)
+            }
+        })
+        array.forEach(item => {
+            let temp = filter(item, item.id)
+            if (temp.length != 0) {
+                item.children = temp
+            }
+            item.__parent__ = father
+        })
+        return array
+    }
+    //排序
+    let sortWay = array => {
         array.sort(function(a, b) {
             return a.sort - b.sort
         })

@@ -315,10 +315,10 @@
         },
         created() {
             this.getList()
-            this.getDicts('sys_notice_status').then(response => {
+            this.getDict('sys_notice_status').then(response => {
                 this.statusOptions = response.data
             })
-            this.getDicts('sys_notice_type').then(response => {
+            this.getDict('sys_notice_type').then(response => {
                 this.typeOptions = response.data
             })
         },
@@ -390,6 +390,7 @@
             },
             /** 提交按钮 */
             submitForm: function() {
+                console.log(this.form)
                 this.$refs['form'].validate(valid => {
                     if (valid) {
                         if (this.form.noticeId != undefined) {

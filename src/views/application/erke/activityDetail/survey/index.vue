@@ -6,15 +6,13 @@
                     <el-row class="textRow">
                         <el-col :span="12" style="min-width:405px">
                             <span class="labelSpan" style="marginRight:65px">
-                                主办方：</span
-                            >
-                            <span class="textSpan"
-                                >153-机电工程学院–学生会–学风建设部(机电)</span
-                            >
+                                主办方：
+                            </span>
+                            <span class="textSpan">{{activityVo.groupId}}</span>
                         </el-col>
                         <el-col :span="12">
-                            <span class="labelSpan"> 录取方式：</span>
-                            <span class="textSpan">评审</span>
+                            <span class="labelSpan">录取方式：</span>
+                            <span class="textSpan">{{activityVo.enrollWay}}</span>
                         </el-col>
                     </el-row>
 
@@ -23,12 +21,12 @@
                             <span class="labelSpan" style="marginRight:65px">
                                 发布人：</span
                             >
-                            <span class="textSpan">2003010727-张光辉</span>
+                            <span class="textSpan">{{activityVo.activityReleaserName}}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelSpan"> 报名范围：</span>
                             <span class="textSpan"
-                                >机电工程学院，土木工程学院</span
+                                >{{activityVo.applyRange}}</span
                             >
                         </el-col>
                     </el-row>
@@ -36,46 +34,46 @@
                     <el-row class="textRow">
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 指导单位：</span>
-                            <span class="textSpan">机电工程学院</span>
+                            <span class="textSpan">{{activityVo.departmentId}}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelSpan"> 报名年级：</span>
-                            <span class="textSpan">2018，2019</span>
+                            <span class="textSpan">{{activityVo.applyGrade}}</span>
                         </el-col>
                     </el-row>
 
                     <el-row class="textRow">
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 指导老师：</span>
-                            <span class="textSpan">---</span>
+                            <span class="textSpan">{{activityVo.guideTeacherID}}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelSpan" style="marginRight:22px"
                                 >最大录取人数：</span
                             >
-                            <span class="textSpan">限定人数(30)</span>
+                            <span class="textSpan">{{activityVo.maxAdmissionNumber}}</span>
                         </el-col>
                     </el-row>
 
                     <el-row class="textRow">
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan">活动级别：</span>
-                            <span class="textSpan">院级</span>
+                            <span class="textSpan">{{activityVo.rankId}}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelSpan"> 允许请假：</span>
-                            <span class="textSpan">是</span>
+                            <span class="textSpan">{{activityVo.vacate}}</span>
                         </el-col>
                     </el-row>
 
                     <el-row class="textRow">
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 活动标签：</span>
-                            <span class="textSpan">创新创业</span>
+                            <span class="textSpan">{{activityVo.activityTag}}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelSpan"> 活动地点：</span>
-                            <span class="textSpan">第三教学楼</span>
+                            <span class="textSpan">{{activityVo.activityPlace}}</span>
                         </el-col>
                     </el-row>
 
@@ -83,14 +81,12 @@
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 活动分类：</span>
                             <span class="textSpan"
-                                >思想政治与任务素养-新生入学教育</span
+                                >{{activityVo.courseClassificationId}}</span
                             >
                         </el-col>
                         <el-col :span="12">
-                            <span class="labelSpan" style="marginRight:35px">
-                                活动负责人：</span
-                            >
-                            <span class="textSpan">2003010727–张光辉</span>
+                            <span class="labelSpan" style="marginRight:35px">活动负责人：</span>
+                            <span class="textSpan">{{activityVo.activityManagerId}}</span>
                         </el-col>
                     </el-row>
 
@@ -98,14 +94,14 @@
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 报名时间：</span>
                             <span class="textSpan"
-                                >2021-10-02 08:00:00 ~ 2021-10-10 08:00:00</span
+                                >{{activityVo.applyStartTime}} ~ {{activityVo.applyEndTime}}</span
                             >
                         </el-col>
                         <el-col :span="12">
                             <span class="labelSpan" style="marginRight:35px">
                                 活动组织者：</span
                             >
-                            <span class="textSpan">2003010727–张光辉</span>
+                            <span class="textSpan">{{activityVo.activityOrganizerId}}</span>
                         </el-col>
                     </el-row>
 
@@ -113,7 +109,7 @@
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 活动时间：</span>
                             <span class="textSpan"
-                                >2021-10-02 08:00:00 ~ 2021-10-10 08:00:00</span
+                                >{{activityVo.activityStartTime}} ~ {{activityVo.activityEndTime}}</span
                             >
                         </el-col>
                     </el-row>
@@ -124,43 +120,50 @@
                             执行状态：
                         </el-col>
                         <el-col :span="22" class="msgStatus-nums">
-                            <a-steps :current="4" size="small">
-                                <a-step title="起草" description="已完成" />
-                                <a-step title="待审核" description="已完成" />
-                                <a-step title="审核通过" description="已完成" />
-                                <a-step title="报名" description="人数：30" />
+                            <a-steps :current="statusList.length - 1" size="small">
+                                <template
+                                    v-for="(item,index) in statusList"    
+                                >
+                                    <a-step
+                                        :key="index"
+                                        :title="dict_sc_activity_status[item.progress].dictLabel"
+                                        :description="item.completeTime"
+                                        v-if="index != statusList.length - 1"
+                                    ></a-step>
+                                    <a-step :key="index" v-else>
+                                        <template slot="title">
+                                            <!-- {{dict_sc_activity_status}} -->
+                                            {{dict_sc_activity_status[item.progress].dictLabel}}
+                                            <!-- dict_sc_activity_status[item.progress].dictLabel:undefined}} -->
+                                        </template>
 
-                                <a-step>
-                                    <template slot="title">
-                                        进行
-                                    </template>
-
-                                    <span slot="subTitle">
-                                        <a-dropdown :trigger="['click']">
-                                            <a
-                                                class="ant-dropdown-link"
-                                                @click="e => e.preventDefault()"
-                                            >
-                                                <a-icon type="down" />
-                                            </a>
-                                            <a-menu slot="overlay">
-                                                <a-menu-item key="0">
-                                                    <a href="#">结束活动</a>
-                                                </a-menu-item>
-                                                <a-menu-item key="1">
-                                                    <a href="#">暂停活动</a>
-                                                </a-menu-item>
-                                            </a-menu>
-                                        </a-dropdown>
-                                    </span>
-                                    <span slot="description">
-                                        签到:30
-                                    </span>
-                                </a-step>
-                                <a-step title="结束" description="" />
+                                        <span slot="subTitle">
+                                            <a-dropdown :trigger="['click']">
+                                                <a
+                                                    class="ant-dropdown-link"
+                                                    @click="e => e.preventDefault()"
+                                                >
+                                                    <a-icon type="down" />
+                                                </a>
+                                                <a-menu slot="overlay">
+                                                    <a-menu-item key="0">
+                                                        <a href="#">结束活动</a>
+                                                    </a-menu-item>
+                                                    <a-menu-item key="1">
+                                                        <a href="#">暂停活动</a>
+                                                    </a-menu-item>
+                                                </a-menu>
+                                            </a-dropdown>
+                                        </span>
+                                        <span slot="description">
+                                            {{item.completeTime}}
+                                        </span>
+                                    </a-step>
+                                </template>
+                                <!-- <a-step title="结束" description="" />
                                 <a-step title="报名" description="人数：30" />
                                 <a-step title="报名" description="人数：30" />
-                                <a-step title="报名" description="人数：30" />
+                                <a-step title="报名" description="人数：30" /> -->
                             </a-steps>
                         </el-col>
                     </el-row>
@@ -239,7 +242,7 @@
                 <div class="lisRight-top">
                     <div class="title">活动统计</div>
                     <el-tabs v-model="activeName">
-                        <el-tab-pane label="用户管理" name="first">
+                        <el-tab-pane label="报名情况" name="first">
                             <div class="lisRight-buttom">
                                 <el-row class="listRowTop">
                                     <el-col :span="3">序号</el-col>
@@ -248,25 +251,63 @@
                                     <el-col :span="4">报名率</el-col>
                                 </el-row>
                                 <el-row
-                                    v-for="(item, index) in userList"
+                                    v-for="(item, index) in deptEnrollStatisticsVoList"
                                     :key="index"
                                     class="listRowButtom"
                                 >
                                     <el-col :span="3">{{ index + 1 }}</el-col>
                                     <el-col :span="12">{{
-                                        item.college
+                                        item.deptName
                                     }}</el-col>
-                                    <el-col :span="5">{{ item.count }}</el-col>
-                                    <el-col :span="4">{{ item.rate }}</el-col>
+                                    <el-col :span="5">{{ item.enrollNumber }}</el-col>
+                                    <el-col :span="4">{{ item.enrollRate*100 + '%' }}</el-col>
                                 </el-row>
                             </div>
                         </el-tab-pane>
-                        <el-tab-pane label="配置管理" name="second"
-                            >配置管理</el-tab-pane
-                        >
-                        <el-tab-pane label="角色管理" name="third"
-                            >角色管理</el-tab-pane
-                        >
+                        <el-tab-pane label="签到情况" name="second">
+                             <div class="lisRight-buttom">
+                                <el-row class="listRowTop">
+                                    <el-col :span="3">序号</el-col>
+                                    <el-col :span="12">分党校</el-col>
+                                    <el-col :span="5">请假人数</el-col>
+                                    <el-col :span="4">请假率</el-col>
+                                </el-row>
+                                <el-row
+                                    v-for="(item, index) in deptRegisteStatisticsVoList"
+                                    :key="index"
+                                    class="listRowButtom"
+                                >
+                                    <el-col :span="3">{{ index + 1 }}</el-col>
+                                    <el-col :span="12">{{
+                                        item.deptName
+                                    }}</el-col>
+                                    <el-col :span="5">{{ item.registeNumber }} </el-col>
+                                    <el-col :span="4">{{ item.registeRate*100 + '%' }}</el-col>
+                                </el-row>
+                            </div>
+                        </el-tab-pane>
+                        <el-tab-pane label="请假情况" name="third">
+                             <div class="lisRight-buttom">
+                                <el-row class="listRowTop">
+                                    <el-col :span="3">序号</el-col>
+                                    <el-col :span="12">分党校</el-col>
+                                    <el-col :span="5">请假人数</el-col>
+                                    <el-col :span="4">请假率</el-col>
+                                </el-row>
+                                <el-row
+                                    v-for="(item, index) in deptLeaveStatisticsVoList"
+                                    :key="index"
+                                    class="listRowButtom"
+                                >
+                                    <el-col :span="3">{{ index + 1 }}</el-col>
+                                    <el-col :span="12">#&nbsp;{{
+                                        item.deptName
+                                    }}</el-col>
+                                    <el-col :span="5"> {{ item.leaveNumber }}</el-col>
+                                    <el-col :span="4"> {{ item.leaveRate*100 + '%' }}</el-col>
+                                </el-row>
+                            </div>    
+                        </el-tab-pane>
                     </el-tabs>
                 </div>
             </el-col>
@@ -275,10 +316,52 @@
 </template>
 
 <script>
+import { getDict } from '@/api/application/secondClass/dict/type.js'
+    import {
+        activityIdDetail
+    } from '@/api/application/secondClass/activity'
     import * as echarts from 'echarts'
     export default {
         data() {
             return {
+                dict_sc_activity_status:[],
+                activityVo:{
+                    groupId: '', //活动主办方
+                    enrollWay: '', //录取方式
+                    
+                    activityReleaserName: '', //发布人
+                    applyRange: '', //报名范围
+                    
+                    departmentId: '', //指导单位
+                    applyGrade: '', //报名年级
+                    
+                    guideTeacherID: '', //指导老师
+                    maxEnrollNumber: '', //最大录取人数
+
+                    rankId: '', //活动级别
+                    vacate: '', //允许请假
+
+                    activityTag: '', //活动标签
+                    activityPlace: '', //活动地点
+
+                    courseClassificationId: '', //活动分类
+                    activityManagerId: '', //活动负责人
+
+                    applyStartTime: '', //报名开始时间
+                    applyEndTime: '', //报名结束时间
+                    activityOrganizerId: '', //活动组织者
+
+                    activityStartTime: '', //活动开始时间
+                    activityEndTime: '', //活动结束时间
+                    
+                },
+                statusList:[],
+                //报名率
+                deptEnrollStatisticsVoList:[],
+                //请假率
+                deptLeaveStatisticsVoList:[],
+                //签到率
+                deptRegisteStatisticsVoList:[],
                 range: '2',
                 activeName: 'first',
                 userList: [
@@ -480,7 +563,7 @@
                             type: 'inside',
                             start: 94,
                             end: 100
-                        },
+                        }
                     ],
                     series: [
                         {
@@ -513,9 +596,38 @@
                 this.option.dataZoom[0].start = start
                 this.option.dataZoom[0].end = end
                 this.myChart.setOption(this.option)
+            },
+            async initDict() {
+                await Promise.all([
+                    getDict('sc_activity_status')
+                ]).then(value => {
+                    let tempArr = [
+                        'dict_sc_activity_status'
+                    ]
+                    tempArr.forEach((item,index) => {
+                        this[item] = value[index].data
+                    })
+                })
             }
         },
+        async created(){
+            await this.initDict()
+            activityIdDetail({
+                id: this.$route.params.aid
+            }).then(value => {
+                console.log(value)
+                Object.keys(this.activityVo).forEach(item => {
+                    this.activityVo[item] = value.data.activityVo[item]
+                })
+                this.statusList = value.data.statusList.reverse()
+                this.deptEnrollStatisticsVoList = value.data.deptEnrollStatisticsVoList
+                this.deptRegisteStatisticsVoList = value.data.deptRegisteStatisticsVoList
+                this.deptLeaveStatisticsVoList = value.data.deptLeaveStatisticsVoList
+                console.log(this.activityVo)
+            })
+        },
         mounted() {
+            
             this.data = {
                 nums: [
                     42,
@@ -1371,7 +1483,7 @@
                         type: 'inside',
                         start: 94,
                         end: 100
-                    },
+                    }
                     // {
                     //     show: true,
                     //     type: 'slider',
@@ -1400,7 +1512,7 @@
                 this.myChart.resize()
             })
 
-            new this.XScrollbar(document.querySelector('.survey'))
+            // new this.XScrollbar(document.querySelector('.survey'))
             new this.XScrollbar(document.querySelector('.msgStatus-nums'), {
                 onlyHorizontal: true
             })
