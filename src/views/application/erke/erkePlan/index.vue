@@ -31,12 +31,16 @@
                     circle
                     icon="el-icon-refresh"
                 ></el-button>
-                <el-button 
-                    style="margin:0 10px" 
-                    @click="handleManager"
-                >管理</el-button>
-                <el-tag>当前学年：{{this.list.rows[this.managerDialog.radio]?
-                    this.list.rows[this.managerDialog.radio].yearName:undefined}}</el-tag>
+                <el-button style="margin:0 10px" @click="handleManager"
+                    >管理</el-button
+                >
+                <el-tag
+                    >当前学年：{{
+                        this.list.rows[this.managerDialog.radio]
+                            ? this.list.rows[this.managerDialog.radio].yearName
+                            : undefined
+                    }}</el-tag
+                >
             </div>
         </div>
 
@@ -264,20 +268,19 @@
                     align="center"
                 ></el-table-column>
                 <el-table-column
-                        prop="learnYearNo"
-                        label="当前学年"
-                        align="center"
-                    >
-                        <template slot-scope="scope">
-                            
-                            <input
-                                type="radio"
-                                name="isNow"
-                                :value="scope.$index"
-                                v-model="managerDialog.radio"
-                            />
-                        </template>
-                    </el-table-column> 
+                    prop="learnYearNo"
+                    label="当前学年"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <input
+                            type="radio"
+                            name="isNow"
+                            :value="scope.$index"
+                            v-model="managerDialog.radio"
+                        />
+                    </template>
+                </el-table-column>
             </el-table>
             <!-- </el-form> -->
 
@@ -621,7 +624,7 @@
                     value: -1,
                     rows: []
                 },
-                preAddData:[],
+                preAddData: [],
                 //新增弹窗里面的数据
                 addPlanDialog: {
                     title: '新增培养方案',
@@ -641,8 +644,7 @@
                 importDialog: {
                     title: '导入方案',
                     open: false,
-                    config: [
-                    ]
+                    config: []
                 },
                 updatePlanDialog: {
                     open: false,
@@ -869,8 +871,9 @@
                 )
             },
             /**
-             * @description: 新增 + 
-             */            
+             * @description: 新增 +
+             */
+
             async addSchoolYear() {
                 this.list.rows.push({
                     yearName: '',
@@ -885,8 +888,9 @@
                 })
             },
             /**
-             * @description: 管理 + 
-             */            
+             * @description: 管理 +
+             */
+
             async addtrainingProgram() {
                 let data = {
                     schoolYearId: this.list.rows[this.managerDialog.radio].id,
@@ -905,10 +909,11 @@
                 })
             },
             /**
-             * @description: 管理 - 
+             * @description: 管理 -
              * @param {*} row
              * @param {*} index
-             */            
+             */
+
             async deleteManagerDialog(row, index) {
                 this.alertDialog.call(this, '预删除', {
                     confirm: () => {
@@ -929,7 +934,7 @@
                     this.msgInfo('请填写完整信息')
                     return
                 }
-                this.list.rows.forEach(item => item.nowYear=0)
+                this.list.rows.forEach(item => (item.nowYear = 0))
                 this.list.rows[this.managerDialog.radio].nowYear = 1
                 schoolYearMulti({
                     deleteIds: this.deleteIds,
@@ -985,9 +990,7 @@
             },
             // 表单重置
             reset() {
-                this.form = {
-
-                }
+                this.form = {}
             },
             /** 搜索按钮操作 */
             handleQuery() {
@@ -1029,8 +1032,8 @@
                 })
                 this.cancelAdd()
             },
-             submitUpdateForm() {
-                 trainingProgramMulti({
+            submitUpdateForm() {
+                trainingProgramMulti({
                     trainingProgramList: [this.updatePlanDialog.config]
                 }).then(value => {
                     Object.assign(
@@ -1047,16 +1050,16 @@
              * @description:  模糊查询培养方案名字
              */
 
-             findFuzzyName() {
+            findFuzzyName() {
                 let option = {
                     name: this.FuzzyInput,
                     pageNum: 1,
                     pageSize: 10
                 }
                 this.list.value != -1 && (option.schoolYearId = this.list.value)
-                 this.getTrainingProgramList(option)
+                this.getTrainingProgramList(option)
             },
-            
+
             /** 导出按钮操作 */
             handleExport() {
                 this.exportDialog.title = '导出数据'
@@ -1070,13 +1073,14 @@
 
             /**
              * @description: 获取学年列表
-             */            
+             */
+
             getSchoolYearList() {
-                 schoolYearList().then(value => {
-                    value.rows.forEach((item,index) => {
+                schoolYearList().then(value => {
+                    value.rows.forEach((item, index) => {
                         /** 这里还需要改进，否则数组到后面将会很大，影响性能 */
                         this.schoolYearIdMapName[item.id] = item.yearName
-                        item.nowYear && (this.managerDialog.radio = index)//记录当前学年下标
+                        item.nowYear && (this.managerDialog.radio = index) //记录当前学年下标
                     })
                     //默认选中学年的第一个
                     // this.managerDialog.radio = value.rows[0].id
@@ -1092,8 +1096,8 @@
              *  @param pageSize 限制每页的条数
              */
 
-             getTrainingProgramList(option) {
-                 trainingProgramList(option).then(value => {
+            getTrainingProgramList(option) {
+                trainingProgramList(option).then(value => {
                     this.planData = value.rows
                     this.queryParams.totalCount = value.total
                     this.queryParams.totalPage =
@@ -1106,8 +1110,8 @@
              * @description:  初始化字典
              */
 
-             initDict() {
-                 Promise.all([
+            initDict() {
+                Promise.all([
                     getDict('sc_train_program_rank'),
                     getDict('sc_train_program_status')
                 ]).then(value => {
@@ -1123,7 +1127,7 @@
         },
         async created() {
             //字典初始化
-             this.initDict()
+            this.initDict()
 
             //表格加载
             this.loading = true
@@ -1135,7 +1139,7 @@
             this.queryParams.pageNum = 1
             this.queryParams.pageSize = 10
             /* 调用 查询培养方案分页 */
-             this.getTrainingProgramList({
+            this.getTrainingProgramList({
                 // schoolYearId: this.list.rows[this.managerDialog.radio].id,
                 pageNum: 1,
                 pageSize: 10

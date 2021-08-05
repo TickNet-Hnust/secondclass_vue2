@@ -336,7 +336,7 @@
         },
         created() {
             this.getList()
-            this.getDicts('sys_normal_disable').then(response => {
+            this.getDict('sys_normal_disable').then(response => {
                 this.statusOptions = response.data
             })
         },

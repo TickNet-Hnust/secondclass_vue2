@@ -97,7 +97,8 @@
                 wx: {
                     appid: '1000034',
                     scope: 'snsapi_login',
-                    redirect_uri: 'http://test.mingyuefusu.cn'
+                    redirect_uri: 'http://localhost:8080'
+                    // redirect_uri: 'http://test.mingyuefusu.cn'
                 },
                 codeUrl: '',
                 cookiePassword: '',

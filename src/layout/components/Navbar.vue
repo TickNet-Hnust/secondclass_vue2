@@ -1,6 +1,6 @@
 <template>
     <div class="navbar">
-        <!-- <hamburger
+        <hamburger
             id="hamburger-container"
             :is-active="sidebar.opened"
             class="hamburger-container"
@@ -11,14 +11,13 @@
             id="breadcrumb-container"
             class="breadcrumb-container"
             v-if="!topNav"
-        /> -->
-        <!-- <top-nav
+        />
+        <top-nav
             id="topmenu-container"
             class="topmenu-container"
             v-if="topNav"
-        /> -->
-
-        <!-- <div class="right-menu">
+        />
+        <div class="right-menu">
             <template v-if="device !== 'mobile'">
                 <search id="header-search" class="right-menu-item" />
 
@@ -69,7 +68,7 @@
                     </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
-        </div> -->
+        </div>
     </div>
 </template>
 

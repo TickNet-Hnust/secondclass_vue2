@@ -9,30 +9,38 @@
                                 <span class="labelSpan"> 签到时间：</span>
                                 <span class="textSpan"
                                     >{{ registeStartTime }} ~
-                                    {{  registeEndTime }}</span
+                                    {{ registeEndTime }}</span
                                 >
                             </el-col>
                             <el-col :span="14">
                                 <span class="labelSpan"> 活动负责人：</span>
-                                <span class="textSpan">{{activityManager}}</span>
+                                <span class="textSpan">{{
+                                    activityManager
+                                }}</span>
                             </el-col>
                         </el-row>
 
                         <el-row style="margin-bottom: 15px">
                             <el-col :span="10" style="min-width:410px">
                                 <span class="labelSpan"> 活动地点：</span>
-                                <span class="textSpan">{{activityPlaceName}}</span>
+                                <span class="textSpan">{{
+                                    activityPlaceName
+                                }}</span>
                             </el-col>
                             <el-col :span="14">
                                 <span class="labelSpan"> 活动组织者：</span>
-                                <span class="textSpan">{{activityOrganizer}}</span>
+                                <span class="textSpan">{{
+                                    activityOrganizer
+                                }}</span>
                             </el-col>
                         </el-row>
 
                         <el-row style="margin-bottom: 15px">
                             <el-col :span="10" style="min-width:410px">
                                 <span class="labelSpan"> 签到距离：</span>
-                                <span class="textSpan">{{registeDistance}}米</span>
+                                <span class="textSpan"
+                                    >{{ registeDistance }}米</span
+                                >
                             </el-col>
                         </el-row>
 
@@ -76,21 +84,25 @@
                             class="el-menu-vertical-demo"
                             @select="handleSelect"
                         >
-                            <el-menu-item
-                                index=''
-                            >
-                                <span slot="title">全部 <span class="numbers">{{admissionNumber}}</span></span>
+                            <el-menu-item index="">
+                                <span slot="title"
+                                    >全部
+                                    <span class="numbers">{{
+                                        admissionNumber
+                                    }}</span></span
+                                >
                             </el-menu-item>
 
                             <el-menu-item
-                                v-for="(item, index) in Object.entries(tabInfo)" :key="index"
+                                v-for="(item, index) in Object.entries(tabInfo)"
+                                :key="index"
                                 :index="index + ''"
-                                 
                             >
-                            <span slot="title" >{{ deptIdMapDeptName[item[0]] }} <span class="numbers">{{item[1]}}</span> </span>
-                                
+                                <span slot="title"
+                                    >{{ deptIdMapDeptName[item[0]] }}
+                                    <span class="numbers">{{ item[1] }}</span>
+                                </span>
                             </el-menu-item>
-
                         </el-menu>
                     </div>
                     <div class="erke-buttom-right">
@@ -102,20 +114,21 @@
                                     justify="space-around"
                                     style="flexWrap:wrap"
                                 >
-                                <el-col :span="1" style="min-width:80px;" >
-                                    <el-tooltip 
-                                        class="item" 
-                                        effect="dark" 
-                                        content="清空查询条件" 
-                                        placement="right">
-                                    <el-button
-                                        circle
-                                        icon="el-icon-refresh"
-                                        @click="refresh"
-                                    >
-                                    </el-button>
-                                    </el-tooltip>
-                                </el-col> 
+                                    <el-col :span="1" style="min-width:80px;">
+                                        <el-tooltip
+                                            class="item"
+                                            effect="dark"
+                                            content="清空查询条件"
+                                            placement="right"
+                                        >
+                                            <el-button
+                                                circle
+                                                icon="el-icon-refresh"
+                                                @click="refresh"
+                                            >
+                                            </el-button>
+                                        </el-tooltip>
+                                    </el-col>
                                     <el-col :span="1" style="min-width:150px">
                                         <el-form-item label="操作:">
                                             <el-select
@@ -123,28 +136,34 @@
                                                 style="width:80px"
                                                 placeholder="操作"
                                             >
-                                            <el-option value="批量修改"></el-option>
-                                            <el-option value="排序"></el-option>
+                                                <el-option
+                                                    value="批量修改"
+                                                ></el-option>
+                                                <el-option
+                                                    value="排序"
+                                                ></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="学号:">
-                                            <el-input data-text
-                                            placeholder="学号"
-                                            v-model="queryList.userName"
-                                            @input="fuzzyQuery"
+                                            <el-input
+                                                data-text
+                                                placeholder="学号"
+                                                v-model="queryList.userName"
+                                                @input="fuzzyQuery"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="姓名:">
-                                            <el-input data-text
-                                            placeholder="姓名"
-                                            v-model="queryList.nickName"
-                                            @input="fuzzyQuery"
+                                            <el-input
+                                                data-text
+                                                placeholder="姓名"
+                                                v-model="queryList.nickName"
+                                                @input="fuzzyQuery"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -168,7 +187,6 @@
                                                     :value="item.dictValue"
                                                     :label="item.dictLabel"
                                                 ></el-option>
-
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -185,14 +203,13 @@
                                                     value=""
                                                     label="签到情况:不限"
                                                 ></el-option>
-                                                  <el-option
+                                                <el-option
                                                     v-for="(item,
                                                     index) in dict_sc_activity_registe_situation"
                                                     :key="index"
                                                     :value="item.dictValue"
                                                     :label="item.dictLabel"
-                                                ></el-option>       
-
+                                                ></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -215,14 +232,13 @@
                                 </el-row>
                             </el-form>
                         </div>
-                        
+
                         <el-table
                             :data="leaveList"
                             v-loading="loading"
                             class="leaveMainTable"
                         >
                             <el-table-column type="selection" min-width="55">
-
                             </el-table-column>
 
                             <el-table-column
@@ -257,7 +273,6 @@
                                 prop="groupName"
                                 label="群组"
                                 min-width="120"
-                                
                             >
                             </el-table-column>
 
@@ -279,7 +294,7 @@
                                 </template>
                             </el-table-column>
 
-                           <el-table-column
+                            <el-table-column
                                 prop="situation"
                                 label="签到情况"
                                 min-width="100"
@@ -287,22 +302,23 @@
                             >
                                 <template slot-scope="scope">
                                     <el-button
-                                        v-if="scope.row.situation!=null"
+                                        v-if="scope.row.situation != null"
                                         size="mini"
                                         round
                                         :class="sureClassSituation(scope.row)"
                                         >{{
-                                            computedSituation(scope.row.situation)
+                                            computedSituation(
+                                                scope.row.situation
+                                            )
                                         }}</el-button
                                     >
                                 </template>
-                            </el-table-column>    
+                            </el-table-column>
 
                             <el-table-column
                                 prop="checkNickName"
                                 label="签到人"
                                 min-width="100"
-                                
                             >
                             </el-table-column>
 
@@ -310,7 +326,6 @@
                                 prop="createTime"
                                 label="签到时间"
                                 min-width="100"
-                                
                             >
                             </el-table-column>
 
@@ -325,7 +340,7 @@
                                         size="mini"
                                         type="text"
                                         icon="el-icon-s-check"
-                                        v-if="scope.row.status==0"
+                                        v-if="scope.row.status == 0"
                                         @click="lateLeave(scope.row)"
                                         >补签</el-button
                                     >
@@ -333,14 +348,12 @@
                                         size="mini"
                                         type="text"
                                         icon="el-icon-s-check"
-                                        v-if="scope.row.status==1"
+                                        v-if="scope.row.status == 1"
                                         @click="cancelLeave(scope.row)"
                                         >取消签到</el-button
                                     >
-                                   
                                 </template>
                             </el-table-column>
-
                         </el-table>
 
                         <pagination
@@ -358,17 +371,17 @@
 </template>
 
 <script>
-   //导入活动签到相关接口
-     import {
+    //导入活动签到相关接口
+    import {
         activityRegiste,
         activityRegisteList,
-        activityRegisteVerify,
+        activityRegisteVerify
     } from '@/api/application/secondClass/activity'
-    import { 
+    import {
         getDept,
         listDeptExcludeChild,
         listDept
-        } from '@/api/system/dept.js'
+    } from '@/api/system/dept.js'
     import {
         trainingProgramDetail,
         trainingProgramList,
@@ -410,181 +423,193 @@
         components: { Treeselect },
         data() {
             return {
-                action:'',
+                action: '',
                 //部门id 用于模糊查询
-                deptId:'',
-                activityManager:'',
-                activityOrganizer:'',
-                activityPlaceName:'',
-                admissionNumber:'',
-                registeDistance:'',
-                registeStartTime:'',
-                registeEndTime:'',
-                registeLate:'',
-                registeYes:'',
-                registeNo:'',
-                tabInfo:'',
+                deptId: '',
+                activityManager: '',
+                activityOrganizer: '',
+                activityPlaceName: '',
+                admissionNumber: '',
+                registeDistance: '',
+                registeStartTime: '',
+                registeEndTime: '',
+                registeLate: '',
+                registeYes: '',
+                registeNo: '',
+                tabInfo: '',
                 //部门id转部门名字
-                deptIdMapDeptName:[],
+                deptIdMapDeptName: [],
                 queryParams: {
                     totalCount: 0,
                     totalPage: 50,
                     pageCount: 1,
                     pageSize: 4
                 },
-                queryList:{
-                    userName:'',
-                    nickName:'',
-                    status:'',
-                    situation:'',
-                    registeStartTime:'',
-                    registeEndTime:'',
+                queryList: {
+                    userName: '',
+                    nickName: '',
+                    status: '',
+                    situation: '',
+                    registeStartTime: '',
+                    registeEndTime: ''
                 },
-                leaveList:[],
-                dict_sc_activity_registe_status:[],
-                dict_sc_activity_registe_situation:[],
-                 //DateTimePicker
+                leaveList: [],
+                dict_sc_activity_registe_status: [],
+                dict_sc_activity_registe_situation: [],
+                //DateTimePicker
                 pickerOptions: {
-                shortcuts: [{
-                    text: '最近一周',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }, {
-                    text: '最近一个月',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }, {
-                    text: '最近三个月',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }]
+                    shortcuts: [
+                        {
+                            text: '最近一周',
+                            onClick(picker) {
+                                const end = new Date()
+                                const start = new Date()
+                                start.setTime(
+                                    start.getTime() - 3600 * 1000 * 24 * 7
+                                )
+                                picker.$emit('pick', [start, end])
+                            }
+                        },
+                        {
+                            text: '最近一个月',
+                            onClick(picker) {
+                                const end = new Date()
+                                const start = new Date()
+                                start.setTime(
+                                    start.getTime() - 3600 * 1000 * 24 * 30
+                                )
+                                picker.$emit('pick', [start, end])
+                            }
+                        },
+                        {
+                            text: '最近三个月',
+                            onClick(picker) {
+                                const end = new Date()
+                                const start = new Date()
+                                start.setTime(
+                                    start.getTime() - 3600 * 1000 * 24 * 90
+                                )
+                                picker.$emit('pick', [start, end])
+                            }
+                        }
+                    ]
                 },
-                value2:'',
-
+                value2: ''
             }
         },
-        computed:{
-          computedStatus(){
-              return value => {
+        computed: {
+            computedStatus() {
+                return value => {
                     // console.log(this.dict_sc_course_status,temp,333)
                     // console.log(value)
-                    return this.dict_sc_activity_registe_status[value]?.dictLabel;
+                    return this.dict_sc_activity_registe_status[value]
+                        ?.dictLabel
                 }
-         },
-         computedSituation(){
-              return value => {
-                    // console.log(this.dict_sc_course_status,temp,333)
-                    // console.log(value)
-                    return this.dict_sc_activity_registe_situation[value]?.dictLabel;
-                }
-         }
-        },
-        methods:{
-            refresh() {
-                this.action='',
-                this.queryList={
-                    userName:'',
-                    nickName:'',
-                    status:'',
-                    situation:'',
-                    registeStartTime:'',
-                    registeEndTime:'',
-                }
-                this.value2='',
-                this.fuzzyQuery()
             },
-            cancelLeave(row){
-                console.log(row);
-                this.alertDialog.call(this,'取消签到',{
-                    confirm:() => {
+            computedSituation() {
+                return value => {
+                    // console.log(this.dict_sc_course_status,temp,333)
+                    // console.log(value)
+                    return this.dict_sc_activity_registe_situation[value]
+                        ?.dictLabel
+                }
+            }
+        },
+        methods: {
+            refresh() {
+                ;(this.action = ''),
+                    (this.queryList = {
+                        userName: '',
+                        nickName: '',
+                        status: '',
+                        situation: '',
+                        registeStartTime: '',
+                        registeEndTime: ''
+                    })
+                ;(this.value2 = ''), this.fuzzyQuery()
+            },
+            cancelLeave(row) {
+                console.log(row)
+                this.alertDialog.call(this, '取消签到', {
+                    confirm: () => {
                         let option = {
-                            ids : row.id,
-                            status: 0,
+                            ids: row.id,
+                            status: 0
                         }
-                        console.log(option,'取消签到传去的数据')
-                        activityRegisteVerify(option).then(value=>{
-                            console.log(value,'取消签到后端传来的数据');
+                        console.log(option, '取消签到传去的数据')
+                        activityRegisteVerify(option).then(value => {
+                            console.log(value, '取消签到后端传来的数据')
                             this.msgSuccess(value.msg)
-                            this.fuzzyQuery();
+                            this.fuzzyQuery()
                         })
                     }
                 })
             },
-            lateLeave(row){
-                this.alertDialog.call(this,'补签',{
-                    confirm:() => {
+            lateLeave(row) {
+                this.alertDialog.call(this, '补签', {
+                    confirm: () => {
                         let option = {
-                            ids : row.id,
-                            status: 1,
+                            ids: row.id,
+                            status: 1
                         }
-                        console.log(option,'补签传去的数据')
-                        activityRegisteVerify(option).then(value=>{
-                            console.log(value,'补签后端传来的数据');
+                        console.log(option, '补签传去的数据')
+                        activityRegisteVerify(option).then(value => {
+                            console.log(value, '补签后端传来的数据')
                             this.msgSuccess(value.msg)
-                            this.fuzzyQuery();
+                            this.fuzzyQuery()
                         })
                     }
                 })
             },
             //点击左下角部门触发的事件
-            handleSelect(index){
-                console.log(index);
-               if(index!='')
-               {
-                  this.deptId = Object.entries(this.tabInfo)[index][0];
-               }else{
-                  this.deptId=''
-               }
-               this.fuzzyQuery()
+            handleSelect(index) {
+                console.log(index)
+                if (index != '') {
+                    this.deptId = Object.entries(this.tabInfo)[index][0]
+                } else {
+                    this.deptId = ''
+                }
+                this.fuzzyQuery()
             },
             //操作分页触发的事件
-            getList(option){
+            getList(option) {
                 this.queryParams.pageNum = option.page
                 this.queryParams.pageSize = option.limit
                 this.fuzzyQuery()
             },
-            LeaveDateChange(){
+            LeaveDateChange() {
                 //发送时间的格式还需要调整一下
-               if(this.value2!=null)
-               {
-                    this.queryList.registeStartTime = this.value2[0];
-                    this.queryList.registeEndTime = this.value2[1];
-                    console.log(this.queryList.registeStartTime);
-                    console.log(this.queryList.registeEndTime,'开始日期和结束日期')
-                    this.fuzzyQuery();
-               }
+                if (this.value2 != null) {
+                    this.queryList.registeStartTime = this.value2[0]
+                    this.queryList.registeEndTime = this.value2[1]
+                    console.log(this.queryList.registeStartTime)
+                    console.log(
+                        this.queryList.registeEndTime,
+                        '开始日期和结束日期'
+                    )
+                    this.fuzzyQuery()
+                }
             },
-            formatStatus(row, column, cellValue){
+            formatStatus(row, column, cellValue) {
                 return (
                     cellValue != null &&
                     this.dict_sc_activity_registe_status[cellValue]?.dictLabel
                 )
             },
-            formatSituation(row, column, cellValue){
+            formatSituation(row, column, cellValue) {
                 return (
                     cellValue != null &&
-                    this.dict_sc_activity_registe_situation[cellValue]?.dictLabel
+                    this.dict_sc_activity_registe_situation[cellValue]
+                        ?.dictLabel
                 )
             },
             /**
              * @description: 确定CSS类
              * @param {*} row
-             */            
+             */
+
             sureClassLeave(row) {
-                
-                   if (row.status == 0) {
+                if (row.status == 0) {
                     //ing
                     return 'textPlain'
                 } else if (row.status == 1) {
@@ -596,7 +621,7 @@
                 } else {
                     //unpass
                     return 'textRed'
-                } 
+                }
             },
             sureClassSituation(row) {
                 if (row.situation == 0) {
@@ -611,91 +636,91 @@
                 } else {
                     //unpass
                     return 'textRed'
-                } 
+                }
             },
-           getActivityRegiste(option){
-
-            activityRegiste(option).then(value=>{ 
-                this.activityManager = value.data.activityManager;
-                this.activityOrganizer = value.data.activityOrganizer;
-                this.activityPlaceName = value.data.activityPlaceName;
-                this.admissionNumber = value.data.admissionNumber;
-                this.registeDistance = value.data.registeDistance;
-                this.registeStartTime = value.data.registeStartTime;
-                this.registeEndTime = value.data.registeEndTime;
-                this.registeLate = value.data.registeLate;
-                this.registeYes = value.data.registeYes;
-                this.registeNo = value.data.registeNo;
-                this.tabInfo = value.data.tabInfo;
-                console.log(value,'活动签到总信息');
-            })
-           },
-           getDeptIdMapDeptName(){
-               listDept().then(value=>{
-                console.log(value,'listDept()接口传来的数据');
-                value.data.forEach(item=>{
-                    //deptId映射deptName字典
-                    this.deptIdMapDeptName[item.deptId]=item.deptName;
-                });
-                console.log(this.deptIdMapDeptName,'这是deptid和deptname的map');
-               }) 
-                
-           },
-           fuzzyQuery(){
+            getActivityRegiste(option) {
+                activityRegiste(option).then(value => {
+                    this.activityManager = value.data.activityManager
+                    this.activityOrganizer = value.data.activityOrganizer
+                    this.activityPlaceName = value.data.activityPlaceName
+                    this.admissionNumber = value.data.admissionNumber
+                    this.registeDistance = value.data.registeDistance
+                    this.registeStartTime = value.data.registeStartTime
+                    this.registeEndTime = value.data.registeEndTime
+                    this.registeLate = value.data.registeLate
+                    this.registeYes = value.data.registeYes
+                    this.registeNo = value.data.registeNo
+                    this.tabInfo = value.data.tabInfo
+                    console.log(value, '活动签到总信息')
+                })
+            },
+            getDeptIdMapDeptName() {
+                listDept().then(value => {
+                    console.log(value, 'listDept()接口传来的数据')
+                    value.data.forEach(item => {
+                        //deptId映射deptName字典
+                        this.deptIdMapDeptName[item.deptId] = item.deptName
+                    })
+                    console.log(
+                        this.deptIdMapDeptName,
+                        '这是deptid和deptname的map'
+                    )
+                })
+            },
+            fuzzyQuery() {
                 let option = {
-                    deptId:this.deptId,
-                    userName:this.queryList.userName,
+                    deptId: this.deptId,
+                    userName: this.queryList.userName,
                     nickName: this.queryList.nickName,
-                    status:this.queryList.status,
-                    situation:this.queryList.situation,
+                    status: this.queryList.status,
+                    situation: this.queryList.situation,
                     // params:{
-                    registeStartTime:this.queryList.registeStartTime,
-                    registeEndTime:this.queryList.registeEndTime,
+                    registeStartTime: this.queryList.registeStartTime,
+                    registeEndTime: this.queryList.registeEndTime,
                     // },
                     page: this.queryParams.pageCount,
                     limit: this.queryParams.pageSize,
-                    activityId:this.$route.params.aid,
+                    activityId: this.$route.params.aid
                     // orderByColumn:'',
                     // isAsc:''
                 }
-                console.log(option,'发送的数据')
+                console.log(option, '发送的数据')
                 this.getRegisteList(option)
-
-           },
-            getRegisteList(option){
-                 this.loading = true
-                 activityRegisteList(option).then(value => {
-
-                    this.loading = true;
+            },
+            getRegisteList(option) {
+                this.loading = true
+                activityRegisteList(option).then(value => {
+                    this.loading = true
                     /** 总共多少条，总共多少页 */
-                    this.queryParams.totalCount  = value.total
+                    this.queryParams.totalCount = value.total
                     // this.queryParams.pageSize = value.data.pageSize
                     // this.queryParams.totalPage = value.data.totalPage
                     // this.queryParams.currPage = value.data.currPage
-                    this.queryParams.pageCount = Math.ceil(this.queryParams.totalCount/this.queryParams.pageSize);
-                    this.leaveList = value.rows;
-                    console.log(this.leaveList,'传来的数据');
+                    this.queryParams.pageCount = Math.ceil(
+                        this.queryParams.totalCount / this.queryParams.pageSize
+                    )
+                    this.leaveList = value.rows
+                    console.log(this.leaveList, '传来的数据')
                     this.loading = false
-                    
                 })
             },
-            initDict(){
-              // getDict
+            initDict() {
+                // getDict
                 Promise.all([
                     getDict('sc_activity_registe_status'),
-                    getDict('sc_activity_registe_situation'),            
+                    getDict('sc_activity_registe_situation')
                 ]).then(value => {
                     console.log(value, 'initDict')
                     let tempArr = [
                         'dict_sc_activity_registe_status',
-                        'dict_sc_activity_registe_situation',
+                        'dict_sc_activity_registe_situation'
                     ]
                     tempArr.forEach((item, index) => {
                         this[item] = value[index].data
                         console.log(value[index].data, '这是所有字典！！！')
                     })
                 })
-            },
+            }
         },
         async created() {
             // 初始化字典
@@ -703,20 +728,20 @@
             /** 通过活动id获取当前活动签到信息，aid代码活动id*/
             this.getActivityRegiste({
                 activityId: this.$route.params.aid
-            });
+            })
             /** 获得当前情况下的报名管理列表 */
             this.fuzzyQuery()
 
             this.getDeptIdMapDeptName()
-        },
+        }
     }
 </script>
 
 <style scoped>
-.adviceText{
-       margin: 10px 0px;
-   }
-   .textRed {
+    .adviceText {
+        margin: 10px 0px;
+    }
+    .textRed {
         color: #de3c50;
     }
     .textgreen {
@@ -773,7 +798,7 @@
     }
     .erke-buttom-left li span {
         position: absolute;
-     
+
         width: 20px;
         text-align: center;
         top: 0;

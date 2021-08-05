@@ -17,19 +17,21 @@
                                 >
                                     <el-col :span="1" style="min-width: 185px">
                                         <el-form-item label="学号：">
-                                            <el-input data-text
-                                            placeholder="学号"
-                                            v-model="queryList.userName"
-                                            @input="fuzzyQuery"
+                                            <el-input
+                                                data-text
+                                                placeholder="学号"
+                                                v-model="queryList.userName"
+                                                @input="fuzzyQuery"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="1" style="min-width: 185px">
                                         <el-form-item label="姓名：">
-                                            <el-input data-text
-                                            placeholder="姓名"
-                                            v-model="queryList.nickName"
-                                            @input="fuzzyQuery"
+                                            <el-input
+                                                data-text
+                                                placeholder="姓名"
+                                                v-model="queryList.nickName"
+                                                @input="fuzzyQuery"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -89,7 +91,9 @@
                                         alt="图片失效"
                                         class="avatar"
                                     />
-                                    <br />{{ row.nickName }} <br />{{ row.userName }}
+                                    <br />{{ row.nickName }} <br />{{
+                                        row.userName
+                                    }}
                                 </template>
                             </el-table-column>
 
@@ -161,9 +165,9 @@
 
 <script>
     //导入活动花絮相关接口
-     import {
+    import {
         activityFlowerList,
-        activityFlowerVerify,
+        activityFlowerVerify
     } from '@/api/application/secondClass/activity'
     import {
         trainingProgramDetail,
@@ -214,12 +218,12 @@
                     pageCount: 1,
                     pageSize: 4
                 },
-                queryList:{
-                    userName:'',
+                queryList: {
+                    userName: '',
                     nickName: '',
-                    status:'',
-                    createStartTime:'',
-                    createEndTime:''
+                    status: '',
+                    createStartTime: '',
+                    createEndTime: ''
                 },
                 flowerList:[],
                 dict_sc_activity_flower_status:[],
@@ -269,7 +273,7 @@
                 }
             },
         },
-        
+
         methods: {
             yes(row){
                 this.alertDialog.call(this,'同意发布',{
@@ -314,7 +318,7 @@
                }
             },
             //操作分页触发的事件
-            getList(option){
+            getList(option) {
                 this.queryParams.pageNum = option.page
                 this.queryParams.pageSize = option.limit
                 this.fuzzyQuery()
@@ -333,32 +337,31 @@
 
                 console.log('this.maxLength:', this.maxLength)
             },
-             fuzzyQuery() {
+            fuzzyQuery() {
                 let option = {
-                    activityId:this.$route.params.aid,
-                    userName:this.queryList.userName,
+                    activityId: this.$route.params.aid,
+                    userName: this.queryList.userName,
                     nickName: this.queryList.nickName,
-                    status:this.queryList.status,
+                    status: this.queryList.status,
                     // params:{
-                    createStartTime:this.queryList.createStartTime,
-                    createEndTime:this.queryList.createEndTime,
+                    createStartTime: this.queryList.createStartTime,
+                    createEndTime: this.queryList.createEndTime,
                     // },
                     page: this.queryParams.pageCount,
-                    limit: this.queryParams.pageSize,
-                    
+                    limit: this.queryParams.pageSize
+
                     // orderByColumn:'',
                     // isAsc:''
                 }
-                console.log(option,'fuzzyQuery发送的数据')
+                console.log(option, 'fuzzyQuery发送的数据')
                 this.getFlowerList(option)
             },
-            getFlowerList(option){
-                 this.loading = true
-                 activityFlowerList(option).then(value => {
-
-                    console.log(value);
+            getFlowerList(option) {
+                this.loading = true
+                activityFlowerList(option).then(value => {
+                    console.log(value)
                     /** 总共多少条，总共多少页 */
-                    this.queryParams.totalCount  = value.total
+                    this.queryParams.totalCount = value.total
                     // this.queryParams.pageSize = value.data.pageSize
                     // this.queryParams.totalPage = value.data.totalPage
                     // this.queryParams.currPage = value.data.currPage
@@ -367,7 +370,6 @@
                     console.log(this.flowerList,'传来的数据');
                     this.initimgLength()
                     this.loading = false
-                    
                 })
             },
             initDict(){

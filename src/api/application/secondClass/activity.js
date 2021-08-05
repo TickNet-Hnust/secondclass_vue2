@@ -1,9 +1,9 @@
 /*
- * @Description: 
+ * @Description:
  * @Autor: 张津瑞
  * @Date: 2021-07-26 18:39:09
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-04 12:08:59
+ * @LastEditTime: 2021-08-05 11:27:55
  */
 
 import request from '@/utils/request.js'
@@ -69,7 +69,6 @@ export function activityPrizeRecord(params) {
     })
 }
 
-
 /**
  * @description: 查询奖项信息
  * @param {*} params
@@ -107,8 +106,6 @@ export function activityRegiste(params) {
     })
 }
 
-
-
 /**
  * @description: 获取活动签到信息列表
  * @param {*} params
@@ -133,10 +130,6 @@ export function activityRegisteVerify(params) {
     })
 }
 
-
-
-
-
 /**
  * @description: 获取活动请假信息
  * @param {*} params
@@ -148,9 +141,6 @@ export function activityLeave(params) {
         params
     })
 }
-
-
-
 
 /**
  * @description: 获取活动请假列表
@@ -180,7 +170,7 @@ export function activityLeaveVerify(params) {
  * @description: 活动花絮列表
  * @param {*} params
  */
- export function activityFlowerList(params) {
+export function activityFlowerList(params) {
     return request({
         url: '/admins/secondClass/activity/flower/list',
         method: 'get',
@@ -192,7 +182,7 @@ export function activityLeaveVerify(params) {
  * @description: 活动花絮审核
  * @param {*} params
  */
- export function activityFlowerVerify(params) {
+export function activityFlowerVerify(params) {
     return request({
         url: '/admins/secondClass/activity/flower/verify',
         method: 'put',
@@ -327,3 +317,16 @@ export function activityIdNextStatus({ id, nextStatus }) {
     })
 }
 /** 活动管理起草结束 */
+
+/** 活动概况开始 */
+/**
+ * @description: 活动概况
+ * @param {*} id
+ */
+export function activityIdDetail({ id }) {
+    return request({
+        url: `/admins/secondClass/activity/${id}/detail`,
+        method: 'get'
+    })
+}
+/** 活动概况结束 */

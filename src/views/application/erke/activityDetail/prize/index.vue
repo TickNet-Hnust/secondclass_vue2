@@ -678,7 +678,6 @@
 
                  })
             }
-         
         },
         async created() {
             //初始化字典
@@ -687,7 +686,7 @@
             //获取活动奖项总信息
             this.getActivityPrizeRecord({
                 activityId: this.$route.params.aid
-            });
+            })
             /** 获得当前情况下的奖项管理列表 */
             this.fuzzyQuery()
 

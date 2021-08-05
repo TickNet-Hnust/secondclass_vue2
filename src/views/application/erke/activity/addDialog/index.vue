@@ -34,7 +34,9 @@
                         </el-form-item>
 
                         <el-form-item label="主办方：">
-                            <el-input v-model="postData.groupPathName"></el-input>
+                            <el-input
+                                v-model="postData.groupPathName"
+                            ></el-input>
                         </el-form-item>
 
                         <el-form-item label="发布人：">
@@ -43,18 +45,17 @@
 
                         <el-form-item label="指导单位">
                             <el-select v-model="postData.deptId">
-                                <el-option 
-                                    v-for="(item,index) in deptListMap"
+                                <el-option
+                                    v-for="(item, index) in deptListMap"
                                     :key="index"
                                     :value="item[0]"
                                     :label="item[1]"
                                 ></el-option>
-
                             </el-select>
                         </el-form-item>
 
                         <el-form-item label="指导老师：">
-                            <el-input ></el-input>
+                            <el-input></el-input>
                         </el-form-item>
 
                         <el-form-item label="报名信息" class="bold"
@@ -69,19 +70,20 @@
                                 range-separator="至"
                                 start-placeholder="开始日期"
                                 end-placeholder="结束日期"
-                                align="right">
+                                align="right"
+                            >
                             </el-date-picker>
                         </el-form-item>
 
                         <el-form-item label="录取方式">
                             <el-select v-model="postData.admissionWay">
-                                <el-option 
-                                    v-for="(item,index) in dict_sc_activity_admission_way"
+                                <el-option
+                                    v-for="(item,
+                                    index) in dict_sc_activity_admission_way"
                                     :key="index"
                                     :value="item.dictValue"
                                     :label="item.dictLabel"
                                 ></el-option>
-                                
                             </el-select>
                         </el-form-item>
 
@@ -92,9 +94,10 @@
                                 filterable
                                 allow-create
                                 default-first-option
-                                placeholder="请选择文章标签">
+                                placeholder="请选择文章标签"
+                            >
                                 <el-option
-                                    v-for="(item,index) in deptListMap"
+                                    v-for="(item, index) in deptListMap"
                                     :key="index"
                                     :value="item[0]"
                                     :label="item[1]"
@@ -132,11 +135,14 @@
                         </el-form-item>
 
                         <el-form-item label="最大录取人数">
-                            <el-radio-group v-model="numberText"  @change="admissionNumberChange">
+                            <el-radio-group
+                                v-model="numberText"
+                                @change="admissionNumberChange"
+                            >
                                 <el-radio :label="0">不限</el-radio>
                                 <el-radio :label="1">
                                     限定人数
-                                    <el-input 
+                                    <el-input
                                         v-model="postData.maxAdmissionNumber"
                                     ></el-input>
                                 </el-radio>
@@ -377,18 +383,18 @@
 
 <script>
     export default {
-        props: ['deptListMap','dict_sc_activity_admission_way'],
+        props: ['deptListMap', 'dict_sc_activity_admission_way'],
         data() {
             return {
                 numberText: 0,
-                postData:{
+                postData: {
                     name: '', //活动名称
                     groupPathName: '', //主办方完整名字
                     groupId: '', //主办方ID
                     activityReleaserId: '', //发布人ID
                     deptId: '', //部门Id
                     guideTeacherId: '', //指导老师Id
-                    
+
                     enrollTime: '', //转换前的报名时间
                     enrollStartTime: '', //转后的报名开始时间
                     emrollEndTime: '', //转后的报名结束时间
@@ -402,7 +408,7 @@
                     activityTag: '', //活动标签
                     courseClassificationId: '', //课程分类
                     courseClassificationName: '', //关联的课程的课程分类完整名字
-                    integralScheme: '',//积分方案
+                    integralScheme: '', //积分方案
                     activityTime: '', //转换前的活动时间
                     activityStartTime: '', //活动开始时间
                     activityEndTime: '', //活动结束时间
@@ -410,7 +416,7 @@
                     flowerStatus: '', //是否开启花絮
                     evaluateStatus: '', //是否开启评价
                     activityPlace: '', //活动地点坐标
-                    activityRegisteDistance:'',//活动签到距离
+                    activityRegisteDistance: '', //活动签到距离
                     activityPlaceName: '', //活动地点名称
                     registeTime: '', //签到时间
                     registeStartTime: '', //签到开始时间
@@ -419,7 +425,7 @@
                     activityOrganizerId: '', //活动组织者
                     images: '', //活动素材
                     enclosure: '', //相关附件链接
-                    activityIntroduce: '', //活动介绍
+                    activityIntroduce: '' //活动介绍
                 },
                 targetOffset: undefined,
                 //map
@@ -464,18 +470,14 @@
                 }
             }
         },
-        watch:{
-            
-        },
+        watch: {},
         computed: {},
         methods: {
             admissionNumberChange(label) {
                 console.log(label)
                 label == 0 && (this.postData.maxAdmissionNumber = '')
             },
-            TimeChange() {
-
-            },
+            TimeChange() {},
             getContainer() {
                 return document.querySelector('.formDetail')
             },
