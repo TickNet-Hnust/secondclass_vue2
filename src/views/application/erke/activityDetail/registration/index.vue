@@ -723,7 +723,7 @@
         color: #54d7b4;
     }
     .textyellow {
-        color: yellow;
+        color: rgba(4, 0, 255, 0.959);
     }
     .textPlain {
         color: #8b8b8b;

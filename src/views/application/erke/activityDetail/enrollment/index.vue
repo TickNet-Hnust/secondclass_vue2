@@ -731,13 +731,11 @@
                 this.examEnrollDialog.post={
                   activityId:row.activityId,
                   content:'',
-                  ids:row.id,
+                  ids:[row.id],
                   status:row.admissionStatus,
-                  userIds:row.userId,
+                  userIds:[row.userId],
   
                 };
-                
-                console.log(this.examEnrollDialog.post);
                 this.examEnrollDialog.open = true;
 
             },
@@ -779,7 +777,6 @@
                     this.queryList.endCreateTime = this.value2[1];
                     this.fuzzyQuery();
                }
-               
             },
             //点击左下角部门触发的事件
             handleSelect(index){

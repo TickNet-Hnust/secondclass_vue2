@@ -3,7 +3,7 @@
  * @Autor: 张津瑞
  * @Date: 2021-07-26 18:39:09
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-07-31 20:51:50
+ * @LastEditTime: 2021-08-04 12:08:59
  */
 
 import request from '@/utils/request.js'
@@ -36,24 +36,61 @@ export function activityEnrollList(params) {
  * @description: 活动报名批量审核
  * @param {*} params
  */
-export function activityEnrollVerify(params) {
+export function activityEnrollVerify(data) {
     return request({
         url: '/admins/secondClass/activity/enroll/verify',
         method: 'put',
+        data
+    })
+}
+
+
+/**
+ * @description: 获取活动奖项总信息
+ * @param {*} params
+ */
+export function activityPrizeRecord(params) {
+    return request({
+        url: '/admins/secondClass/activity/prize/record',
+        method: 'get',
+        params
+    })
+}
+
+/**
+ * @description: 获取活动奖项信息列表
+ * @param {*} params
+ */
+ export function activityPrizeRecordList(params) {
+    return request({
+        url: '/admins/secondClass/activity/prize/record/list',
+        method: 'get',
         params
     })
 }
 
 
 /**
- * @description: 获取活动奖项信息
+ * @description: 查询奖项信息
  * @param {*} params
  */
-export function activityPrize(params) {
+ export function activityPrizeManageList(params) {
     return request({
-        url: '/admins/secondClass/activity/prize',
+        url: '/admins/secondClass/activity/prize/manage/list',
         method: 'get',
         params
+    })
+}
+
+/**
+ * @description: 批量修改奖项信息
+ * @param {*} data
+ */
+ export function activityPrizeManageMulti(data) {
+    return request({
+        url: '/admins/secondClass/activity/prize/manage/multi',
+        method: 'put',
+        data
     })
 }
 
@@ -162,6 +199,75 @@ export function activityLeaveVerify(params) {
         params
     })
 }
+
+/**
+ * @description: 活动评论列表
+ * @param {*} params
+ */
+ export function activityEvaluationList(params) {
+    return request({
+        url: '/admins/secondClass/activity/evaluation/list',
+        method: 'get',
+        params
+    })
+}
+
+/**
+ * @description: 活动评论审核
+ * @param {*} params
+ */
+ export function activityEvaluationVerify(params) {
+    return request({
+        url: '/admins/secondClass/activity/evaluation/verify',
+        method: 'put',
+        params
+    })
+}
+
+
+
+
+
+/**
+ * @description: 获取活动积分信息
+ * @param {*} params
+ */
+ export function activityIntegral(params) {
+    return request({
+        url: '/admins/secondClass/activity/integral',
+        method: 'get',
+        params
+    })
+}
+
+
+
+
+/**
+ * @description: 获取活动积分列表
+ * @param {*} params
+ */
+export function activityIntegralList(params) {
+    return request({
+        url: '/admins/secondClass/activity/integral/list',
+        method: 'get',
+        params
+    })
+}
+
+/**
+ * @description: 活动积分批量审核
+ * @param {*} params
+ */
+export function activityIntegralVerify(data) {
+    return request({
+        url: '/admins/secondClass/activity/integral/verify',
+        method: 'put',
+        data,
+    })
+}
+
+
 
 
 /** 活动管理起草开始 */
