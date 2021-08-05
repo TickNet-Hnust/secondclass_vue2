@@ -159,48 +159,16 @@
     import {
         activityFlowerList,
         activityFlowerVerify
-    } from '@/api/application/secondClass/activity'
-    import {
-        trainingProgramDetail,
-        trainingProgramList,
-        trainingProgramId
-    } from '@/api/application/secondClass/trainingProgram'
-    import {
-        schoolYearList,
-        schoolYearMulti
-    } from '@/api/application/secondClass/schoolYear'
-    import {
-        courseId,
-        coursePost,
-        courstPut,
-        courseDelete
-    } from '@/api/application/secondClass/course'
-    import { getDict } from '@/api/application/secondClass/dict/type.js'
+    } from '@/api/application/secondClass/index'
 
-    import formaterDate from '@/utils/formatDate.js'
+    import { getDict } from '@/api/application/secondClass/dict/type.js'
     import horwheel from 'horwheel'
 
-    import {
-        listUser,
-        getUser,
-        delUser,
-        addUser,
-        updateUser,
-        exportUser,
-        resetUserPwd,
-        changeUserStatus,
-        importTemplate
-    } from '@/api/system/user'
-    import { getToken } from '@/utils/auth'
-    import { treeselect } from '@/api/system/dept'
-    import Treeselect from '@riophae/vue-treeselect'
-    import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-
     export default {
-        name: 'User',
-        components: { Treeselect },
+        name: 'flower',
         data() {
             return {
+                dict_sc_activity_flower_status:[],
                 maxLength: 0,
                 flocculus: [],
                 queryParams: {

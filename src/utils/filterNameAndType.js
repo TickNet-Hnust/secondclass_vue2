@@ -3,9 +3,9 @@
  * @Author: 林舒恒
  * @Date: 2021-07-27 21:48:25
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-28 21:43:52
+ * @LastEditTime: 2021-08-05 14:46:09
  */
-export default function(data, name) {
+export function filterNameAndType(data, name) {
     if (!name) return data
 
     let findParent = node => {

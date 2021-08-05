@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-08-05 11:11:46
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-05 11:20:17
+ * @LastEditTime: 2021-08-05 14:36:04
  */
 import request from '@/utils/request.js'
 
@@ -17,6 +17,10 @@ export function activityIdDetail({ id }) {
         method: 'get'
     })
 }
+/**
+ * @description: 统计图
+ * @param {*} id
+ */
 export function activityIdEnrollBar({ id }) {
     return request({
         url: `/admins/secondClass/activity/${id}/enrollBar`,

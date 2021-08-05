@@ -61,6 +61,7 @@
                                                 style="width:80px"
                                             >
                                                 <el-option
+                                                    value="fuckyou"
                                                     label="操作"
                                                 ></el-option>
                                             </el-select>
@@ -92,6 +93,7 @@
                                                 style="width:120px"
                                             >
                                                 <el-option
+                                                    value="fuckman"
                                                     label="操作"
                                                 ></el-option>
                                             </el-select>
@@ -134,47 +136,10 @@
 
 <script>
     //导入活动奖项相关接口
-    import { activityPrize } from '@/api/application/secondClass/activity'
-
-    import {
-        trainingProgramDetail,
-        trainingProgramList,
-        trainingProgramId
-    } from '@/api/application/secondClass/trainingProgram'
-    import {
-        schoolYearList,
-        schoolYearMulti
-    } from '@/api/application/secondClass/schoolYear'
-    import {
-        courseId,
-        coursePost,
-        courstPut,
-        courseDelete
-    } from '@/api/application/secondClass/course'
-    import { getDict } from '@/api/application/secondClass/dict/type.js'
-
-    import formaterDate from '@/utils/formatDate.js'
-    import horwheel from 'horwheel'
-
-    import {
-        listUser,
-        getUser,
-        delUser,
-        addUser,
-        updateUser,
-        exportUser,
-        resetUserPwd,
-        changeUserStatus,
-        importTemplate
-    } from '@/api/system/user'
-    import { getToken } from '@/utils/auth'
-    import { treeselect } from '@/api/system/dept'
-    import Treeselect from '@riophae/vue-treeselect'
-    import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+    import { activityPrize } from '@/api/application/secondClass/index'
 
     export default {
-        name: 'User',
-        components: { Treeselect },
+        name: 'Prize',
         data() {
             return {
                 queryParams: {

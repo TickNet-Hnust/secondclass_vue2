@@ -72,7 +72,7 @@
     import evaluation from '@/views/application/erke/activityDetail/evaluation/index.vue'
     import credit from '@/views/application/erke/activityDetail/credit/index.vue'
 
-    import formatDate from '@/utils/formatDate.js'
+    import {format} from '@/utils/gather.js'
     import horwheel from 'horwheel'
     import { getToken } from '@/utils/auth'
 

@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-01 23:14:15
+ * @LastEditTime: 2021-08-05 15:24:02
 -->
 <template>
     <div class="app-container">
@@ -827,45 +827,31 @@
     import {
         trainingProgramDetail,
         trainingProgramList,
-        trainingProgramId
-    } from '@/api/application/secondClass/trainingProgram'
-    import {
+        trainingProgramId,
+        courseClassificationList,
         schoolYearList,
-        schoolYearMulti
-    } from '@/api/application/secondClass/schoolYear'
-    import filterCourseClassificationList from '@/utils/filterCourseClassificationList'
-    import {
+        schoolYearMulti,
         courseId,
         coursePost,
         coursePut,
         courseDelete
-    } from '@/api/application/secondClass/course'
-    import { courseClassificationList } from '@/api/application/secondClass/courseClassification.js'
+    } from '@/api/application/secondClass/index'
+    
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
-    import formaterDate from '@/utils/formatDate.js'
+    import {
+        filterCourseClassificationList,
+        format
+    } from '@/utils/gather.js'
     import horwheel from 'horwheel'
 
     import {
-        listUser,
-        getUser,
-        delUser,
-        addUser,
-        updateUser,
-        exportUser,
-        resetUserPwd,
-        changeUserStatus,
         importTemplate
     } from '@/api/system/user'
-    import request from '@/utils/request.js'
     import { getToken } from '@/utils/auth'
-    import { treeselect } from '@/api/system/dept'
-    import Treeselect from '@riophae/vue-treeselect'
-    import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
     export default {
-        name: 'User',
-        components: { Treeselect },
+        name: 'detail',
         data() {
             return {
                 /** 学年度列表 */
@@ -1016,7 +1002,7 @@
         },
         methods: {
             formatDate(row, column, cellValue) {
-                return cellValue != null && formaterDate(cellValue)
+                return cellValue != null && format(cellValue)
             },
             formatClassificationId(row, column, cellValue) {
                 return (

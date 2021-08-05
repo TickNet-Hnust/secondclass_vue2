@@ -438,55 +438,25 @@
         activityEnroll,
         activityEnrollList,
         activityEnrollVerify
-    } from '@/api/application/secondClass/activity'
+    } from '@/api/application/secondClass/index'
 
     import {
         getDept,
         listDeptExcludeChild,
         listDept
     } from '@/api/system/dept.js'
-
-    import {
-        trainingProgramDetail,
-        trainingProgramList,
-        trainingProgramId
-    } from '@/api/application/secondClass/trainingProgram'
-    import {
-        schoolYearList,
-        schoolYearMulti
-    } from '@/api/application/secondClass/schoolYear'
-    import {
-        courseId,
-        coursePost,
-        courstPut,
-        courseDelete
-    } from '@/api/application/secondClass/course'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
-    import formaterDate from '@/utils/formatDate.js'
-    import horwheel from 'horwheel'
-
     import {
-        listUser,
-        getUser,
-        delUser,
-        addUser,
-        updateUser,
-        exportUser,
-        resetUserPwd,
-        changeUserStatus,
-        importTemplate
-    } from '@/api/system/user'
-    import { getToken } from '@/utils/auth'
-    import { treeselect } from '@/api/system/dept'
-    import Treeselect from '@riophae/vue-treeselect'
-    import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+        format
+    } from '@/utils/gather'
+
 
     export default {
-        name: 'User',
-        components: { Treeselect },
+        name: 'Enroll',
         data() {
             return {
+                loading:false,
                 //单个审核报名会话框表单参数form
                 form: {},
                 //单个审核报名会话框数据
@@ -785,7 +755,7 @@
             },
             //格式化时间
             formatDate(row, column, cellValue) {
-                return cellValue != null && formaterDate(cellValue)
+                return cellValue != null && format(cellValue)
             },
             //筛选报名时间触发的事件
             enrollDateChange() {

@@ -764,16 +764,17 @@
     import {
         activityList,
         activityPost,
-        activityIdNextStatus
-    } from '@/api/application/secondClass/activity'
-    import { schoolYearList } from '@/api/application/secondClass/schoolYear'
-    import { trainingProgramDetail } from '@/api/application/secondClass/trainingProgram'
-    import { courseClassificationList } from '@/api/application/secondClass/courseClassification'
+        activityIdNextStatus,
+        schoolYearList,
+        trainingProgramDetail,
+        courseClassificationList,
+    } from '@/api/application/secondClass/index'
+
+    import {
+        transformDate,
+        filterCourseClassificationList
+    } from '@/utils/gather'
     import { deptListByType } from '@/api/system/dept'
-    import filterCourseClassificationList from '@/utils/filterCourseClassificationList'
-    import transformDate from '@/utils/transformDate'
-    import addDialog from './addDialog'
-    import formatDate from '@/utils/formatDate.js'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
     import horwheel from 'horwheel'
     import Editor from '@/components/Editor'
@@ -782,7 +783,6 @@
         name: 'activity',
         mixins:[IMGURL_MIXINS],
         components: {
-            addDialog,
             Editor
         },
         data() {
@@ -1299,7 +1299,7 @@
             formatRank(row, column, cellValue) {
                 return (
                     cellValue != null &&
-                    this.dict_sc_train_program_rank[cellValue]?.dictLabel
+                    this.dict_sc_train_program_rank[cellValue].dictLabel
                 )
             },
             formatSchoolYear(row, column, cellValue) {
@@ -1508,7 +1508,7 @@
         computed: {
             computedStatus() {
                 return status => {
-                    return this.dict_sc_activity_status[status]?.dictLabel
+                    return status!=null && this.dict_sc_activity_status[status]?.dictLabel
                 }
             }
         },

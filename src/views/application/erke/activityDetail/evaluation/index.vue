@@ -78,45 +78,9 @@
 </template>
 
 <script>
-    import {
-        trainingProgramDetail,
-        trainingProgramList,
-        trainingProgramId
-    } from '@/api/application/secondClass/trainingProgram'
-    import {
-        schoolYearList,
-        schoolYearMulti
-    } from '@/api/application/secondClass/schoolYear'
-    import {
-        courseId,
-        coursePost,
-        courstPut,
-        courseDelete
-    } from '@/api/application/secondClass/course'
-    import { getDict } from '@/api/application/secondClass/dict/type.js'
-
-    import formaterDate from '@/utils/formatDate.js'
-    import horwheel from 'horwheel'
-
-    import {
-        listUser,
-        getUser,
-        delUser,
-        addUser,
-        updateUser,
-        exportUser,
-        resetUserPwd,
-        changeUserStatus,
-        importTemplate
-    } from '@/api/system/user'
-    import { getToken } from '@/utils/auth'
-    import { treeselect } from '@/api/system/dept'
-    import Treeselect from '@riophae/vue-treeselect'
-    import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
     export default {
-        name: 'User',
-        components: { Treeselect },
+        name: 'evaluation',
         data() {
             return {
                 queryParams: {

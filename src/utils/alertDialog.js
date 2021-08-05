@@ -3,9 +3,9 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-25 22:48:37
+ * @LastEditTime: 2021-08-05 14:44:00
  */
-export default function(type, { confirm, cencel }) {
+export function alertDialog(type, { confirm, cencel }) {
     console.log(this)
     this.$confirm(`您确定要${type}吗`, '提示框', {
         confirmButtonText: '确定',

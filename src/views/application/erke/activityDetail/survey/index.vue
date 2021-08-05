@@ -320,7 +320,7 @@ import { getDict } from '@/api/application/secondClass/dict/type.js'
     import {
         activityIdDetail,
         activityIdEnrollBar
-    } from '@/api/application/secondClass/activity'
+    } from '@/api/application/secondClass/index'
     import * as echarts from 'echarts'
     export default {
         data() {
