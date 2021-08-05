@@ -333,7 +333,7 @@
                         </el-form-item>
 
                         <el-form-item label="发布人：">
-                            <el-input></el-input>
+                            <el-input v-model="postData.activityReleaserId"></el-input>
                         </el-form-item>
 
                         <el-form-item label="指导单位">
@@ -348,7 +348,7 @@
                         </el-form-item>
 
                         <el-form-item label="指导老师：">
-                            <el-input></el-input>
+                            <el-input v-model="postData.guideTeacherId"></el-input>
                         </el-form-item>
 
                         <el-form-item label="报名信息" class="bold"
@@ -357,7 +357,7 @@
 
                         <el-form-item label="报名时间">
                             <el-date-picker
-                                v-model="postData.enrollTime"
+                                v-model="postFakeData.enrollTime"
                                 type="datetimerange"
                                 @change="enrollTimeChange"
                                 range-separator="至"
@@ -382,7 +382,11 @@
 
                         <el-form-item label="报名范围">
                             <el-select
-                                v-model="postData.enrollRange"
+                                :value="
+                                    postData.enrollRange?
+                                    postData.enrollRange.split(';'):
+                                    undefined"
+                                @change="postData.enrollRange = $event.join(';')"
                                 multiple
                                 filterable
                                 allow-create
@@ -399,37 +403,34 @@
                         </el-form-item>
 
                         <el-form-item label="报名年级">
-                            <el-tag
-                                :key="tag"
-                                v-for="tag in yearTags.dynamicTags"
-                                closable
-                                :disable-transitions="false"
-                                @close="yearHandleClose(tag)"
+                            <el-select
+                               :value="
+                                    postData.enrollGrade?
+                                    postData.enrollGrade.split(';'):
+                                    undefined"
+                                @change="postData.enrollGrade = $event.join(';')"
+                                multiple
+                                filterable
+                                allow-create
+                                default-first-option
+                                placeholder="请选择文章标签"
                             >
-                                {{ tag }}
-                            </el-tag>
-                            <el-input
-                                class="input-new-tag"
-                                v-if="yearTags.inputVisible"
-                                v-model="yearTags.inputValue"
-                                ref="yearSaveTagInput"
-                                size="small"
-                                @keyup.enter.native="yearHandleInputConfirm"
-                                @blur="yearHandleInputConfirm"
-                            >
-                            </el-input>
-                            <el-button
-                                v-else
-                                class="button-new-tag"
-                                size="small"
-                                @click="yearShowInput"
-                                >+</el-button
-                            >
+                                <!-- <el-option
+                                    v-for="(item, index) in deptListMap"
+                                    :key="index"
+                                    :value="item[0]"
+                                    :label="item[1]"
+                                ></el-option> -->
+                                <el-option value="2019" label="2019"></el-option>
+                                <el-option value="2020" label="2020"></el-option>
+                                <el-option value="2021" label="2020"></el-option>
+                                <el-option value="2022" label="2022"></el-option>
+                            </el-select>
                         </el-form-item>
 
                         <el-form-item label="最大录取人数">
                             <el-radio-group
-                                v-model="postFakeDate.maxAdmissionNumber"
+                                v-model="postFakeData.maxAdmissionNumber"
                                 @change="admissionNumberChange"
                             >
                                 <el-radio :label="0">不限</el-radio>
@@ -468,7 +469,7 @@
                         <el-form-item label="活动标签">
                             <el-tag
                                 :key="tag"
-                                v-for="tag in activityTags.dynamicTags"
+                                v-for="tag in postFakeData.activityTag"
                                 closable
                                 :disable-transitions="false"
                                 @close="activityHandleClose(tag)"
@@ -520,21 +521,21 @@
                         <el-form-item label="积分方案">
                             <el-radio
                                 v-model="postData.integralScheme"
-                                label="1"
+                                label="0"
                                 >活动签到获取积分 + 个人申报获取积分，管理员认定
                             </el-radio>
                         </el-form-item>
                         <el-form-item label="">
                             <el-radio
                                 v-model="postData.integralScheme"
-                                label="0"
+                                label="1"
                                 >主办方申请，管理员认定</el-radio
                             >
                         </el-form-item>
 
                         <el-form-item label="活动时间">
                             <el-date-picker
-                                v-model="postData.activityTime"
+                                v-model="postFakeData.activityTime"
                                 type="datetimerange"
                                 @change="activityTimeChange"
                                 range-separator="至"
@@ -554,25 +555,34 @@
 
                         <el-form-item label="花絮管理">
                             <el-radio-group v-model="postData.flowerStatus">
-                                <el-radio label="1">关闭</el-radio>
+                                <el-radio
+                                    v-for="(item,index) in dict_sc_activity_flower_scheme"
+                                    :key="index"                                    :label="item.dictValue"
+                                >{{item.dictLabel}}</el-radio>
+                                <!-- <el-radio label="1">关闭</el-radio>
                                 <el-radio label="2"
                                     >启动，且提交信息需审核</el-radio
                                 >
                                 <el-radio label="3"
                                     >启动，且提交信息不需要审核</el-radio
-                                >
+                                > -->
                             </el-radio-group>
                         </el-form-item>
 
                         <el-form-item label="评价管理">
                             <el-radio-group v-model="postData.evaluateStatus">
-                                <el-radio label="1">关闭</el-radio>
+                                <el-radio
+                                    v-for="(item,index) in dict_sc_activity_evaluate_scheme"
+                                    :key="index"
+                                    :label="item.dictValue"
+                                >{{item.dictLabel}}</el-radio>
+                                <!-- <el-radio label="1">关闭</el-radio>
                                 <el-radio label="2"
                                     >启动，且提交信息需审核</el-radio
                                 >
                                 <el-radio label="3"
                                     >启动，且提交信息不需要审核</el-radio
-                                >
+                                > -->
                             </el-radio-group>
                         </el-form-item>
 
@@ -591,25 +601,26 @@
                         </el-form-item>
 
                         <el-form-item label="地点描述：">
-                            <el-input> </el-input>
+                            <el-input v-model="postData.activityPlaceName"></el-input>
                         </el-form-item>
 
                         <el-form-item label="签到时间">
                             <el-radio-group
-                                v-model="postFakeDate.registeTime"
-                                @change="registeTimeChange"
+                                v-model="postFakeData.registeTime"
+                                @change="Change"
                             >
                                 <el-radio :label="0">不限</el-radio>
                                 <el-radio :label="1"
                                     >时间范围：
                                     <el-date-picker
                                         style="max-width:230px"
-                                        v-model="postData.registeTime"
+                                        v-model="postFakeData.registeTime"
                                         type="datetimerange"
                                         range-separator="至"
                                         start-placeholder="开始日期"
                                         end-placeholder="结束日期"
                                         align="right"
+                                        @change="registeTimeChange"
                                     >
                                     </el-date-picker>
                                 </el-radio>
@@ -618,7 +629,7 @@
 
                         <el-form-item label="签到距离">
                             <el-radio-group
-                                v-model="postFakeDate.activityRegisteDistance"
+                                v-model="postFakeData.activityRegisteDistance"
                                 @change="activityRegisteDistanceChange"
                             >
                                 <el-radio :label="0">不限</el-radio>
@@ -692,49 +703,15 @@
                         </el-form-item>
                         <el-form-item label="图片素材">
                             <el-upload
-                                action="#"
-                                list-type="picture-card"
-                                :auto-upload="false"
-                            >
-                                <i slot="default" class="el-icon-plus"></i>
-                                <div slot="file" slot-scope="{ file }">
-                                    <img
-                                        class="el-upload-list__item-thumbnail"
-                                        :src="file.url"
-                                        alt=""
-                                    />
-                                    <span class="el-upload-list__item-actions">
-                                        <span
-                                            class="el-upload-list__item-preview"
-                                            @click="
-                                                handlePictureCardPreview(file)
-                                            "
-                                        >
-                                            <i class="el-icon-zoom-in"></i>
-                                        </span>
-                                        <span
-                                            v-if="!disabled"
-                                            class="el-upload-list__item-delete"
-                                            @click="handleDownload(file)"
-                                        >
-                                            <i class="el-icon-download"></i>
-                                        </span>
-                                        <span
-                                            v-if="!disabled"
-                                            class="el-upload-list__item-delete"
-                                            @click="handleRemove(file)"
-                                        >
-                                            <i class="el-icon-delete"></i>
-                                        </span>
-                                    </span>
-                                </div>
+                            :http-request="httpRequest"
+                            action="https://jsonplaceholder.typicode.com/posts/"
+                            list-type="picture-card"
+                            :on-success="handlePictureCardPreview"
+                            :on-remove="handleRemove">
+                            <i class="el-icon-plus"></i>
                             </el-upload>
                             <el-dialog :visible.sync="dialogVisible">
-                                <img
-                                    width="100%"
-                                    :src="dialogImageUrl"
-                                    alt=""
-                                />
+                            <img width="100%" :src="dialogImageUrl" alt="">
                             </el-dialog>
                         </el-form-item>
 
@@ -743,6 +720,7 @@
                                 class="upload-demo"
                                 drag
                                 action="https://jsonplaceholder.typicode.com/posts/"
+                                :http-request="httpRequest2"
                                 multiple
                             >
                                 <i class="el-icon-upload"></i>
@@ -782,8 +760,10 @@
 </template>
 
 <script>
+    
     import {
         activityList,
+        activityPost,
         activityIdNextStatus
     } from '@/api/application/secondClass/activity'
     import { schoolYearList } from '@/api/application/secondClass/schoolYear'
@@ -797,8 +777,10 @@
     import { getDict } from '@/api/application/secondClass/dict/type.js'
     import horwheel from 'horwheel'
     import Editor from '@/components/Editor'
+    import IMGURL_MIXINS from '@/mixins/upload.js'
     export default {
         name: 'activity',
+        mixins:[IMGURL_MIXINS],
         components: {
             addDialog,
             Editor
@@ -809,36 +791,39 @@
                 dialogVisible: false,
                 disabled: false,
                 courseList: [],
-                postFakeDate: {
+                postFakeData: {
+                    activityTag:[],
                     maxAdmissionNumber: 0,
-                    registeTime: 0
+                    registeTime: [],
+                    activityTime: [],
+                    enrollTime:[],
                 },
                 postData: {
                     name: '', //活动名称
                     groupPathName: '', //主办方完整名字
-                    groupId: '', //主办方ID
-                    activityReleaserId: '', //发布人ID
+                    groupId: 102, //主办方ID
+                    activityReleaserId: 111, //发布人ID
                     deptId: '', //部门Id
-                    guideTeacherId: '', //指导老师Id
+                    guideTeacherId: 105, //指导老师Id
 
                     enrollTime: '', //转换前的报名时间
                     enrollStartTime: '', //转后的报名开始时间
                     emrollEndTime: '', //转后的报名结束时间
                     admissionWay: '', //录取方式
                     enrollRange: '', //报名范围
-                    enrollGrage: '', //报名年级
+                    enrollGrade: '', //报名年级
                     maxAdmissionNumber: '', //最大录取人数
                     enrollNotice: '', //报名须知
 
                     rankId: '', //活动级别
-                    activityTag: '', //活动标签
+                    activityTag: 'sdf,sdg', //活动标签
                     courseClassificationId: '', //课程分类
                     courseClassificationName: '', //关联的课程的课程分类完整名字
                     integralScheme: '', //积分方案
                     activityTime: '', //转换前的活动时间
                     activityStartTime: '', //活动开始时间
                     activityEndTime: '', //活动结束时间
-                    vacate: '', //允许请假
+                    vacate: 1, //允许请假
                     flowerStatus: '', //是否开启花絮
                     evaluateStatus: '', //是否开启评价
                     activityPlace: '', //活动地点坐标
@@ -847,11 +832,12 @@
                     registeTime: '', //签到时间
                     registeStartTime: '', //签到开始时间
                     registeEndTime: '', //签到结束时间
-                    activityManagerId: '', //活动负责人
-                    activityOrganizerId: '', //活动组织者
+                    activityManagerId: 103, //活动负责人
+                    activityOrganizerId: 103, //活动组织者
                     images: '', //活动素材
                     enclosure: '', //相关附件链接
-                    activityIntroduce: '' //活动介绍
+                    activityIntroduce: '', //活动介绍
+                    schoolYearId:5
                 },
                 targetOffset: undefined,
                 //map
@@ -932,6 +918,12 @@
                 dict_sc_activity_admission_way: [],
                 //培养方案级别
                 dict_sc_train_program_rank: [],
+                //活动积分状态
+                dict_sc_activity_integral_scheme:[],
+                //活动花絮管理方案
+                dict_sc_activity_flower_scheme:[],
+                //活动评价管理方案
+                dict_sc_activity_evaluate_scheme:[],
                 //操作映射
                 operation: [
                     [
@@ -1050,22 +1042,76 @@
                             icon: 'el-icon-refresh-right'
                         }
                     ]
-                ]
+                ],
+                imgUrls:'',
             }
         },
         methods: {
+            handlePictureCardPreview(){},
+            handleRemove() {},
+            httpRequest2(file) {
+                
+                this.getImgUrl(file).then(value => {
+                    if(this.postData.enclosure.length)
+                    this.postData.enclosure += `;${value}`
+                    else
+                    this.postData.enclosure += `${value}`
+                })
+            },
+            httpRequest(file) {
+                
+                this.getImgUrl(file).then(value => {
+                    if(this.postData.images.length)
+                    this.postData.images += `;${value}`
+                    else 
+                    this.postData.images += `${value}`
+                })
+            },
             activityRegisteDistanceChange(label) {
                 label == 0 && (this.postData.activityRegisteDistance = '')
             },
-            registeTimeChange(label) {
-                label == 0 && (this.postData.registeTime = '')
+            Change(label) {
+                if(label == 0) {
+                    (this.postData.registeTime = '')
+                }
             },
             admissionNumberChange(label) {
                 console.log(label)
                 label == 0 && (this.postData.maxAdmissionNumber = '')
             },
-            activityTimeChange() {},
-            enrollTimeChange() {},
+            /**
+             * @description: 表单报名年级改变
+             */            
+            enrollGradeChange(value) {
+                this.postData.enrollGrade = value.join(';')
+            },
+            /**
+             * @description: 表单报名范围改变
+             * @param {*} value
+             */            
+            enrollRangeChange(value) {
+                console.log(value)
+                // this.postData.enrollRange = value.join(';')
+            },
+            registeTimeChange() {
+                let fuckMan = transformDate(this.postFakeData.registeTime)
+                console.log(fuckMan)
+                this.postData.registeTimeStartTime = fuckMan[0]
+                this.postData.registeTimeEndTime = fuckMan[1]
+            },
+            activityTimeChange() {
+                let fuckMan = transformDate(this.postFakeData.activityTime)
+                console.log(fuckMan)
+                this.postData.activityStartTime = fuckMan[0]
+                this.postData.activityEndTime = fuckMan[1]
+            },
+            enrollTimeChange() {
+                let fuckMan = transformDate(this.postFakeData.enrollTime)
+                console.log(fuckMan)
+                this.postData.enrollStartTime = fuckMan[0]
+                this.postData.enrollEndTime = fuckMan[1]
+
+            },
             getContainer() {
                 return document.querySelector('.formDetail')
             },
@@ -1112,8 +1158,8 @@
             },
             //actiove
             activityHandleClose(tag) {
-                this.activityTags.dynamicTags.splice(
-                    this.activityTags.dynamicTags.indexOf(tag)
+                this.postFakeData.activityTag.splice(
+                    this.postFakeData.activityTag.indexOf(tag)
                 )
             },
 
@@ -1127,7 +1173,7 @@
             activityHandleInputConfirm() {
                 let inputValue = this.activityTags.inputValue
                 if (inputValue) {
-                    this.activityTags.dynamicTags.push(inputValue)
+                    this.postFakeData.activityTag.push(inputValue)
                 }
                 this.activityTags.inputVisible = false
                 this.activityTags.inputValue = ''
@@ -1182,6 +1228,7 @@
                 this.mapDialog.open = true
                 this.$nextTick(() => {
                     let map = new BMapGL.Map('mapContainer') // 创建Map实例
+                    //起始点为湖南科技大学校内
                     map.centerAndZoom(
                         new BMapGL.Point(112.927988, 27.908385),
                         17
@@ -1216,6 +1263,7 @@
                         if (marker2) {
                             this.mapDialog.lng = e.latlng.lng
                             this.mapDialog.lat = e.latlng.lat
+                            this.postData.activityPlace = e.latlng.lat + ',' + e.latlng.lng
                             this.$forceUpdate()
                             return
                         }
@@ -1232,6 +1280,7 @@
                             map.addOverlay(marker2)
                             this.mapDialog.lng = e.latlng.lng
                             this.mapDialog.lat = e.latlng.lat
+                            this.postData.activityPlace = e.latlng.lat + ',' + e.latlng.lng
                             this.$forceUpdate()
                         }
                     })
@@ -1258,6 +1307,7 @@
             },
             handChangeNodePost(value) {
                 this.postData.courseClassificationId = value[value.length - 1]
+                this.postData.coursePath = value.join(',')
                 this.getCourseList({
                     classificationId: value[value.length - 1]
                 })
@@ -1277,7 +1327,13 @@
                 })
             },
             postActivity() {
+                this.postData.activityTag = 'sd,dfg'
                 console.log(this.postData)
+                // this.postData.activityTag = this.postFakeData.activityTag.join(';')
+                activityPost(this.postData).then(value => {
+                    this.msgSuccess('添加成功')
+                    consoel.log(value)
+                })
             },
             /**
              * @description: 改变活动状态
@@ -1322,13 +1378,17 @@
                     getDict('sc_activity_status'),
                     getDict('sc_activity_admission_way'),
                     getDict('sc_train_program_rank'),
-                    getDict('sc_activity_admission_way')
+                    getDict('sc_activity_integral_scheme'),
+                    getDict('sc_activity_evaluate_scheme'),
+                    getDict('sc_activity_flower_scheme')
                 ]).then(value => {
                     let tempArr = [
                         'dict_sc_activity_status',
                         'dict_sc_activity_admission_way',
                         'dict_sc_train_program_rank',
-                        'dict_sc_activity_admission_way'
+                        'dict_sc_activity_integral_scheme',
+                        'dict_sc_activity_evaluate_scheme',
+                        'dict_sc_activity_flower_scheme',
                     ]
 
                     value.forEach((item, index) => {

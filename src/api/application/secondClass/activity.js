@@ -3,7 +3,7 @@
  * @Autor: 张津瑞
  * @Date: 2021-07-26 18:39:09
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-04 11:38:13
+ * @LastEditTime: 2021-08-05 11:22:24
  */
 
 import request from '@/utils/request.js'
@@ -218,6 +218,12 @@ export function activityIdNextStatus({ id, nextStatus }) {
 export function activityIdDetail({ id }) {
     return request({
         url: `/admins/secondClass/activity/${id}/detail`,
+        method: 'get'
+    })
+}
+export function activityIdEnrollBar({ id }) {
+    return request({
+        url: `/admins/secondClass/activity/${id}/enrollBar`,
         method: 'get'
     })
 }
