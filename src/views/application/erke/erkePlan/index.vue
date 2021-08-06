@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-27 17:35:04
+ * @LastEditTime: 2021-08-05 15:29:10
 -->
 <template>
     <div class="app-container">
@@ -140,7 +140,7 @@
                 <el-table-column
                     prop="createTime"
                     label="创建时间"
-                    min-width="120"
+                    min-width="130"
                     :formatter="formatUpdateTime"
                 >
                 </el-table-column>
@@ -149,7 +149,7 @@
                 <el-table-column
                     prop="updateTime"
                     label="修改时间"
-                    min-width="120"
+                    min-width="130"
                     :formatter="formatUpdateTime"
                 >
                 </el-table-column>
@@ -590,14 +590,14 @@
         trainingProgramMulti,
         trainingProgramId,
         trainingProgramList,
-        trainingProgram
-    } from '@/api/application/secondClass/trainingProgram'
-    import {
+        trainingProgram,
         schoolYearList,
         schoolYearMulti
-    } from '@/api/application/secondClass/schoolYear'
-    import formatDate from '@/utils/formatDate.js'
-    // import alertDialog from '@/utils/alertDialog.js'
+    } from '@/api/application/secondClass/index'
+    import {
+        format
+    } from '@/utils/gather'
+    
     import { getDict } from '@/api/application/secondClass/dict/type.js'
     import horwheel from 'horwheel'
 
@@ -812,7 +812,7 @@
              * @param {*} cellValue 要转换的数据
              */
             formatUpdateTime(row, column, cellValue) {
-                return cellValue != null && formatDate(cellValue)
+                return cellValue != null && format(cellValue)
             },
             /**
              * @description: 表格 状态 字典转化
@@ -1149,11 +1149,11 @@
         },
         mounted() {
             /** 横向滚动条 */
-            let view = document.querySelector(
-                '.erkePlanMainTable .el-table__body-wrapper'
-            )
-            console.log(view)
-            view && horwheel(view)
+        //     let view = document.querySelector(
+        //         '.erkePlanMainTable .el-table__body-wrapper'
+        //     )
+        //     console.log(view)
+        //     view && horwheel(view)
         }
     }
 </script>
@@ -1196,6 +1196,8 @@
         background-color: #fff;
         border: 1px solid #ddd;
         padding: 15px;
+        max-height: calc(100vh - 180px);
+        overflow: auto;
     }
     .el-input {
         width: 200px;

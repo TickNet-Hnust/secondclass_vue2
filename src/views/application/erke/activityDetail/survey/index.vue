@@ -318,8 +318,9 @@
 <script>
 import { getDict } from '@/api/application/secondClass/dict/type.js'
     import {
-        activityIdDetail
-    } from '@/api/application/secondClass/activity'
+        activityIdDetail,
+        activityIdEnrollBar
+    } from '@/api/application/secondClass/index'
     import * as echarts from 'echarts'
     export default {
         data() {
@@ -362,143 +363,102 @@ import { getDict } from '@/api/application/secondClass/dict/type.js'
                 deptLeaveStatisticsVoList:[],
                 //签到率
                 deptRegisteStatisticsVoList:[],
-                range: '2',
+                range: '4',
                 activeName: 'first',
-                userList: [
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    },
-                    {
-                        id: 2,
-                        college: '计算机科学与工程学院',
-                        count: 120,
-                        rate: '100%'
-                    }
-                ],
                 //挂载目标
                 myChart: {},
                 //基本配置
-                option: {},
+                defalutOption: {
+                    color: ['#3ba1ff'],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow',
+                            label: {
+                                show: true
+                            }
+                        }
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: { show: true },
+                            dataView: { show: true, readOnly: false },
+                            magicType: { show: true, type: ['line', 'bar'] },
+                            restore: { show: true },
+                            saveAsImage: { show: true }
+                        }
+                    },
+                    calculable: true,
+                    legend: {
+                        data: ['Growth', 'Budget 2012'],
+                        itemGap: 5
+                    },
+                    grid: {
+                        top: '12%',
+                        left: '2%',
+                        right: '5%',
+                        bottom: '5%',
+                        containLabel: true,
+                        width: 'auto'
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: '' //需要修改this.data.names
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '活动报名情况',
+                            axisLabel: {
+                                formatter: function(a) {
+                                    a = +a
+                                    return isFinite(a)
+                                        ? echarts.format.addCommas(+a / 1)
+                                        : ''
+                                }
+                            }
+                        }
+                    ],
+                    dataZoom: [
+                        // {
+                        //     show: true,
+                        //     type: 'slider',
+                        //     start: 94,
+                        //     end: 100
+                        // },
+                        {
+                            type: 'inside',
+                            start: 0,
+                            end: 100
+                        }
+                        // {
+                        //     show: true,
+                        //     type: 'slider',
+                        //     yAxisIndex: 0,
+                        //     filterMode: 'empty',
+                        //     width: 30,
+                        //     height: '80%',
+                        //     showDataShadow: false,
+                        //     left: '93%'
+                        // }
+                    ],
+                    series: [
+                        {
+                            name: 'Budget 2011',
+                            type: 'bar',
+                            data: '',//需要修改this.data.nums
+                        }
+                    ]
+                },
                 //全年数据
-                data: {},
-                today: {}
+                yearEnrollList: {},
+                //今天数据
+                dayEnrollList: {},
+                data:{},
+                today:{}
             }
         },
         methods: {
@@ -573,11 +533,12 @@ import { getDict } from '@/api/application/secondClass/dict/type.js'
                         }
                     ]
                 }
+
                 if (value == 4) {
                     start = 0
                     end = 100
-                    this.option.xAxis[0].data = this.today.names
-                    this.option.series[0].data = this.today.nums
+                    this.defalutOption.xAxis[0].data = this.dayEnrollList.names
+                    this.defalutOption.series[0].data = this.dayEnrollList.nums
                 } else {
                     if (value == 1) {
                         start = 0
@@ -589,13 +550,13 @@ import { getDict } from '@/api/application/secondClass/dict/type.js'
                         start = 55
                         end = 56.7
                     }
-                    this.option.xAxis[0].data = this.data.names
-                    this.option.series[0].data = this.data.nums
+                    this.defalutOption.xAxis[0].data = this.yearEnrollList.names
+                    this.defalutOption.series[0].data = this.yearEnrollList.nums
                 }
                 console.log(value, this.option)
-                this.option.dataZoom[0].start = start
-                this.option.dataZoom[0].end = end
-                this.myChart.setOption(this.option)
+                this.defalutOption.dataZoom[0].start = start
+                this.defalutOption.dataZoom[0].end = end
+                this.myChart.setOption(this.defalutOption)
             },
             async initDict() {
                 await Promise.all([
@@ -627,7 +588,7 @@ import { getDict } from '@/api/application/secondClass/dict/type.js'
             })
         },
         mounted() {
-            
+            //全年横坐标
             this.data = {
                 nums: [
                     42,
@@ -1364,6 +1325,8 @@ import { getDict } from '@/api/application/secondClass/dict/type.js'
                     '02-04'
                 ]
             }
+            
+            //今天恒坐标
             this.today = {
                 nums: [
                     28,
@@ -1418,99 +1381,37 @@ import { getDict } from '@/api/application/secondClass/dict/type.js'
                     '23'
                 ]
             }
-            this.option = {
-                color: ['#3ba1ff'],
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'shadow',
-                        label: {
-                            show: true
-                        }
-                    }
-                },
-                toolbox: {
-                    show: true,
-                    feature: {
-                        mark: { show: true },
-                        dataView: { show: true, readOnly: false },
-                        magicType: { show: true, type: ['line', 'bar'] },
-                        restore: { show: true },
-                        saveAsImage: { show: true }
-                    }
-                },
-                calculable: true,
-                legend: {
-                    data: ['Growth', 'Budget 2012'],
-                    itemGap: 5
-                },
-                grid: {
-                    top: '12%',
-                    left: '2%',
-                    right: '5%',
-                    bottom: '5%',
-                    containLabel: true,
-                    width: 'auto'
-                },
-                xAxis: [
-                    {
-                        type: 'category',
-                        data: this.data.names
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: '活动报名情况',
-                        axisLabel: {
-                            formatter: function(a) {
-                                a = +a
-                                return isFinite(a)
-                                    ? echarts.format.addCommas(+a / 1)
-                                    : ''
-                            }
-                        }
-                    }
-                ],
-                dataZoom: [
-                    // {
-                    //     show: true,
-                    //     type: 'slider',
-                    //     start: 94,
-                    //     end: 100
-                    // },
-                    {
-                        type: 'inside',
-                        start: 94,
-                        end: 100
-                    }
-                    // {
-                    //     show: true,
-                    //     type: 'slider',
-                    //     yAxisIndex: 0,
-                    //     filterMode: 'empty',
-                    //     width: 30,
-                    //     height: '80%',
-                    //     showDataShadow: false,
-                    //     left: '93%'
-                    // }
-                ],
-                series: [
-                    {
-                        name: 'Budget 2011',
-                        type: 'bar',
-                        data: this.data.nums
-                    }
-                ]
-            }
-            this.myChart = echarts.init(this.$refs.graph)
-            this.myChart.setOption(this.option)
-            // this.$nextTick(() => {
-            //     // console.log(this.$refs.graph.children[0].children.style="")
-            // })
-            window.addEventListener('resize', () => {
-                this.myChart.resize()
+            activityIdEnrollBar({
+                id: this.$route.params.aid
+            }).then(value => {
+                console.log(value,12)
+                this.yearEnrollList.names = value.data.yearEnrollList.map(item => item[0])
+                this.yearEnrollList.nums = value.data.yearEnrollList.map(item => item[1])
+
+                this.dayEnrollList.names = value.data.dayEnrollList.map(item => item[0])
+                this.dayEnrollList.nums = value.data.dayEnrollList.map(item => item[1])
+
+                console.log(this.dayEnrollList,this.yearEnrollList)
+
+                //mock Data of four
+                this.yearEnrollList.names = this.data.names
+                this.yearEnrollList.nums = this.data.nums
+                this.dayEnrollList.names = this.today.names
+                this.dayEnrollList.nums = this.today.nums
+
+                this.defalutOption.xAxis[0].data = this.dayEnrollList.names
+                this.defalutOption.series[0].data = this.dayEnrollList.nums
+                this.myChart = echarts.init(this.$refs.graph)
+                this.myChart.setOption(this.defalutOption)
+                // this.$nextTick(() => {
+                //     // console.log(this.$refs.graph.children[0].children.style="")
+                // })
+                window.addEventListener('resize', () => {
+                    this.myChart.resize()
+                })
             })
+            
+            
 
             // new this.XScrollbar(document.querySelector('.survey'))
             new this.XScrollbar(document.querySelector('.msgStatus-nums'), {

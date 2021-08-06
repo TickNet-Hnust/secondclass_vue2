@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-25 23:13:05
+ * @LastEditTime: 2021-08-05 14:44:44
  */
 import Vue from 'vue'
 import Cookies from 'js-cookie'
@@ -45,7 +45,7 @@ import {
     download,
     handleTree
 } from '@/utils/ruoyi'
-import alertDialog from './utils/alertDialog'
+import { alertDialog } from './utils/gather'
 import Pagination from '@/components/Pagination'
 // 自定义表格工具扩展
 import RightToolbar from '@/components/RightToolbar'

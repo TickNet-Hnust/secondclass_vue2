@@ -3,9 +3,9 @@
  * @Author: 林舒恒
  * @Date: 2021-07-24 12:01:09
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-24 13:05:32
+ * @LastEditTime: 2021-08-05 14:46:43
  */
-export default function(classificationArray, path, id) {
+export function removeChild(classificationArray, path, id) {
     let tempArray = path.split(',')
     tempArray.push(id)
     let find = (array, layer) => {

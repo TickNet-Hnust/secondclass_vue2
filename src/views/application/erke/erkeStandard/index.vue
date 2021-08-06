@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-28 09:20:16
+ * @LastEditTime: 2021-08-05 15:28:25
 -->
 <template>
     <div class="app-container">
@@ -461,28 +461,23 @@
         courseClassificationList,
         courseClassificationIds,
         courseClassification
-    } from '@/api/application/secondClass/courseClassification.js'
-    import filterCourseClassificationList from '@/utils/filterCourseClassificationList'
-    import filterNameAndType from '@/utils/filterNameAndType'
-    import formatDate from '@/utils/formatDate.js'
+    } from '@/api/application/secondClass/index'
+    import {
+        filterCourseClassificationList,
+        filterNameAndType,
+        format
+    } from '@/utils/gather'
+    
     import removeChild from '@/utils/removeChild.js'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
     import {
-        listUser,
-        getUser,
-        delUser,
-        addUser,
-        updateUser,
-        exportUser,
-        resetUserPwd,
-        changeUserStatus,
         importTemplate
     } from '@/api/system/user'
     import { getToken } from '@/utils/auth'
 
     export default {
-        name: 'User',
+        name: 'standard',
         data() {
             return {
                 loading: false,
@@ -714,7 +709,7 @@
                 )
             },
             formatUpdateTime(row, column, cellValue) {
-                return cellValue != null && formatDate(cellValue)
+                return cellValue != null && format(cellValue)
             },
             renderHeader(h) {
                 return h(

@@ -438,55 +438,25 @@
         activityEnroll,
         activityEnrollList,
         activityEnrollVerify
-    } from '@/api/application/secondClass/activity'
+    } from '@/api/application/secondClass/index'
 
     import {
         getDept,
         listDeptExcludeChild,
         listDept
     } from '@/api/system/dept.js'
-
-    import {
-        trainingProgramDetail,
-        trainingProgramList,
-        trainingProgramId
-    } from '@/api/application/secondClass/trainingProgram'
-    import {
-        schoolYearList,
-        schoolYearMulti
-    } from '@/api/application/secondClass/schoolYear'
-    import {
-        courseId,
-        coursePost,
-        courstPut,
-        courseDelete
-    } from '@/api/application/secondClass/course'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
-    import formaterDate from '@/utils/formatDate.js'
-    import horwheel from 'horwheel'
-
     import {
-        listUser,
-        getUser,
-        delUser,
-        addUser,
-        updateUser,
-        exportUser,
-        resetUserPwd,
-        changeUserStatus,
-        importTemplate
-    } from '@/api/system/user'
-    import { getToken } from '@/utils/auth'
-    import { treeselect } from '@/api/system/dept'
-    import Treeselect from '@riophae/vue-treeselect'
-    import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+        format
+    } from '@/utils/gather'
+
 
     export default {
-        name: 'User',
-        components: { Treeselect },
+        name: 'Enroll',
         data() {
             return {
+                loading:false,
                 //单个审核报名会话框表单参数form
                 form: {},
                 //单个审核报名会话框数据
@@ -737,25 +707,23 @@
                 // console.log(row);
             },
             //渲染会话框数据 打开会话框
-            renderState(row){
-                console.log(row);
-                this.examEnrollDialog.data={
-                  nickName:row.nickName,
-                  userName:row.userName,
-                  className:row.className,
-                  groupName:row.groupName,
-                  createTime:row.createTime,
-                };
+            renderState(row) {
+                console.log(row)
+                this.examEnrollDialog.data = {
+                    nickName: row.nickName,
+                    userName: row.userName,
+                    className: row.className,
+                    groupName: row.groupName,
+                    createTime: row.createTime
+                }
 
-                this.examEnrollDialog.post={
-                  activityId:row.activityId,
-                  content:'',
-                  ids:[row.id],
-                  status:row.admissionStatus,
-                  userIds:[row.userId],
-  
-                };
-                this.examEnrollDialog.open = true;
+                this.examEnrollDialog.post = {
+                    activityId: row.activityId,
+                    content: '',
+                    ids: row.id,
+                    status: row.admissionStatus,
+                    userIds: row.userId
+                }
 
                 console.log(this.examEnrollDialog.post)
                 this.examEnrollDialog.open = true
@@ -787,17 +755,16 @@
             },
             //格式化时间
             formatDate(row, column, cellValue) {
-                return cellValue != null && formaterDate(cellValue)
+                return cellValue != null && format(cellValue)
             },
             //筛选报名时间触发的事件
-            enrollDateChange(){
-               //发送时间的格式还需要调整一下
-               if(this.value2!=null)
-               {
-                    this.queryList.beginCreateTime = this.value2[0];
-                    this.queryList.endCreateTime = this.value2[1];
-                    this.fuzzyQuery();
-               }
+            enrollDateChange() {
+                //发送时间的格式还需要调整一下
+                if (this.value2 != null) {
+                    this.queryList.beginCreateTime = this.value2[0]
+                    this.queryList.endCreateTime = this.value2[1]
+                    this.fuzzyQuery()
+                }
             },
             //点击左下角部门触发的事件
             handleSelect(index) {

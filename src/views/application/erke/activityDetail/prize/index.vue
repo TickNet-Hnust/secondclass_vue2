@@ -7,25 +7,25 @@
                         <el-row :gutter="20">
                             <el-col :span="1" style="min-width:140px">
                                 <el-button icon="el-icon-plus" type="primary"
-                                @click="managePrizeOpenDialog"    
-                                >奖项管理</el-button>
+                                    >奖项管理</el-button
+                                >
                             </el-col>
                             <el-col :span="1" style="min-width:190px">
-                                <el-input v-model="prizeType">
+                                <el-input value="200">
                                     <template slot="prepend">
                                         奖项种类：
                                     </template>
                                 </el-input>
                             </el-col>
                             <el-col :span="1" style="min-width:190px">
-                                <el-input v-model="prizeNumber">
+                                <el-input value="50">
                                     <template slot="prepend">
                                         奖项数量：
                                     </template>
                                 </el-input>
                             </el-col>
                             <el-col :span="1" style="min-width:190px">
-                                <el-input v-model="prizePerson">
+                                <el-input value="50">
                                     <template slot="prepend">
                                         获奖人数：
                                     </template>
@@ -67,59 +67,29 @@
                                     justify="space-around"
                                     style="flexWrap:wrap"
                                 >
-                                   <el-col :span="1" style="min-width:80px;" >
-                                    <el-tooltip 
-                                        class="item" 
-                                        effect="dark" 
-                                        content="清空查询条件" 
-                                        placement="right">
-                                    <el-button
-                                        circle
-                                        icon="el-icon-refresh"
-                                        @click="refresh"
-                                    >
-                                    </el-button>
-                                    </el-tooltip>
-                                </el-col> 
-
-                                    <el-col :span="1" style="min-width:90px">
+                                    <el-col :span="1" style="min-width:80px">
                                         <el-form-item label="">
-                                            <a-dropdown>
-                                                <a class="ant-dropdown-link" @click="e => e.preventDefault()">
-                                                操作 <a-icon type="down" />
-                                                </a>
-                                                <a-menu slot="overlay">
-                                                <a-menu-item>
-                                                    <a href="javascript:;" @click="PrizeRegistration">发放登记</a>
-                                                </a-menu-item>
-                                                <a-menu-item>
-                                                    <a href="javascript:;">导出</a>
-                                                </a-menu-item>
-                                                <a-menu-item>
-                                                    <a href="javascript:;">排序</a>
-                                                </a-menu-item>
-                                                </a-menu>
-                                            </a-dropdown>
-                                        </el-form-item>
-                                    </el-col>
-
-                                    <el-col :span="1" style="min-width:165px">
-                                        <el-form-item label="姓名:">
-                                            <el-input data-text
-                                            placeholder="姓名"
-                                            v-model="queryList.nickName"
-                                            @input="fuzzyQuery">
-                                            </el-input>
+                                            <el-select
+                                                value="操作"
+                                                style="width:80px"
+                                            >
+                                                <el-option
+                                                    value="fuckyou"
+                                                    label="操作"
+                                                ></el-option>
+                                            </el-select>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="学号:">
-                                            <el-input data-text
-                                            placeholder="学号"
-                                            v-model="queryList.userName"
-                                            @input="fuzzyQuery"
-                                            ></el-input>
+                                            <el-input data-text></el-input>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="1" style="min-width:165px">
+                                        <el-form-item label="姓名:">
+                                            <el-input data-text></el-input>
                                         </el-form-item>
                                     </el-col>
 
@@ -133,31 +103,36 @@
                                         </el-form-item>
                                     </el-col> -->
 
-                                    <el-col :span="1" style="min-width:165px">
-                                        <el-form-item label="奖品:">
-                                            <el-input data-text
-                                            placeholder="奖品"
-                                            v-model="queryList.prizeName"
-                                            @input="fuzzyQuery"
-                                            ></el-input>
+                                    <el-col :span="1" style="min-width:205px">
+                                        <el-form-item label="奖项类别:">
+                                            <el-select
+                                                value="操作"
+                                                style="width:120px"
+                                            >
+                                                <el-option
+                                                    value="fuckman"
+                                                    label="操作"
+                                                ></el-option>
+                                            </el-select>
                                         </el-form-item>
                                     </el-col>
 
-                                    <el-col :span="1" style="min-width:300px">
+                                    <el-col :span="1" style="min-width:250px">
                                         <el-form-item label="发放时间:">
                                             <el-date-picker
-                                                v-model="value2"
-                                                type="datetimerange"
-                                                :picker-options="pickerOptions"
-                                                range-separator="至"
-                                                start-placeholder="开始日期"
-                                                end-placeholder="结束日期"
                                                 align="right"
-                                                @change="prizeDateChange">
+                                                type="date"
+                                                placeholder="选择日期"
+                                            >
                                             </el-date-picker>
                                         </el-form-item>
                                     </el-col>
-                             
+                                    <el-col :span="1" style="min-width:130px">
+                                        <el-button type="primary" size="mini"
+                                            >查询</el-button
+                                        >
+                                        <el-button size="mini">重置</el-button>
+                                    </el-col>
                                 </el-row>
                             </el-form>
                         </div>
@@ -273,7 +248,7 @@
                         <pagination
                             v-show="queryParams.totalPage > 0"
                             :total="queryParams.totalCount"
-                            :page.sync="queryParams.pageNum"
+                            :page.sync="queryParams.pageCount"
                             :limit.sync="queryParams.pageSize"
                             @pagination="getList($event)"
                         />
@@ -493,53 +468,17 @@
 
 <script>
     //导入活动奖项相关接口
-     import {
+    import { 
+        activityPrize,
         activityPrizeRecord,
         activityPrizeRecordList,
         activityPrizeManageList,
         activityPrizeManageMulti,
         activityPrizeRecordPost,
-    } from '@/api/application/secondClass/activity'
-
-    import {
-        trainingProgramDetail,
-        trainingProgramList,
-        trainingProgramId
-    } from '@/api/application/secondClass/trainingProgram'
-    import {
-        schoolYearList,
-        schoolYearMulti
-    } from '@/api/application/secondClass/schoolYear'
-    import {
-        courseId,
-        coursePost,
-        courstPut,
-        courseDelete
-    } from '@/api/application/secondClass/course'
-    import { getDict } from '@/api/application/secondClass/dict/type.js'
-
-    import formaterDate from '@/utils/formatDate.js'
-    import horwheel from 'horwheel'
-
-    import {
-        listUser,
-        getUser,
-        delUser,
-        addUser,
-        updateUser,
-        exportUser,
-        resetUserPwd,
-        changeUserStatus,
-        importTemplate
-    } from '@/api/system/user'
-    import { getToken } from '@/utils/auth'
-    import { treeselect } from '@/api/system/dept'
-    import Treeselect from '@riophae/vue-treeselect'
-    import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+     } from '@/api/application/secondClass/index'
 
     export default {
-        name: 'User',
-        components: { Treeselect },
+        name: 'Prize',
         data() {
             return {
                 form:{},
@@ -882,19 +821,12 @@
             // this.initDict()
 
             //获取活动奖项总信息
-            this.getActivityPrizeRecord({
+            this.getActivityPrize({
                 activityId: this.$route.params.aid
             })
             /** 获得当前情况下的奖项管理列表 */
-            this.fuzzyQuery()
-
-            this.getPrizeManageList({
-                activityId: this.$route.params.aid
-            })
-            
-        },
-        
-
+            // this.fuzzyQuery()
+        }
     }
 </script>
 
@@ -913,7 +845,7 @@
         overflow: hidden;
     }
     .erke-buttom-left {
-        width: 340px;
+        width: 300px;
         float: left;
         padding: 16px;
         height: calc(100vh - 250px);
@@ -944,21 +876,14 @@
     }
     .erke-buttom-left li span {
         position: absolute;
-        width: 20px;
-        text-align: center;
-        top: 0;
-    }
-    .erke-buttom-left .numbers {
-        position: absolute;
-        right: -276px;
+        right: 10px;
         width: 20px;
         text-align: center;
         top: 0;
     }
     .erke-buttom-right {
-        overflow: auto;
         background-color: #fff;
-        margin-left: 350px;
+        margin-left: 305px;
         height: calc(100vh - 250px);
         padding: 16px;
         border: 1px solid #ddd;
