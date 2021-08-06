@@ -3,7 +3,7 @@
  * @Autor: 张津瑞
  * @Date: 2021-07-26 18:39:09
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-05 11:27:55
+ * @LastEditTime: 2021-08-06 15:37:23
  */
 
 import request from '@/utils/request.js'
@@ -66,6 +66,18 @@ export function activityPrizeRecord(params) {
         url: '/admins/secondClass/activity/prize/record/list',
         method: 'get',
         params
+    })
+}
+
+/**
+ * @description: 发放登记新增或修改
+ * @param {*} params
+ */
+ export function activityPrizeRecordPost(data) {
+    return request({
+        url: '/admins/secondClass/activity/prize/record/list',
+        method: 'put',
+        data
     })
 }
 

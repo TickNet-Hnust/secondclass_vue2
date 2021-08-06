@@ -40,7 +40,7 @@
                         <el-menu
                             default-active=""
                             class="el-menu-vertical-demo"
-                           
+                            @select="handleSelect"
                         >
                             <el-menu-item
                                 index=''
@@ -54,7 +54,6 @@
                                  
                             >
                             <span slot="title" >{{ item.prizeType }} <span class="numbers">{{item.prizeNumber}}</span> </span>
-                                
                             </el-menu-item>
 
                         </el-menu>
@@ -124,7 +123,7 @@
                                         </el-form-item>
                                     </el-col>
 
-                                    <el-col :span="1" style="min-width:165px">
+                                    <!-- <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="奖项:">
                                             <el-input data-text
                                             placeholder="奖项"
@@ -132,7 +131,7 @@
                                             @input="fuzzyQuery"
                                             ></el-input>
                                         </el-form-item>
-                                    </el-col>
+                                    </el-col> -->
 
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="奖品:">
@@ -220,6 +219,13 @@
                                 prop="prizeName"
                                 label="奖品"
                                 min-width="120"
+                            >
+                            </el-table-column>
+
+                            <el-table-column
+                                prop="number"
+                                label="发放数量"
+                                min-width="100"
                             >
                             </el-table-column>
 
@@ -375,6 +381,113 @@
             </div>
         </el-dialog>
 
+        <el-dialog
+            :title="addPrizeDialogList.title"
+            :visible.sync="addPrizeDialogList.open"
+            width="915px"
+            append-to-body
+            class="addDetailDialog"
+        >
+          
+          <el-form ref="form" :model="form" label-width="300px">
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="6">
+                       奖项：
+                    </el-col>
+                    <el-col :span="18">
+                       <el-select
+                        v-model="addPrizeDialogList.data.prizeType"
+                        class="shoutInput"
+                        @change="filterManagePrizeDialogList"
+                        >
+                            <el-option
+                                v-for="(item,index) in tabInfo"
+                                :key="index"
+                                :label="item.prizeType"
+                                :value="item.prizeType"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
+
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="6">
+                       奖品：
+                    </el-col>
+                    <el-col :span="18">
+                       <el-select
+                        v-model="addPrizeDialogList.data.prizeName"
+                        class="shoutInput"
+                        @change="filterManagePrizeDialogList2"
+                        >
+                            <el-option
+                                v-for="(item,index) in managePrizeDialogList2"
+                                :key="index"
+                                :label="item.name"
+                                :value="item.name"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
+
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="6">
+                       数量：
+                    </el-col>
+                    <el-col :span="18">
+                       <el-input
+                            v-model="addPrizeDialogList.data.number"
+                            style="width: 200px;"
+                        ></el-input>
+                    </el-col>
+                </el-row>
+
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="6">
+                       发放对象：
+                    </el-col>
+                    <el-col :span="18">
+                       <el-input
+                            v-model="addPrizeDialogList.data.userId"
+                            style="width: 200px;"
+                        ></el-input>
+                    </el-col>
+                </el-row>
+
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="6">
+                       发放人：
+                    </el-col>
+                    <el-col :span="18">
+                       <el-input
+                            v-model="addPrizeDialogList.data.deliverUserId"
+                            style="width: 200px;"
+                        ></el-input>
+                    </el-col>
+                </el-row>
+
+                <el-row  style="margin-bottom:10px">
+                    <el-col :span="6">
+                       发放时间：
+                    </el-col>
+                    <el-col :span="18">
+                       <el-date-picker
+                            v-model="addPrizeDialogList.data.createTime"
+                            type="datetime"
+                            placeholder="选择日期时间"
+                            >
+                        </el-date-picker>
+                    </el-col>
+                </el-row>
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button >关闭</el-button>
+                <el-button type="primary" @click="save">保存</el-button>
+            </div>
+
+         </el-dialog>
+
     </div>
 </template>
 
@@ -385,6 +498,7 @@
         activityPrizeRecordList,
         activityPrizeManageList,
         activityPrizeManageMulti,
+        activityPrizeRecordPost,
     } from '@/api/application/secondClass/activity'
 
     import {
@@ -428,6 +542,7 @@
         components: { Treeselect },
         data() {
             return {
+                form:{},
                 action:'',
                 prizeType:'',
                 prizePerson: '',
@@ -488,28 +603,112 @@
                 }]
                 },
                 value2: '',
+                value1: '',
                 addPrizeDialogList:{
-                    title: '发放登记',
+                    title: '',
                     open: false,
                     data:{
+                        activityId:this.$route.params.aid,
+                        prizeId:'',
                         prizeType:'',
                         prizeName:'',
-                        number:''
+                        number:'',
+                        userId:'',
+                        deptId:'',
+                        deliverUserId:'',
+                        createTime:'',
                     }
                 },
+                //managePrizeDialogList第一次过滤后的数组
+                managePrizeDialogList2:[],
             }
         },
         methods:{
+            handleSelect(index){
+                console.log(this.tabInfo[index].prizeType,'左下角点击的奖项');
+                if (index != '') {
+                    this.queryList.prizeType = this.tabInfo[index].prizeType
+                } else {
+                    this.queryList.prizeType = ''
+                }
+                this.fuzzyQuery()
+            },
+            prizeUpdateDateChange(){
+               if(value1!=null) 
+               this.addPrizeDialogList.data.createTime = this.value1;
+            },
+            //修改和新增的保存按钮
+            save(){
+               //要提交的数据
+               console.log(this.addPrizeDialogList.data,'点击保存要发送的数据');
+               activityPrizeRecordPost(this.addPrizeDialogList.data).then(value=>{
+                   console.log(value,'发布登记修改新增接口返回的数据');
+               })
+            },
+            filterManagePrizeDialogList(value){
+               console.log(value,'选中的奖项值！！！')
+               this.managePrizeDialogList.forEach((item,index)=>{
+                   if(item.type==value){
+                       this.managePrizeDialogList2.push(item);
+                   }
+               })
+               console.log(this.managePrizeDialogList2,'managePrizeDialogList第一次过滤后的数组');
+            },
+            filterManagePrizeDialogList2(value){
+               console.log(value,'经过第一次过滤后选中的奖品值！！！')
+               this.managePrizeDialogList2.forEach((item,index)=>{
+                   if(item.name==value){
+                       this.addPrizeDialogList.data.prizeId=item.id
+                       console.log(this.addPrizeDialogList.data.prizeId,'两次过滤选中的奖项id！！！');
+                   }
+               })
+               
+            },
             //点击修改
             updatePrize(row) {
+                this.addPrizeDialogList.title = '修改奖项记录'
                 console.log(row,'点击修改奖项传来的数据')
-                // this.renderState(row)
-                // this.addPrizeDialogList.title = '修改奖项记录'
-                
+                this.renderState(row)        
             },
-            //点击发放登记
+            renderState(row){
+               this.addPrizeDialogList.data = {
+                    id:row.id,
+                    activityId:this.$route.params.aid,
+                    prizeId:row.prizeId,
+                    prizeType:row.prizeType,
+                    prizeName:row.prizeName,
+                    number:row.number,
+                    userId:row.userId,
+                    deptId:row.deptId,  
+                    deliverUserId:row.deliverUserId,
+                    createTime:row.createTime,
+               }
+               this.addPrizeDialogList.open = true
+            },
+            //点击发放登记按钮
             PrizeRegistration(){
-               console.log('我是发放登记！');
+                 console.log('我是发放登记！');
+                 this.reset()
+                 this.addPrizeDialogList.title='发放登记'
+                 this.addPrizeDialogList.open = true
+               
+            },
+            // 表单重置
+            reset() {
+                this.addPrizeDialogList.data = {
+                        activityId:this.$route.params.aid,
+                        prizeId:'',
+                        prizeType:'',
+                        prizeName:'',
+                        number:'',
+                        userId:'',
+                        deptId:'',
+                        id:'',
+                        deliverUserId:'',
+                        createTime:'',
+                }
+                this.value1 = ''
+
             },
             //清空查询条件
             refresh() {
@@ -675,7 +874,6 @@
                      this.managePrizeDialogListBak = value.data.map(item => ({...item}));
                     // this.managePrizdeDialogListBak=this.managePrizeDialogList.slice(0)
                      console.log(this.managePrizeDialogList,'奖项信息列表')
-
                  })
             }
         },

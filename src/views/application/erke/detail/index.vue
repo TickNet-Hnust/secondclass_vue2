@@ -2,8 +2,8 @@
  * @Descripttion: 培养方案详情
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-01 23:14:15
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-08-06 15:31:33
 -->
 <template>
     <div class="app-container">
@@ -1196,15 +1196,21 @@
                     })
                     .join(',')
                 console.log(this.addDetailDialog.config, 999)
-                ;(function(that) {
-                    if (that.addDetailDialog.title == '新增')
-                        return coursePost(that.addDetailDialog.config)
-                    else return coursePut(that.addDetailDialog.config)
-                })(this).then(value => {
+                let state = that.addDetailDialog.title == '新增' ? coursePost : coursePut
+                state(this.addDetailDialog.config).then(value => {
                     // console.log(value, 789789)
                     this.addDetailDialog.open = false
                     this.fuzzyQuery()
                 })
+                // ;(function(that) {
+                //     if (that.addDetailDialog.title == '新增')
+                //         return coursePost(that.addDetailDialog.config)
+                //     else return coursePut(that.addDetailDialog.config)
+                // })(this).then(value => {
+                //     // console.log(value, 789789)
+                //     this.addDetailDialog.open = false
+                //     this.fuzzyQuery()
+                // })
             },
             /**
              * @description: 回显
