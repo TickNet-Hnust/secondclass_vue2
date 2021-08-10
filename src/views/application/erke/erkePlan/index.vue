@@ -594,10 +594,8 @@
         schoolYearList,
         schoolYearMulti
     } from '@/api/application/secondClass/index'
-    import {
-        format
-    } from '@/utils/gather'
-    
+    import { format } from '@/utils/gather'
+
     import { getDict } from '@/api/application/secondClass/dict/type.js'
     import horwheel from 'horwheel'
 
@@ -1149,11 +1147,11 @@
         },
         mounted() {
             /** 横向滚动条 */
-        //     let view = document.querySelector(
-        //         '.erkePlanMainTable .el-table__body-wrapper'
-        //     )
-        //     console.log(view)
-        //     view && horwheel(view)
+            //     let view = document.querySelector(
+            //         '.erkePlanMainTable .el-table__body-wrapper'
+            //     )
+            //     console.log(view)
+            //     view && horwheel(view)
         }
     }
 </script>

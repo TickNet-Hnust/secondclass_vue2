@@ -1,5 +1,5 @@
 /*
- * @Descripttion: 
+ * @Descripttion:
  * @Author: 林舒恒
  * @Date: 2021-08-04 16:54:39
  * @LastEditors: 林舒恒
@@ -7,13 +7,11 @@
  */
 import { getPolicy, upload, getOssFileUrl } from '@/api/application/ossImage'
 export default {
-    data() {
-
-    },
+    data() {},
     methods: {
         async getImgUrl(file) {
             // console.log(file)
-            let ossFileUrl;
+            let ossFileUrl
             await getPolicy() // 获取签名
                 .then(res => {
                     if (res.code === 200) {
@@ -23,15 +21,16 @@ export default {
                         return Promise.reject('上传次数受限')
                     }
                 })
-                .then(ossData => { // 上传
+                .then(ossData => {
+                    // 上传
                     ossFileUrl = getOssFileUrl(ossData, file)
-                        // console.log(ossFileUrl, 777)
-                        // fileObj.status = 'uploading' // 设置为上传中
+                    // console.log(ossFileUrl, 777)
+                    // fileObj.status = 'uploading' // 设置为上传中
                     return upload(ossData, file, ossFileUrl)
                 })
                 .then(res => {
-                    if (res.status === 200) { // 上传成功
-
+                    if (res.status === 200) {
+                        // 上传成功
                         // fileObj.status = 'done'
                         // if (this.imgUrls.length) {
                         // this.imgUrls += ';' + ossFileUrl
@@ -39,7 +38,6 @@ export default {
                         // this.imgUrls += ossFileUrl
                         // }
                         // console.log(this.imgUrls,555)
-
                     }
                 })
             return Promise.resolve(ossFileUrl)

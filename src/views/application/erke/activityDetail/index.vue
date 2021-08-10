@@ -52,9 +52,9 @@
         </div>
 
         <transition name="fade-transform" mode="out-in">
-        <keep-alive>
-            <component v-if="hackReset" :is="aliveComponent"></component>
-        </keep-alive>
+            <keep-alive>
+                <component v-if="hackReset" :is="aliveComponent"></component>
+            </keep-alive>
         </transition>
         <!-- <div class="erke-bottom"> -->
         <!-- <router-view></router-view> -->
@@ -72,7 +72,7 @@
     import evaluation from '@/views/application/erke/activityDetail/evaluation/index.vue'
     import credit from '@/views/application/erke/activityDetail/credit/index.vue'
 
-    import {format} from '@/utils/gather.js'
+    import { format } from '@/utils/gather.js'
     import horwheel from 'horwheel'
     import { getToken } from '@/utils/auth'
 

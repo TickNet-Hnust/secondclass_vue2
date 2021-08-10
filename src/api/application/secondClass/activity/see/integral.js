@@ -1,9 +1,9 @@
 /*
- * @Descripttion: 
+ * @Descripttion:
  * @Author: 林舒恒
  * @Date: 2021-08-05 11:11:19
- * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-09 15:11:16
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-08-10 13:37:29
  */
 
 import request from '@/utils/request.js'
@@ -12,7 +12,7 @@ import request from '@/utils/request.js'
  * @description: 活动花絮列表
  * @param {*} params
  */
- export function activityIntegral(params) {
+export function activityIntegral(params) {
     return request({
         url: '/admins/secondClass/activity/integral',
         method: 'get',

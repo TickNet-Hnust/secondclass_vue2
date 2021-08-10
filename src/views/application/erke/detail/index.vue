@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-10 14:16:12
+ * @LastEditTime: 2021-08-10 14:19:12
 -->
 <template>
     <div class="app-container">
@@ -325,6 +325,7 @@
                                 prop="name"
                                 label="课程名称"
                                 min-width="200"
+                                show-overflow-tooltip
                             >
                             </el-table-column>
 
@@ -836,18 +837,13 @@
         coursePut,
         courseDelete
     } from '@/api/application/secondClass/index'
-    
+
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
-    import {
-        filterCourseClassificationList,
-        format
-    } from '@/utils/gather.js'
+    import { filterCourseClassificationList, format } from '@/utils/gather.js'
     import horwheel from 'horwheel'
 
-    import {
-        importTemplate
-    } from '@/api/system/user'
+    import { importTemplate } from '@/api/system/user'
     import { getToken } from '@/utils/auth'
 
     export default {

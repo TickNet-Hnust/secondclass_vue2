@@ -393,7 +393,7 @@
         name: 'regiter',
         data() {
             return {
-                loading:false,
+                loading: false,
                 action: '',
                 //部门id 用于模糊查询
                 deptId: '',

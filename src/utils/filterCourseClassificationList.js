@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-05 14:50:23
+ * @LastEditTime: 2021-08-10 11:47:55
  */
 export function filterCourseClassificationList(obj) {
     //挂载子节点与父节点
@@ -37,7 +37,6 @@ export function filterCourseClassificationList(obj) {
 
     return sortWay(temp)
 }
-
 
 /* map版本 */
 // function filter(layer) {
