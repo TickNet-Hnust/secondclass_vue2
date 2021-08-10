@@ -447,16 +447,13 @@
     } from '@/api/system/dept.js'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
-    import {
-        format
-    } from '@/utils/gather'
-
+    import { format } from '@/utils/gather'
 
     export default {
         name: 'Enroll',
         data() {
             return {
-                loading:false,
+                loading: false,
                 //单个审核报名会话框表单参数form
                 form: {},
                 //单个审核报名会话框数据

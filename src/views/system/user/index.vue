@@ -743,8 +743,9 @@
                 this.reset()
                 this.getTreeselect()
                 getUser().then(response => {
-                    this.postOptions = response.posts
-                    this.roleOptions = response.roles
+                    console.log(response,77777)
+                    this.postOptions = response.data.posts
+                    this.roleOptions = response.data.roles
                     this.open = true
                     this.title = '添加用户'
                     this.form.password = this.initPassword
@@ -756,9 +757,10 @@
                 this.getTreeselect()
                 const userId = row.userId || this.ids
                 getUser(userId).then(response => {
+                    console.log(response,77777)
                     this.form = response.data.user
-                    this.postOptions = response.posts
-                    this.roleOptions = response.roles
+                    this.postOptions = response.data.posts
+                    this.roleOptions = response.data.roles
                     this.form.postIds = response.postIds
                     this.form.roleIds = response.roleIds
                     this.open = true

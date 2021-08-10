@@ -336,7 +336,7 @@
         listDeptExcludeChild,
         listDept
     } from '@/api/system/dept.js'
-    
+
     import { getDict } from '@/api/application/secondClass/dict/type.js'
     export default {
         name: 'Leave',

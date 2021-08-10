@@ -1,5 +1,5 @@
 /*
- * @Descripttion: 
+ * @Descripttion:
  * @Author: 林舒恒
  * @Date: 2021-08-04 16:19:46
  * @LastEditors: 林舒恒
@@ -30,6 +30,4 @@ export function getUUID() {
     return s.join('')
 }
 
-export function getOssSmallImg(images) {
-
-}
+export function getOssSmallImg(images) {}

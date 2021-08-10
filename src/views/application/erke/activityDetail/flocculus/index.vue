@@ -168,7 +168,7 @@
         name: 'flower',
         data() {
             return {
-                dict_sc_activity_flower_status:[],
+                dict_sc_activity_flower_status: [],
                 maxLength: 0,
                 flocculus: [],
                 queryParams: {

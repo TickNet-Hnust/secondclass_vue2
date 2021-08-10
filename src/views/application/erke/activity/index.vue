@@ -23,10 +23,10 @@
                         <el-select v-model="queryList.deptId">
                             <el-option value="" label="全部"></el-option>
                             <el-option
-                                v-for="(item, index) in deptListMap"
+                                v-for="(item, index) in deptList"
                                 :key="index"
-                                :value="item[0]"
-                                :label="item[1]"
+                                :value="item.deptId"
+                                :label="item.deptName"
                             ></el-option>
                         </el-select>
                     </el-col>
@@ -202,6 +202,7 @@
                     prop="courseClassificationName"
                     label="课程分类"
                     min-width="140"
+                    show-overflow-tooltip
                 ></el-table-column>
 
                 <el-table-column
@@ -323,39 +324,74 @@
                         ></el-form-item>
 
                         <el-form-item label="活动名称：">
-                            <el-input v-model="postData.name"></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="主办方：">
-                            <el-input
-                                v-model="postData.groupPathName"
+                            <el-input 
+                                v-model="postData.name"
+                                placeholder="请填写活动名称"
                             ></el-input>
                         </el-form-item>
 
-                        <el-form-item label="发布人：">
-                            <el-input v-model="postData.activityReleaserId"></el-input>
-                        </el-form-item>
-
-                        <el-form-item label="指导单位">
-                            <el-select v-model="postData.deptId">
+                        <el-form-item label="主办方：">
+                            <el-select
+                                v-model="postData.groupId"
+                                @change="groupChange"
+                                placeholder="请选择活动主办方"
+                            >
                                 <el-option
-                                    v-for="(item, index) in deptListMap"
+                                    v-for="(item,index) in groupList"
                                     :key="index"
-                                    :value="item[0]"
-                                    :label="item[1]"
+                                    :value="item.deptId"
+                                    :label="item.deptName"
                                 ></el-option>
                             </el-select>
                         </el-form-item>
 
+                        <el-form-item label="发布人：">
+                            <el-input
+                                v-model="postData.activityReleaserId"
+                                placeholder="请选择发布人"
+                            ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="指导单位：">
+                            <el-select 
+                                v-model="postData.deptId"
+                                placeholder="请选择指导单位"
+                            >
+                                <el-option
+                                v-for="(item, index) in deptList"
+                                :key="index"
+                                :value="item.deptId"
+                                :label="item.deptName"
+                            ></el-option>
+                            </el-select>
+                        </el-form-item>
+
                         <el-form-item label="指导老师：">
-                            <el-input v-model="postData.guideTeacherId"></el-input>
+                            <el-input
+                                v-model="postData.guideTeacherId"
+                                placeholder="请选择指导老师"
+                            ></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="学年：">
+                            <el-select 
+                                v-model="postData.schoolYearId"
+                                placeholder="请选择学年"
+                            >
+                                <el-option
+                                    v-for="(item, index) in schoolYearList.rows"
+                                    :key="index"
+                                    :value="item.id"
+                                    :label="item.yearName"
+                                ></el-option>
+                            </el-select>
                         </el-form-item>
 
                         <el-form-item label="报名信息" class="bold"
                             ><a id="bm"></a
                         ></el-form-item>
 
-                        <el-form-item label="报名时间">
+                        <el-form-item label="报名时间：">
                             <el-date-picker
                                 v-model="postFakeData.enrollTime"
                                 type="datetimerange"
@@ -368,8 +404,11 @@
                             </el-date-picker>
                         </el-form-item>
 
-                        <el-form-item label="录取方式">
-                            <el-select v-model="postData.admissionWay">
+                        <el-form-item label="录取方式：">
+                            <el-select 
+                                v-model="postData.admissionWay"
+                                placeholder="请选择录取方式"
+                            >
                                 <el-option
                                     v-for="(item,
                                     index) in dict_sc_activity_admission_way"
@@ -380,40 +419,46 @@
                             </el-select>
                         </el-form-item>
 
-                        <el-form-item label="报名范围">
+                        <el-form-item label="报名范围：">
                             <el-select
                                 :value="
-                                    postData.enrollRange?
-                                    postData.enrollRange.split(';'):
-                                    undefined"
-                                @change="postData.enrollRange = $event.join(';')"
+                                    postData.enrollRange
+                                        ? postData.enrollRange.split(';')
+                                        : undefined
+                                "
+                                @change="
+                                    postData.enrollRange = $event.join(';')
+                                "
                                 multiple
                                 filterable
                                 allow-create
                                 default-first-option
-                                placeholder="请选择文章标签"
+                                placeholder="请选择报名范围"
                             >
                                 <el-option
-                                    v-for="(item, index) in deptListMap"
-                                    :key="index"
-                                    :value="item[0]"
-                                    :label="item[1]"
-                                ></el-option>
+                                v-for="(item, index) in deptList"
+                                :key="index"
+                                :value="item.deptId"
+                                :label="item.deptName"
+                            ></el-option>
                             </el-select>
                         </el-form-item>
 
-                        <el-form-item label="报名年级">
+                        <el-form-item label="报名年级：">
                             <el-select
-                               :value="
-                                    postData.enrollGrade?
-                                    postData.enrollGrade.split(';'):
-                                    undefined"
-                                @change="postData.enrollGrade = $event.join(';')"
+                                :value="
+                                    postData.enrollGrade
+                                        ? postData.enrollGrade.split(';')
+                                        : undefined
+                                "
+                                @change="
+                                    postData.enrollGrade = $event.join(';')
+                                "
                                 multiple
                                 filterable
                                 allow-create
                                 default-first-option
-                                placeholder="请选择文章标签"
+                                placeholder="请选择报名年级"
                             >
                                 <!-- <el-option
                                     v-for="(item, index) in deptListMap"
@@ -421,14 +466,26 @@
                                     :value="item[0]"
                                     :label="item[1]"
                                 ></el-option> -->
-                                <el-option value="2019" label="2019"></el-option>
-                                <el-option value="2020" label="2020"></el-option>
-                                <el-option value="2021" label="2020"></el-option>
-                                <el-option value="2022" label="2022"></el-option>
+                                <el-option
+                                    value="2019"
+                                    label="2019"
+                                ></el-option>
+                                <el-option
+                                    value="2020"
+                                    label="2020"
+                                ></el-option>
+                                <el-option
+                                    value="2021"
+                                    label="2021"
+                                ></el-option>
+                                <el-option
+                                    value="2022"
+                                    label="2022"
+                                ></el-option>
                             </el-select>
                         </el-form-item>
 
-                        <el-form-item label="最大录取人数">
+                        <el-form-item label="最大录取人数：">
                             <el-radio-group
                                 v-model="postFakeData.maxAdmissionNumber"
                                 @change="admissionNumberChange"
@@ -443,7 +500,7 @@
                             </el-radio-group>
                         </el-form-item>
 
-                        <el-form-item label="报名须知">
+                        <el-form-item label="报名须知：">
                             <editor
                                 v-model="postData.enrollNotice"
                                 :min-height="192"
@@ -454,8 +511,11 @@
                             ><a id="hd"></a
                         ></el-form-item>
 
-                        <el-form-item label="活动级别">
-                            <el-select v-model="postData.rankId">
+                        <el-form-item label="活动级别：">
+                            <el-select 
+                                v-model="postData.rankId"
+                                placeholder="请选择活动级别"
+                            >
                                 <el-option
                                     v-for="(item,
                                     index) in dict_sc_train_program_rank"
@@ -466,7 +526,7 @@
                             </el-select>
                         </el-form-item>
 
-                        <el-form-item label="活动标签">
+                        <el-form-item label="活动标签：">
                             <el-tag
                                 :key="tag"
                                 v-for="tag in postFakeData.activityTag"
@@ -495,7 +555,7 @@
                             >
                         </el-form-item>
 
-                        <el-form-item label="课程分类">
+                        <el-form-item label="课程分类：">
                             <el-cascader
                                 v-model="postData.coursePath"
                                 :options="datadata"
@@ -503,10 +563,12 @@
                                 :show-all-levels="false"
                                 class="activityCascader"
                                 @change="handChangeNodePost"
+                                placeholder="请选择课程分类"
                             ></el-cascader>
                             <el-select
                                 v-model="postData.courseId"
                                 style=" margin-left:10px"
+                                placeholder="请选择课程"
                             >
                                 <!-- <el-option label="无" value=""></el-option> -->
                                 <el-option
@@ -518,7 +580,7 @@
                             </el-select>
                         </el-form-item>
 
-                        <el-form-item label="积分方案">
+                        <el-form-item label="积分方案：">
                             <el-radio
                                 v-model="postData.integralScheme"
                                 label="0"
@@ -533,7 +595,7 @@
                             >
                         </el-form-item>
 
-                        <el-form-item label="活动时间">
+                        <el-form-item label="活动时间：">
                             <el-date-picker
                                 v-model="postFakeData.activityTime"
                                 type="datetimerange"
@@ -546,19 +608,22 @@
                             </el-date-picker>
                         </el-form-item>
 
-                        <el-form-item label="允许请假">
+                        <el-form-item label="允许请假：">
                             <el-switch
                                 :value="Boolean(postData.vacate)"
                                 @change="postData.vacate = Number($event)"
                             ></el-switch>
                         </el-form-item>
 
-                        <el-form-item label="花絮管理">
+                        <el-form-item label="花絮管理：">
                             <el-radio-group v-model="postData.flowerStatus">
                                 <el-radio
-                                    v-for="(item,index) in dict_sc_activity_flower_scheme"
-                                    :key="index"                                    :label="item.dictValue"
-                                >{{item.dictLabel}}</el-radio>
+                                    v-for="(item,
+                                    index) in dict_sc_activity_flower_scheme"
+                                    :key="index"
+                                    :label="item.dictValue"
+                                    >{{ item.dictLabel }}</el-radio
+                                >
                                 <!-- <el-radio label="1">关闭</el-radio>
                                 <el-radio label="2"
                                     >启动，且提交信息需审核</el-radio
@@ -569,13 +634,15 @@
                             </el-radio-group>
                         </el-form-item>
 
-                        <el-form-item label="评价管理">
+                        <el-form-item label="评价管理：">
                             <el-radio-group v-model="postData.evaluateStatus">
                                 <el-radio
-                                    v-for="(item,index) in dict_sc_activity_evaluate_scheme"
+                                    v-for="(item,
+                                    index) in dict_sc_activity_evaluate_scheme"
                                     :key="index"
                                     :label="item.dictValue"
-                                >{{item.dictLabel}}</el-radio>
+                                    >{{ item.dictLabel }}</el-radio
+                                >
                                 <!-- <el-radio label="1">关闭</el-radio>
                                 <el-radio label="2"
                                     >启动，且提交信息需审核</el-radio
@@ -601,12 +668,15 @@
                         </el-form-item>
 
                         <el-form-item label="地点描述：">
-                            <el-input v-model="postData.activityPlaceName"></el-input>
+                            <el-input
+                                v-model="postData.activityPlaceName"
+                                placeholder="请详细描述地点"
+                            ></el-input>
                         </el-form-item>
 
-                        <el-form-item label="签到时间">
+                        <el-form-item label="签到时间：">
                             <el-radio-group
-                                v-model="postFakeData.registeTime"
+                                v-model="postFakeData.registeTimeRadio"
                                 @change="Change"
                             >
                                 <el-radio :label="0">不限</el-radio>
@@ -627,9 +697,9 @@
                             </el-radio-group>
                         </el-form-item>
 
-                        <el-form-item label="签到距离">
+                        <el-form-item label="签到距离：">
                             <el-radio-group
-                                v-model="postFakeData.activityRegisteDistance"
+                                v-model="postFakeData.registeDistanceRadio"
                                 @change="activityRegisteDistanceChange"
                             >
                                 <el-radio :label="0">不限</el-radio>
@@ -644,7 +714,7 @@
                             </el-radio-group>
                         </el-form-item>
 
-                        <el-form-item label="活动负责人">
+                        <el-form-item label="活动负责人：">
                             <el-tag
                                 :key="tag"
                                 v-for="tag in peopleTags.dynamicTags"
@@ -673,7 +743,7 @@
                             >
                         </el-form-item>
 
-                        <el-form-item label="活动组织者">
+                        <el-form-item label="活动组织者：">
                             <el-tag
                                 :key="tag"
                                 v-for="tag in groupTags.dynamicTags"
@@ -701,21 +771,26 @@
                                 >+</el-button
                             >
                         </el-form-item>
-                        <el-form-item label="图片素材">
+                        <el-form-item label="图片素材：">
                             <el-upload
-                            :http-request="httpRequest"
-                            action="https://jsonplaceholder.typicode.com/posts/"
-                            list-type="picture-card"
-                            :on-success="handlePictureCardPreview"
-                            :on-remove="handleRemove">
-                            <i class="el-icon-plus"></i>
+                                :http-request="httpRequest"
+                                action="https://jsonplaceholder.typicode.com/posts/"
+                                list-type="picture-card"
+                                :on-success="handlePictureCardPreview"
+                                :on-remove="handleRemove"
+                            >
+                                <i class="el-icon-plus"></i>
                             </el-upload>
                             <el-dialog :visible.sync="dialogVisible">
-                            <img width="100%" :src="dialogImageUrl" alt="">
+                                <img
+                                    width="100%"
+                                    :src="dialogImageUrl"
+                                    alt=""
+                                />
                             </el-dialog>
                         </el-form-item>
 
-                        <el-form-item label="相关附件">
+                        <el-form-item label="相关附件：">
                             <el-upload
                                 class="upload-demo"
                                 drag
@@ -732,7 +807,7 @@
                                 </div>
                             </el-upload>
                         </el-form-item>
-                        <el-form-item label="活动介绍">
+                        <el-form-item label="活动介绍：">
                             <editor
                                 v-model="postData.activityIntroduce"
                                 :min-height="192"
@@ -743,7 +818,9 @@
             </el-row>
             <div slot="footer" class="dialog-footer">
                 <el-button>关闭</el-button>
-                <el-button type="primary" @click="postActivity">确 定</el-button>
+                <el-button type="primary" @click="postActivity"
+                    >确 定</el-button
+                >
             </div>
         </el-dialog>
 
@@ -760,14 +837,13 @@
 </template>
 
 <script>
-    
     import {
         activityList,
         activityPost,
         activityIdNextStatus,
         schoolYearList,
         trainingProgramDetail,
-        courseClassificationList,
+        courseClassificationList
     } from '@/api/application/secondClass/index'
 
     import {
@@ -781,7 +857,7 @@
     import IMGURL_MIXINS from '@/mixins/upload.js'
     export default {
         name: 'activity',
-        mixins:[IMGURL_MIXINS],
+        mixins: [IMGURL_MIXINS],
         components: {
             Editor
         },
@@ -792,16 +868,18 @@
                 disabled: false,
                 courseList: [],
                 postFakeData: {
-                    activityTag:[],
+                    activityTag: [],
                     maxAdmissionNumber: 0,
                     registeTime: [],
+                    registeTimeRadio: 0,
+                    registeDistanceRadio: 0,
                     activityTime: [],
-                    enrollTime:[],
+                    enrollTime: []
                 },
                 postData: {
                     name: '', //活动名称
                     groupPathName: '', //主办方完整名字
-                    groupId: 102, //主办方ID
+                    groupId: '', //主办方ID
                     activityReleaserId: 111, //发布人ID
                     deptId: '', //部门Id
                     guideTeacherId: 105, //指导老师Id
@@ -837,7 +915,7 @@
                     images: '', //活动素材
                     enclosure: '', //相关附件链接
                     activityIntroduce: '', //活动介绍
-                    schoolYearId:5
+                    schoolYearId: ''
                 },
                 targetOffset: undefined,
                 //map
@@ -880,8 +958,10 @@
                     inputVisible: false,
                     inputValue: ''
                 },
-
-                deptListMap: [],
+                //社团群组
+                groupList:[],
+                //学院
+                deptList: [],
                 loading: false,
                 queryList: {
                     deptId: '', //部门名称
@@ -919,11 +999,11 @@
                 //培养方案级别
                 dict_sc_train_program_rank: [],
                 //活动积分状态
-                dict_sc_activity_integral_scheme:[],
+                dict_sc_activity_integral_scheme: [],
                 //活动花絮管理方案
-                dict_sc_activity_flower_scheme:[],
+                dict_sc_activity_flower_scheme: [],
                 //活动评价管理方案
-                dict_sc_activity_evaluate_scheme:[],
+                dict_sc_activity_evaluate_scheme: [],
                 //操作映射
                 operation: [
                     [
@@ -1043,52 +1123,56 @@
                         }
                     ]
                 ],
-                imgUrls:'',
+                imgUrls: ''
             }
         },
         methods: {
-            handlePictureCardPreview(){},
+            handlePictureCardPreview() {},
             handleRemove() {},
             httpRequest2(file) {
-                
                 this.getImgUrl(file).then(value => {
-                    if(this.postData.enclosure.length)
-                    this.postData.enclosure += `;${value}`
-                    else
-                    this.postData.enclosure += `${value}`
+                    if (this.postData.enclosure.length)
+                        this.postData.enclosure += `;${value}`
+                    else this.postData.enclosure += `${value}`
                 })
             },
             httpRequest(file) {
-                
                 this.getImgUrl(file).then(value => {
-                    if(this.postData.images.length)
-                    this.postData.images += `;${value}`
-                    else 
-                    this.postData.images += `${value}`
+                    if (this.postData.images.length)
+                        this.postData.images += `;${value}`
+                    else this.postData.images += `${value}`
                 })
             },
+            /**
+             * @description: 主办方改变
+             */            
+            groupChange() {
+                this.postData.groupPathName = this.groupList[this.postData.groupId]
+            },
             activityRegisteDistanceChange(label) {
-                label == 0 && (this.postData.activityRegisteDistance = '')
+                label == 0 && (this.postData.activityRegisteDistance = 0)
             },
             Change(label) {
-                if(label == 0) {
-                    (this.postData.registeTime = '')
+                if (label == 0) {
+                    this.postFakeData.registeTime = []
                 }
             },
             admissionNumberChange(label) {
                 console.log(label)
-                label == 0 && (this.postData.maxAdmissionNumber = '')
+                label == 0 && (this.postFakeData.maxAdmissionNumber = [])
             },
             /**
              * @description: 表单报名年级改变
-             */            
+             */
+
             enrollGradeChange(value) {
                 this.postData.enrollGrade = value.join(';')
             },
             /**
              * @description: 表单报名范围改变
              * @param {*} value
-             */            
+             */
+
             enrollRangeChange(value) {
                 console.log(value)
                 // this.postData.enrollRange = value.join(';')
@@ -1110,7 +1194,6 @@
                 console.log(fuckMan)
                 this.postData.enrollStartTime = fuckMan[0]
                 this.postData.enrollEndTime = fuckMan[1]
-
             },
             getContainer() {
                 return document.querySelector('.formDetail')
@@ -1263,7 +1346,8 @@
                         if (marker2) {
                             this.mapDialog.lng = e.latlng.lng
                             this.mapDialog.lat = e.latlng.lat
-                            this.postData.activityPlace = e.latlng.lat + ',' + e.latlng.lng
+                            this.postData.activityPlace =
+                                e.latlng.lat + ',' + e.latlng.lng
                             this.$forceUpdate()
                             return
                         }
@@ -1280,7 +1364,8 @@
                             map.addOverlay(marker2)
                             this.mapDialog.lng = e.latlng.lng
                             this.mapDialog.lat = e.latlng.lat
-                            this.postData.activityPlace = e.latlng.lat + ',' + e.latlng.lng
+                            this.postData.activityPlace =
+                                e.latlng.lat + ',' + e.latlng.lng
                             this.$forceUpdate()
                         }
                     })
@@ -1307,7 +1392,8 @@
             },
             handChangeNodePost(value) {
                 this.postData.courseClassificationId = value[value.length - 1]
-                this.postData.coursePath = value.join(',')
+                this.postData.courseClassificationName = value.join(',')
+                // this.postData.courseClassificationName = value.join()
                 this.getCourseList({
                     classificationId: value[value.length - 1]
                 })
@@ -1327,12 +1413,15 @@
                 })
             },
             postActivity() {
-                this.postData.activityTag = 'sd,dfg'
+                this.postData.recommend = 0
+                // this.postData.activityTag = 'sd,dfg'
                 console.log(this.postData)
-                // this.postData.activityTag = this.postFakeData.activityTag.join(';')
+                this.postData.activityTag = this.postFakeData.activityTag.join(
+                    ';'
+                )
                 activityPost(this.postData).then(value => {
                     this.msgSuccess('添加成功')
-                    consoel.log(value)
+                    console.log(value)
                 })
             },
             /**
@@ -1388,7 +1477,7 @@
                         'dict_sc_train_program_rank',
                         'dict_sc_activity_integral_scheme',
                         'dict_sc_activity_evaluate_scheme',
-                        'dict_sc_activity_flower_scheme',
+                        'dict_sc_activity_flower_scheme'
                     ]
 
                     value.forEach((item, index) => {
@@ -1508,7 +1597,10 @@
         computed: {
             computedStatus() {
                 return status => {
-                    return status!=null && this.dict_sc_activity_status[status]?.dictLabel
+                    return (
+                        status != null &&
+                        this.dict_sc_activity_status[status]?.dictLabel
+                    )
                 }
             }
         },
@@ -1519,7 +1611,12 @@
             this.getClassificationList() //查询分类列表
 
             deptListByType({ type: 1 }).then(value => {
-                this.deptListMap = Object.entries(value.data)
+                this.deptList = value.data
+                console.log(value,'deptlist')
+            })
+            deptListByType({ type: 3 }).then(value => {
+                this.groupList = value.data
+                console.log(this.groupList,'grouplist')
             })
         },
         mounted() {

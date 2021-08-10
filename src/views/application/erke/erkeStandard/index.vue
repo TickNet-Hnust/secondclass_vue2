@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-05 15:28:25
+ * @LastEditTime: 2021-08-10 11:53:38
 -->
 <template>
     <div class="app-container">
@@ -220,8 +220,8 @@
                 <el-table
                     :data="datadata"
                     stripe
-                    :default-sort="{ prop: 'sort' }"
                 >
+                    <!-- :default-sort="{ prop: 'sort' }" -->
                     <el-table-column
                         lable="sdf"
                         width="40"
@@ -467,13 +467,11 @@
         filterNameAndType,
         format
     } from '@/utils/gather'
-    
+
     import removeChild from '@/utils/removeChild.js'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
-    import {
-        importTemplate
-    } from '@/api/system/user'
+    import { importTemplate } from '@/api/system/user'
     import { getToken } from '@/utils/auth'
 
     export default {
@@ -728,18 +726,19 @@
              */
 
             addManagerDialog() {
+                console.log(this.datadata,777)
                 this.datadata.push({
                     id: null,
                     pid: 0,
                     sort: '',
                     name: ''
                 })
-                this.$nextTick(() => {
-                    let tableBody = document.querySelector(
-                        '.managerDialog .el-table__body-wrapper'
-                    )
-                    tableBody.scrollTop = 9999
-                })
+                // this.$nextTick(() => {
+                //     let tableBody = document.querySelector(
+                //         '.managerDialog .el-table__body-wrapper'
+                //     )
+                //     tableBody.scrollTop = 9999
+                // })
             },
             /**
              * @description: 类别配置 -
@@ -876,8 +875,10 @@
                 }
                 this.datadata.forEach(item => {
                     console.log(item, 11)
-                    !!item.children && this.$delete(item, item.children)
+                    item.hasOwnProperty('children') && delete item.children && this.$delete(item, item.children)
+                    item.hasOwnProperty('__parent__') && delete item.__parent__ && this.$delete(item, item.__parent__)
                 })
+                console.log(this.datadata,123)
                 courseClassificationMulti({
                     deleteIds: this.deleteIds,
                     courseClassificationEntityList: this.datadata
@@ -906,7 +907,7 @@
              * @param index 某行下标
              */
             async updateData(row, index) {
-                console.log(row, index)
+                console.log(row, index,'updata')
                 this.addStardardDialog.open = true
                 this.clearForm()
                 this.postCourseClassification = {
