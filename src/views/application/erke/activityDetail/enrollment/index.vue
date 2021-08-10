@@ -150,7 +150,7 @@
                                                 data-text
                                                 placeholder="学号"
                                                 v-model="queryList.userName"
-                                                @input="fuzzyQuery"
+                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -161,7 +161,7 @@
                                                 data-text
                                                 placeholder="姓名"
                                                 v-model="queryList.nickName"
-                                                @input="fuzzyQuery"
+                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -224,7 +224,7 @@
                                                 start-placeholder="开始日期"
                                                 end-placeholder="结束日期"
                                                 align="right"
-                                                @change="enrollDateChange"
+                                                @change="fuzzyQuery"
                                             >
                                             </el-date-picker>
                                         </el-form-item>
@@ -355,7 +355,7 @@
                         <pagination
                             v-show="queryParams.totalPage > 0"
                             :total="queryParams.totalCount"
-                            :page.sync="queryParams.pageCount"
+                            :page.sync="queryParams.pageNum"
                             :limit.sync="queryParams.pageSize"
                             @pagination="getList($event)"
                         />
@@ -439,7 +439,6 @@
         activityEnrollList,
         activityEnrollVerify
     } from '@/api/application/secondClass/index'
-
     import {
         getDept,
         listDeptExcludeChild,
@@ -447,13 +446,19 @@
     } from '@/api/system/dept.js'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
-    import { format } from '@/utils/gather'
+    import {
+        transformDate
+    } from '@/utils/gather'
+import importTableVue from '../../../../tool/gen/importTable.vue'
+
 
     export default {
         name: 'Enroll',
         data() {
             return {
-                loading: false,
+                count:0,
+                timer:'',
+                loading:false,
                 //单个审核报名会话框表单参数form
                 form: {},
                 //单个审核报名会话框数据
@@ -511,10 +516,9 @@
                 //分页请求参数
                 queryParams: {
                     totalCount: 0,
-                    totalPage: 50,
-                    pageCount: 1,
-                    pageSize: 4,
-                    currPage: 1
+                    totalPage: 0,
+                    pageNum: 1,
+                    pageSize: 10,
                 },
                 //下拉操作
                 action: '',
@@ -524,10 +528,6 @@
                     nickName: '',
                     enrollStatus: '',
                     admissionStatus: '',
-                    //学生开始报名时间
-                    beginCreateTime: '',
-                    //学生取消报名时间
-                    endCreateTime: ''
                 },
 
                 //报名列表
@@ -608,6 +608,23 @@
             }
         },
         methods: {
+            //模糊查询防抖
+            debounceFuzzyQuery(func,delayTime){
+                return function(){
+                    clearTimeout(this.timer);
+                    console.log(this.count,'搜索次数');
+                    if(this.count==0)
+                    {
+                        func();
+                        this.count++;
+                    }else{
+                        this.timer = setTimeout( ()=>{
+                        func();
+                        this.count++;
+                        },delayTime )
+                    }
+                }.bind(this)
+            },
             //操作分页触发的事件
             getList(option) {
                 this.queryParams.pageNum = option.page
@@ -625,7 +642,7 @@
                         beginCreateTime: '',
                         endCreateTime: ''
                     })
-                ;(this.value2 = ''), this.fuzzyQuery()
+                ;(this.value2 = '',this.count=0,this.timer=''), this.fuzzyQuery()
             },
             //格式化群组 要使用群组字典
             formatGroup(row, column, cellValue) {
@@ -717,9 +734,9 @@
                 this.examEnrollDialog.post = {
                     activityId: row.activityId,
                     content: '',
-                    ids: row.id,
+                    ids: [row.id],
                     status: row.admissionStatus,
-                    userIds: row.userId
+                    userIds: [row.userId]
                 }
 
                 console.log(this.examEnrollDialog.post)
@@ -753,15 +770,6 @@
             //格式化时间
             formatDate(row, column, cellValue) {
                 return cellValue != null && format(cellValue)
-            },
-            //筛选报名时间触发的事件
-            enrollDateChange() {
-                //发送时间的格式还需要调整一下
-                if (this.value2 != null) {
-                    this.queryList.beginCreateTime = this.value2[0]
-                    this.queryList.endCreateTime = this.value2[1]
-                    this.fuzzyQuery()
-                }
             },
             //点击左下角部门触发的事件
             handleSelect(index) {
@@ -812,15 +820,19 @@
                     nickName: this.queryList.nickName,
                     enrollStatus: this.queryList.enrollStatus,
                     admissionStatus: this.queryList.admissionStatus,
-                    // params:{
-                    beginCreateTime: this.queryList.beginCreateTime,
-                    endCreateTime: this.queryList.endCreateTime,
-                    // },
-                    page: this.queryParams.pageCount,
-                    limit: this.queryParams.pageSize,
+                    params:{
+                    // beginCreateTime: this.queryList.beginCreateTime,
+                    // endCreateTime: this.queryList.endCreateTime,
+                    },
+                    pageNum: this.queryParams.pageNum,
+                    pageSize: this.queryParams.pageSize,
                     activityId: this.$route.params.aid,
                     orderByColumn: '',
                     isAsc: ''
+                }
+                if (this.value2) {
+                    option.params.beginCreateTime =  transformDate(this.value2)[0]
+                    option.params.endCreateTime =  transformDate(this.value2 )[1]
                 }
                 console.log(option, '发送的数据')
                 this.getEnrollList(option)
@@ -835,7 +847,7 @@
                     // this.queryParams.pageSize = value.data.pageSize
                     // this.queryParams.totalPage = value.data.totalPage
                     // this.queryParams.currPage = value.data.currPage
-                    this.queryParams.pageCount = Math.ceil(
+                    this.queryParams.totalPage = Math.ceil(
                         this.queryParams.totalCount / this.queryParams.pageSize
                     )
                     this.enrollList = value.rows
@@ -874,6 +886,8 @@
             this.fuzzyQuery()
 
             this.getDeptIdMapDeptName()
+
+            this.refresh()
         }
     }
 </script>
@@ -951,6 +965,7 @@
         top: 0;
     }
     .erke-buttom-right {
+        overflow: auto;
         background-color: #fff;
         margin-left: 305px;
         height: calc(100vh - 315px);

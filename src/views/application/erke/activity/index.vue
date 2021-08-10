@@ -1594,6 +1594,7 @@
                     option.params.beginCreateTime = fuckMan[0]
                     option.params.endCreateTime = fuckMan[1]
                 }
+                console.log(option,'发送的数据')
                 this.getActivityList(option)
             }
         },

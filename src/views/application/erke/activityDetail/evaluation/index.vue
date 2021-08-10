@@ -33,21 +33,19 @@
 
                                     <el-col :span="1" style="min-width: 185px">
                                         <el-form-item label="学号：">
-                                            <el-input
-                                                data-text
-                                                placeholder="学号"
-                                                v-model="queryList.userName"
-                                                @input="fuzzyQuery"
+                                            <el-input data-text
+                                            placeholder="学号"
+                                            v-model="queryList.userName"
+                                            @input="debounceFuzzyQuery(fuzzyQuery,500)()"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="1" style="min-width: 185px">
                                         <el-form-item label="姓名：">
-                                            <el-input
-                                                data-text
-                                                placeholder="姓名"
-                                                v-model="queryList.nickName"
-                                                @input="fuzzyQuery"
+                                            <el-input data-text
+                                            placeholder="姓名"
+                                            v-model="queryList.nickName"
+                                            @input="debounceFuzzyQuery(fuzzyQuery,500)()"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -83,7 +81,7 @@
                                                 start-placeholder="开始日期"
                                                 end-placeholder="结束日期"
                                                 align="right"
-                                                @change="evaluationDateChange"
+                                                @change="fuzzyQuery"
                                             >
                                             </el-date-picker>
                                         </el-form-item>
@@ -157,6 +155,7 @@
                             >
                                 <template slot-scope="scope">
                                     <el-button
+                                        v-if="scope.row.status<4"
                                         size="mini"
                                         round
                                         :class="sureClassEvaluation(scope.row)"
@@ -279,6 +278,9 @@
         activityEvaluationList,
         activityEvaluationVerify
     } from '@/api/application/secondClass/index'
+    import {
+        transformDate
+    } from '@/utils/gather'
     import {
         trainingProgramDetail,
         trainingProgramList,
@@ -403,7 +405,24 @@
                 }
             }
         },
-        methods: {
+        methods:{
+            //模糊查询防抖
+            debounceFuzzyQuery(func,delayTime){
+                return function(){
+                    clearTimeout(this.timer);
+                    console.log(this.count,'搜索次数');
+                    if(this.count==0)
+                    {
+                        func();
+                        this.count++;
+                    }else{
+                        this.timer = setTimeout( ()=>{
+                        func();
+                        this.count++;
+                        },delayTime )
+                    }
+                }.bind(this)
+            },
             //会话框取消
             cancel() {
                 this.examEvaluationDialog.open = false
@@ -481,14 +500,7 @@
                 }
                 ;(this.value2 = ''), this.fuzzyQuery()
             },
-            evaluationDateChange() {
-                //发送时间的格式还需要调整一下
-                if (this.value2 != null) {
-                    this.queryList.createStartTime = this.value2[0]
-                    this.queryList.createEndTime = this.value2[1]
-                    this.fuzzyQuery()
-                }
-            },
+            
             /**
              * @description: 确定CSS类
              * @param {*} row
@@ -521,17 +533,21 @@
                     activityId: this.$route.params.aid,
                     userName: this.queryList.userName,
                     nickName: this.queryList.nickName,
-                    status: this.queryList.status,
-                    // params:{
-                    beginCreateTime: this.queryList.createStartTime,
-                    endCreateTime: this.queryList.createEndTime,
-                    // },
+                    status:this.queryList.status,
+                    params:{
+                    // beginCreateTime:this.queryList.createStartTime,
+                    // endCreateTime:this.queryList.createEndTime,
+                    },
                     page: this.queryParams.pageCount,
                     limit: this.queryParams.pageSize
                     // orderByColumn:'',
                     // isAsc:''
                 }
-                console.log(option, 'fuzzyQuery发送的数据')
+                if (this.value2) {
+                    option.params.beginCreateTime =  transformDate(this.value2)[0]
+                    option.params.endCreateTime =  transformDate(this.value2 )[1]
+                }
+                console.log(option,'fuzzyQuery发送的数据')
                 this.getEvaluationList(option)
             },
             getEvaluationList(option) {

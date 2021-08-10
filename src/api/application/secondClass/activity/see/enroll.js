@@ -2,8 +2,8 @@
  * @Descripttion:
  * @Author: 林舒恒
  * @Date: 2021-08-05 11:09:58
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-05 14:33:46
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-08-10 12:26:21
  */
 import request from '@/utils/request.js'
 
@@ -35,10 +35,10 @@ export function activityEnrollList(params) {
  * @description: 活动报名批量审核
  * @param {*} params
  */
-export function activityEnrollVerify(params) {
+export function activityEnrollVerify(data) {
     return request({
         url: '/admins/secondClass/activity/enroll/verify',
         method: 'put',
-        params
+        data
     })
 }

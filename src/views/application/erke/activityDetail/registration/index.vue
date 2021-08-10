@@ -152,7 +152,7 @@
                                                 data-text
                                                 placeholder="学号"
                                                 v-model="queryList.userName"
-                                                @input="fuzzyQuery"
+                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -163,7 +163,7 @@
                                                 data-text
                                                 placeholder="姓名"
                                                 v-model="queryList.nickName"
-                                                @input="fuzzyQuery"
+                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -224,7 +224,7 @@
                                                 start-placeholder="开始日期"
                                                 end-placeholder="结束日期"
                                                 align="right"
-                                                @change="LeaveDateChange"
+                                                @change="fuzzyQuery"
                                             >
                                             </el-date-picker>
                                         </el-form-item>
@@ -382,6 +382,10 @@
         listDeptExcludeChild,
         listDept
     } from '@/api/system/dept.js'
+    
+    import {
+        transformDate
+    } from '@/utils/gather'
 
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
@@ -483,6 +487,23 @@
             }
         },
         methods: {
+            //模糊查询防抖
+            debounceFuzzyQuery(func,delayTime){
+                return function(){
+                    clearTimeout(this.timer);
+                    console.log(this.count,'搜索次数');
+                    if(this.count==0)
+                    {
+                        func();
+                        this.count++;
+                    }else{
+                        this.timer = setTimeout( ()=>{
+                        func();
+                        this.count++;
+                        },delayTime )
+                    }
+                }.bind(this)
+            },
             refresh() {
                 ;(this.action = ''),
                     (this.queryList = {
@@ -543,19 +564,6 @@
                 this.queryParams.pageNum = option.page
                 this.queryParams.pageSize = option.limit
                 this.fuzzyQuery()
-            },
-            LeaveDateChange() {
-                //发送时间的格式还需要调整一下
-                if (this.value2 != null) {
-                    this.queryList.registeStartTime = this.value2[0]
-                    this.queryList.registeEndTime = this.value2[1]
-                    console.log(this.queryList.registeStartTime)
-                    console.log(
-                        this.queryList.registeEndTime,
-                        '开始日期和结束日期'
-                    )
-                    this.fuzzyQuery()
-                }
             },
             formatStatus(row, column, cellValue) {
                 return (
@@ -641,15 +649,19 @@
                     nickName: this.queryList.nickName,
                     status: this.queryList.status,
                     situation: this.queryList.situation,
-                    // params:{
-                    registeStartTime: this.queryList.registeStartTime,
-                    registeEndTime: this.queryList.registeEndTime,
-                    // },
+                    params:{
+                    // registeStartTime: this.queryList.registeStartTime,
+                    // registeEndTime: this.queryList.registeEndTime,
+                    },
                     page: this.queryParams.pageCount,
                     limit: this.queryParams.pageSize,
                     activityId: this.$route.params.aid
                     // orderByColumn:'',
                     // isAsc:''
+                }
+                if (this.value2) {
+                    option.params.registeStartTime =  transformDate(this.value2)[0]
+                    option.params.registeEndTime =  transformDate(this.value2 )[1]
                 }
                 console.log(option, '发送的数据')
                 this.getRegisteList(option)

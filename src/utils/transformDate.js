@@ -2,8 +2,8 @@
  * @Descripttion:
  * @Author: 林舒恒
  * @Date: 2021-07-31 19:43:58
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-05 14:47:11
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-08-10 14:20:18
  */
 /**
  * @description:
@@ -11,7 +11,11 @@
  * @return {(2)Array[String,String]} 例如 [yyyy-mm-dd HH:MM:SS,yyyy-mm-dd HH:MM:SS]
  */
 export function transformDate(date) {
-    let format = t => {
+    return [transformDateSingle(date[0]), transformDateSingle(date[1])]
+}
+
+export function transformDateSingle(date) {
+    function format(t){
         let time = new Date(t)
         let yy = time.getFullYear()
         let mm = time.getMonth() + 1
@@ -21,5 +25,5 @@ export function transformDate(date) {
         let ss = time.getSeconds()
         return `${yy}-${mm}-${dd} ${hh}:${MM}:${ss}`
     }
-    return [format(date[0]), format(date[1])]
+    return format(date)
 }
