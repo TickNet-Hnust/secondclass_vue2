@@ -21,7 +21,7 @@
                                                 data-text
                                                 placeholder="学号"
                                                 v-model="queryList.userName"
-                                                @input="fuzzyQuery"
+                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -31,7 +31,7 @@
                                                 data-text
                                                 placeholder="姓名"
                                                 v-model="queryList.nickName"
-                                                @input="fuzzyQuery"
+                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -67,7 +67,7 @@
                                                 start-placeholder="开始日期"
                                                 end-placeholder="结束日期"
                                                 align="right"
-                                                @change="flowerDateChange"
+                                                @change="fuzzyQuery"
                                             >
                                             </el-date-picker>
                                         </el-form-item>
@@ -116,9 +116,9 @@
                                     />
                                 </template>
 
-                                <template v-if="row.picture==null" slot-scope="{ row }">
+                                <!-- <template v-if="row.picture==null" slot-scope="{ row }">
                                     该活动暂无图片上传
-                                </template>
+                                </template> -->
                             </el-table-column>
 
 
@@ -169,6 +169,9 @@
         activityFlowerList,
         activityFlowerVerify
     } from '@/api/application/secondClass/index'
+    import {
+        transformDate
+    } from '@/utils/gather'
     import {
         trainingProgramDetail,
         trainingProgramList,
@@ -275,6 +278,23 @@
         },
 
         methods: {
+            //模糊查询防抖
+            debounceFuzzyQuery(func,delayTime){
+                return function(){
+                    clearTimeout(this.timer);
+                    console.log(this.count,'搜索次数');
+                    if(this.count==0)
+                    {
+                        func();
+                        this.count++;
+                    }else{
+                        this.timer = setTimeout( ()=>{
+                        func();
+                        this.count++;
+                        },delayTime )
+                    }
+                }.bind(this)
+            },
             yes(row){
                 this.alertDialog.call(this,'同意发布',{
                     confirm:() => {
@@ -307,16 +327,6 @@
                     }
                 })
             },
-            //筛选报名时间触发的事件
-            flowerDateChange(){
-               //发送时间的格式还需要调整一下
-               if(this.value2!=null)
-               {
-                    this.queryList.createStartTime = this.value2[0];
-                    this.queryList.createEndTime = this.value2[1];
-                    this.fuzzyQuery();
-               }
-            },
             //操作分页触发的事件
             getList(option) {
                 this.queryParams.pageNum = option.page
@@ -343,15 +353,19 @@
                     userName: this.queryList.userName,
                     nickName: this.queryList.nickName,
                     status: this.queryList.status,
-                    // params:{
-                    createStartTime: this.queryList.createStartTime,
-                    createEndTime: this.queryList.createEndTime,
-                    // },
+                    params:{
+                    // createStartTime: this.queryList.createStartTime,
+                    // createEndTime: this.queryList.createEndTime,
+                    },
                     page: this.queryParams.pageCount,
                     limit: this.queryParams.pageSize
 
                     // orderByColumn:'',
                     // isAsc:''
+                }
+                if (this.value2) {
+                    option.params.createStartTime =  transformDate(this.value2)[0]
+                    option.params.createEndTime =  transformDate(this.value2 )[1]
                 }
                 console.log(option, 'fuzzyQuery发送的数据')
                 this.getFlowerList(option)

@@ -93,7 +93,7 @@
                                             <el-input data-text
                                             placeholder="姓名"
                                             v-model="queryList.nickName"
-                                            @input="fuzzyQuery"
+                                            @input="debounceFuzzyQuery(fuzzyQuery,500)()"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -103,7 +103,7 @@
                                             <el-input data-text
                                             placeholder="学号"
                                             v-model="queryList.userName"
-                                            @input="fuzzyQuery"
+                                            @input="debounceFuzzyQuery(fuzzyQuery,500)()"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>           
@@ -190,7 +190,7 @@
                                                 start-placeholder="开始日期"
                                                 end-placeholder="结束日期"
                                                 align="right"
-                                                @change="integralDateChange">
+                                                @change="fuzzyQuery">
                                             </el-date-picker>
                                         </el-form-item>
                                     </el-col>
@@ -443,6 +443,9 @@
     import {
         courseClassificationList
     } from '@/api/application/secondClass/courseClassification.js'
+    import {
+        transformDate
+    } from '@/utils/gather'
     import { 
         getDept,
         listDeptExcludeChild,
@@ -640,6 +643,23 @@
         },
 
         methods:{
+            //模糊查询防抖
+            debounceFuzzyQuery(func,delayTime){
+                return function(){
+                    clearTimeout(this.timer);
+                    console.log(this.count,'搜索次数');
+                    if(this.count==0)
+                    {
+                        func();
+                        this.count++;
+                    }else{
+                        this.timer = setTimeout( ()=>{
+                        func();
+                        this.count++;
+                        },delayTime )
+                    }
+                }.bind(this)
+            },
             formatStatus(row, column, cellValue) {
                 return (
                     cellValue != null &&
@@ -808,17 +828,6 @@
                   applyIntegral:'',
                }
             },
-            
-            //筛选报名时间触发的事件
-            integralDateChange(){
-               //发送时间的格式还需要调整一下
-               if(this.value2!=null)
-               {
-                    this.queryList.beginCreateTime = this.value2[0];
-                    this.queryList.endCreateTime = this.value2[1];
-                    this.fuzzyQuery();
-               }
-            },
             //点击左下角部门触发的事件
             handleSelect(index){
                 console.log(index);
@@ -852,14 +861,18 @@
                     reason: this.queryList.reason,
                     applyWay: this.queryList.applyWay,
                     status:this.queryList.status,
-                    // params:{
-                    beginCreateTime:this.queryList.beginCreateTime,
-                    endCreateTime:this.queryList.endCreateTime,
-                    // },
+                    params:{
+                    // beginCreateTime:this.queryList.beginCreateTime,
+                    // endCreateTime:this.queryList.endCreateTime,
+                    },
                     page: this.queryParams.pageCount,
                     limit: this.queryParams.pageSize,
                     // orderByColumn:'',
                     // isAsc:''
+                }
+                if (this.value2) {
+                    option.params.beginCreateTime =  transformDate(this.value2)[0]
+                    option.params.endCreateTime =  transformDate(this.value2 )[1]
                 }
                 console.log(option,'发送的数据')
                 this.getIntegralList(option)

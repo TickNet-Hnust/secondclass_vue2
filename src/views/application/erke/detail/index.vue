@@ -2,13 +2,8 @@
  * @Descripttion: 培养方案详情
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
-<<<<<<< HEAD
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-06 15:31:33
-=======
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-05 15:24:02
->>>>>>> 7babca7a947cfee5d6f3a388ca8dfeaddaac8552
+ * @LastEditTime: 2021-08-10 14:16:12
 -->
 <template>
     <div class="app-container">
