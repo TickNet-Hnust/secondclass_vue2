@@ -3,9 +3,9 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-31 16:54:14
+ * @LastEditTime: 2021-08-10 15:40:49
  */
-import request from '@/utils/request.bak.js'
+import request from '@/utils/request.js'
 
 /* GET查询课程详细 */
 export function courseId(id) {

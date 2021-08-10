@@ -743,7 +743,7 @@
                 this.reset()
                 this.getTreeselect()
                 getUser().then(response => {
-                    console.log(response,77777)
+                    console.log(response, 77777)
                     this.postOptions = response.data.posts
                     this.roleOptions = response.data.roles
                     this.open = true
@@ -757,7 +757,7 @@
                 this.getTreeselect()
                 const userId = row.userId || this.ids
                 getUser(userId).then(response => {
-                    console.log(response,77777)
+                    console.log(response, 77777)
                     this.form = response.data.user
                     this.postOptions = response.data.posts
                     this.roleOptions = response.data.roles

@@ -1,4 +1,4 @@
-import request from '@/utils/request.bak.js'
+import request from '@/utils/request.js'
 
 /* 获取积分类型 */
 export function getDict(type) {

@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:22
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-24 17:52:53
+ * @LastEditTime: 2021-08-10 16:36:35
 -->
 <template>
     <div class="menubar">
@@ -62,8 +62,8 @@
                 <el-menu-item index="/application/erke">
                     <template slot="title"> 第二课堂成绩单 </template>
                 </el-menu-item>
-                <el-menu-item>
-                    <template slot="title"> 学生会报名 </template>
+                <el-menu-item index="/application/group">
+                    <template slot="title"> 群组管理 </template>
                 </el-menu-item>
                 <el-menu-item>
                     <template slot="title"> 竞赛报名 </template>

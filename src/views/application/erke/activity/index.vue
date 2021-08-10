@@ -324,7 +324,7 @@
                         ></el-form-item>
 
                         <el-form-item label="活动名称：">
-                            <el-input 
+                            <el-input
                                 v-model="postData.name"
                                 placeholder="请填写活动名称"
                             ></el-input>
@@ -337,7 +337,7 @@
                                 placeholder="请选择活动主办方"
                             >
                                 <el-option
-                                    v-for="(item,index) in groupList"
+                                    v-for="(item, index) in groupList"
                                     :key="index"
                                     :value="item.deptId"
                                     :label="item.deptName"
@@ -353,16 +353,16 @@
                         </el-form-item>
 
                         <el-form-item label="指导单位：">
-                            <el-select 
+                            <el-select
                                 v-model="postData.deptId"
                                 placeholder="请选择指导单位"
                             >
                                 <el-option
-                                v-for="(item, index) in deptList"
-                                :key="index"
-                                :value="item.deptId"
-                                :label="item.deptName"
-                            ></el-option>
+                                    v-for="(item, index) in deptList"
+                                    :key="index"
+                                    :value="item.deptId"
+                                    :label="item.deptName"
+                                ></el-option>
                             </el-select>
                         </el-form-item>
 
@@ -374,7 +374,7 @@
                         </el-form-item>
 
                         <el-form-item label="学年：">
-                            <el-select 
+                            <el-select
                                 v-model="postData.schoolYearId"
                                 placeholder="请选择学年"
                             >
@@ -405,7 +405,7 @@
                         </el-form-item>
 
                         <el-form-item label="录取方式：">
-                            <el-select 
+                            <el-select
                                 v-model="postData.admissionWay"
                                 placeholder="请选择录取方式"
                             >
@@ -436,11 +436,11 @@
                                 placeholder="请选择报名范围"
                             >
                                 <el-option
-                                v-for="(item, index) in deptList"
-                                :key="index"
-                                :value="item.deptId"
-                                :label="item.deptName"
-                            ></el-option>
+                                    v-for="(item, index) in deptList"
+                                    :key="index"
+                                    :value="item.deptId"
+                                    :label="item.deptName"
+                                ></el-option>
                             </el-select>
                         </el-form-item>
 
@@ -512,7 +512,7 @@
                         ></el-form-item>
 
                         <el-form-item label="活动级别：">
-                            <el-select 
+                            <el-select
                                 v-model="postData.rankId"
                                 placeholder="请选择活动级别"
                             >
@@ -959,7 +959,7 @@
                     inputValue: ''
                 },
                 //社团群组
-                groupList:[],
+                groupList: [],
                 //学院
                 deptList: [],
                 loading: false,
@@ -1145,9 +1145,12 @@
             },
             /**
              * @description: 主办方改变
-             */            
+             */
+
             groupChange() {
-                this.postData.groupPathName = this.groupList[this.postData.groupId]
+                this.postData.groupPathName = this.groupList[
+                    this.postData.groupId
+                ]
             },
             activityRegisteDistanceChange(label) {
                 label == 0 && (this.postData.activityRegisteDistance = 0)
@@ -1612,11 +1615,11 @@
 
             deptListByType({ type: 1 }).then(value => {
                 this.deptList = value.data
-                console.log(value,'deptlist')
+                console.log(value, 'deptlist')
             })
             deptListByType({ type: 3 }).then(value => {
                 this.groupList = value.data
-                console.log(this.groupList,'grouplist')
+                console.log(this.groupList, 'grouplist')
             })
         },
         mounted() {

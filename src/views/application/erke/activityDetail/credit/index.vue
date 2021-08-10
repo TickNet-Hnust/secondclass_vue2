@@ -7,44 +7,63 @@
                         <el-row style="margin-bottom: 15px">
                             <el-col :span="10" style="min-width:450px">
                                 <span class="labelSpan"> 活动级别：</span>
-                                <span class="textSpan">{{computedRank(activityRank)}}</span>                        
+                                <span class="textSpan">{{
+                                    computedRank(activityRank)
+                                }}</span>
                             </el-col>
 
                             <el-col :span="14">
                                 <span class="labelSpan"> 积分方案：</span>
-                                <span class="textSpan">{{computedScheme(integralScheme)}}</span>
+                                <span class="textSpan">{{
+                                    computedScheme(integralScheme)
+                                }}</span>
                             </el-col>
-
                         </el-row>
 
                         <el-row style="margin-bottom: 15px">
                             <el-col :span="10" style="min-width:900px">
                                 <span class="labelSpan"> 活动分类：</span>
-                                <span class="textSpan">{{courseClassificationName}}</span>
+                                <span class="textSpan">{{
+                                    courseClassificationName
+                                }}</span>
                             </el-col>
                         </el-row>
 
                         <el-row :gutter="20">
                             <el-col :span="1" style="min-width:90px">
-                                <span > 积分规则：</span>
+                                <span> 积分规则：</span>
                             </el-col>
 
-                            <el-col :span="1" style="min-width:280px" 
-                            v-for="(item,index) in integrationRule"
-                            :key="index"
+                            <el-col
+                                :span="1"
+                                style="min-width:280px"
+                                v-for="(item, index) in integrationRule"
+                                :key="index"
                             >
-                                <el-input  :value="computedRule(item.integralType,item.integrationRange)">
+                                <el-input
+                                    :value="
+                                        computedRule(
+                                            item.integralType,
+                                            item.integrationRange
+                                        )
+                                    "
+                                >
                                     <template slot="prepend">
-                                        {{item.name}}
+                                        {{ item.name }}
                                     </template>
                                 </el-input>
                             </el-col>
-                            
                         </el-row>
 
                         <el-row style="margin-top: 15px">
-                            <el-col :span="10" style="min-width:1300px" class="explain">
-                                <span style="margin-left:10px"> 说明 ：个人积分 = 积分项 + 加分项</span>
+                            <el-col
+                                :span="10"
+                                style="min-width:1300px"
+                                class="explain"
+                            >
+                                <span style="margin-left:10px">
+                                    说明 ：个人积分 = 积分项 + 加分项</span
+                                >
                             </el-col>
                         </el-row>
                     </div>
@@ -60,53 +79,63 @@
                                     justify="space-between"
                                     style="flexWrap:wrap"
                                 >
-                                <el-col :span="1" style="min-width:80px;" >
-                                    <el-tooltip 
-                                        class="item" 
-                                        effect="dark" 
-                                        content="清空查询条件" 
-                                        placement="right">
-                                    <el-button
-                                        circle
-                                        icon="el-icon-refresh"
-                                        @click="refresh"
+                                    <el-col :span="1" style="min-width:80px;">
+                                        <el-tooltip
+                                            class="item"
+                                            effect="dark"
+                                            content="清空查询条件"
+                                            placement="right"
+                                        >
+                                            <el-button
+                                                circle
+                                                icon="el-icon-refresh"
+                                                @click="refresh"
+                                            >
+                                            </el-button>
+                                        </el-tooltip>
+                                    </el-col>
+
+                                    <el-col
+                                        :span="1"
+                                        style="min-width:150px;margin-left: -24px;"
                                     >
-                                    </el-button>
-                                    </el-tooltip>
-                                </el-col> 
-                                
-                                    <el-col :span="1" style="min-width:150px;margin-left: -24px;" >
                                         <el-form-item label="操作:">
                                             <el-select
                                                 v-model="action"
                                                 style="width:80px"
                                                 placeholder="操作"
                                             >
-                                                <el-option value="批量修改"></el-option>
-                                                <el-option value="排序"></el-option>
+                                                <el-option
+                                                    value="批量修改"
+                                                ></el-option>
+                                                <el-option
+                                                    value="排序"
+                                                ></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="姓名:">
-                                            <el-input data-text
-                                            placeholder="姓名"
-                                            v-model="queryList.nickName"
-                                            @input="fuzzyQuery"
+                                            <el-input
+                                                data-text
+                                                placeholder="姓名"
+                                                v-model="queryList.nickName"
+                                                @input="fuzzyQuery"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="学号:">
-                                            <el-input data-text
-                                            placeholder="学号"
-                                            v-model="queryList.userName"
-                                            @input="fuzzyQuery"
+                                            <el-input
+                                                data-text
+                                                placeholder="学号"
+                                                v-model="queryList.userName"
+                                                @input="fuzzyQuery"
                                             ></el-input>
                                         </el-form-item>
-                                    </el-col>           
+                                    </el-col>
 
                                     <el-col :span="1" style="min-width:205px">
                                         <el-form-item label="申报理由:">
@@ -130,7 +159,7 @@
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
-                                    
+
                                     <el-col :span="1" style="min-width:205px">
                                         <el-form-item label="认定状态:">
                                             <el-select
@@ -143,14 +172,13 @@
                                                     value=""
                                                     label="认定状态:不限"
                                                 ></el-option>
-                                               <el-option
+                                                <el-option
                                                     v-for="(item,
                                                     index) in dict_sc_activity_integral"
                                                     :key="index"
                                                     :value="item.dictValue"
                                                     :label="item.dictLabel"
                                                 ></el-option>
-
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -167,18 +195,16 @@
                                                     value=""
                                                     label="申请方式:不限"
                                                 ></el-option>
-                                               <el-option
+                                                <el-option
                                                     v-for="(item,
                                                     index) in dict_sc_activity_integral_apply_way"
                                                     :key="index"
                                                     :value="item.dictValue"
                                                     :label="item.dictLabel"
                                                 ></el-option>
-
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
-
 
                                     <el-col :span="1" style="min-width:335px">
                                         <el-form-item label="申请时间:">
@@ -190,7 +216,8 @@
                                                 start-placeholder="开始日期"
                                                 end-placeholder="结束日期"
                                                 align="right"
-                                                @change="integralDateChange">
+                                                @change="integralDateChange"
+                                            >
                                             </el-date-picker>
                                         </el-form-item>
                                     </el-col>
@@ -198,13 +225,12 @@
                             </el-form>
                         </div>
 
-                       <el-table
+                        <el-table
                             :data="integralList"
                             v-loading="loading"
                             class="integralMainTable"
                         >
                             <el-table-column type="selection" min-width="55">
-
                             </el-table-column>
 
                             <el-table-column
@@ -239,7 +265,6 @@
                                 prop="reason"
                                 label="申报理由"
                                 min-width="120"
-                                
                             >
                             </el-table-column>
 
@@ -260,18 +285,18 @@
                                     >
                                 </template>
                             </el-table-column>
-   
+
                             <el-table-column
                                 prop="applyIntegral"
                                 label="申请积分"
-                                min-width="100"                                
+                                min-width="100"
                             >
                             </el-table-column>
-                            
+
                             <el-table-column
                                 prop="confirmIntegral"
                                 label="认定积分"
-                                min-width="100"                                
+                                min-width="100"
                             >
                             </el-table-column>
 
@@ -311,7 +336,6 @@
                                 prop="confirmTime"
                                 label="认定时间"
                                 min-width="100"
-                               
                             >
                             </el-table-column>
 
@@ -326,14 +350,15 @@
                                         size="mini"
                                         type="text"
                                         icon="el-icon-s-check"
-                                        @click="examIntegralOpenDialog(scope.row)"
+                                        @click="
+                                            examIntegralOpenDialog(scope.row)
+                                        "
                                         >积分认定</el-button
                                     >
-                                   
                                 </template>
                             </el-table-column>
                         </el-table>
-                        
+
                         <pagination
                             v-show="queryParams.totalPage > 0"
                             :total="queryParams.totalCount"
@@ -361,7 +386,7 @@
                         examIntegralDialog.data.nickName
                     }}</el-col>
                 </el-row>
-                 <el-row>
+                <el-row>
                     <el-col :span="10">学号：</el-col>
                     <el-col :span="14">{{
                         examIntegralDialog.data.userName
@@ -372,11 +397,11 @@
                     <el-col :span="14">{{
                         examIntegralDialog.data.reason
                     }}</el-col>
-                </el-row> 
+                </el-row>
                 <el-row>
                     <el-col :span="10">认定状态：</el-col>
                     <el-col :span="14">{{
-                       computedStatus(examIntegralDialog.data.status) 
+                        computedStatus(examIntegralDialog.data.status)
                     }}</el-col>
                 </el-row>
                 <el-row>
@@ -384,49 +409,50 @@
                     <el-col :span="14">{{
                         computedApplyWay(examIntegralDialog.data.applyWay)
                     }}</el-col>
-                </el-row> 
+                </el-row>
 
                 <el-row>
                     <el-col :span="10">申请积分：</el-col>
                     <el-col :span="14">{{
                         examIntegralDialog.data.applyIntegral
                     }}</el-col>
-                </el-row> 
+                </el-row>
 
                 <el-row>
                     <el-col :span="10">认定积分：</el-col>
                     <el-col :span="2">
-                        <el-input data-text
-                        placeholder="认定积分"
-                        size="mini"
-                        v-model="examIntegralDialog.data.confirmIntegral"
+                        <el-input
+                            data-text
+                            placeholder="认定积分"
+                            size="mini"
+                            v-model="examIntegralDialog.data.confirmIntegral"
                         ></el-input>
                     </el-col>
-                </el-row>        
-
-                
+                </el-row>
             </el-form>
 
             <div slot="footer" class="dialog-footer">
-            <el-radio-group 
-                v-if="examIntegralDialog.title=='积分认定'"
-                v-model="examIntegralDialog.post.status" 
-                style="float:left;margin-top:15px"
-            >
-                <el-radio :label="1">认定通过</el-radio>
-                <el-radio :label="0">认定未通过</el-radio>
-            </el-radio-group>
+                <el-radio-group
+                    v-if="examIntegralDialog.title == '积分认定'"
+                    v-model="examIntegralDialog.post.status"
+                    style="float:left;margin-top:15px"
+                >
+                    <el-radio :label="1">认定通过</el-radio>
+                    <el-radio :label="0">认定未通过</el-radio>
+                </el-radio-group>
 
-            <el-input
-                type="textarea"
-                v-model="examIntegralDialog.post.content"
-                placeholder="填写认定意见"
-                rows=1
-                class="adviceText"
-            ></el-input>
+                <el-input
+                    type="textarea"
+                    v-model="examIntegralDialog.post.content"
+                    placeholder="填写认定意见"
+                    rows="1"
+                    class="adviceText"
+                ></el-input>
 
                 <el-button @click="cancel">关闭</el-button>
-                <el-button type="primary" @click="examIntegralSubmit">确 定</el-button>
+                <el-button type="primary" @click="examIntegralSubmit"
+                    >确 定</el-button
+                >
             </div>
         </el-dialog>
     </div>
@@ -434,20 +460,18 @@
 
 <script>
     //导入活动报名相关接口
-     import {
+    import {
         activityIntegral,
         activityIntegralList,
-        activityIntegralVerify,
+        activityIntegralVerify
     } from '@/api/application/secondClass/index'
 
+    import { courseClassificationList } from '@/api/application/secondClass/courseClassification.js'
     import {
-        courseClassificationList
-    } from '@/api/application/secondClass/courseClassification.js'
-    import { 
         getDept,
         listDeptExcludeChild,
         listDept
-        } from '@/api/system/dept.js'
+    } from '@/api/system/dept.js'
 
     import {
         trainingProgramDetail,
@@ -465,7 +489,6 @@
         courseDelete
     } from '@/api/application/secondClass/course'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
-
 
     import horwheel from 'horwheel'
 
@@ -491,155 +514,164 @@
         data() {
             return {
                 //积分规则数组:
-                integrationRule:[],
+                integrationRule: [],
                 //单个认定报名会话框表单参数form
-                form:{},
+                form: {},
                 //单个认定报名会话框数据
-                examIntegralDialog:{
-                     title:'积分认定',
-                     open:false,
-                     data:{
-                        nickName:'',
-                        userName:'',
-                        reason:'',
-                        status:'',
-                        applyWay:'',
-                        applyIntegral:'',
-                        confirmIntegral:'',
-                     },
-                     post:{
-                        activityId:'',
-                        content:'',
-                        ids:'',
-                        status:'',
-                        userIds:'',
-                     }
-                 },
+                examIntegralDialog: {
+                    title: '积分认定',
+                    open: false,
+                    data: {
+                        nickName: '',
+                        userName: '',
+                        reason: '',
+                        status: '',
+                        applyWay: '',
+                        applyIntegral: '',
+                        confirmIntegral: ''
+                    },
+                    post: {
+                        activityId: '',
+                        content: '',
+                        ids: '',
+                        status: '',
+                        userIds: ''
+                    }
+                },
                 //  批量认定 会话框数据数组
-                mutiExamIntegralDialogDataList:[],
+                mutiExamIntegralDialogDataList: [],
                 //成功参与
-                successfulParticipation:'积分项(定值)：1分',
-                quarterFinalist:'积分项(定值)：1.5分',
-                final:'积分项(定值)：2分',
-                champion:'加分项(定值)：3分',
-                activityRank:0,
-                courseClassificationId:0,
-                courseClassificationName:'',
-                integralScheme:0,
+                successfulParticipation: '积分项(定值)：1分',
+                quarterFinalist: '积分项(定值)：1.5分',
+                final: '积分项(定值)：2分',
+                champion: '加分项(定值)：3分',
+                activityRank: 0,
+                courseClassificationId: 0,
+                courseClassificationName: '',
+                integralScheme: 0,
                 //分页请求参数
                 queryParams: {
                     totalCount: 0,
                     totalPage: 50,
                     pageCount: 1,
                     pageSize: 4,
-                    currPage: 1,
+                    currPage: 1
                 },
                 //下拉操作
-                action:'',
+                action: '',
                 //模糊查询请求列表
-                queryList:{
-                    userName:'',
-                    nickName:'',
-                    reason:'',
-                    applyWay:'',
-                    status:'',
+                queryList: {
+                    userName: '',
+                    nickName: '',
+                    reason: '',
+                    applyWay: '',
+                    status: '',
                     // params:{
-                    beginCreateTime:'',
-                    endCreateTime:'',
+                    beginCreateTime: '',
+                    endCreateTime: ''
                 },
-                
+
                 //报名列表
-                integralList:[],
+                integralList: [],
                 //DateTimePicker
                 pickerOptions: {
-                shortcuts: [{
-                    text: '最近一周',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }, {
-                    text: '最近一个月',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }, {
-                    text: '最近三个月',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }]
+                    shortcuts: [
+                        {
+                            text: '最近一周',
+                            onClick(picker) {
+                                const end = new Date()
+                                const start = new Date()
+                                start.setTime(
+                                    start.getTime() - 3600 * 1000 * 24 * 7
+                                )
+                                picker.$emit('pick', [start, end])
+                            }
+                        },
+                        {
+                            text: '最近一个月',
+                            onClick(picker) {
+                                const end = new Date()
+                                const start = new Date()
+                                start.setTime(
+                                    start.getTime() - 3600 * 1000 * 24 * 30
+                                )
+                                picker.$emit('pick', [start, end])
+                            }
+                        },
+                        {
+                            text: '最近三个月',
+                            onClick(picker) {
+                                const end = new Date()
+                                const start = new Date()
+                                start.setTime(
+                                    start.getTime() - 3600 * 1000 * 24 * 90
+                                )
+                                picker.$emit('pick', [start, end])
+                            }
+                        }
+                    ]
                 },
                 value2: '',
                 //活动级别
-                dict_sc_train_program_rank:[],
+                dict_sc_train_program_rank: [],
                 //积分方案字典
-                dict_sc_activity_integral_scheme:[],
+                dict_sc_activity_integral_scheme: [],
                 //积分类别字典 用于积分规则中显示是 定制还是范围用的
-                dict_sc_integral_type:[],
+                dict_sc_integral_type: [],
                 //积分申请方式字典
-                dict_sc_activity_integral_apply_way:[],
+                dict_sc_activity_integral_apply_way: [],
                 //活动认定状态
-                dict_sc_activity_integral:[],
-
+                dict_sc_activity_integral: []
             }
         },
         computed: {
-            computedStatus(){
+            computedStatus() {
                 return value => {
-                    return this.dict_sc_activity_integral[value]?.dictLabel;
+                    return this.dict_sc_activity_integral[value]?.dictLabel
                 }
             },
 
-            computedApplyWay(){
+            computedApplyWay() {
                 return value => {
-                    return this.dict_sc_activity_integral_apply_way[value]?.dictLabel;
+                    return this.dict_sc_activity_integral_apply_way[value]
+                        ?.dictLabel
                 }
             },
 
-            computedRule(){
-                    return (integralType,integrationRange) => {
-
-                    if(integralType==null||integrationRange==null)
-                    {
+            computedRule() {
+                return (integralType, integrationRange) => {
+                    if (integralType == null || integrationRange == null) {
                         return '积分类型或范围为空'
+                    } else {
+                        return (
+                            '积分项(' +
+                            this.dict_sc_integral_type[integralType] +
+                            '):' +
+                            integrationRange
+                        )
                     }
-                    else{
-                        return '积分项('+this.dict_sc_integral_type[integralType]+'):'+integrationRange;
-                    }
-                    
                 }
-                
             },
             //取活动级别字典计算方法
-            computedRank(){
-                    return value => {
+            computedRank() {
+                return value => {
                     // console.log(this.dict_sc_course_status,temp,333)
                     // console.log(value)
-                    return this.dict_sc_train_program_rank[value]?.dictLabel;
+                    return this.dict_sc_train_program_rank[value]?.dictLabel
                 }
-                
             },
             //取级别方案字典计算方法
-            computedScheme(){
-                    return value => {
+            computedScheme() {
+                return value => {
                     // console.log(this.dict_sc_course_status,temp,333)
                     // console.log(value)
-                    return this.dict_sc_activity_integral_scheme[value]?.dictLabel;
+                    return this.dict_sc_activity_integral_scheme[value]
+                        ?.dictLabel
                 }
-                
-            },
+            }
         },
 
-        methods:{
+        methods: {
             formatStatus(row, column, cellValue) {
                 return (
                     cellValue != null &&
@@ -649,13 +681,15 @@
             formatApplyWay(row, column, cellValue) {
                 return (
                     cellValue != null &&
-                    this.dict_sc_activity_integral_apply_way[cellValue]?.dictLabel
+                    this.dict_sc_activity_integral_apply_way[cellValue]
+                        ?.dictLabel
                 )
             },
             /**
              * @description: 确定CSS类
              * @param {*} row
-             */            
+             */
+
             sureClassStatus(row) {
                 if (row.status == 0) {
                     //ing
@@ -687,35 +721,34 @@
                 }
             },
             //操作分页触发的事件
-            getList(option){
+            getList(option) {
                 this.queryParams.pageNum = option.page
                 this.queryParams.pageSize = option.limit
                 this.fuzzyQuery()
             },
             //清空查询条件
             refresh() {
-                this.action='',
-                this.queryList={
-                     userName:'',
-                    nickName:'',
-                    reason:'',
-                    applyWay:'',
-                    status:'',
-                    // params:{
-                    beginCreateTime:'',
-                    endCreateTime:'',
-                }
-                this.value2='',
-                this.fuzzyQuery()
+                ;(this.action = ''),
+                    (this.queryList = {
+                        userName: '',
+                        nickName: '',
+                        reason: '',
+                        applyWay: '',
+                        status: '',
+                        // params:{
+                        beginCreateTime: '',
+                        endCreateTime: ''
+                    })
+                ;(this.value2 = ''), this.fuzzyQuery()
             },
-            
+
             /**
              * @description: 确定CSS类
              * @param {*} row
-             */            
+             */
+
             sureClassIntegral(row) {
-                
-                   if (row.integralStatus == 0) {
+                if (row.integralStatus == 0) {
                     //ing
                     return 'textPlain'
                 } else if (row.integralStatus == 1) {
@@ -727,11 +760,10 @@
                 } else {
                     //unpass
                     return 'textRed'
-                } 
+                }
             },
             sureClassAdmission(row) {
-                
-                   if (row.admissionStatus == 0) {
+                if (row.admissionStatus == 0) {
                     //ing
                     return 'textPlain'
                 } else if (row.admissionStatus == 1) {
@@ -743,52 +775,57 @@
                 } else {
                     //unpass
                     return 'textRed'
-                } 
+                }
             },
             //认定点击事件 开打会话框
-            examIntegralOpenDialog(row){
+            examIntegralOpenDialog(row) {
                 //渲染会话框数据
                 this.renderState(row)
-                this.examIntegralDialog.title='积分认定'
-               
+                this.examIntegralDialog.title = '积分认定'
             },
             //渲染会话框数据 打开会话框
-            renderState(row){
-                console.log(row);
-                this.examIntegralDialog.data={
-                  nickName:row.nickName,
-                  userName:row.userName,
-                  reason:row.reason,
-                  status:row.status,
-                  applyWay:row.applyWay,
-                  applyIntegral:row.applyIntegral,
-                  confirmIntegral:row.confirmIntegral,
-                  id:row.id, 
-                };
+            renderState(row) {
+                console.log(row)
+                this.examIntegralDialog.data = {
+                    nickName: row.nickName,
+                    userName: row.userName,
+                    reason: row.reason,
+                    status: row.status,
+                    applyWay: row.applyWay,
+                    applyIntegral: row.applyIntegral,
+                    confirmIntegral: row.confirmIntegral,
+                    id: row.id
+                }
 
-                this.examIntegralDialog.post={
-                  activityId:row.activityId,
-                  content:'',
-                  idIntegral:{
-                      [row.id] : row.confirmIntegral
-                     
-                  },
-                //   idIntegral[row.id]=row.confirmIntegral,
-                  userIds:[row.userId],
-                  status:row.status,  
-                };
-                this.examIntegralDialog.open = true;
+                this.examIntegralDialog.post = {
+                    activityId: row.activityId,
+                    content: '',
+                    idIntegral: {
+                        [row.id]: row.confirmIntegral
+                    },
+                    //   idIntegral[row.id]=row.confirmIntegral,
+                    userIds: [row.userId],
+                    status: row.status
+                }
+                this.examIntegralDialog.open = true
             },
             //会话积分认定确定
-            examIntegralSubmit(){
+            examIntegralSubmit() {
                 //在点击确定之后 给idIntegral对象重新赋新修改的值
-                this.examIntegralDialog.post.idIntegral[this.examIntegralDialog.data.id] = this.examIntegralDialog.data.confirmIntegral;
-                console.log((this.examIntegralDialog.post),'积分认定确定后发送的数据');
-                activityIntegralVerify((this.examIntegralDialog.post)).then(value=>{
-                    console.log(value,'积分认定操作成功的返回！');
-                    this.examIntegralDialog.open = false
-                    this.fuzzyQuery()
-                })
+                this.examIntegralDialog.post.idIntegral[
+                    this.examIntegralDialog.data.id
+                ] = this.examIntegralDialog.data.confirmIntegral
+                console.log(
+                    this.examIntegralDialog.post,
+                    '积分认定确定后发送的数据'
+                )
+                activityIntegralVerify(this.examIntegralDialog.post).then(
+                    value => {
+                        console.log(value, '积分认定操作成功的返回！')
+                        this.examIntegralDialog.open = false
+                        this.fuzzyQuery()
+                    }
+                )
                 // console.log(this.examIntegralDialog.post,'积分认定确定后发送的数据');
                 // console.log(JSON.stringify(this.examIntegralDialog.post),'积分认定确定后发送的数据');
             },
@@ -798,97 +835,96 @@
                 this.reset()
             },
             //会话框数据重置
-            reset(){
-               this.examIntegralDialog.data={
-                  nickName:'',
-                  userName:'',
-                  reason:'',
-                  status:'',
-                  applyWay:'',
-                  applyIntegral:'',
-               }
+            reset() {
+                this.examIntegralDialog.data = {
+                    nickName: '',
+                    userName: '',
+                    reason: '',
+                    status: '',
+                    applyWay: '',
+                    applyIntegral: ''
+                }
             },
-            
+
             //筛选报名时间触发的事件
-            integralDateChange(){
-               //发送时间的格式还需要调整一下
-               if(this.value2!=null)
-               {
-                    this.queryList.beginCreateTime = this.value2[0];
-                    this.queryList.endCreateTime = this.value2[1];
-                    this.fuzzyQuery();
-               }
+            integralDateChange() {
+                //发送时间的格式还需要调整一下
+                if (this.value2 != null) {
+                    this.queryList.beginCreateTime = this.value2[0]
+                    this.queryList.endCreateTime = this.value2[1]
+                    this.fuzzyQuery()
+                }
             },
             //点击左下角部门触发的事件
-            handleSelect(index){
-                console.log(index);
-               if(index!='')
-               {
-                  this.deptId = Object.entries(this.tabInfo)[index][0];
-               }else{
-                  this.deptId=''
-               }
-               this.fuzzyQuery()
+            handleSelect(index) {
+                console.log(index)
+                if (index != '') {
+                    this.deptId = Object.entries(this.tabInfo)[index][0]
+                } else {
+                    this.deptId = ''
+                }
+                this.fuzzyQuery()
             },
             //通过活动id获取当前活动报名信息函数
-            getActivityIntegral(option){
-               activityIntegral(option).then(async value => {
-                console.log(value,'活动积分管理总信息');
-                this.activityRank = value.data.activityRank;
-                this.courseClassificationId = value.data.courseClassificationId;
-                this.courseClassificationName = value.data.courseClassificationName;
-                this.integralScheme = value.data.integralScheme;
-                await this.getCourseClassificationList()
-               
-            })
-           },
-           
-           /**获得当前情况下的报名管理列表  模糊查询 */
+            getActivityIntegral(option) {
+                activityIntegral(option).then(async value => {
+                    console.log(value, '活动积分管理总信息')
+                    this.activityRank = value.data.activityRank
+                    this.courseClassificationId =
+                        value.data.courseClassificationId
+                    this.courseClassificationName =
+                        value.data.courseClassificationName
+                    this.integralScheme = value.data.integralScheme
+                    await this.getCourseClassificationList()
+                })
+            },
+
+            /**获得当前情况下的报名管理列表  模糊查询 */
             fuzzyQuery() {
                 let option = {
-                    activityId:this.$route.params.aid,
-                    userName:this.queryList.userName,
+                    activityId: this.$route.params.aid,
+                    userName: this.queryList.userName,
                     nickName: this.queryList.nickName,
                     reason: this.queryList.reason,
                     applyWay: this.queryList.applyWay,
-                    status:this.queryList.status,
+                    status: this.queryList.status,
                     // params:{
-                    beginCreateTime:this.queryList.beginCreateTime,
-                    endCreateTime:this.queryList.endCreateTime,
+                    beginCreateTime: this.queryList.beginCreateTime,
+                    endCreateTime: this.queryList.endCreateTime,
                     // },
                     page: this.queryParams.pageCount,
-                    limit: this.queryParams.pageSize,
+                    limit: this.queryParams.pageSize
                     // orderByColumn:'',
                     // isAsc:''
                 }
-                console.log(option,'发送的数据')
+                console.log(option, '发送的数据')
                 this.getIntegralList(option)
             },
-            
-            getIntegralList(option){
-                 this.loading = true
-                 activityIntegralList(option).then(value => {
+
+            getIntegralList(option) {
+                this.loading = true
+                activityIntegralList(option).then(value => {
                     /** 总共多少条，总共多少页 */
-                    this.queryParams.totalCount  = value.total
+                    this.queryParams.totalCount = value.total
                     // this.queryParams.pageSize = value.data.pageSize
                     // this.queryParams.totalPage = value.data.totalPage
                     // this.queryParams.currPage = value.data.currPage
-                    this.queryParams.pageCount = Math.ceil(this.queryParams.totalCount/this.queryParams.pageSize);
-                    this.integralList = value.rows;
-                    console.log(this.integralList,'传来的数据');
+                    this.queryParams.pageCount = Math.ceil(
+                        this.queryParams.totalCount / this.queryParams.pageSize
+                    )
+                    this.integralList = value.rows
+                    console.log(this.integralList, '传来的数据')
                     this.loading = false
-                    
                 })
             },
-            initDict(){
-              // getDict
+            initDict() {
+                // getDict
                 Promise.all([
                     getDict('sc_train_program_rank'),
                     getDict('sc_activity_integral_scheme'),
                     getDict('sc_integral_type'),
                     getDict('sc_activity_integral_apply_way'),
                     getDict('sc_activity_integral')
-             
                 ]).then(value => {
                     console.log(value, 'initDict')
                     let tempArr = [
@@ -904,33 +940,28 @@
                 })
             },
             getCourseClassificationList(option) {
-                courseClassificationList(option).then(value => {                   
-                    console.log(value,'课程分类列表!');
-                    value.data.forEach((item,index)=>{
-                        if(item.pid == this.courseClassificationId)
-                        {
-                            
-                            this.integrationRule.push(item);
+                courseClassificationList(option).then(value => {
+                    console.log(value, '课程分类列表!')
+                    value.data.forEach((item, index) => {
+                        if (item.pid == this.courseClassificationId) {
+                            this.integrationRule.push(item)
                         }
                     })
-                    console.log(this.integrationRule,'integrationRule数组');
-
+                    console.log(this.integrationRule, 'integrationRule数组')
                 })
-            },   
+            }
         },
-        
+
         async created() {
             //初始化字典
             this.initDict()
             /** 通过活动id获取当前活动报名信息，aid代码活动id*/
             this.getActivityIntegral({
                 activityId: this.$route.params.aid
-            });
+            })
             /** 获得当前情况下的报名管理列表 */
             this.fuzzyQuery()
-
-            
-        },
+        }
     }
 </script>
 
@@ -938,15 +969,15 @@
     /* .champion >>> div{
         background-color:#93d6dc;
     } */
-    .el-row >>> .explain{
-        background-color:#93d6dc;
+    .el-row >>> .explain {
+        background-color: #93d6dc;
         height: 30px;
         line-height: 30px;
     }
-   .adviceText{
-       margin: 10px 0px;
-   }
-   .textRed {
+    .adviceText {
+        margin: 10px 0px;
+    }
+    .textRed {
         color: #de3c50;
     }
     .textgreen {
