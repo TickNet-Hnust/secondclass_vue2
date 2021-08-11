@@ -2,8 +2,8 @@
  * @Descripttion: 积分标准
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-10 11:53:38
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-08-10 16:10:40
 -->
 <template>
     <div class="app-container">
