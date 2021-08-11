@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-10 17:03:31
+ * @LastEditTime: 2021-08-11 15:36:00
 -->
 <template>
     <div class="app-container">
@@ -14,12 +14,6 @@
             <el-col :span="24" :xs="24">
                 <div class="erke-top">
                     <div class="erke-top-head">
-                        <router-link to="/application/erke/erkePlan"
-                            ><el-button
-                                circle
-                                icon="el-icon-arrow-left"
-                            ></el-button
-                        ></router-link>
                         <span> <i>✈</i> 群组管理</span>
                     </div>
                     <div class="erke-top-foot">
@@ -29,7 +23,14 @@
                                 style="margin-right: 10px"
                                 placeholder="0"
                             >
-                                <template slot="prepend">课程总数</template>
+                                <template slot="prepend">群组总数</template>
+                            </el-input>
+
+                            <el-input
+                                style="margin-right: 10px"
+                                placeholder="0"
+                            >
+                                <template slot="prepend">有效群组</template>
                             </el-input>
 
                             <el-input
@@ -43,14 +44,7 @@
                                 style="margin-right: 10px"
                                 placeholder="0"
                             >
-                                <template slot="prepend">审核通过</template>
-                            </el-input>
-
-                            <el-input
-                                style="margin-right: 10px"
-                                placeholder="0"
-                            >
-                                <template slot="prepend">审核未通过</template>
+                                <template slot="prepend">已解散</template>
                             </el-input>
                         </div>
 
@@ -69,7 +63,23 @@
                             icon="el-icon-download"
                             size="mini"
                             v-hasPermi="['system:user:export']"
+                            >导入</el-button
+                        >
+                        <el-button
+                            type="info"
+                            plain
+                            icon="el-icon-download"
+                            size="mini"
+                            v-hasPermi="['system:user:export']"
                             >导出</el-button
+                        >
+                        <el-button
+                            type="info"
+                            plain
+                            icon="el-icon-sort"
+                            size="mini"
+                            v-hasPermi="['system:user:export']"
+                            >排序</el-button
                         >
                         <el-tooltip
                             effect="dark"
@@ -87,106 +97,214 @@
 
                 <div class="erke-bottom">
                     <div class="erke-buttom-left">
-                        
+                        <el-tabs>
+                            <el-tab-pane label="根据分类">
+                                <el-menu>
+                                    <el-menu-item>
+                                        <span slot="title">全部</span>
+                                    </el-menu-item>
+                                    <el-menu-item>
+                                        <span slot="title">班级</span>
+                                    </el-menu-item>
+                                    <el-menu-item>
+                                        <span slot="title">社团与协会</span>
+                                    </el-menu-item>
+                                    <el-menu-item>
+                                        <span slot="title">年级组</span>
+                                    </el-menu-item>
+                                    <el-menu-item>
+                                        <span slot="title">校学生会组织</span>
+                                    </el-menu-item>
+                                    <el-menu-item>
+                                        <span slot="title">院学生会组织</span>
+                                    </el-menu-item>
+                                    <el-menu-item>
+                                        <span slot="title">校团委</span>
+                                    </el-menu-item>
+                                    <el-menu-item>
+                                        <span slot="title">院团委</span>
+                                    </el-menu-item>
+                                    <el-menu-item>
+                                        <span slot="title">校社联</span>
+                                    </el-menu-item>
+                                </el-menu>
+                            </el-tab-pane>
+                            <el-tab-pane label="根据指导单位">
+                                <el-menu>
+                                    <el-menu>
+                                    <el-menu-item>
+                                        <span slot="title">全部</span>
+                                    </el-menu-item>
+                                    <el-menu-item>
+                                        <span slot="title">资环环境与安全工程学院</span>
+                                    </el-menu-item>
+                                    <el-menu-item>
+                                        <span slot="title">土木工程学院</span>
+                                    </el-menu-item>
+                                    <el-menu-item>
+                                        <span slot="title">机械工程学院</span>
+                                    </el-menu-item>
+                                    <el-menu-item>
+                                        <span slot="title">化学化工学院</span>
+                                    </el-menu-item>
+                                </el-menu>
+                                </el-menu>
+                            </el-tab-pane>
+                        </el-tabs>
                     </div>
                     <div class="erke-buttom-right">
                         <div class="operate">
-                            <el-row
-                                :gutter="10"
-                                style="flexWrap:wrap"
-                                type="flex"
-                                justify="space-around"
-                            >
-                                <el-col :span="1" style="min-width:80px">
-                                    <el-select
-                                        style="width: 80px"
-                                        placeholder="操作"
-                                        value="批量修改"
-                                    >
-                                        <el-option value="批量修改"></el-option>
-                                        <el-option value="排序"></el-option>
-                                    </el-select>
-                                </el-col>
-                                <el-col :span="1" style="min-width:200px">
-                                    <el-input
-                                        suffix-icon="el-icon-search"
-                                        placeholder="课程名称"
-                                    >
-                                    </el-input>
-                                </el-col>
+                            <el-form>
+                                <el-row
+                                    :gutter="10"
+                                    style="flexWrap:wrap"
+                                    type="flex"
+                                    justify="space-around"
+                                >
+                                    <el-col :span="1" style="min-width:280px">
+                                        <el-form-item
+                                            label="活动名称"
+                                        >
+                                            <el-input></el-input>
+                                        </el-form-item>
+                                    </el-col>
+                                    <el-col :span="1" style="min-width:175px">
+                                        <el-form-item
+                                            label="活动ID"
+                                        >
+                                            <el-input class="data-text"></el-input>
+                                        </el-form-item>
+                                    </el-col>
 
-                                <el-col :span="1" style="min-width:100px">
-                                    <el-select
-                                    value="批量修改"
-                                        style="width: 100px"
-                                    >
-                                    </el-select>
-                                </el-col>
+                                    <el-col :span="1" style="min-width:280px">
+                                        <el-form-item
+                                            label="分类"
+                                        >
+                                            <el-select
+                                                value="全部"
+                                            >
+                                                <el-option value="全部"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
 
-                                <el-col :span="1" style="min-width:100px">
-                                    <el-select
-                                    value="批量修改"
-                                        style="width: 100px"
-                                    >
-                                        <el-option
-                                            value=""
-                                            label="必修课：不限"
-                                        ></el-option>
-                                    </el-select>
-                                </el-col>
+                                    <el-col :span="1" style="min-width:310px">
+                                        <el-form-item
+                                            label="指导单位"
+                                        >
+                                            <el-select
+                                                value="全部"
+                                            >
+                                                <el-option value="全部"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
 
-                                <el-col :span="1" style="min-width:120px">
-                                    <el-select
-                                        style="width: 120px"
-                                        value="批量修改"
-                                    >
-                                        <el-option
-                                            value=""
-                                            label="开课学期：不限"
-                                        ></el-option>
-                                    </el-select>
-                                </el-col>
+                                    <el-col :span="1" style="min-width:200px">
+                                        <el-form-item
+                                            label="指导老师"
+                                        >
+                                            <el-input class="data-text"></el-input>
+                                        </el-form-item>
+                                    </el-col>
 
-                                <el-col :span="1" style="min-width:120px">
-                                    <el-select
-                                        style="width: 120px"
-                                        value="批量修改"
-                                        placeholder="发布单位：不限"
-                                    >
-                                        <el-option
-                                            value="0"
-                                            label="发布单位：不限"
-                                        ></el-option>
+                                    <el-col :span="1" style="min-width:270px">
+                                        <el-form-item
+                                            label="状态"
+                                        >
+                                            <el-select
+                                                value="全部"
+                                            >
+                                                <el-option value="全部"></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                    </el-col>
 
-                                        <el-option value="保卫处"></el-option>
-                                        <el-option value="网络中心"></el-option>
-                                    </el-select>
-                                </el-col>
+                                    <el-col :span="1" style="min-width:180px">
+                                        <el-form-item
+                                            label="负责人"
+                                        >
+                                            <el-input class="data-text"></el-input>
+                                        </el-form-item>
+                                    </el-col>
 
-                                <el-col :span="1" style="min-width:120px">
-                                    <el-select
-                                        style="width: 120px"
-                                        value="批量修改"
-                                    >
-                                        <el-option
-                                            value=""
-                                            label="课程性质：不限"
-                                        ></el-option>
-                                    </el-select>
-                                </el-col>
+                                    <el-col :span="1" style="min-width:210px">
+                                        <el-form-item
+                                            label="负责人学号"
+                                        >
+                                            <el-input class="data-text"></el-input>
+                                        </el-form-item>
+                                    </el-col>
 
-                                <el-col :span="1" style="min-width:340px">
-                                    <el-radio-group
-                                        size="mini"
-                                    >
-                                        <el-radio-button
-                                            label="全部"
-                                        ></el-radio-button>
-                                    </el-radio-group>
-                                </el-col>
-                            </el-row>
+                                    <el-col :span="1" style="min-width:430px">
+                                        <el-form-item
+                                            label="更新时间"
+                                        >
+                                            <el-date-picker
+                                                type="daterange"
+                                                range-separator="至"
+                                                start-placeholder="开始日期"
+                                                end-placeholder="结束日期"
+                                            >
+                                                </el-date-picker>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="1" style="min-width:120px">
+                                        <el-form-item
+                                            label="推荐群组"
+                                        >
+                                            <el-switch></el-switch>
+                                        </el-form-item>
+                                    </el-col>
+
+                                    <el-col :span="1" style="min-width:140px">
+                                        <el-form-item
+                                            label=""
+                                        >
+                                            <el-button
+                                                size="mini"
+                                                type="primary"
+                                            >查询</el-button>
+                                            <el-button
+                                                size="mini"
+                                            >重置</el-button>
+                                        </el-form-item>
+                                    </el-col>
+                                </el-row>
+                            </el-form>
                         </div>
-                        
+                        <el-table
+                            :data="groupList"
+                        >
+                            <el-table-column
+                                label="ID"
+                                prop="id"
+                            ></el-table-column>
+                            <el-table-column
+                                label="群组名称"
+                                prop="name"
+                            >
+                                <template slot-scope="scope">
+                                    <router-link
+                                        class="textBlue"
+                                        :to="
+                                            '/application/group/groupDetail/' +
+                                                scope.row.id
+                                        "
+                                        >{{ scope.row.name }}</router-link
+                                    >
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                label="操作"
+                                prop=""
+                            >
+                                <template>
+                                    恢复
+                                </template>
+                            </el-table-column>
+                        </el-table>
                         <pagination
                             v-show="queryParams.totalPage > 0"
                             :total="queryParams.totalCount"
@@ -227,10 +345,16 @@
         name: 'detail',
         data() {
             return {
-    
+                groupList:[{
+                    id: 1,
+                    name: '第二课堂服务部',
+                },{
+                    id: 2,
+                    name: '第二课堂部'
+                }],
                 queryParams: {
-                    totalCount: 0,
-                    totalPage: 0,
+                    totalCount: 10,
+                    totalPage: 10,
                     pageNum: 1,
                     pageSize: 10
                 }
@@ -286,7 +410,7 @@
         width: 220px;
         float: left;
         padding: 16px;
-        height: calc(100vh - 260px);
+        height: calc(100vh - 220px);
         background-color: #fff;
         border: 1px solid #ddd;
         border-radius: 5px;
@@ -294,7 +418,7 @@
     .erke-buttom-right {
         background-color: #fff;
         margin-left: 225px;
-        height: calc(100vh - 260px);
+        height: calc(100vh - 220px);
         padding: 16px;
         border: 1px solid #ddd;
         border-radius: 5px;
@@ -471,5 +595,15 @@
     }
     .el-form .el-row {
         height: initial;
+    }
+    .el-input.data-text,
+    .el-input.data-text >>> .el-input__inner {
+        width: 110px;
+    }
+    .operate >>> .el-input__inner[data-text] {
+        width: 110px;
+    }
+    .textBlue {
+        color: #1890ff;
     }
 </style>

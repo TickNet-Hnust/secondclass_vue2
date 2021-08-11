@@ -69,6 +69,7 @@ const group = resolve => require(['@/views/application/group/index.vue'], resolv
 const guidance = resolve => require(['@/views/application/group/guidanceUnit/index.vue'], resolve)
 const groupClasify = resolve => require(['@/views/application/group/groupClasify/index.vue'], resolve)
 const groupSelf = resolve => require(['@/views/application/group/groupSelf/index.vue'], resolve)
+const groupDetail = resolve => require(['@/views/application/group/groupDetail/index.vue'], resolve)
 
 
 export const constantRoutes = [{
@@ -235,6 +236,13 @@ export const constantRoutes = [{
                             name: 'groupSelf',
                             meta: {
                                 title: '群组'
+                            }
+                        }, {
+                            path: '/application/group/groupDetail/:gid',
+                            component: groupDetail,
+                            name: 'groupDetail',
+                            meta: {
+                                title: '群组详情'
                             }
                         }, ]
                     }
