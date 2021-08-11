@@ -2,8 +2,8 @@
  * @Descripttion: 培养方案详情
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
- * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-10 14:19:12
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-08-10 17:26:00
 -->
 <template>
     <div class="app-container">
@@ -309,6 +309,7 @@
                         <el-table
                             :data="courseList"
                             v-loading="loading"
+                            stripe
                             class="detailMainTable"
                         >
                             <el-table-column type="selection" min-width="55">
@@ -1175,12 +1176,14 @@
                 this.addDetailDialog.config.lowestValue = this.addDetailDialog.lowestValueArray
                     .map(item => {
                         return item.join(':')
-                    })
-                    .join(',')
-                console.log(this.addDetailDialog.config, 999)
-                let state = that.addDetailDialog.title == '新增' ? coursePost : coursePut
+                    }).join(',')
+                
+                let state =
+                    this.addDetailDialog.title == '新增'
+                        ? coursePost
+                        : coursePut
                 state(this.addDetailDialog.config).then(value => {
-                    // console.log(value, 789789)
+                    
                     this.addDetailDialog.open = false
                     this.fuzzyQuery()
                 })

@@ -121,31 +121,31 @@
                                 </template> -->
                             </el-table-column>
 
-
                             <el-table-column
                                 label="操作"
                                 width="100"
                                 align="center"
                                 fixed="right"
                             >
-                                <template slot-scope="{ row }">  
-                                    {{
-                                        computedFlowerStatus(row.status)
-                                    }}
+                                <template slot-scope="{ row }">
+                                    {{ computedFlowerStatus(row.status) }}
                                     <br />
-                                    <el-button 
-                                     type="primary" 
-                                     size="mini" 
-                                     v-if="row.status==0||row.status==2"
-                                     @click="yes(row)"
-                                     >同意发布</el-button
-                                 >
-                                    <el-button 
-                                      type="primary" 
-                                      size="mini" 
-                                      v-if="row.status==1"
-                                      @click="no(row)"
-                                      >取消发布</el-button>
+                                    <el-button
+                                        type="primary"
+                                        size="mini"
+                                        v-if="
+                                            row.status == 0 || row.status == 2
+                                        "
+                                        @click="yes(row)"
+                                        >同意发布</el-button
+                                    >
+                                    <el-button
+                                        type="primary"
+                                        size="mini"
+                                        v-if="row.status == 1"
+                                        @click="no(row)"
+                                        >取消发布</el-button
+                                    >
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -189,7 +189,6 @@
     } from '@/api/application/secondClass/course'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
-    
     import horwheel from 'horwheel'
 
     import {
@@ -228,38 +227,47 @@
                     createStartTime: '',
                     createEndTime: ''
                 },
-                flowerList:[],
-                dict_sc_activity_flower_status:[],
+                flowerList: [],
+                dict_sc_activity_flower_status: [],
                 //DateTimePicker
                 pickerOptions: {
-                shortcuts: [{
-                    text: '最近一周',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }, {
-                    text: '最近一个月',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }, {
-                    text: '最近三个月',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }]
+                    shortcuts: [
+                        {
+                            text: '最近一周',
+                            onClick(picker) {
+                                const end = new Date()
+                                const start = new Date()
+                                start.setTime(
+                                    start.getTime() - 3600 * 1000 * 24 * 7
+                                )
+                                picker.$emit('pick', [start, end])
+                            }
+                        },
+                        {
+                            text: '最近一个月',
+                            onClick(picker) {
+                                const end = new Date()
+                                const start = new Date()
+                                start.setTime(
+                                    start.getTime() - 3600 * 1000 * 24 * 30
+                                )
+                                picker.$emit('pick', [start, end])
+                            }
+                        },
+                        {
+                            text: '最近三个月',
+                            onClick(picker) {
+                                const end = new Date()
+                                const start = new Date()
+                                start.setTime(
+                                    start.getTime() - 3600 * 1000 * 24 * 90
+                                )
+                                picker.$emit('pick', [start, end])
+                            }
+                        }
+                    ]
                 },
-                value2: '',
-                    
+                value2: ''
             }
         },
         computed: {
@@ -267,14 +275,14 @@
                 // return this.flocculus
                 return this.maxLength * 150 + ''
             },
-            //取花絮状态计算方法 
-           computedFlowerStatus(){
+            //取花絮状态计算方法
+            computedFlowerStatus() {
                 return value => {
                     // console.log(this.dict_sc_course_status,temp,333)
                     // console.log(value)
-                    return this.dict_sc_activity_flower_status[value]?.dictLabel;
+                    return this.dict_sc_activity_flower_status[value]?.dictLabel
                 }
-            },
+            }
         },
 
         methods: {
@@ -299,30 +307,30 @@
                 this.alertDialog.call(this,'同意发布',{
                     confirm:() => {
                         let option = {
-                            ids : row.id,
-                            status: 1,
+                            ids: row.id,
+                            status: 1
                         }
-                        console.log(option,'同意发布传去的数据')
-                        activityFlowerVerify(option).then(value=>{
-                            console.log(value,'同意发布后端传来的数据');
+                        console.log(option, '同意发布传去的数据')
+                        activityFlowerVerify(option).then(value => {
+                            console.log(value, '同意发布后端传来的数据')
                             this.msgSuccess(value.msg)
-                            this.fuzzyQuery();
+                            this.fuzzyQuery()
                         })
                     }
                 })
             },
-            no(row){
-                this.alertDialog.call(this,'取消发布',{
-                    confirm:() => {
+            no(row) {
+                this.alertDialog.call(this, '取消发布', {
+                    confirm: () => {
                         let option = {
-                            ids : row.id,
-                            status: 2,
+                            ids: row.id,
+                            status: 2
                         }
-                        console.log(option,'取消发布传去的数据')
-                        activityFlowerVerify(option).then(value=>{
-                            console.log(value,'取消发布后端传来的数据');
+                        console.log(option, '取消发布传去的数据')
+                        activityFlowerVerify(option).then(value => {
+                            console.log(value, '取消发布后端传来的数据')
                             this.msgSuccess(value.msg)
-                            this.fuzzyQuery();
+                            this.fuzzyQuery()
                         })
                     }
                 })
@@ -337,11 +345,13 @@
                 console.log('进入了initimgLength函数')
 
                 this.flowerList.forEach(item => {
-                    if(item.picture!=null){
-                        this.maxLength = Math.max(this.maxLength, item.picture.length)
-                    }
-                    else{
-                        this.maxLength = 1;
+                    if (item.picture != null) {
+                        this.maxLength = Math.max(
+                            this.maxLength,
+                            item.picture.length
+                        )
+                    } else {
+                        this.maxLength = 1
                     }
                 })
 
@@ -379,24 +389,24 @@
                     // this.queryParams.pageSize = value.data.pageSize
                     // this.queryParams.totalPage = value.data.totalPage
                     // this.queryParams.currPage = value.data.currPage
-                    this.queryParams.pageCount = Math.ceil(this.queryParams.totalCount/this.queryParams.pageSize);
-                    this.flowerList = value.rows;
-                    console.log(this.flowerList,'传来的数据');
+                    this.queryParams.pageCount = Math.ceil(
+                        this.queryParams.totalCount / this.queryParams.pageSize
+                    )
+                    this.flowerList = value.rows
+                    console.log(this.flowerList, '传来的数据')
                     this.initimgLength()
                     this.loading = false
                 })
             },
-            initDict(){
-                Promise.all([
-                   getDict('sc_activity_flower_status'),
-                ]).then(value=>{
-                    let tempArr = [
-                        'dict_sc_activity_flower_status',
-                    ]
-                    tempArr.forEach((item,index)=>{
-                        this[item] = value[index].data
-                    })
-                })
+            initDict() {
+                Promise.all([getDict('sc_activity_flower_status')]).then(
+                    value => {
+                        let tempArr = ['dict_sc_activity_flower_status']
+                        tempArr.forEach((item, index) => {
+                            this[item] = value[index].data
+                        })
+                    }
+                )
             }
         },
         mounted() {
@@ -410,11 +420,10 @@
         async created() {
             // 初始化字典
             this.initDict()
-    
+
             /** 获得当前情况下的活动花絮管理列表 */
             this.fuzzyQuery()
-        },
-        
+        }
     }
 </script>
 

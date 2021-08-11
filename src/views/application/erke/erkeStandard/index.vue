@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-10 16:10:40
+ * @LastEditTime: 2021-08-11 20:10:28
 -->
 <template>
     <div class="app-container">
@@ -114,6 +114,7 @@
                                             children: 'children',
                                             hasChildren: 'hasChildren'
                                         }"
+                                        :row-class-name="heightLight"
                                     >
                                         <el-table-column type="index">
                                         </el-table-column>
@@ -217,10 +218,7 @@
                 :rules="rules"
                 label-width="80px"
             >
-                <el-table
-                    :data="datadata"
-                    stripe
-                >
+                <el-table :data="datadata" stripe>
                     <!-- :default-sort="{ prop: 'sort' }" -->
                     <el-table-column
                         lable="sdf"
@@ -588,9 +586,9 @@
                     if (!data) {
                         return []
                     }
-                    console.log(data, 11)
+                    // console.log(data, 11)
                     let temp = filterNameAndType(data, this.queryList.name)
-                    console.log(temp, 12)
+                    // console.log(temp, 12)
                     return temp
                 }
             },
@@ -607,10 +605,19 @@
         },
         methods: {
             /**
+             * @description: 行背景颜色
+             */
+
+            heightLight({ row }) {
+                console.log(row, 'row')
+                if (row.children) {
+                    return 'red'
+                }
+            },
+            /**
              * @description: 删除积分分类
              * @param {*} row 对应积分分类
              */
-
             deleteCourseClassificaiton(row) {
                 this.alertDialog.call(this, '删除', {
                     confirm: () => {
@@ -653,6 +660,16 @@
              */
 
             handleIntegralType(value) {
+                if ([0, 1, 3].includes(value)) {
+                    this.addStardardDialog.start = ''
+                    this.addStardardDialog.end = ''
+                }
+                if ([0, 2, 3].includes(value)) {
+                    this.addStardardDialog.fixed = ''
+                }
+                if ([0, 3].includes(value)) {
+                    this.postCourseClassification.integrationRange = 0
+                }
                 // this.postCourseClassification.integralType = value + 1
                 // console.log(this.postCourseClassification.integralType)
             },
@@ -726,7 +743,7 @@
              */
 
             addManagerDialog() {
-                console.log(this.datadata,777)
+                console.log(this.datadata, 777)
                 this.datadata.push({
                     id: null,
                     pid: 0,
@@ -874,11 +891,15 @@
                     return
                 }
                 this.datadata.forEach(item => {
-                    console.log(item, 11)
-                    item.hasOwnProperty('children') && delete item.children && this.$delete(item, item.children)
-                    item.hasOwnProperty('__parent__') && delete item.__parent__ && this.$delete(item, item.__parent__)
+                    // console.log(item, 11)
+                    item.hasOwnProperty('children') &&
+                        delete item.children &&
+                        this.$delete(item, item.children)
+                    item.hasOwnProperty('__parent__') &&
+                        delete item.__parent__ &&
+                        this.$delete(item, item.__parent__)
                 })
-                console.log(this.datadata,123)
+                console.log(this.datadata, 123)
                 courseClassificationMulti({
                     deleteIds: this.deleteIds,
                     courseClassificationEntityList: this.datadata
@@ -907,7 +928,7 @@
              * @param index 某行下标
              */
             async updateData(row, index) {
-                console.log(row, index,'updata')
+                console.log(row, index, 'updata')
                 this.addStardardDialog.open = true
                 this.clearForm()
                 this.postCourseClassification = {
@@ -932,7 +953,6 @@
                         ':'
                     )[1]
                 }
-                this.$forceUpdate()
             },
             /**
              * @description: 根据参数查询二课课程分类列表
@@ -1253,5 +1273,15 @@
     .managerDialog >>> .el-table__body-wrapper {
         overflow-y: auto;
         height: 250px;
+    }
+
+    .el-table >>> .red {
+        background-color: #f9fafa;
+    }
+    .el-table >>> .green {
+        background-color: green;
+    }
+    .el-table >>> .blue {
+        background-color: blue;
     }
 </style>

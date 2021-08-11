@@ -61,7 +61,7 @@ export function upload(ossData, file, ossFileUrl) {
     const photoName = file.file.name // 原图片的名称 abc.jpg
     const policy = ossData.policy // 服务器端同事调oss的API，通过接口返回给前端的 policy
     const OSSAccessKeyId = ossData.accessid
-        // const callback = "callback"  // 服务器端同事调oss的API，通过接口返回给前端的 callback。这个是需要 oss 触发这个回调来通知服务器操作结果。
+    // const callback = "callback"  // 服务器端同事调oss的API，通过接口返回给前端的 callback。这个是需要 oss 触发这个回调来通知服务器操作结果。
     const signature = ossData.signature
     const host = ossData.host
     const key = ossFileUrl.substring(host.length + 1)
@@ -71,15 +71,15 @@ export function upload(ossData, file, ossFileUrl) {
     param.append('policy', `${policy}`)
     param.append('OSSAccessKeyId', `${OSSAccessKeyId}`)
     param.append('success_action_status', 200)
-        // param.append('callback', `${callback}`)
+    // param.append('callback', `${callback}`)
     param.append('signature', `${signature}`)
-        // return new Promise((resolve, reject) => {
-        //     new Compressor(file.file, {
-        //         quality: 0.8,
-        //         success: resolve,
-        //         error: reject
-        //     })
-        // }).then(res => {
+    // return new Promise((resolve, reject) => {
+    //     new Compressor(file.file, {
+    //         quality: 0.8,
+    //         success: resolve,
+    //         error: reject
+    //     })
+    // }).then(res => {
     param.append('file', file)
     return axios
         .post(host, param)
@@ -89,5 +89,5 @@ export function upload(ossData, file, ossFileUrl) {
         .catch(err => {
             return Promise.reject(err)
         })
-        // })
+    // })
 }

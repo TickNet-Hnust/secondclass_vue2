@@ -20,7 +20,6 @@ export function activityIntegral(params) {
     })
 }
 
-
 /**
  * @description: 活动花絮列表
  * @param {*} params

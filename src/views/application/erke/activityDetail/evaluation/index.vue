@@ -15,22 +15,21 @@
                                     justify="start"
                                     style="flexWrap:wrap"
                                 >
-                                      
-                                    <el-col :span="1" style="min-width:80px;" >
-                                    <el-tooltip 
-                                        class="item" 
-                                        effect="dark" 
-                                        content="清空查询条件" 
-                                        placement="right">
-                                    <el-button
-                                        circle
-                                        icon="el-icon-refresh"
-                                        @click="refresh"
-                                    >
-                                    </el-button>
-                                    </el-tooltip>
-                                </el-col>   
-
+                                    <el-col :span="1" style="min-width:80px;">
+                                        <el-tooltip
+                                            class="item"
+                                            effect="dark"
+                                            content="清空查询条件"
+                                            placement="right"
+                                        >
+                                            <el-button
+                                                circle
+                                                icon="el-icon-refresh"
+                                                @click="refresh"
+                                            >
+                                            </el-button>
+                                        </el-tooltip>
+                                    </el-col>
 
                                     <el-col :span="1" style="min-width: 185px">
                                         <el-form-item label="学号：">
@@ -90,14 +89,13 @@
                                 </el-row>
                             </el-form>
                         </div>
-                       
-                         <el-table
+
+                        <el-table
                             :data="evaluationList"
                             v-loading="loading"
                             class="evaluationMainTable"
                         >
                             <el-table-column type="selection" min-width="55">
-
                             </el-table-column>
 
                             <el-table-column
@@ -132,7 +130,6 @@
                                 prop="groupName"
                                 label="群组"
                                 min-width="120"
-                                
                             >
                             </el-table-column>
 
@@ -140,7 +137,6 @@
                                 prop="createTime"
                                 label="评价时间"
                                 min-width="100"
-                                
                             >
                             </el-table-column>
 
@@ -148,9 +144,8 @@
                                 prop="score"
                                 label="评价"
                                 min-width="100"
-                                
                             >
-                            </el-table-column>    
+                            </el-table-column>
 
                             <el-table-column
                                 prop="status"
@@ -165,20 +160,21 @@
                                         round
                                         :class="sureClassEvaluation(scope.row)"
                                         >{{
-                                            computedEvaluationStatus(scope.row.status)
+                                            computedEvaluationStatus(
+                                                scope.row.status
+                                            )
                                         }}</el-button
                                     >
                                 </template>
-                            </el-table-column>   
+                            </el-table-column>
 
                             <el-table-column
                                 prop="content"
                                 label="评论"
                                 min-width="200"
-                                
                             >
-                            </el-table-column>                                              
-                            
+                            </el-table-column>
+
                             <el-table-column
                                 label="操作"
                                 fixed="right"
@@ -189,10 +185,11 @@
                                         size="mini"
                                         type="text"
                                         icon="el-icon-s-check"
-                                        @click="examEvaluationOpenDialog(scope.row)"
+                                        @click="
+                                            examEvaluationOpenDialog(scope.row)
+                                        "
                                         >审核</el-button
                                     >
-                                   
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -209,7 +206,7 @@
             </el-col>
         </el-row>
 
-         <!-- 审核评价会话框 -->
+        <!-- 审核评价会话框 -->
         <el-dialog
             :title="examEvaluationDialog.title"
             :visible.sync="examEvaluationDialog.open"
@@ -224,7 +221,7 @@
                         examEvaluationDialog.data.nickName
                     }}</el-col>
                 </el-row>
-                 <el-row>
+                <el-row>
                     <el-col :span="10">学号：</el-col>
                     <el-col :span="14">{{
                         examEvaluationDialog.data.userName
@@ -235,7 +232,7 @@
                     <el-col :span="14">{{
                         examEvaluationDialog.data.className
                     }}</el-col>
-                </el-row> 
+                </el-row>
                 <el-row>
                     <el-col :span="10">群组：</el-col>
                     <el-col :span="14">{{
@@ -247,40 +244,39 @@
                     <el-col :span="14">{{
                         examEvaluationDialog.data.createTime
                     }}</el-col>
-                </el-row> 
+                </el-row>
                 <el-row>
                     <el-col :span="10">评论内容时间：</el-col>
                     <el-col :span="14">{{
                         examEvaluationDialog.data.content
                     }}</el-col>
-                </el-row>           
-
+                </el-row>
             </el-form>
 
             <div slot="footer" class="dialog-footer">
-            <el-radio-group 
-                v-if="examEvaluationDialog.title=='评价审核'"
-                v-model="examEvaluationDialog.post.status" 
-                style="float:left;margin-top:15px"
-            >
-                <el-radio :label="1">审核通过</el-radio>
-                <el-radio :label="2">审核未通过</el-radio>
-            </el-radio-group>
-
+                <el-radio-group
+                    v-if="examEvaluationDialog.title == '评价审核'"
+                    v-model="examEvaluationDialog.post.status"
+                    style="float:left;margin-top:15px"
+                >
+                    <el-radio :label="1">审核通过</el-radio>
+                    <el-radio :label="2">审核未通过</el-radio>
+                </el-radio-group>
 
                 <el-button @click="cancel">关闭</el-button>
-                <el-button type="primary" @click="examEvaluationSubmit">确 定</el-button>
+                <el-button type="primary" @click="examEvaluationSubmit"
+                    >确 定</el-button
+                >
             </div>
         </el-dialog>
-
     </div>
 </template>
 
 <script>
     //导入活动评价相关接口
-     import {
+    import {
         activityEvaluationList,
-        activityEvaluationVerify,
+        activityEvaluationVerify
     } from '@/api/application/secondClass/index'
     import {
         transformDate
@@ -331,73 +327,83 @@
                     pageCount: 1,
                     pageSize: 4
                 },
-                queryList:{
-                    userName:'',
+                queryList: {
+                    userName: '',
                     nickName: '',
-                    status:'',
-                    createStartTime:'',
-                    createEndTime:''
+                    status: '',
+                    createStartTime: '',
+                    createEndTime: ''
                 },
-                evaluationList:[],
-                dict_sc_activity_evaluation_status:[],
+                evaluationList: [],
+                dict_sc_activity_evaluation_status: [],
                 //DateTimePicker
                 pickerOptions: {
-                shortcuts: [{
-                    text: '最近一周',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }, {
-                    text: '最近一个月',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }, {
-                    text: '最近三个月',
-                    onClick(picker) {
-                    const end = new Date();
-                    const start = new Date();
-                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                    picker.$emit('pick', [start, end]);
-                    }
-                }]
+                    shortcuts: [
+                        {
+                            text: '最近一周',
+                            onClick(picker) {
+                                const end = new Date()
+                                const start = new Date()
+                                start.setTime(
+                                    start.getTime() - 3600 * 1000 * 24 * 7
+                                )
+                                picker.$emit('pick', [start, end])
+                            }
+                        },
+                        {
+                            text: '最近一个月',
+                            onClick(picker) {
+                                const end = new Date()
+                                const start = new Date()
+                                start.setTime(
+                                    start.getTime() - 3600 * 1000 * 24 * 30
+                                )
+                                picker.$emit('pick', [start, end])
+                            }
+                        },
+                        {
+                            text: '最近三个月',
+                            onClick(picker) {
+                                const end = new Date()
+                                const start = new Date()
+                                start.setTime(
+                                    start.getTime() - 3600 * 1000 * 24 * 90
+                                )
+                                picker.$emit('pick', [start, end])
+                            }
+                        }
+                    ]
                 },
                 value2: '',
-                examEvaluationDialog:{
-                    title:'评价审核',
-                     open:false,
-                     data:{
-                        nickName:'',
-                        userName:'',
-                        className:'',
-                        groupName:'',
-                        createTime:'',
-                        content:'',
-                     },
-                     post:{
-                         ids:'',
-                         status:0,
-                     }
+                examEvaluationDialog: {
+                    title: '评价审核',
+                    open: false,
+                    data: {
+                        nickName: '',
+                        userName: '',
+                        className: '',
+                        groupName: '',
+                        createTime: '',
+                        content: ''
+                    },
+                    post: {
+                        ids: '',
+                        status: 0
+                    }
                 },
-                form:{},
-
+                form: {}
             }
         },
-        computed:{
-          //取报名状态计算方法 
-           computedEvaluationStatus(){
+        computed: {
+            //取报名状态计算方法
+            computedEvaluationStatus() {
                 return value => {
                     // console.log(this.dict_sc_course_status,temp,333)
                     // console.log(value)
-                    return this.dict_sc_activity_evaluation_status[value]?.dictLabel;
+                    return this.dict_sc_activity_evaluation_status[value]
+                        ?.dictLabel
                 }
-            },
+            }
         },
         methods:{
             //模糊查询防抖
@@ -423,83 +429,85 @@
                 this.reset()
             },
             //会话框数据重置
-            reset(){
-               this.examEvaluationDialog.data={
-                  nickName:'',
-                  userName:'',
-                  className:'',
-                  groupName:'',
-                  createTime:'',
-                  content:''
-               }
-               this.examEvaluationDialog.post={
-                   ids:'',
-                   status:'',
-               }
+            reset() {
+                this.examEvaluationDialog.data = {
+                    nickName: '',
+                    userName: '',
+                    className: '',
+                    groupName: '',
+                    createTime: '',
+                    content: ''
+                }
+                this.examEvaluationDialog.post = {
+                    ids: '',
+                    status: ''
+                }
             },
             //审核点击事件 开打会话框
-            examEvaluationOpenDialog(row){
-              //渲染会话框数据
+            examEvaluationOpenDialog(row) {
+                //渲染会话框数据
                 this.renderState(row)
-    
-                this.examEvaluationDialog.title='评价审核'
+
+                this.examEvaluationDialog.title = '评价审核'
             },
-             //渲染会话框数据 打开会话框
-            renderState(row){
-                console.log(row,'要渲染的数据');
-                
-                this.examEvaluationDialog.data={
-                  nickName:row.nickName,
-                  userName:row.userName,
-                  className:row.className,
-                  groupName:row.groupName,
-                  createTime:row.createTime,
-                  content:row.content
-                };
+            //渲染会话框数据 打开会话框
+            renderState(row) {
+                console.log(row, '要渲染的数据')
 
-                this.examEvaluationDialog.post={
-                  ids:row.id,
-                  status:row.status,
+                this.examEvaluationDialog.data = {
+                    nickName: row.nickName,
+                    userName: row.userName,
+                    className: row.className,
+                    groupName: row.groupName,
+                    createTime: row.createTime,
+                    content: row.content
+                }
 
-                };
-                this.examEvaluationDialog.open = true;
-
+                this.examEvaluationDialog.post = {
+                    ids: row.id,
+                    status: row.status
+                }
+                this.examEvaluationDialog.open = true
             },
             //会话审核确定
-            examEvaluationSubmit(){
-                console.log(this.examEvaluationDialog.post,'审核确定后发送的数据');
-                activityEvaluationVerify(this.examEvaluationDialog.post).then(value=>{
-                    console.log(value,'审核确定后传来的数据');
-                    this.examEvaluationDialog.open = false
-                    this.fuzzyQuery()
-                })
+            examEvaluationSubmit() {
+                console.log(
+                    this.examEvaluationDialog.post,
+                    '审核确定后发送的数据'
+                )
+                activityEvaluationVerify(this.examEvaluationDialog.post).then(
+                    value => {
+                        console.log(value, '审核确定后传来的数据')
+                        this.examEvaluationDialog.open = false
+                        this.fuzzyQuery()
+                    }
+                )
             },
             //操作分页触发的事件
-            getList(option){
+            getList(option) {
                 this.queryParams.pageNum = option.page
                 this.queryParams.pageSize = option.limit
                 this.fuzzyQuery()
             },
             //清空查询条件
             refresh() {
-                this.queryList={
-                    userName:'',
+                this.queryList = {
+                    userName: '',
                     nickName: '',
-                    status:'',
-                    createStartTime:'',
-                    createEndTime:''
+                    status: '',
+                    createStartTime: '',
+                    createEndTime: ''
                 }
-                this.value2='',
-                this.fuzzyQuery()
+                ;(this.value2 = ''), this.fuzzyQuery()
             },
             
             /**
              * @description: 确定CSS类
              * @param {*} row
-             */            
+             */
+
             sureClassEvaluation(row) {
-                
-                   if (row.status == 0) {
+                if (row.status == 0) {
                     //ing
                     return 'textPlain'
                 } else if (row.status == 1) {
@@ -511,18 +519,19 @@
                 } else {
                     //unpass
                     return 'textRed'
-                } 
+                }
             },
-            formatEvaluationStatus(row, column, cellValue){
+            formatEvaluationStatus(row, column, cellValue) {
                 return (
                     cellValue != null &&
-                    this.dict_sc_activity_evaluation_status[cellValue]?.dictLabel
+                    this.dict_sc_activity_evaluation_status[cellValue]
+                        ?.dictLabel
                 )
             },
-            fuzzyQuery(){
-                 let option = {
-                    activityId:this.$route.params.aid,
-                    userName:this.queryList.userName,
+            fuzzyQuery() {
+                let option = {
+                    activityId: this.$route.params.aid,
+                    userName: this.queryList.userName,
                     nickName: this.queryList.nickName,
                     status:this.queryList.status,
                     params:{
@@ -530,7 +539,7 @@
                     // endCreateTime:this.queryList.createEndTime,
                     },
                     page: this.queryParams.pageCount,
-                    limit: this.queryParams.pageSize,
+                    limit: this.queryParams.pageSize
                     // orderByColumn:'',
                     // isAsc:''
                 }
@@ -541,52 +550,48 @@
                 console.log(option,'fuzzyQuery发送的数据')
                 this.getEvaluationList(option)
             },
-            getEvaluationList(option){
-                 this.loading = true
-                 activityEvaluationList(option).then(value => {
-
+            getEvaluationList(option) {
+                this.loading = true
+                activityEvaluationList(option).then(value => {
                     // console.log(value,'传来的数据');
                     /** 总共多少条，总共多少页 */
-                    this.queryParams.totalCount  = value.total
+                    this.queryParams.totalCount = value.total
                     // this.queryParams.pageSize = value.data.pageSize
                     // this.queryParams.totalPage = value.data.totalPage
                     // this.queryParams.currPage = value.data.currPage
-                    this.queryParams.pageCount = Math.ceil(this.queryParams.totalCount/this.queryParams.pageSize);
-                    this.evaluationList = value.rows;
-                    console.log(this.evaluationList,'传来的数据');
+                    this.queryParams.pageCount = Math.ceil(
+                        this.queryParams.totalCount / this.queryParams.pageSize
+                    )
+                    this.evaluationList = value.rows
+                    console.log(this.evaluationList, '传来的数据')
                     this.loading = false
-                    
                 })
             },
-            initDict(){
-               Promise.all([
-                  getDict('sc_activity_evaluation_status') 
-                ]).then(value=>{
-                    let tempArr =[
-                        'dict_sc_activity_evaluation_status'
-                    ]
-                    tempArr.forEach((item,index)=>{
-                        this[item] = value[index].data;
-                    })
-                })
-            },
-
+            initDict() {
+                Promise.all([getDict('sc_activity_evaluation_status')]).then(
+                    value => {
+                        let tempArr = ['dict_sc_activity_evaluation_status']
+                        tempArr.forEach((item, index) => {
+                            this[item] = value[index].data
+                        })
+                    }
+                )
+            }
         },
         async created() {
             //初始化字典
             this.initDict()
             /** 获得当前情况下的报名管理列表 */
             this.fuzzyQuery()
-
-        },
+        }
     }
 </script>
 
 <style scoped>
-   .adviceText{
-       margin: 10px 0px;
-   }
-   .textRed {
+    .adviceText {
+        margin: 10px 0px;
+    }
+    .textRed {
         color: #de3c50;
     }
     .textgreen {

@@ -105,11 +105,11 @@
                             }
                         },
                         {
-                            name: 'xsh',
-                            path: 'xsh',
+                            name: 'group',
+                            path: 'group',
                             hidden: false,
                             meta: {
-                                title: '学生会报名',
+                                title: '群组管理',
                                 icon: 'peoples',
                                 noCache: false
                             }

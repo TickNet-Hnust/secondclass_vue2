@@ -2,8 +2,8 @@
  * @Descripttion:
  * @Author: 林舒恒
  * @Date: 2021-08-05 11:10:30
- * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-10 14:20:58
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-08-10 17:28:30
  */
 import request from '@/utils/request.js'
 
@@ -71,7 +71,7 @@ export function activityPrizeManageMulti(data) {
  * @description: 删除奖项信息
  * @param {*} data
  */
- export function activityPrizeDelete(id) {
+export function activityPrizeDelete(id) {
     return request({
         url: '/admins/secondClass/activity/prize/record' + id,
         method: 'delete',
