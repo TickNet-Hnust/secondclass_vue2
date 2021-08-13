@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-10 17:26:00
+ * @LastEditTime: 2021-08-13 12:30:06
 -->
 <template>
     <div class="app-container">
@@ -356,7 +356,7 @@
                             <el-table-column
                                 prop="classificationIdPath"
                                 label="分类明细"
-                                min-width="180"
+                                min-width="280"
                                 show-overflow-tooltip
                                 :formatter="formatClassificationDetail"
                             >
@@ -695,9 +695,9 @@
                 <el-row :gutter="4">
                     <el-col :span="3"> 分类明细： </el-col>
                     <el-col :span="5.5">
+                            <!-- :props="{ checkStrictly: true }" -->
                         <el-cascader
                             :options="datadata"
-                            :props="{ checkStrictly: true }"
                             :value="
                                 addDetailDialog.config.classificationIdPath
                                     .split(',')
@@ -743,6 +743,7 @@
                                 <span
                                     class="addOrMine"
                                     @click="mineLowest(index)"
+                                    v-show="addDetailDialog.lowestValueArray.length != 1"
                                     >-</span
                                 >
                             </el-col>
@@ -841,7 +842,7 @@
 
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
-    import { filterCourseClassificationList, format } from '@/utils/gather.js'
+    import { filterTwoLayer, format } from '@/utils/gather.js'
     import horwheel from 'horwheel'
 
     import { importTemplate } from '@/api/system/user'
@@ -950,8 +951,8 @@
                         schoolYearName: '',
                         trainingProgramId: 8,
                         name: '',
-                        classificationId: 1,
-                        classificationIdPath: '1',
+                        classificationId: '',
+                        classificationIdPath: '',
                         joinType: '0',
                         necessary: 1,
                         type: '0',
@@ -1070,9 +1071,7 @@
             handleNodeChange(value) {
                 this.addDetailDialog.config.classificationId =
                     value[value.length - 1]
-                this.addDetailDialog.config.classificationIdPath = value.join(
-                    ','
-                )
+                this.addDetailDialog.config.classificationIdPath = value.join(',')
                 this.addDetailDialog.config.layer = value.length
                 console.log(value)
             },
@@ -1115,8 +1114,8 @@
                     schoolYearName: '',
                     trainingProgramId: 8,
                     name: '',
-                    classificationId: 1,
-                    classificationIdPath: '1',
+                    classificationId: '',
+                    classificationIdPath: '',
                     joinType: '0',
                     necessary: 1,
                     type: '0',
@@ -1307,6 +1306,8 @@
                     this.classificationList.value = ''
                 }
                 console.log(this.classificationList.value)
+                this.queryParams.pageNum = 1
+                this.queryParams.pageSize = 10
                 this.fuzzyQuery()
             },
             /** 初始化字典 */
@@ -1436,7 +1437,7 @@
                         value: item.id,
                         label: item.name
                     }))
-                    this.datadata = filterCourseClassificationList(value)
+                    this.datadata = filterTwoLayer(value.data)
                     console.log(this.datadata, 'datadata')
                 })
             }

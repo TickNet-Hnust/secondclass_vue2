@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-10 15:30:12
+ * @LastEditTime: 2021-08-13 16:25:44
 -->
 <template>
     <div class="app-container">
@@ -586,9 +586,10 @@
                     if (!data) {
                         return []
                     }
-                    // console.log(data, 11)
-                    let temp = filterNameAndType(data, this.queryList.name)
-                    // console.log(temp, 12)
+                    let temp = filterNameAndType(JSON.parse(JSON.stringify(data,((key,val) => {
+                        if(key != '__parent__')
+                        return val
+                    }))), this.queryList.name)
                     return temp
                 }
             },
