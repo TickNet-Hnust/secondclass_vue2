@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-11 20:10:28
+ * @LastEditTime: 2021-08-13 21:30:59
 -->
 <template>
     <div class="app-container">
@@ -586,12 +586,14 @@
                     if (!data) {
                         return []
                     }
-                    // console.log(data, 11)
-                    let temp = filterNameAndType(data, this.queryList.name)
-                    // console.log(temp, 12)
+                    let temp = filterNameAndType(JSON.parse(JSON.stringify(data,((key,val) => {
+                        if(key != '__parent__')
+                        return val
+                    }) )), this.queryList.name)
                     return temp
                 }
             },
+
             /* 还需要优化选择时候的UI界面 */
             computeType() {
                 return this.postCourseClassification.type == 0
@@ -609,7 +611,7 @@
              */
 
             heightLight({ row }) {
-                console.log(row, 'row')
+                // console.log(row, 'row')
                 if (row.children) {
                     return 'red'
                 }
@@ -966,15 +968,16 @@
                 return courseClassificationList(option).then(value => {
                     /* value保证存在且唯一 */
                     /* label保证渲染视图 */
-                    console.log(value, 'courseClassificationList')
+                    
                     value.data = value.data.map(item => ({
                         ...item,
                         value: item.id,
                         label: item.name
                     }))
+                    console.log(value, '过滤之前的courseClassificationList')
                     //挂载算法
                     this.datadata = filterCourseClassificationList(value)
-                    console.log(this.datadata, 'datadata')
+                    console.log(this.datadata, '过滤之后的datadata')
                     this.loading = false
                 })
             },
