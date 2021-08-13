@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-13 21:30:59
+ * @LastEditTime: 2021-08-13 23:09:35
 -->
 <template>
     <div class="app-container">
@@ -589,7 +589,7 @@
                     let temp = filterNameAndType(JSON.parse(JSON.stringify(data,((key,val) => {
                         if(key != '__parent__')
                         return val
-                    }) )), this.queryList.name)
+                    }))), this.queryList.name)
                     return temp
                 }
             },

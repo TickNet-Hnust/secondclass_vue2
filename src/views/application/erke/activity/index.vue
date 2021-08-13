@@ -895,6 +895,7 @@
 
                     rankId: '', //活动级别
                     activityTag: 'sdf,sdg', //活动标签
+                    courseId:'',
                     courseClassificationId: '', //课程分类
                     courseClassificationName: '', //关联的课程的课程分类完整名字
                     integralScheme: '', //积分方案
