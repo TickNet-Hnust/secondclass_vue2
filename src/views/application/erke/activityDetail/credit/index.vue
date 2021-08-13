@@ -29,16 +29,14 @@
                             </el-col>
                         </el-row>
 
-                        <el-row :gutter="20">
+                        <el-row :gutter="20" class="ruleInput" >
                             <el-col :span="1" style="min-width:90px">
                                 <span> 积分规则：</span>
                             </el-col>
 
-                            <el-col
-                                :span="1"
-                                style="min-width:280px"
-                                v-for="(item, index) in integrationRule"
-                                :key="index"
+                            <el-col :span="1" style="min-width:300px;margin-bottom:5px;" 
+                            v-for="(item,index) in integrationRule"
+                            :key="index"
                             >
                                 <el-input
                                     :value="
@@ -464,7 +462,8 @@
     } from '@/api/application/secondClass/index'
 
     import {
-        courseClassificationList
+        courseClassificationList,
+        SortListClassificationId,
     } from '@/api/application/secondClass/courseClassification.js'
     import {
         transformDate
@@ -640,9 +639,11 @@
                 }
             },
 
-            computedRule() {
-                return (integralType, integrationRange) => {
-                    if (integralType == null || integrationRange == null) {
+            computedRule(){
+                    return (integralType,integrationRange) => {
+
+                    if(integralType==null||integrationRange==null||integrationRange==0)
+                    {
                         return '积分类型或范围为空'
                     } else {
                         return (
@@ -875,20 +876,19 @@
                 this.fuzzyQuery()
             },
             //通过活动id获取当前活动报名信息函数
-            getActivityIntegral(option) {
-                activityIntegral(option).then(async value => {
-                    console.log(value, '活动积分管理总信息')
-                    this.activityRank = value.data.activityRank
-                    this.courseClassificationId =
-                        value.data.courseClassificationId
-                    this.courseClassificationName =
-                        value.data.courseClassificationName
-                    this.integralScheme = value.data.integralScheme
-                    await this.getCourseClassificationList()
-                })
-            },
-
-            /**获得当前情况下的报名管理列表  模糊查询 */
+            getActivityIntegral(option){
+               activityIntegral(option).then(async value => {
+                console.log(value,'活动积分管理总信息');
+                this.activityRank = value.data.activityRank;
+                this.courseClassificationId = value.data.courseClassificationId;
+                this.courseClassificationName = value.data.courseClassificationName;
+                this.integralScheme = value.data.integralScheme;
+                await this.getCourseClassificationList(this.courseClassificationId);
+               
+            })
+           },
+           
+           /**获得当前情况下的报名管理列表  模糊查询 */
             fuzzyQuery() {
                 let option = {
                     activityId: this.$route.params.aid,
@@ -953,14 +953,18 @@
                 })
             },
             getCourseClassificationList(option) {
-                courseClassificationList(option).then(value => {
-                    console.log(value, '课程分类列表!')
-                    value.data.forEach((item, index) => {
-                        if (item.pid == this.courseClassificationId) {
-                            this.integrationRule.push(item)
-                        }
-                    })
-                    console.log(this.integrationRule, 'integrationRule数组')
+                SortListClassificationId(option).then(value => {                   
+                    console.log(value,'子课程分类列表!');
+                    this.integrationRule = value.data;
+                    // value.data.forEach((item,index)=>{
+                    //     if(item.pid == this.courseClassificationId)
+                    //     {
+                            
+                    //         this.integrationRule.push(item);
+                    //     }
+                    // })
+                    // console.log(this.integrationRule,'integrationRule数组');
+
                 })
             }
         },
@@ -982,8 +986,11 @@
     /* .champion >>> div{
         background-color:#93d6dc;
     } */
-    .el-row >>> .explain {
-        background-color: #93d6dc;
+    .ruleInput >>> .el-input__inner{
+        width: 180px;
+    }
+    .el-row >>> .explain{
+        background-color:#93d6dc;
         height: 30px;
         line-height: 30px;
     }
@@ -997,7 +1004,7 @@
         color: #54d7b4;
     }
     .textyellow {
-        color: yellow;
+        color: rgba(255, 166, 0, 0.993);
     }
     .textPlain {
         color: #8b8b8b;
