@@ -3,7 +3,7 @@
  * @Autor: 张津瑞
  * @Date: 2021-08-13 21:38:39
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-13 22:10:38
+ * @LastEditTime: 2021-08-16 21:48:35
  */
 
 
@@ -14,7 +14,7 @@ import request from '@/utils/request.js'
 export function groupTypeList(params){
     return request({
         url:'/admins/group/type/list',
-        methods:'get',
+        method:'get',
         params
     })
 }
@@ -23,7 +23,7 @@ export function groupTypeList(params){
 export function groupTypePost(data){
     return request({
         url:'/admins/group/type',
-        methods:'post',
+        method:'post',
         data
     })
 }
@@ -32,16 +32,24 @@ export function groupTypePost(data){
 export function groupTypePut(data){
     return request({
         url:'/admins/group/type',
-        methods:'put',
+        method:'put',
         data
     })
 }
 
 //根据id获取编辑回显
 export function groupType(id){
-    request({
+    return request({
         url:`/admins/group/type/${id}`,
-        methods:'get',
+        method:'get',
+    })
+}
+
+//获取学校列表
+export function deptUtilSchool(){
+    return request({
+        url:'/dept/util/school',
+        method:'get',
     })
 }
 

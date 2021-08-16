@@ -3,7 +3,7 @@
  * @Autor: 张津瑞
  * @Date: 2021-08-13 22:16:02
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-13 23:11:29
+ * @LastEditTime: 2021-08-16 14:12:50
  */
 /*
  * @Description: 
@@ -15,21 +15,34 @@
 
 export function filterGroupClassificationList(data)
 {
-    //挂载子节点与父节点
-    let filter = (father_id) => {
+    let maxLayer=0;
+    let count = 0;
+    let filter = (fahter,father_id) => {
         let array = []
         data.forEach(item => {
             if (item.parentId === father_id) {
                 array.push(item)
             }
         })
-        array.forEach(item => {
-            let temp = filter(item.id)
+        count++;
+        if(count==1&&array.length==0)
+        {
+            return data
+        }
+        else{
+           array.forEach(item => {
+            let temp = filter(item,item.id)
             if (temp.length != 0) {
                 item.children = temp
             }
-        })
-        return array
+            else
+            {
+                maxLayer = Math.max(maxLayer,item.layer);
+            }
+            item._parent_ = fahter;
+           })
+            return array 
+        }
     }
     //排序
     let sortWay = array => {
@@ -42,7 +55,16 @@ export function filterGroupClassificationList(data)
         return array
     }
     //赋值第一层的id和parentId
-    let temp = filter(0)
-
-    return sortWay(temp)
+    let temp = filter(null,0)
+    //方便页面v-for渲染
+    maxLayer++;
+    temp = sortWay(temp);
+    //给数组增加一个maxLayer属性
+    Object.defineProperty(temp,'maxLayer',{
+        value: maxLayer,
+        //不可遍历 这样表格就不好遍历这个多余的数据
+        enumerable:false
+    })
+    // temp.push(maxLayer);
+    return temp
 }
