@@ -142,7 +142,7 @@
                     >
                     <el-button size="small" plain>导出</el-button>
                 </el-col>
-                <el-col class="filterRadio" :span="19">
+                <el-col :span="19">
                     <el-radio-group
                         v-model="queryList.activityStatusId"
                         size="mini"
@@ -330,32 +330,21 @@
                             ></el-input>
                         </el-form-item>
 
-                        <el-form-item label="主办方：">
-                            <el-select
-                                v-model="postData.groupId"
-                                @change="groupChange"
-                                placeholder="请选择活动主办方"
-                            >
-                                <el-option
-                                    v-for="(item, index) in groupList"
-                                    :key="index"
-                                    :value="item.deptId"
-                                    :label="item.deptName"
-                                ></el-option>
-                            </el-select>
-                        </el-form-item>
-
                         <el-form-item label="发布人：">
-                            <el-input
-                                v-model="postData.activityReleaserId"
-                                placeholder="请选择发布人"
-                            ></el-input>
+                            <el-autocomplete
+                                value-key="label"
+                                v-model="postFakeData.activityReleaserId"
+                                :fetch-suggestions="querySearchAsync"
+                                placeholder="请输入内容"
+                                @select="handRelease"
+                            ></el-autocomplete>
                         </el-form-item>
 
                         <el-form-item label="指导单位：">
                             <el-select
                                 v-model="postData.deptId"
                                 placeholder="请选择指导单位"
+                                @change="deptChanged"
                             >
                                 <el-option
                                     v-for="(item, index) in deptList"
@@ -366,11 +355,29 @@
                             </el-select>
                         </el-form-item>
 
+                        <el-form-item label="主办方：">
+                            <el-select
+                                v-model="postData.groupId"
+                                @change="groupChange"
+                                placeholder="请先选择有效的指导单位"
+                            >
+                                <el-option
+                                    v-for="(item, index) in groupList"
+                                    :key="index"
+                                    :value="item.deptId"
+                                    :label="item.deptName"
+                                ></el-option>
+                            </el-select>
+                        </el-form-item>
+
                         <el-form-item label="指导老师：">
-                            <el-input
-                                v-model="postData.guideTeacherId"
-                                placeholder="请选择指导老师"
-                            ></el-input>
+                            <el-autocomplete
+                                value-key="label"
+                                v-model="postFakeData.guideTeacherId"
+                                :fetch-suggestions="querySearchAsync"
+                                placeholder="请输入内容"
+                                @select="handleTeacher"
+                            ></el-autocomplete>
                         </el-form-item>
 
                         <el-form-item label="学年：">
@@ -420,20 +427,19 @@
                         </el-form-item>
 
                         <el-form-item label="报名范围：">
-                            <el-select
-                                :value="
+                                <!-- :value="
                                     postData.enrollRange
                                         ? postData.enrollRange.split(';')
                                         : undefined
                                 "
                                 @change="
                                     postData.enrollRange = $event.join(';')
-                                "
+                                " -->
+                            <el-select
+                                v-model="postFakeData.enrollRange"
                                 multiple
-                                filterable
-                                allow-create
-                                default-first-option
                                 placeholder="请选择报名范围"
+                                @change="rangeChanged"
                             >
                                 <el-option
                                     v-for="(item, index) in deptList"
@@ -557,7 +563,7 @@
 
                         <el-form-item label="课程分类：">
                             <el-cascader
-                                v-model="postData.coursePath"
+                                v-model="postFakeData.coursePath"
                                 :options="datadata"
                                 :props="{ checkStrictly: true }"
                                 :show-all-levels="false"
@@ -715,61 +721,43 @@
                         </el-form-item>
 
                         <el-form-item label="活动负责人：">
-                            <el-tag
-                                :key="tag"
-                                v-for="tag in peopleTags.dynamicTags"
-                                closable
-                                :disable-transitions="false"
-                                @close="peopleHandleClose(tag)"
-                            >
-                                {{ tag }}
-                            </el-tag>
-                            <el-input
-                                class="input-new-tag"
-                                v-if="peopleTags.inputVisible"
-                                v-model="peopleTags.inputValue"
-                                ref="peopleSaveTagInput"
-                                size="small"
-                                @keyup.enter.native="peopleHandleInputConfirm"
-                                @blur="peopleHandleInputConfirm"
-                            >
-                            </el-input>
-                            <el-button
-                                v-else
-                                class="button-new-tag"
-                                size="small"
-                                @click="peopleShowInput"
-                                >+</el-button
-                            >
+                            <!-- <el-select
+                                v-model="postFakeData.activityManagerId"
+                                multiple
+                                filterable
+                                remote
+                                :remote-method="queryManager"
+                                @change="managerChanged"
+                                style="margin-left: 20px;"
+                                placeholder="请选择">
+                                
+                                <el-option
+                                    v-for="(item,index) in postFakeData.activityManagerIdList"
+                                    :key="index"
+                                    :value="item.userId"
+                                    :label="item.userName"
+                                >
+                                    <span style="float: left">{{ item.userName }}</span>
+                                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.nickName }}</span>
+                                </el-option>
+                            </el-select> -->
+                            <el-autocomplete
+                                value-key="label"
+                                v-model="postFakeData.activityManagerId"
+                                :fetch-suggestions="querySearchAsync"
+                                placeholder="请输入内容"
+                                @select="handManager"
+                            ></el-autocomplete>
                         </el-form-item>
 
                         <el-form-item label="活动组织者：">
-                            <el-tag
-                                :key="tag"
-                                v-for="tag in groupTags.dynamicTags"
-                                closable
-                                :disable-transitions="false"
-                                @close="groupHandleClose(tag)"
-                            >
-                                {{ tag }}
-                            </el-tag>
-                            <el-input
-                                class="input-new-tag"
-                                v-if="groupTags.inputVisible"
-                                v-model="groupTags.inputValue"
-                                ref="groupSaveTagInput"
-                                size="small"
-                                @keyup.enter.native="groupHandleInputConfirm"
-                                @blur="groupHandleInputConfirm"
-                            >
-                            </el-input>
-                            <el-button
-                                v-else
-                                class="button-new-tag"
-                                size="small"
-                                @click="groupShowInput"
-                                >+</el-button
-                            >
+                            <el-autocomplete
+                                value-key="label"
+                                v-model="postFakeData.activityOrganizerId"
+                                :fetch-suggestions="querySearchAsync"
+                                placeholder="请输入内容"
+                                @select="handOrganizer"
+                            ></el-autocomplete>
                         </el-form-item>
                         <el-form-item label="图片素材：">
                             <el-upload
@@ -843,14 +831,16 @@
         activityIdNextStatus,
         schoolYearList,
         trainingProgramDetail,
-        courseClassificationList
+        courseClassificationList,
+        groupList,
+        utilListByName,
+        uitlListCollege
     } from '@/api/application/secondClass/index'
 
     import {
         transformDate,
         filterCourseClassificationList
     } from '@/utils/gather'
-    import { deptListByType } from '@/api/system/dept'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
     import horwheel from 'horwheel'
     import Editor from '@/components/Editor'
@@ -871,7 +861,13 @@
                     activityTag: [],
                     maxAdmissionNumber: 0,
                     registeTime: [],
+                    coursePath:null,
                     registeTimeRadio: 0,
+                    activityReleaserId:'',
+                    guideTeacherId:'',
+                    activityManagerId:'',
+                    activityOrganizerId:'',
+                    enrollRange:'',
                     registeDistanceRadio: 0,
                     activityTime: [],
                     enrollTime: []
@@ -880,11 +876,10 @@
                     name: '', //活动名称
                     groupPathName: '', //主办方完整名字
                     groupId: '', //主办方ID
-                    activityReleaserId: 111, //发布人ID
+                    activityReleaserId: '', //发布人ID
                     deptId: '', //部门Id
-                    guideTeacherId: 105, //指导老师Id
+                    guideTeacherId: '', //指导老师Id
 
-                    enrollTime: '', //转换前的报名时间
                     enrollStartTime: '', //转后的报名开始时间
                     emrollEndTime: '', //转后的报名结束时间
                     admissionWay: '', //录取方式
@@ -894,12 +889,11 @@
                     enrollNotice: '', //报名须知
 
                     rankId: '', //活动级别
-                    activityTag: 'sdf,sdg', //活动标签
+                    activityTag: '', //活动标签
                     courseId:'',
                     courseClassificationId: '', //课程分类
                     courseClassificationName: '', //关联的课程的课程分类完整名字
                     integralScheme: '', //积分方案
-                    activityTime: '', //转换前的活动时间
                     activityStartTime: '', //活动开始时间
                     activityEndTime: '', //活动结束时间
                     vacate: 1, //允许请假
@@ -908,11 +902,10 @@
                     activityPlace: '', //活动地点坐标
                     activityRegisteDistance: '', //活动签到距离
                     activityPlaceName: '', //活动地点名称
-                    registeTime: '', //签到时间
                     registeStartTime: '', //签到开始时间
                     registeEndTime: '', //签到结束时间
-                    activityManagerId: 103, //活动负责人
-                    activityOrganizerId: 103, //活动组织者
+                    activityManagerId: '', //活动负责人
+                    activityOrganizerId: '', //活动组织者
                     images: '', //活动素材
                     enclosure: '', //相关附件链接
                     activityIntroduce: '', //活动介绍
@@ -1128,17 +1121,58 @@
             }
         },
         methods: {
+            handleTeacher(item) {
+                console.log(item,item.value,'指导老师id')
+                this.postData.guideTeacherId = item.value
+            },
+            handRelease(item) {
+                console.log(item,item.value,'发布人id')
+                this.postData.activityReleaserId = item.value
+            },
+            handManager(item) {
+                console.log(item,item.value,'负责人id')
+                this.postData.activityManagerId = item.value
+            },
+            handOrganizer(item) {
+                console.log(item,item.value,'组织者id')
+                this.postData.activityOrganizerId = item.value
+            },
+            queryManager(value) {
+                console.log(value)
+                utilListByName({name:value}).then(value => {
+                         this.postFakeData.activityManagerIdList.push(...value.data)
+                        // cb(value.data)
+                    })
+                // this.postFakeData.activityManagerIdList.push({userId:3,nickName:34,userName:67})
+                
+            },
+            querySearchAsync(queryString,cb) {
+                if(queryString) {
+                    utilListByName({name:queryString}).then(value => {
+                        console.log(value)
+                        cb(value.data.map(item =>({
+                            label: `${item.userName}-${item.nickName}`,
+                            value: item.userId
+                        })))
+                        // cb(value.data)
+                    })
+                } 
+            },
             handlePictureCardPreview() {},
             handleRemove() {},
             httpRequest2(file) {
+                // consoel.log(file)
                 this.getImgUrl(file).then(value => {
+                    console.log(value,'图片路径')
                     if (this.postData.enclosure.length)
                         this.postData.enclosure += `;${value}`
                     else this.postData.enclosure += `${value}`
                 })
             },
             httpRequest(file) {
+                console.log(file)
                 this.getImgUrl(file).then(value => {
+                    console.log(value,'图片路径')
                     if (this.postData.images.length)
                         this.postData.images += `;${value}`
                     else this.postData.images += `${value}`
@@ -1147,7 +1181,10 @@
             /**
              * @description: 主办方改变
              */
-
+            rangeChanged(value) {
+                console.log(value)
+                this.postData.enrollRange = value?.join(';')
+            },
             groupChange() {
                 this.postData.groupPathName = this.groupList[
                     this.postData.groupId
@@ -1198,6 +1235,14 @@
                 console.log(fuckMan)
                 this.postData.enrollStartTime = fuckMan[0]
                 this.postData.enrollEndTime = fuckMan[1]
+            },
+            deptChanged(value) {
+                console.log(value)
+                groupList({parentId:value}).then(value => {
+                    console.log(value,'group')
+                    this.groupList = value.rows
+                    this.postData.groupId = value.rows[0]?.deptId
+                })
             },
             getContainer() {
                 return document.querySelector('.formDetail')
@@ -1418,7 +1463,6 @@
             },
             postActivity() {
                 this.postData.recommend = 0
-                // this.postData.activityTag = 'sd,dfg'
                 console.log(this.postData)
                 this.postData.activityTag = this.postFakeData.activityTag.join(
                     ';'
@@ -1615,13 +1659,9 @@
             this.getSchoolYearList() //查询学年
             this.getClassificationList() //查询分类列表
 
-            deptListByType({ type: 1 }).then(value => {
+            uitlListCollege().then(value => {
                 this.deptList = value.data
                 console.log(value, 'deptlist')
-            })
-            deptListByType({ type: 3 }).then(value => {
-                this.groupList = value.data
-                console.log(this.groupList, 'grouplist')
             })
         },
         mounted() {

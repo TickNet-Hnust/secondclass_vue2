@@ -2,8 +2,8 @@
  * @Descripttion: 积分标准
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
- * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-13 23:09:35
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-08-14 16:47:58
 -->
 <template>
     <div class="app-container">
@@ -96,17 +96,117 @@
                                 </el-col> -->
                             </el-row>
                         </div>
+                        <el-tab-pane
+                            label="全部"
+                            name=""
+                            :key="0"
+                        >
+                            <div class="erke-buttom-right">
+                                    <el-table
+                                        :data="datadata.flatMap(item => item.children)"
+                                        row-key="id"
+                                        v-loading="loading"
+                                        
+                                        :tree-props="{
+                                            children: 'children',
+                                            hasChildren: 'hasChildren'
+                                        }"
+                                        :row-class-name="heightLight"
+                                    >
+                                        <el-table-column type="index">
+                                        </el-table-column>
+
+                                        <!-- <el-table-column
+                                            prop="id"
+                                            label="ID"
+                                            width="150"
+                                        > -->
+                                        <!-- </el-table-column> -->
+                                        <el-table-column
+                                            prop="name"
+                                            label="项目名称"
+                                            min-width="300"
+                                            :show-overflow-tooltip="true"
+                                        >
+                                        </el-table-column>
+                                        <el-table-column
+                                            prop="type"
+                                            label="类型"
+                                            :formatter="formatType"
+                                        >
+                                        </el-table-column>
+                                        <el-table-column
+                                            prop="integralType"
+                                            label="积分类别"
+                                            min-width="120"
+                                            :formatter="formatIntegralType"
+                                        >
+                                        </el-table-column>
+                                        <el-table-column
+                                            prop="integrationRange"
+                                            label="分值"
+                                        >
+                                        </el-table-column>
+                                        <el-table-column
+                                            prop="updateTime"
+                                            label="修订时间"
+                                            :show-overflow-tooltip="true"
+                                            :formatter="formatUpdateTime"
+                                        >
+                                        </el-table-column>
+                                        <el-table-column
+                                            label="操作"
+                                            fixed="right"
+                                            width="180"
+                                        >
+                                            <template slot-scope="scope">
+                                                <el-button
+                                                    size="mini"
+                                                    type="text"
+                                                    icon="el-icon-edit"
+                                                    @click="
+                                                        updateData(
+                                                            scope.row,
+                                                            scope.$index
+                                                        )
+                                                    "
+                                                    >修改</el-button
+                                                >
+                                                <el-button
+                                                    size="mini"
+                                                    type="text"
+                                                    icon="el-icon-key"
+                                                    @click="sortData(scope.row)"
+                                                    >排序</el-button
+                                                >
+                                                <el-button
+                                                    size="mini"
+                                                    type="text"
+                                                    icon="el-icon-delete"
+                                                    @click="
+                                                        deleteCourseClassificaiton(
+                                                            scope.row
+                                                        )
+                                                    "
+                                                    >删除</el-button
+                                                >
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+                            </div>
+                        </el-tab-pane>
                         <!-- 表单下面 -->
                         <template v-for="(item, index) in datadata">
                             <!-- default-expand-all -->
+                            
                             <el-tab-pane
                                 :label="item.name"
-                                :key="index"
-                                :name="index + ''"
+                                :key="index+1"
+                                :name="index+1 + ''"
                             >
                                 <div class="erke-buttom-right">
                                     <el-table
-                                        :data="filterData(item.children)"
+                                        :data="item.children"
                                         row-key="id"
                                         v-loading="loading"
                                         default-expand-all
@@ -590,7 +690,8 @@
                         if(key != '__parent__')
                         return val
                     }))), this.queryList.name)
-                    return temp
+                    // return temp
+                    return filterNameAndType(this.clone(data), this.queryList.name)
                 }
             },
 
@@ -606,12 +707,21 @@
             }
         },
         methods: {
+            clone(o) {
+                let temp = Array.from(o)
+                Object.values(temp).forEach(item => {
+                    console.log(item.name)
+                    if(typeof item == 'object') {
+                        this.clone(item)
+                    }
+                })
+                return temp
+            },
             /**
              * @description: 行背景颜色
              */
 
             heightLight({ row }) {
-                // console.log(row, 'row')
                 if (row.children) {
                     return 'red'
                 }
@@ -863,10 +973,6 @@
             },
             /** 确定修改排序 */
             updateSort() {
-                this.sortDialog.config.forEach(item => {
-                    item.children && delete item.children
-                    item.__parent__ && delete item.__parent__
-                })
                 courseClassificationMulti({
                     courseClassificationEntityList: this.sortDialog.config
                 })
@@ -892,15 +998,15 @@
                     this.msgInfo('请填写完整信息')
                     return
                 }
-                this.datadata.forEach(item => {
-                    // console.log(item, 11)
-                    item.hasOwnProperty('children') &&
-                        delete item.children &&
-                        this.$delete(item, item.children)
-                    item.hasOwnProperty('__parent__') &&
-                        delete item.__parent__ &&
-                        this.$delete(item, item.__parent__)
-                })
+                // this.datadata.forEach(item => {
+                //     // console.log(item, 11)
+                //     item.hasOwnProperty('children') &&
+                //         delete item.children &&
+                //         this.$delete(item, item.children)
+                //     item.hasOwnProperty('__parent__') &&
+                //         delete item.__parent__ &&
+                //         this.$delete(item, item.__parent__)
+                // })
                 console.log(this.datadata, 123)
                 courseClassificationMulti({
                     deleteIds: this.deleteIds,
@@ -920,6 +1026,7 @@
              */
 
             sortData(row) {
+                console.log(row)
                 this.sortDialog.title = '同级排序'
                 this.sortDialog.open = true
                 this.sortDialog.config = row.__parent__.children
