@@ -2,8 +2,8 @@
  * @Descripttion: 培养方案
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-10 16:56:45
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-08-13 22:29:03
 -->
 <template>
     <div class="app-container">
@@ -61,6 +61,27 @@
 </template>
 
 <script>
+    // //导出活动分类
+    // export function groupTypeExport(){
+    //     request({
+    //         url:'/admins/group/type/export',
+    //         methods:'get'
+    //     })
+    // }
+    import {
+        //群组分类列表
+        groupTypeList,
+        //新增群组分类
+        groupTypePost,
+        //编辑群组分类
+        groupTypePut,
+        //通过id获取编辑回显
+        groupType,
+    } from '@/api/application/secondClass/index'
+    import{
+         filterGroupClassificationList
+    } from '@/utils/gather'
+
     export default {
         name: 'erkePlan',
         data() {
@@ -75,18 +96,28 @@
                     pageNum: 1,
                     // 一页多少条
                     pageSize: 10
-                }
+                },
+                //表格里面的数据
+                treeData:[],
             }
         },
         computed: {
         },
         methods: {
-            getList() {
-                
+            getGroupClassificationList(option){
+                this.$loading = true;
+                groupTypeList(option).then(value=>{
+                    console.log(value,'群组分类列表');
+                    this.treeData = filterGroupClassificationList(value.data);
+                    console.log(this.treeData,'过滤之后的数据');
+                    this.loading = false
+                })
+
             }
+           
         },
         async created() {
-
+            this.getGroupClassificationList()
         },
         mounted() {
         

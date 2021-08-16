@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-08-05 14:41:26
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-12 19:23:52
+ * @LastEditTime: 2021-08-14 11:30:24
  */
 export * from './filterTwoLayer'
 export * from './index'
@@ -24,3 +24,4 @@ export * from './alertDialog'
 export * from './filterCourseClassificationList'
 export * from './filterNameAndType'
 export * from './format'
+export * from './filterGroupClassificationList'

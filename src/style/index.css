@@ -112,6 +112,7 @@ textarea {
     display: none !important;
 }
 
+
 /* .graph>div:first-child {
     width: 100% !important;
 } */
@@ -125,7 +126,7 @@ textarea {
     padding: 0 10px !important;
 }
 
-.el-button [class*='el-icon-'] + span {
+.el-button [class*='el-icon-']+span {
     margin-left: 0 !important;
 }
 
@@ -139,4 +140,9 @@ textarea {
 
 .el-range-editor {
     border: 1px solid #aaa !important;
+}
+
+.el-input.data-text,
+.el-input.data-text>>>.el-input__inner {
+    width: 110px;
 }

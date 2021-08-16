@@ -142,7 +142,7 @@
                     >
                     <el-button size="small" plain>导出</el-button>
                 </el-col>
-                <el-col class="filterRadio" :span="19">
+                <el-col :span="19">
                     <el-radio-group
                         v-model="queryList.activityStatusId"
                         size="mini"
@@ -346,10 +346,12 @@
                         </el-form-item>
 
                         <el-form-item label="发布人：">
-                            <el-input
+                            <el-autocomplete
                                 v-model="postData.activityReleaserId"
-                                placeholder="请选择发布人"
-                            ></el-input>
+                                :fetch-suggestions="querySearchAsync"
+                                placeholder="请输入内容"
+                                @select="handleSelect"
+                            ></el-autocomplete>
                         </el-form-item>
 
                         <el-form-item label="指导单位：">
@@ -843,7 +845,9 @@
         activityIdNextStatus,
         schoolYearList,
         trainingProgramDetail,
-        courseClassificationList
+        courseClassificationList,
+
+        utilListByName
     } from '@/api/application/secondClass/index'
 
     import {
@@ -880,7 +884,7 @@
                     name: '', //活动名称
                     groupPathName: '', //主办方完整名字
                     groupId: '', //主办方ID
-                    activityReleaserId: 111, //发布人ID
+                    activityReleaserId: '111', //发布人ID
                     deptId: '', //部门Id
                     guideTeacherId: 105, //指导老师Id
 
@@ -1128,9 +1132,25 @@
             }
         },
         methods: {
+            handleSelect(item) {
+                console.log(item)
+            },
+            querySearchAsync(queryString,cb) {
+                if(queryString) {
+                    utilListByName({name:queryString}).then(value => {
+                        console.log(value)
+                        cb(Object.entries(value.data).map(item => ({
+                            value: item[1] + '-'+ item[0],
+                            label: item[0]
+                        })))
+                        // cb(value.data)
+                    })
+                } 
+            },
             handlePictureCardPreview() {},
             handleRemove() {},
             httpRequest2(file) {
+                // consoel.log(file)
                 this.getImgUrl(file).then(value => {
                     if (this.postData.enclosure.length)
                         this.postData.enclosure += `;${value}`
@@ -1138,6 +1158,7 @@
                 })
             },
             httpRequest(file) {
+                console.log(file)
                 this.getImgUrl(file).then(value => {
                     if (this.postData.images.length)
                         this.postData.images += `;${value}`

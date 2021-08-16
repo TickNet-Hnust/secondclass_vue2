@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-13 23:38:18
+ * @LastEditTime: 2021-08-14 16:47:58
 -->
 <template>
     <div class="app-container">
@@ -694,6 +694,7 @@
                     return filterNameAndType(this.clone(data), this.queryList.name)
                 }
             },
+
             /* 还需要优化选择时候的UI界面 */
             computeType() {
                 return this.postCourseClassification.type == 0
@@ -972,10 +973,6 @@
             },
             /** 确定修改排序 */
             updateSort() {
-                this.sortDialog.config.forEach(item => {
-                    item.children && delete item.children
-                    item.__parent__ && delete item.__parent__
-                })
                 courseClassificationMulti({
                     courseClassificationEntityList: this.sortDialog.config
                 })
@@ -1001,15 +998,15 @@
                     this.msgInfo('请填写完整信息')
                     return
                 }
-                this.datadata.forEach(item => {
-                    // console.log(item, 11)
-                    item.hasOwnProperty('children') &&
-                        delete item.children &&
-                        this.$delete(item, item.children)
-                    item.hasOwnProperty('__parent__') &&
-                        delete item.__parent__ &&
-                        this.$delete(item, item.__parent__)
-                })
+                // this.datadata.forEach(item => {
+                //     // console.log(item, 11)
+                //     item.hasOwnProperty('children') &&
+                //         delete item.children &&
+                //         this.$delete(item, item.children)
+                //     item.hasOwnProperty('__parent__') &&
+                //         delete item.__parent__ &&
+                //         this.$delete(item, item.__parent__)
+                // })
                 console.log(this.datadata, 123)
                 courseClassificationMulti({
                     deleteIds: this.deleteIds,
@@ -1078,15 +1075,16 @@
                 return courseClassificationList(option).then(value => {
                     /* value保证存在且唯一 */
                     /* label保证渲染视图 */
-                    console.log(value, 'courseClassificationList')
+                    
                     value.data = value.data.map(item => ({
                         ...item,
                         value: item.id,
                         label: item.name
                     }))
+                    console.log(value, '过滤之前的courseClassificationList')
                     //挂载算法
                     this.datadata = filterCourseClassificationList(value)
-                    console.log(this.datadata, 'datadata')
+                    console.log(this.datadata, '过滤之后的datadata')
                     this.loading = false
                 })
             },

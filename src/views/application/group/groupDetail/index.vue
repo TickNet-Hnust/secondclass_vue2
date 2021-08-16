@@ -86,7 +86,7 @@
                 })
             },
             back() {
-                this.$router.push('/application/erke/activity')
+                this.$router.push('/application/group/groupSelf')
             }
         }
     }
@@ -141,4 +141,5 @@
         /* height: 475px !important; */
         overflow: hidden;
     }
+    
 </style>

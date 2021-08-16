@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-11 15:36:00
+ * @LastEditTime: 2021-08-16 18:14:31
 -->
 <template>
     <div class="app-container">
@@ -22,6 +22,7 @@
                             <el-input
                                 style="margin-right: 10px"
                                 placeholder="0"
+                                :value="allGroup.groupTotal"
                             >
                                 <template slot="prepend">群组总数</template>
                             </el-input>
@@ -29,6 +30,7 @@
                             <el-input
                                 style="margin-right: 10px"
                                 placeholder="0"
+                                :value="allGroup.groupYes"
                             >
                                 <template slot="prepend">有效群组</template>
                             </el-input>
@@ -36,6 +38,7 @@
                             <el-input
                                 style="margin-right: 10px"
                                 placeholder="0"
+                                :value="allGroup.groupVerify"
                             >
                                 <template slot="prepend">申请中</template>
                             </el-input>
@@ -43,6 +46,7 @@
                             <el-input
                                 style="margin-right: 10px"
                                 placeholder="0"
+                                :value="allGroup.groupNo"
                             >
                                 <template slot="prepend">已解散</template>
                             </el-input>
@@ -53,7 +57,7 @@
                             plain
                             icon="el-icon-plus"
                             size="mini"
-                            v-hasPermi="['system:user:add']"
+                            @click="openAddDialog"
                             >新增</el-button
                         >
 
@@ -99,14 +103,32 @@
                     <div class="erke-buttom-left">
                         <el-tabs>
                             <el-tab-pane label="根据分类">
-                                <el-menu>
-                                    <el-menu-item>
-                                        <span slot="title">全部</span>
+                                <el-menu
+                                    default-activt=""
+                                    @select="typeChanged"
+                                >
+                                    <el-menu-item index="" class="father">
+                                        <span slot="title">
+                                            全部
+                                            <span class="children">
+                                                {{allGroup.groupTotal}}
+                                            </span>
+                                        </span>
                                     </el-menu-item>
-                                    <el-menu-item>
-                                        <span slot="title">班级</span>
+                                    <el-menu-item
+                                        class="father"
+                                        v-for="(item,index) in allGroup.tabByType"
+                                        :key="index"
+                                        :index="item.typeId + ''"
+                                    >
+                                        <span slot="title">
+                                            {{item.typeName}}
+                                            <span class="children">
+                                                {{item.number}}
+                                            </span>
+                                        </span>
                                     </el-menu-item>
-                                    <el-menu-item>
+                                    <!-- <el-menu-item>
                                         <span slot="title">社团与协会</span>
                                     </el-menu-item>
                                     <el-menu-item>
@@ -126,19 +148,39 @@
                                     </el-menu-item>
                                     <el-menu-item>
                                         <span slot="title">校社联</span>
-                                    </el-menu-item>
+                                    </el-menu-item> -->
                                 </el-menu>
                             </el-tab-pane>
                             <el-tab-pane label="根据指导单位">
-                                <el-menu>
-                                    <el-menu>
-                                    <el-menu-item>
-                                        <span slot="title">全部</span>
+                                <el-menu
+                                    default-activt=""
+                                    @select="parentChanged"
+                                >
+                                    <el-menu-item
+                                        index=""
+                                        class="father"
+                                    >
+                                        <span slot="title">
+                                            全部
+                                            <span class="children">
+                                                {{allGroup.groupTotal}}
+                                            </span>
+                                        </span>
                                     </el-menu-item>
-                                    <el-menu-item>
-                                        <span slot="title">资环环境与安全工程学院</span>
+                                    <el-menu-item
+                                        class="father"
+                                        v-for="(item,index) in allGroup.tabByParent"
+                                        :key="index"
+                                        :index="item.parentId+''"
+                                    >
+                                        <span slot="title">
+                                            {{item.parentName}}
+                                            <span class="children">
+                                                {{item.number}}
+                                            </span>
+                                        </span>
                                     </el-menu-item>
-                                    <el-menu-item>
+                                    <!-- <el-menu-item>
                                         <span slot="title">土木工程学院</span>
                                     </el-menu-item>
                                     <el-menu-item>
@@ -146,8 +188,8 @@
                                     </el-menu-item>
                                     <el-menu-item>
                                         <span slot="title">化学化工学院</span>
-                                    </el-menu-item>
-                                </el-menu>
+                                    </el-menu-item> -->
+                                
                                 </el-menu>
                             </el-tab-pane>
                         </el-tabs>
@@ -159,24 +201,24 @@
                                     :gutter="10"
                                     style="flexWrap:wrap"
                                     type="flex"
-                                    justify="space-around"
+                                    justify="start"
                                 >
                                     <el-col :span="1" style="min-width:280px">
                                         <el-form-item
-                                            label="活动名称"
+                                            label="群组名称"
                                         >
-                                            <el-input></el-input>
+                                            <el-input v-model="queryList.deptName"></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="1" style="min-width:175px">
                                         <el-form-item
-                                            label="活动ID"
+                                            label="群组ID"
                                         >
-                                            <el-input class="data-text"></el-input>
+                                            <el-input class="data-text" v-model="queryList.deptId"></el-input>
                                         </el-form-item>
                                     </el-col>
 
-                                    <el-col :span="1" style="min-width:280px">
+                                    <!-- <el-col :span="1" style="min-width:280px">
                                         <el-form-item
                                             label="分类"
                                         >
@@ -198,13 +240,13 @@
                                                 <el-option value="全部"></el-option>
                                             </el-select>
                                         </el-form-item>
-                                    </el-col>
+                                    </el-col> -->
 
                                     <el-col :span="1" style="min-width:200px">
                                         <el-form-item
                                             label="指导老师"
                                         >
-                                            <el-input class="data-text"></el-input>
+                                            <el-input class="data-text" v-model="queryList.teacher"></el-input>
                                         </el-form-item>
                                     </el-col>
 
@@ -213,9 +255,15 @@
                                             label="状态"
                                         >
                                             <el-select
-                                                value="全部"
+                                                v-model="queryList.status"
                                             >
-                                                <el-option value="全部"></el-option>
+                                                <el-option value="" label="全部"></el-option>
+                                                <el-option 
+                                                    v-for="(item,index) in dict_ga_group_status"
+                                                    :key="index"
+                                                    :value="item.dictValue"
+                                                    :label="item.dictLabel"
+                                                ></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-col>
@@ -224,29 +272,31 @@
                                         <el-form-item
                                             label="负责人"
                                         >
-                                            <el-input class="data-text"></el-input>
+                                            <el-input class="data-text" v-model="queryList.leader"></el-input>
                                         </el-form-item>
                                     </el-col>
 
-                                    <el-col :span="1" style="min-width:210px">
+                                    <!-- <el-col :span="1" style="min-width:210px">
                                         <el-form-item
                                             label="负责人学号"
                                         >
                                             <el-input class="data-text"></el-input>
                                         </el-form-item>
-                                    </el-col>
+                                    </el-col> -->
 
-                                    <el-col :span="1" style="min-width:430px">
+                                    <el-col :span="1" style="min-width:480px">
                                         <el-form-item
                                             label="更新时间"
                                         >
                                             <el-date-picker
-                                                type="daterange"
+                                                v-model="queryList.updateTime"
+                                                type="datetimerange"
                                                 range-separator="至"
                                                 start-placeholder="开始日期"
                                                 end-placeholder="结束日期"
+                                                @change="updateTimeChange"
                                             >
-                                                </el-date-picker>
+                                            </el-date-picker>
                                         </el-form-item>
                                     </el-col>
 
@@ -265,9 +315,11 @@
                                             <el-button
                                                 size="mini"
                                                 type="primary"
+                                                @click="fuzzyQuery"
                                             >查询</el-button>
                                             <el-button
                                                 size="mini"
+                                                @click="reset"
                                             >重置</el-button>
                                         </el-form-item>
                                     </el-col>
@@ -279,29 +331,138 @@
                         >
                             <el-table-column
                                 label="ID"
-                                prop="id"
+                                prop="deptId"
                             ></el-table-column>
                             <el-table-column
                                 label="群组名称"
-                                prop="name"
+                                prop="deptName"
                             >
                                 <template slot-scope="scope">
                                     <router-link
                                         class="textBlue"
                                         :to="
                                             '/application/group/groupDetail/' +
-                                                scope.row.id
+                                                scope.row.deptId
                                         "
-                                        >{{ scope.row.name }}</router-link
+                                        >{{ scope.row.deptName }}</router-link
                                     >
                                 </template>
                             </el-table-column>
                             <el-table-column
+                                label="指导单位"
+                                prop="parentName"
+                            >
+                            </el-table-column>
+                            
+                            <el-table-column
+                                label="指导老师"
+                                prop="teacher"
+                            ></el-table-column>
+                            
+                            <el-table-column
+                                label="负责人"
+                                prop="leaderNickName"
+                            ></el-table-column>
+
+                            <el-table-column
+                                label="学号"
+                                prop="leaderUserName"
+                            ></el-table-column>
+
+                            <el-table-column
+                                label="成员数"
+                                prop="memberNumber"
+                            ></el-table-column>
+
+                            <el-table-column
+                                label="状态"
+                                prop="status"
+                                :formatter="formatStatus"
+                            >
+                                <template slot-scope="scope">
+                                    <el-button
+                                        size="mini"
+                                        round
+                                        :class="sureClass(scope.row.status)"
+                                    >{{formatStatus(scope.row.status)}}</el-button>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column
+                                label="更新时间"
+                                prop="updateTime"
+                                min-width="120"
+                            ></el-table-column>
+
+                            <el-table-column
+                                label="推荐群组"
+                                prop="recommend"
+                                :formatter="formatRecommend"
+                            >
+                                <template slot-scope="scope">
+                                    <i 
+                                        class="el-icon-check textGreen"
+                                        v-if="scope.row.recommend!=null && !scope.row.recommend"
+                                    ></i>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column
                                 label="操作"
                                 prop=""
+                                fixed="right"
+                                min-width="180"
                             >
-                                <template>
-                                    恢复
+                                <template slot-scope="scope">
+                                    
+                                    <el-button
+                                        
+                                        type="text"
+                                        size="mini"
+                                        icon="el-icon-edit"
+                                        @click="editDialog(scope.row)"
+                                    >编辑</el-button>
+                                    <el-button
+                                        type="text"
+                                        size="mini"
+                                        icon="el-icon-delete"
+                                    >解散</el-button>
+                                    <el-button
+                                        v-if="scope.row.status == 1"
+                                        type="text"
+                                        size="mini"
+                                        icon="el-icon-refresh"
+                                        @click="refreshStatus(scope.row)"
+                                    >启用</el-button>
+                                    <el-button
+                                        v-if="scope.row.status ==0"
+                                        type="text"
+                                        size="mini"
+                                        icon="el-icon-video-pause"
+                                        @click="pauseStatus(scope.row)"
+                                    >停用</el-button>
+                                        <!-- v-if="scope.row.status == 0" -->
+                                    <el-button
+                                        v-if="scope.row.status == 2"
+                                        type="text"
+                                        size="mini"
+                                        icon="el-icon-edit-outline"
+                                        @click="examStatus(scope.row)"
+                                    >审核</el-button>
+                                    <el-button
+                                        v-if="scope.row.recommend != 0"
+                                        type="text"
+                                        size="mini"
+                                        icon="el-icon-check"
+                                        @click="recommend(scope.row)"
+                                    >推荐</el-button>
+                                    <el-button
+                                        v-if="scope.row.recommend == 0"
+                                        type="text"
+                                        size="mini"
+                                        icon="el-icon-close"
+                                        @click="calcelRecommend(scope.row)"
+                                    >取消推荐</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -316,57 +477,432 @@
                 </div>
             </el-col>
         </el-row>
+        <el-dialog
+            :title="addDialog.title"
+            :visible.sync="addDialog.open"
+            width="700px"
+            class="groupAddDialog"
+            >
+            <el-form label-width="100px" label-position="left">
+                <el-form-item label="群组名称：" >
+                    <el-input v-model="postData.deptName"></el-input>
+                </el-form-item>
+                <el-form-item label="分类：">
+                    <el-select
+                        v-model="fakeData.one"
+                    >
+                        <el-option
+                            v-for="(item,index) in typeTreeList"
+                            :key="index"
+                            :label="item.name"
+                            :value="index"
+                        ></el-option>
+                    </el-select>
+                    ---
+                    <el-select
+                        v-model="fakeData.two"
+                    >
+                        <el-option
+                            v-for="(item,index) in typeTreeList[fakeData.one] && typeTreeList[fakeData.one].children"
+                            :key="index"
+                            :label="item.name"
+                            :value="index"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="指导单位：">
+                    <el-select
+                        v-model="postData.parentId"
+                    >
+                        <el-option
+                            v-for="(item,index) in deptList"
+                            :key="index"
+                            :value="item.deptId"
+                            :label="item.deptName"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="指导老师:">
+                    <el-input v-model="postData.teacher"></el-input>
+                </el-form-item>
+                <el-form-item label="加入规则:">
+                    <el-radio-group v-model="postData.joinRule">
+                        <el-radio-button
+                            v-for="(item,index) in dict_ga_group_join_rule"
+                            :key="index"
+                            :label="item.dictValue"
+                        >{{item.dictLabel}}</el-radio-button>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="推荐群组:">
+                    <el-switch 
+                        :value="Boolean(postData.recommend)"
+                        @change="postData.recommend = Number($event)"
+                    ></el-switch>
+                </el-form-item>
+                <el-form-item label="群组头像：">
+                    <el-upload
+                    class="avatar-uploader"
+                        :http-request="httpRequest"
+                        action="https://jsonplaceholder.typicode.com/posts/"
+                        list-type="picture-card"
+                    >
+                        <img v-if="postData.avatar" :src="postData.avatar" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item label="活动介绍：">
+                    <editor
+                        v-model="postData.introduce"
+                        :min-height="192"
+                    ></editor>
+                </el-form-item>
+            </el-form>
+            
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="cancel">取 消</el-button>
+                <el-button type="primary" @click="addGroup">确 定</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
 <script>
     import {
-        trainingProgramDetail,
-        trainingProgramList,
-        trainingProgramId,
-        courseClassificationList,
-        schoolYearList,
-        schoolYearMulti,
-        courseId,
-        coursePost,
-        coursePut,
-        courseDelete
+        getDict,
+
+        groupList,
+        groupInfo,
+        groupPut,
+        groupPost,
+        groupId,
+        groupTypeList,
+        groupIdVerify,
     } from '@/api/application/secondClass/index'
-
-    import { getDict } from '@/api/application/secondClass/dict/type.js'
-
-    import { filterCourseClassificationList, format } from '@/utils/gather.js'
-    import horwheel from 'horwheel'
-
-    import { importTemplate } from '@/api/system/user'
-    import { getToken } from '@/utils/auth'
-
+    import {
+        transformDate,
+        filterGroupClassificationList
+    } from '@/utils/gather.js'
+    import { deptListByType } from '@/api/system/dept'
+    import IMGURL_MIXINS from '@/mixins/upload.js'
+    import Editor from '@/components/Editor'
     export default {
         name: 'detail',
+        mixins: [IMGURL_MIXINS],
+        components: {
+            Editor
+        },
         data() {
             return {
-                groupList:[{
-                    id: 1,
-                    name: '第二课堂服务部',
-                },{
-                    id: 2,
-                    name: '第二课堂部'
-                }],
+                dict_ga_group_status:[],
+                dict_ga_group_recommend:[],
+                dict_ga_group_join_rule:[],
+                allGroup:{},
+                deptList:[],
+                typeTreeList:[],
+                fakeData:{
+                    one:0,
+                    two:0
+                },
+                postData:{
+                    deptName:'',
+                    type: '',
+                    parentId:'',
+                    teacher: '',
+                    joinRule:'',
+                    recommend:'',
+                    avatar:'',
+                    introduce:''
+                },
+                queryList:{
+                    parentId: '',//指导单位id
+                    teacher: '',//指导老师
+                    status:'',//状态,
+                    recommend: '',//是否推荐
+                    deptName: '',//群组名称
+                    leader:'',
+                    deptId: '',//群组id
+                    type: '',//群组id
+                    updateTime:'',
+                    beginUpdateTime:'',
+                    endUpdateTime:''
+                },
+                groupList:[],
                 queryParams: {
                     totalCount: 10,
                     totalPage: 10,
                     pageNum: 1,
                     pageSize: 10
+                },
+                addDialog:{
+                    title: '',
+                    open:false
                 }
             }
         },
         computed: {
         },
         methods: {
-
+            formatRecommend(row,column,cellValue) {
+                return cellValue!=null && this.dict_ga_group_recommend[cellValue]?.dictLabel
+            },
+            formatStatus(cellValue) {
+                return cellValue!=null && this.dict_ga_group_status[cellValue]?.dictLabel
+            },
+            sureClass(cellValue) {
+                if (cellValue == 0) {
+                    //ing
+                    return 'textGreen'
+                } else if (cellValue == 1) {
+                    //yes
+                    return 'textPlain'
+                } else if (cellValue == 2) {
+                    //no
+                    return 'textRed'
+                } 
+            },
+            /**
+             * @description: 取消推荐
+             */            
+            recommend(row) {
+                this.alertDialog.call(this,'推荐',{
+                    confirm:() =>{
+                        groupId({id:row.deptId}).then(value => {
+                            console.log(value,'ty')
+                            value.data.recommend = 0
+                            return value.data
+                        }).then(value => {
+                            console.log(value,'tm')
+                            groupPut(value).then(value => {
+                            this.msgSuccess('推荐成功')
+                            this.fuzzyQuery()
+                            })
+                        })
+                    }
+                })
+            },
+            calcelRecommend(row) {
+                this.alertDialog.call(this,'取消推荐',{
+                    confirm:() =>{
+                        groupId({id:row.deptId}).then(value => {
+                            value.data.recommend = 1
+                            return value.data
+                        }).then(value => {
+                            groupPut(value).then(value => {
+                            this.msgSuccess('取消推荐成功')
+                            this.fuzzyQuery()
+                            })
+                        })
+                    }
+                })
+            },
+            refreshStatus(row) {
+                this.alertDialog.call(this,'启用',{
+                    confirm:() =>{
+                        groupIdVerify({
+                            id:row.deptId,
+                            status: 0
+                        }).then(value => {
+                            this.msgSuccess('启用成功')
+                            this.fuzzyQuery()
+                        })
+                    }
+                })
+            },
+            pauseStatus(row) {
+                this.alertDialog.call(this,'停用',{
+                    confirm:() =>{
+                        groupIdVerify({
+                            id:row.deptId,
+                            status: 1
+                        }).then(value => {
+                            this.msgSuccess('停用成功')
+                            this.fuzzyQuery()
+                        })
+                    }
+                })
+            },
+            examStatus(row) {
+                this.alertDialog.call(this,'审核',{
+                    confirm:() =>{
+                        groupIdVerify({
+                            id:row.deptId,
+                            status: 0
+                        }).then(value => {
+                            this.msgSuccess('审核成功')
+                            this.fuzzyQuery()
+                        })
+                    }
+                })
+            },
+            /**
+             * @description: 根据分类改变了
+             */            
+            typeChanged(id) {
+                this.queryList.type = id
+                this.fuzzyQuery()
+            },
+            parentChanged(id) {
+                this.queryList.parentId = id
+                this.fuzzyQuery()
+            },
+            //时间选择器改变
+            updateTimeChange(value) {
+                if(!value) return 
+                let fuckMan = transformDate(value)
+                this.queryList.beginUpdateTime = fuckMan[0]
+                this.queryList.endUpdateTime = fuckMan[1]
+                console.log(fuckMan)
+            },
+            getList(option) {
+                console.log(option)
+                this.queryParams.pageNum = option.page
+                this.queryParams.pageSize = option.limit
+                this.fuzzyQuery()
+            },
+            httpRequest(file) {
+                this.getImgUrl(file).then(value => {
+                    if (this.postData.avatar?.length)
+                        this.postData.avatar += `;${value}`
+                    else this.postData.avatar += `${value}`
+                })
+            },
+            //点击编辑
+            async editDialog(row) {
+                await groupId({id:row.deptId}).then(value => {
+                    console.log(value)
+                    Object.keys(this.postData).forEach(item => {
+                        this.postData[item] = value.data?.[item]
+                    })
+                })
+                // console.log(row)
+                this.addDialog.open = true
+                this.addDialog.title = '编辑'
+            },
+            cancel() {
+                this.reset()
+                this.addDialog.open = false
+            },
+            /**
+             * @description: 确定新增
+             */            
+            addGroup() {
+                this.postData.type = this.typeTreeList[this.fakeData.one].children[this.fakeData.two].id
+                this.postData.orderNum = 0
+                this.postData.ancestors = 0 + ',' + this.postData.deptId
+                this.postData.status = 2 //待审核
+                console.log(this.postData)
+                groupPost(this.postData).then(value => {
+                    console.log(value)
+                    this.msgSuccess('新增成功')
+                    this.addDialog.open = false
+                    this.reset()
+                    this.fuzzyQuery()
+                })
+            },
+            openAddDialog() {
+                // this.reset()
+                this.addDialog.open = true
+                this.addDialog.title = '新增'
+            },
+            closeAddDialog() {
+                this.addDialog.open = false
+            },
+            /**
+             * @description: 重置
+             */            
+            reset() {
+                this.postData = {
+                    deptName:'',
+                    type: '',
+                    parentId:'',
+                    teacher: '',
+                    joinRule:'',
+                    recommend:'',
+                    avatar:'',
+                    introduce:''
+                }
+                this.queryList = {
+                    parentId: '',//指导单位id
+                    teacher: '',//指导老师
+                    status:'',//状态,
+                    leader: '',//负责人
+                    recommend: '',//是否推荐
+                    deptName: '',//群组名称
+                    deptId: '',//群组id
+                    type: '',//群组id
+                    updateTime:'',
+                    beginUpdateTime:'',
+                    endUpdateTime:''
+                }
+                this.fuzzyQuery()
+            },
+            fuzzyQuery() {
+                let option = {
+                    parentId: this.queryList.parentId,
+                    teacher: this.queryList.teacher,//指导老师
+                    status:this.queryList.status,//状态,
+                    leader: this.queryList.leader,//负责人
+                    recommend: this.queryList.recommend,//是否推荐
+                    deptName: this.queryList.deptName,//群组名称
+                    deptId: this.queryList.deptId,//群组id
+                    type: this.queryList.type,//群组id
+                    pageNum: this.queryParams.pageNum,
+                    pageSize: this.queryParams.pageSize
+                }
+                if(this.queryList.updateTime) {
+                    option.params = {
+                        beginUpdateTime: this.queryList.beginUpdateTime,
+                        endUpdateTime: this.queryList.endUpdateTime
+                    }
+                }
+                console.log(option)
+                this.getGroupList(option)
+            },
+            getGroupList(option) {
+                groupList(option).then(value => {
+                    console.log(option,value,888)
+                    this.groupList = value.rows
+                    this.queryParams.totalCount = value.total
+                    this.queryParams.totalPage = Math.ceil(value.total / this.queryParams.pageSize)
+                })
+            },
+            initDict() {
+                Promise.all([
+                    getDict('ga_group_status'),
+                    getDict('ga_group_recommend'),
+                    getDict('ga_group_join_rule')
+                ]).then(value => {
+                    console.log(value)
+                    let tempArr = [
+                        'dict_ga_group_status',
+                        'dict_ga_group_recommend',
+                        'dict_ga_group_join_rule'
+                    ]
+                    tempArr.forEach((item,index) => {
+                        this[item] = value[index].data
+                    })
+                })
+            }
         },
         async created() {
-
+            this.initDict()
+            groupTypeList().then(value => {
+                this.typeTreeList = filterGroupClassificationList(value.data)
+                // this.fakeData.one = this.typeTreeList[0].id
+                // this.fakeData.two = this.typeTreeList[0].chidlren[0].id
+                console.log(value,'分类比诶')
+            })
+            groupInfo().then(value => {
+                
+                this.allGroup = value.data
+            })
+            deptListByType({ type: 1 }).then(value => {
+                this.deptList = value.data
+            })
+            this.fuzzyQuery()
+            // this.getGroupList({pageNum:1,pageSize:10})
         },
         async beforeMount() {},
         async mounted() {}
@@ -430,169 +966,10 @@
     .el-input {
         width: 200px;
     }
-    .textRed {
-        color: #de3c50;
-    }
-    .textgreen {
-        color: #54d7b4;
-    }
-    .textyellow {
-        color: yellow;
-    }
-    .textPlain {
-        color: #8b8b8b;
-    }
-    .unitValue .el-input__inner,
-    .unitValue .el-input--suffix {
-        width: 260px;
-    }
-    .unitValue .el-input__icon::before {
-        color: #000;
-        font-weight: 700;
-    }
-    /*two*/
-    .switchStyle .el-switch__label {
-        position: absolute;
-        display: none;
-        color: #fff;
-    }
-    .switchStyle .el-switch__label--left {
-        z-index: 9;
-        left: 22px;
-    }
-    .switchStyle .el-switch__label--right {
-        z-index: 9;
-        left: -2px;
-    }
-    .switchStyle .el-switch__label.is-active {
-        display: block;
-    }
-    .switchStyle.el-switch .el-switch__core,
-    .el-switch .el-switch__label {
-        width: 45px !important;
-    }
-    /*three*/
-    .className .el-input__inner {
-        width: 330px;
-    }
-
-    .shoutInput .el-input__inner,
-    .shoutInput .el-input--suffix {
-        width: 130px;
-    }
-    .shoutInput .el-input__icon::before {
-        color: #000;
-        font-weight: 700;
-    }
-    /*four line */
-    .sortClass .el-input__inner,
-    .sortClass .el-input--suffix {
-        width: 200px;
-    }
-    .sortClass .el-input__icon::before {
-        color: #000;
-        font-weight: 700;
-    }
-    /*five */
-    .classSort .el-input__inner,
-    .classSort .el-input--suffix {
-        width: 180px;
-    }
-    .classSort .el-input__icon::before {
-        color: #000;
-        font-weight: 700;
-    }
-
-    .activitySort .el-input__inner,
-    .activitySort .el-input--suffix {
-        width: 320px;
-    }
-    .activitySort .el-input__icon::before {
-        color: #000;
-        font-weight: 700;
-    }
-
-    .rankSort .el-input__inner,
-    .rankSort .el-input--suffix {
-        width: 100px;
-    }
-    .rankSort .el-input__icon::before {
-        color: #000;
-        font-weight: 700;
-    }
-    textarea {
-        resize: none !important;
-        height: 150px;
-        width: 690px !important;
-        border: 1px solid #aaa !important;
-    }
-    .addDetailDialog >>> .el-dialog__body {
-        height: 500px;
-        overflow: auto;
-    }
-    .addDetailDialog .el-form > .el-row {
-        margin: 13px 0 !important;
-    }
-
-    .addDetailDialog .el-dialog__header {
-        border-bottom: 1px solid #ddd;
-    }
-    .addOrMine {
-        cursor: pointer;
-        display: inline-block;
-        height: 30px;
-        width: 30px;
-        text-align: center;
-        vertical-align: top;
-        line-height: 30px;
-        border: 1px solid #aaa;
-        border-radius: 3px;
-    }
-    .exportDialog >>> .el-dialog {
-        width: 762px !important;
-    }
-    .exportDialog >>> .el-dialog__body {
-        padding-top: 10px;
-        height: 390px;
-    }
-    .exportDialog >>> .el-tabs__header {
-        width: 260px;
-    }
-    .exportDialog >>> .el-tabs__item {
-        text-align: left;
-    }
     .planExport {
         position: relative;
     }
-    .planExport::after {
-        position: absolute;
-        right: 0;
-        top: -40px;
-        content: '';
-        width: 1px;
-        height: 400px;
-        background-color: #ddd;
-    }
-    .planExport >>> .el-tree-node__content {
-        height: 40px;
-        line-height: 20px;
-        padding: 10px;
-    }
-    * >>> .is-current {
-        background-color: #f6f7f9;
-        color: #5f9dfd;
-        cursor: pointer;
-    }
-    .planChoose >>> .el-checkbox {
-        margin: 5px 20px !important;
-        width: 320px;
-    }
-    .detailMainTable >>> .el-table__body-wrapper {
-        /* overflow: auto; */
-    }
-    .mb10 {
-        margin-bottom: 10px;
-    }
+    
     .el-form .el-row {
         height: initial;
     }
@@ -606,4 +983,26 @@
     .textBlue {
         color: #1890ff;
     }
+    .textGreen {
+        color: #54d7b4;
+    }
+    .textRed {
+        color: #de3c50;
+    }
+    .textGray {
+        color: #808080;
+    }
+    .father {
+        position: relative;
+    }
+    .children {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    .groupAddDialog >>> .el-dialog__body {
+        max-height: 50vh;
+        overflow: auto;
+    }
+    
 </style>
