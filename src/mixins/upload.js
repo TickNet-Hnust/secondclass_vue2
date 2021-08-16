@@ -3,16 +3,15 @@
  * @Author: 林舒恒
  * @Date: 2021-08-04 16:54:39
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-16 10:32:46
+ * @LastEditTime: 2021-08-16 21:08:33
  */
 import { getPolicy, upload, getOssFileUrl } from '@/api/application/ossImage'
 export default {
     data() {},
     methods: {
-        getImgUrl(file) {
-            console.log(file)
+        async getImgUrl(file) {
             let ossFileUrl
-            getPolicy() // 获取签名
+            await getPolicy() // 获取签名
                 .then(res => {
                     if (res.code === 200) {
                         return Promise.resolve(res.data)

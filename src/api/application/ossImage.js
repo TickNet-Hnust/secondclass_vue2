@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-08-04 16:19:11
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-16 10:49:28
+ * @LastEditTime: 2021-08-16 21:06:56
  */
 // import { getUUID } from '@/utils/utils'
 import request from '@/utils/request.js'
@@ -58,7 +58,6 @@ export function getOssFileUrl(ossData, file) {
  上传图片,status: 0成功，data为上传成功时的文件url
  */
 export function upload(ossData, file, ossFileUrl) {
-    console.log(123, ossData, file, ossFileUrl)
     const photoName = file.file.name // 原图片的名称 abc.jpg
     const policy = ossData.policy // 服务器端同事调oss的API，通过接口返回给前端的 policy
     const OSSAccessKeyId = ossData.accessid
@@ -86,7 +85,6 @@ export function upload(ossData, file, ossFileUrl) {
     return axios
         .post(host, param)
         .then(res => {
-            console.log(res, 7777)
             return Promise.resolve(res)
         })
         .catch(err => {

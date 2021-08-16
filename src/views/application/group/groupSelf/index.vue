@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-16 18:14:31
+ * @LastEditTime: 2021-08-16 21:36:18
 -->
 <template>
     <div class="app-container">
@@ -579,6 +579,7 @@
         groupId,
         groupTypeList,
         groupIdVerify,
+        uitlListCollege
     } from '@/api/application/secondClass/index'
     import {
         transformDate,
@@ -898,7 +899,7 @@
                 
                 this.allGroup = value.data
             })
-            deptListByType({ type: 1 }).then(value => {
+            uitlListCollege().then(value => {
                 this.deptList = value.data
             })
             this.fuzzyQuery()
