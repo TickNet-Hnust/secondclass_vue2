@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-16 22:27:41
+ * @LastEditTime: 2021-08-17 09:44:31
 -->
 <template>
     <div class="app-container">
@@ -499,9 +499,7 @@
                 this.addDialog.open = true
                 //id 与userid有差别
                 this.postData = fuckRow
-                memberPut(this.postData).then(value => {
-                    console.log(value)
-                })
+                
             },
             addMember() {
                 let state = this.addDialog.title =='新增' ? memberPost : memberPut

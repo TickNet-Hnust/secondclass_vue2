@@ -92,7 +92,6 @@
                         <el-cascader
                             v-model="queryList.coursePath"
                             :options="datadata"
-                            :props="{ checkStrictly: true }"
                             :show-all-levels="false"
                             class="activityCascader"
                             @change="handChangeNode"
@@ -244,11 +243,6 @@
                     prop="admissionWay"
                     label="录取方式"
                     :formatter="formatAdmissionWay"
-                ></el-table-column>
-
-                <el-table-column
-                    prop="admissionWay"
-                    label="参与方式"
                 ></el-table-column>
 
                 <el-table-column
@@ -500,6 +494,7 @@
                                 <el-radio :label="1">
                                     限定人数
                                     <el-input
+                                        class="data-number"
                                         v-model="postData.maxAdmissionNumber"
                                     ></el-input>
                                 </el-radio>
@@ -532,7 +527,7 @@
                             </el-select>
                         </el-form-item>
 
-                        <el-form-item label="活动标签：">
+                        <el-form-item label="活动标签：" class="dialogTags">
                             <el-tag
                                 :key="tag"
                                 v-for="tag in postFakeData.activityTag"
@@ -565,16 +560,19 @@
                             <el-cascader
                                 v-model="postFakeData.coursePath"
                                 :options="datadata"
-                                :props="{ checkStrictly: true }"
+                                
                                 :show-all-levels="false"
                                 class="activityCascader"
                                 @change="handChangeNodePost"
                                 placeholder="请选择课程分类"
                             ></el-cascader>
+                        
+
+                        </el-form-item>
+                        <el-form-item label="课程分类：">
                             <el-select
                                 v-model="postData.courseId"
-                                style=" margin-left:10px"
-                                placeholder="请选择课程"
+                                placeholder="请先选择分类"
                             >
                                 <!-- <el-option label="无" value=""></el-option> -->
                                 <el-option
@@ -712,6 +710,7 @@
                                 <el-radio :label="1"
                                     >签到距离：
                                     <el-input
+                                        class="data-number"
                                         v-model="
                                             postData.activityRegisteDistance
                                         "
@@ -767,15 +766,9 @@
                                 :on-success="handlePictureCardPreview"
                                 :on-remove="handleRemove"
                             >
-                                <i class="el-icon-plus"></i>
+                                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
-                            <el-dialog :visible.sync="dialogVisible">
-                                <img
-                                    width="100%"
-                                    :src="dialogImageUrl"
-                                    alt=""
-                                />
-                            </el-dialog>
                         </el-form-item>
 
                         <el-form-item label="相关附件：">
@@ -791,7 +784,7 @@
                                     将文件拖到此处，或<em>点击上传</em>
                                 </div>
                                 <div class="el-upload__tip" slot="tip">
-                                    只能上传jpg/png文件，且不超过500kb
+                                    只能上传文件，且不超过500kb
                                 </div>
                             </el-upload>
                         </el-form-item>
@@ -834,11 +827,12 @@
         courseClassificationList,
         groupList,
         utilListByName,
-        uitlListCollege
+        utilListCollege
     } from '@/api/application/secondClass/index'
 
     import {
         transformDate,
+        filterTwoLayer,
         filterCourseClassificationList
     } from '@/utils/gather'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
@@ -854,6 +848,7 @@
         data() {
             return {
                 dialogImageUrl: '',
+                imageUrl:'',
                 dialogVisible: false,
                 disabled: false,
                 courseList: [],
@@ -1158,11 +1153,15 @@
                     })
                 } 
             },
-            handlePictureCardPreview() {},
+            handlePictureCardPreview(file) {
+                this.dialogImageUrl = file.url;
+                this.dialogVisible = true;
+            },
             handleRemove() {},
             httpRequest2(file) {
                 // consoel.log(file)
                 this.getImgUrl(file).then(value => {
+                    this.imageUrl = value
                     console.log(value,'图片路径')
                     if (this.postData.enclosure.length)
                         this.postData.enclosure += `;${value}`
@@ -1191,7 +1190,7 @@
                 ]
             },
             activityRegisteDistanceChange(label) {
-                label == 0 && (this.postData.activityRegisteDistance = 0)
+                label == 0 && (this.postData.activityRegisteDistance = '')
             },
             Change(label) {
                 if (label == 0) {
@@ -1200,7 +1199,7 @@
             },
             admissionNumberChange(label) {
                 console.log(label)
-                label == 0 && (this.postFakeData.maxAdmissionNumber = [])
+                label == 0 && (this.postData.maxAdmissionNumber='')
             },
             /**
              * @description: 表单报名年级改变
@@ -1459,6 +1458,8 @@
                 trainingProgramDetail(option).then(value => {
                     this.courseList = value.data.pageData.list
                     console.log(this.courseList)
+                    this.queryList.courseId = ''
+                    this.postData.courseId = this.courseList[0].id
                 })
             },
             postActivity() {
@@ -1545,7 +1546,8 @@
                         label: item.name
                     }))
                     //挂载算法
-                    this.datadata = filterCourseClassificationList(value)
+                    this.datadata = filterTwoLayer(value.data)
+                    console.log(this.datadata)
                 })
             },
             /**
@@ -1659,7 +1661,7 @@
             this.getSchoolYearList() //查询学年
             this.getClassificationList() //查询分类列表
 
-            uitlListCollege().then(value => {
+            utilListCollege().then(value => {
                 this.deptList = value.data
                 console.log(value, 'deptlist')
             })
@@ -1807,5 +1809,14 @@
     }
     .addActivity >>> .ant-anchor-ink-ball {
         left: 101px !important;
+    }
+    .dialogTags >>> .button-new-tag {
+        margin-left: 0;
+    }
+    .data-number {
+        width: 131px;
+    }
+    .data-number >>> .el-input__inner {
+        width: 131px;
     }
 </style>

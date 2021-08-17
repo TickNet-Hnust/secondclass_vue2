@@ -5,7 +5,7 @@
                 <el-col :span="1" class="erke-top-head" style="min-width:380px">
                     <span> <i>✈</i>『百年征程，党史回眸』书法展览学习活动</span>
                 </el-col>
-                <el-col :span="1" style=";padding:10px 0;min-width:610px">
+                <el-col :span="2" style=";padding:10px 0;min-width:630px">
                     <el-radio-group
                         v-model="status"
                         size="mini"

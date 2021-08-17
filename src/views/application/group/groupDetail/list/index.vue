@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-08-11 15:43:03
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-16 17:28:24
+ * @LastEditTime: 2021-08-17 09:51:45
 -->
 <template>
     <div>
@@ -21,6 +21,7 @@
                         size="mini"
                         style="float:right"
                         v-model="status"
+                        @change="searchStatus"
                     >
                         <el-radio-button label="">全部</el-radio-button>
                         <el-radio-button
@@ -205,6 +206,16 @@
                 } else {
                     return 'textGreen'
                 }
+            },
+            searchStatus(value) {
+                console.log(value)
+                activityList({
+                    groupId:this.$route.params.gid,
+                    activityStatusId: value
+                }).then(value =>{
+                    console.log(value)
+                    this.activitys = value.rows
+                })
             },
             initDict() {
                 Promise.all([

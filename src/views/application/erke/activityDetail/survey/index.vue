@@ -9,13 +9,13 @@
                                 主办方：
                             </span>
                             <span class="textSpan">{{
-                                activityVo.groupId
+                                activityVo.groupName
                             }}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelSpan">录取方式：</span>
                             <span class="textSpan">{{
-                                activityVo.enrollWay
+                                computedAdmissionWay(activityVo.admissionWay)
                             }}</span>
                         </el-col>
                     </el-row>
@@ -32,7 +32,7 @@
                         <el-col :span="12">
                             <span class="labelSpan"> 报名范围：</span>
                             <span class="textSpan">{{
-                                activityVo.applyRange
+                                computedDept(activityVo.enrollRange)
                             }}</span>
                         </el-col>
                     </el-row>
@@ -41,13 +41,13 @@
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 指导单位：</span>
                             <span class="textSpan">{{
-                                activityVo.departmentId
+                                activityVo.deptName
                             }}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelSpan"> 报名年级：</span>
                             <span class="textSpan">{{
-                                activityVo.applyGrade
+                                activityVo.enrollGrade
                             }}</span>
                         </el-col>
                     </el-row>
@@ -56,7 +56,7 @@
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 指导老师：</span>
                             <span class="textSpan">{{
-                                activityVo.guideTeacherID
+                                activityVo.guideTeacherName
                             }}</span>
                         </el-col>
                         <el-col :span="12">
@@ -73,13 +73,13 @@
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan">活动级别：</span>
                             <span class="textSpan">{{
-                                activityVo.rankId
+                                computedRank(activityVo.rankId)
                             }}</span>
                         </el-col>
                         <el-col :span="12">
                             <span class="labelSpan"> 允许请假：</span>
                             <span class="textSpan">{{
-                                activityVo.vacate
+                                computedVacate(activityVo.vacate)
                             }}</span>
                         </el-col>
                     </el-row>
@@ -94,7 +94,7 @@
                         <el-col :span="12">
                             <span class="labelSpan"> 活动地点：</span>
                             <span class="textSpan">{{
-                                activityVo.activityPlace
+                                activityVo.activityPlaceName
                             }}</span>
                         </el-col>
                     </el-row>
@@ -111,7 +111,7 @@
                                 >活动负责人：</span
                             >
                             <span class="textSpan">{{
-                                activityVo.activityManagerId
+                                activityVo.activityManagerName
                             }}</span>
                         </el-col>
                     </el-row>
@@ -120,8 +120,8 @@
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 报名时间：</span>
                             <span class="textSpan"
-                                >{{ activityVo.applyStartTime }} ~
-                                {{ activityVo.applyEndTime }}</span
+                                >{{ activityVo.enrollStartTime }} ~
+                                {{ activityVo.enrollEndTime }}</span
                             >
                         </el-col>
                         <el-col :span="12">
@@ -129,7 +129,7 @@
                                 活动组织者：</span
                             >
                             <span class="textSpan">{{
-                                activityVo.activityOrganizerId
+                                activityVo.activityOrganizerName
                             }}</span>
                         </el-col>
                     </el-row>
@@ -375,38 +375,43 @@
     import { getDict } from '@/api/application/secondClass/dict/type.js'
     import {
         activityIdDetail,
-        activityIdEnrollBar
+        activityIdEnrollBar,
+        utilListCollege
     } from '@/api/application/secondClass/index'
     import * as echarts from 'echarts'
     export default {
         data() {
             return {
                 dict_sc_activity_status: [],
+                dict_sc_activity_admission_way:[],
+                dict_sc_train_program_rank:[],
+                dict_sc_activity_vacate:[],
+                deptListMap:[],
                 activityVo: {
-                    groupId: '', //活动主办方
-                    enrollWay: '', //录取方式
+                    groupName: '', //活动主办方
+                    admissionWay: '', //录取方式
 
                     activityReleaserName: '', //发布人
-                    applyRange: '', //报名范围
+                    enrollRange: '', //报名范围
 
-                    departmentId: '', //指导单位
-                    applyGrade: '', //报名年级
+                    deptName: '', //指导单位
+                    enrollGrade: '', //报名年级
 
-                    guideTeacherID: '', //指导老师
-                    maxEnrollNumber: '', //最大录取人数
+                    guideTeacherName: '', //指导老师
+                    maxAdmissionNumber: '', //最大录取人数
 
                     rankId: '', //活动级别
                     vacate: '', //允许请假
 
                     activityTag: '', //活动标签
-                    activityPlace: '', //活动地点
+                    activityPlaceName: '', //活动地点
 
                     courseClassificationId: '', //活动分类
-                    activityManagerId: '', //活动负责人
+                    activityManagerName: '', //活动负责人
 
-                    applyStartTime: '', //报名开始时间
-                    applyEndTime: '', //报名结束时间
-                    activityOrganizerId: '', //活动组织者
+                    enrollStartTime: '', //报名开始时间
+                    enrollEndTime: '', //报名结束时间
+                    activityOrganizerName: '', //活动组织者
 
                     activityStartTime: '', //活动开始时间
                     activityEndTime: '' //活动结束时间
@@ -516,6 +521,30 @@
                 today: {}
             }
         },
+        computed:{
+            computedRank() {
+                return (value) => {
+                    return this.dict_sc_train_program_rank[value]?.dictLabel
+                }
+            },
+            computedAdmissionWay() {
+                return (value) => {
+                    return this.dict_sc_activity_admission_way[value]?.dictLabel
+                }
+            },
+            computedVacate() {
+                return (value) => {
+                    return this.dict_sc_activity_vacate[value]?.dictLabel
+                }
+            },
+            computedDept() {
+                return (_array) => {
+                    return _array.split(';').map(item => {
+                        return this.deptListMap[item]
+                    }).join('、')
+                }
+            }
+        },
         methods: {
             rangeChange(value) {
                 let start, end
@@ -614,9 +643,19 @@
                 this.myChart.setOption(this.defalutOption)
             },
             async initDict() {
-                await Promise.all([getDict('sc_activity_status')]).then(
+                await Promise.all([
+                    getDict('sc_activity_status'),
+                    getDict('sc_activity_admission_way'),
+                    getDict('sc_train_program_rank'),
+                    getDict('sc_activity_vacate'),
+                ]).then(
                     value => {
-                        let tempArr = ['dict_sc_activity_status']
+                        let tempArr = [
+                            'dict_sc_activity_status',
+                            'dict_sc_activity_admission_way',
+                            'dict_sc_train_program_rank',
+                            'dict_sc_activity_vacate'
+                        ]
                         tempArr.forEach((item, index) => {
                             this[item] = value[index].data
                         })
@@ -625,11 +664,19 @@
             }
         },
         async created() {
-            await this.initDict()
+            this.initDict()
+            utilListCollege().then(value => {
+                console.log(value,'部门')
+                value.data.forEach((item,index) => {
+                    this.deptListMap[item.deptId] = item.deptName
+                })
+                
+            })
             activityIdDetail({
                 id: this.$route.params.aid
             }).then(value => {
-                console.log(value)
+                console.log(value,'活动详情')
+                // this.activityVo = value.data.activitVo
                 Object.keys(this.activityVo).forEach(item => {
                     this.activityVo[item] = value.data.activityVo[item]
                 })
@@ -1555,6 +1602,7 @@
     }
     .lisRight-top {
         padding-top: 10px;
+        height: calc(100vh - 180px);
         position: relative;
     }
     .title {

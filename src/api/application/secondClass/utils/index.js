@@ -15,7 +15,7 @@ export function utilListByName(params) {
     })
 }
 
-export function uitlListCollege(params) {
+export function utilListCollege(params) {
     return request({
         url: '/dept/util/listCollege',
         method: 'get',
