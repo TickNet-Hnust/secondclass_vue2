@@ -1153,6 +1153,13 @@
                     })
                 } 
             },
+            async getList(option) {
+                console.log(option)
+                    this.queryParams.pageNum= option.page,
+                    this.queryParams.pageSize= option.limit
+                
+                this.fuzzyQuery()
+            },
             handlePictureCardPreview(file) {
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;

@@ -45,16 +45,19 @@
 
                 <sidebar-item
                     :item="home"
+                    icon="home"
                     :key="44646"
                     :base-path="home.path"
                 />
                 <sidebar-item
                     :item="system"
+                    icon="setting"
                     :key="564"
                     :base-path="system.path"
                 />
                 <sidebar-item
                     :item="application"
+                    icon="appstore"
                     :key="count"
                     :base-path="application.path"
                 />
@@ -80,7 +83,7 @@
                     hidden: false,
                     meta: {
                         title: '首页',
-                        icon: 'nested',
+                        icon: 'home',
                         noCache: false
                     }
                 },
@@ -90,7 +93,7 @@
                     alwaysShow: true,
                     meta: {
                         title: '应用',
-                        icon: 'list',
+                        icon: 'appstore',
                         noCache: false
                     },
                     children: [
@@ -100,7 +103,7 @@
                             hidden: false,
                             meta: {
                                 title: '第二课堂成绩单',
-                                icon: 'list',
+                                icon: '',
                                 noCache: false
                             }
                         },
@@ -110,7 +113,7 @@
                             hidden: false,
                             meta: {
                                 title: '群组管理',
-                                icon: 'peoples',
+                                icon: '',
                                 noCache: false
                             }
                         },
@@ -120,7 +123,7 @@
                             hidden: false,
                             meta: {
                                 title: '竞赛报名',
-                                icon: 'peoples',
+                                icon: '',
                                 noCache: false
                             }
                         },
@@ -130,7 +133,7 @@
                             hidden: false,
                             meta: {
                                 title: '电子证书',
-                                icon: 'peoples',
+                                icon: '',
                                 noCache: false
                             }
                         }
@@ -142,7 +145,7 @@
                     hidden: false,
                     meta: {
                         title: '系统管理',
-                        icon: 'system',
+                        icon: 'setting',
                         noCache: false
                     }
                 }

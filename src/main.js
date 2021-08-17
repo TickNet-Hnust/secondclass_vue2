@@ -34,6 +34,7 @@ import XScrollbar from 'x-scrollbar'
 import './style/xscrollbar.css'
 import './assets/icons' // icon
 import './permission' // permission control
+import './iconfont.js'
 // import { getDicts } from '@/api/system/dict/data'
 import { getDict } from '@/api/application/secondClass/dict/type.js'
 import { getConfigKey } from '@/api/system/config'
