@@ -19,7 +19,7 @@
                 >
                     <item
                         :icon="
-                            onlyOneChild.meta.icon ||
+                            
                                 (item.meta && item.meta.icon)
                         "
                         :title="onlyOneChild.meta.title"
@@ -79,7 +79,8 @@
             basePath: {
                 type: String,
                 default: ''
-            }
+            },
+            icon: String
         },
         data() {
             this.onlyOneChild = null

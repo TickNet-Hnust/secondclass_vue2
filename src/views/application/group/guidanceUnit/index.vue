@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-17 10:56:02
+ * @LastEditTime: 2021-08-18 23:45:24
 -->
 <template>
     <div class="app-container">
@@ -549,8 +549,9 @@
     .erke-bottom {
         background-color: #fff;
         border: 1px solid #ddd;
+        border-radius: 5px;
         padding: 15px;
-        max-height: calc(100vh - 180px);
+        max-height: calc(100vh - 140px);
         overflow: auto;
     }
    

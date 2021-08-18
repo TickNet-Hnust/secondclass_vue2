@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-17 11:01:28
+ * @LastEditTime: 2021-08-18 23:45:43
 -->
 <template>
     <div class="app-container">
@@ -640,7 +640,8 @@
         background-color: #fff;
         border: 1px solid #ddd;
         padding: 15px;
-        max-height: calc(100vh - 180px);
+        border-radius: 5px;
+        max-height: calc(100vh - 140px);
         overflow: auto;
     }
    

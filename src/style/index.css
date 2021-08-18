@@ -126,6 +126,14 @@ textarea {
     padding: 0 10px !important;
 }
 
+.icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
+
 .el-button [class*='el-icon-']+span {
     margin-left: 0 !important;
 }

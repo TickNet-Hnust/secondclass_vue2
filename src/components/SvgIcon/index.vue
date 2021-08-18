@@ -1,8 +1,15 @@
+<!--
+ * @Descripttion: 
+ * @Author: 林舒恒
+ * @Date: 2021-07-18 16:03:21
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-08-17 15:31:29
+-->
 <template>
     <div
         v-if="isExternal"
         :style="styleExternalIcon"
-        class="svg-external-icon svg-icon"
+        class="svg-external-icon icon"
         v-on="$listeners"
     />
     <svg v-else :class="svgClass" aria-hidden="true" v-on="$listeners">
@@ -53,6 +60,7 @@
     .svg-icon {
         width: 1em;
         height: 1em;
+        font-size: 18px;
         vertical-align: -0.15em;
         fill: currentColor;
         overflow: hidden;

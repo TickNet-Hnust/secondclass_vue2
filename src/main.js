@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-05 14:44:44
+ * @LastEditTime: 2021-08-17 14:46:36
  */
 import Vue from 'vue'
 import Cookies from 'js-cookie'
@@ -14,6 +14,7 @@ import 'ant-design-vue/lib/dropdown/style/css'
 import 'ant-design-vue/lib/menu/style/css'
 import 'ant-design-vue/lib/icon/style/css'
 import 'ant-design-vue/lib/anchor/style/css'
+
 Vue.use(Steps)
 Vue.use(Dropdown)
 Vue.use(Menu)
@@ -22,7 +23,7 @@ Vue.use(Anchor)
 import Element from 'element-ui'
 import './assets/styles/element-variables.scss'
 
-import '@/assets/styles/index.scss' // global css
+import '@/assets/styles/index.scss' // global cs
 import '@/assets/styles/ruoyi.scss' // ruoyi css
 import './style/index.css'
 import App from './App'
@@ -33,6 +34,7 @@ import XScrollbar from 'x-scrollbar'
 import './style/xscrollbar.css'
 import './assets/icons' // icon
 import './permission' // permission control
+import './iconfont.js'
 // import { getDicts } from '@/api/system/dict/data'
 import { getDict } from '@/api/application/secondClass/dict/type.js'
 import { getConfigKey } from '@/api/system/config'

@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-16 21:36:18
+ * @LastEditTime: 2021-08-17 11:37:49
 -->
 <template>
     <div class="app-container">
@@ -523,7 +523,15 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="指导老师:">
-                    <el-input v-model="postData.teacher"></el-input>
+                    
+                    <el-autocomplete
+                    :debounce="500"
+                    value-key="label"
+                    v-model="fakeData.teacher"
+                    :fetch-suggestions="querySearchAsync"
+                    placeholder="请输入内容"
+                    @select="handName"
+                    ></el-autocomplete>
                 </el-form-item>
                 <el-form-item label="加入规则:">
                     <el-radio-group v-model="postData.joinRule">
@@ -547,8 +555,8 @@
                         action="https://jsonplaceholder.typicode.com/posts/"
                         list-type="picture-card"
                     >
-                        <img v-if="postData.avatar" :src="postData.avatar" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        
+                        <i  class="el-icon-plus avatar-uploader-icon"></i>
                     </el-upload>
                 </el-form-item>
                 <el-form-item label="活动介绍：">
@@ -579,7 +587,8 @@
         groupId,
         groupTypeList,
         groupIdVerify,
-        uitlListCollege
+        utilListCollege,
+        utilListByName
     } from '@/api/application/secondClass/index'
     import {
         transformDate,
@@ -604,9 +613,11 @@
                 typeTreeList:[],
                 fakeData:{
                     one:0,
-                    two:0
+                    two:0,
+                    teacher:''
                 },
                 postData:{
+                    deptId:'',
                     deptName:'',
                     type: '',
                     parentId:'',
@@ -756,6 +767,23 @@
                 this.queryList.endUpdateTime = fuckMan[1]
                 console.log(fuckMan)
             },
+            handName(item,k) {
+                console.log(item,item.value,777)
+                this.postData.teacher = item.value
+            },
+            querySearchAsync(qs,cb) {
+                if(qs) {
+                    utilListByName({name:qs}).then(value => {
+                        console.log(value)
+                        cb(value.data.map(item =>({
+                            label: `${item.userName}-${item.nickName}`,
+                            value: item.nickName
+                        })))
+                    })
+                    return 
+                }
+                cb([])
+            },
             getList(option) {
                 console.log(option)
                 this.queryParams.pageNum = option.page
@@ -776,6 +804,7 @@
                     Object.keys(this.postData).forEach(item => {
                         this.postData[item] = value.data?.[item]
                     })
+                    console.log(this.postData)
                 })
                 // console.log(row)
                 this.addDialog.open = true
@@ -789,14 +818,20 @@
              * @description: 确定新增
              */            
             addGroup() {
-                this.postData.type = this.typeTreeList[this.fakeData.one].children[this.fakeData.two].id
-                this.postData.orderNum = 0
-                this.postData.ancestors = 0 + ',' + this.postData.deptId
-                this.postData.status = 2 //待审核
-                console.log(this.postData)
-                groupPost(this.postData).then(value => {
+                
+                let state = this.addDialog.title == '新增' ? groupPost :groupPut
+                if(state) {
+                    this.postData.type = this.typeTreeList[this.fakeData.one].children[this.fakeData.two].id
+                    this.postData.orderNum = 0
+                    this.postData.ancestors = 0 + ',' + this.postData.deptId
+                    this.postData.status = 2 //待审核
+                } else {
+                    
+                }
+                    console.log(this.postData)
+                state(this.postData).then(value => {
                     console.log(value)
-                    this.msgSuccess('新增成功')
+                    this.msgSuccess('操作成功')
                     this.addDialog.open = false
                     this.reset()
                     this.fuzzyQuery()
@@ -899,7 +934,7 @@
                 
                 this.allGroup = value.data
             })
-            uitlListCollege().then(value => {
+            utilListCollege().then(value => {
                 this.deptList = value.data
             })
             this.fuzzyQuery()
