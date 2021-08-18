@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-16 22:40:07
+ * @LastEditTime: 2021-08-17 10:56:02
 -->
 <template>
     <div class="app-container">
@@ -301,8 +301,9 @@
         systemDeptPut,
         //通过id获取编辑回显
         systemDeptGet,
-
+        //获取学校列表
         deptUtilSchool,
+
     } from '@/api/application/secondClass/index'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
     export default {
@@ -351,6 +352,7 @@
             }
         },
         methods: {
+       
             sureClass(row){
                 if (row.status == 0) {
                     //ing

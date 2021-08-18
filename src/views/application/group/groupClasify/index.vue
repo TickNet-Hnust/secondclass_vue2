@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-16 22:41:21
+ * @LastEditTime: 2021-08-17 11:01:28
 -->
 <template>
     <div class="app-container">
@@ -327,13 +327,6 @@
 </template>
 
 <script>
-    // //导出活动分类
-    // export function groupTypeExport(){
-    //     request({
-    //         url:'/admins/group/type/export',
-    //         methods:'get'
-    //     })
-    // }
     import {
         //群组分类列表
         groupTypeList,
@@ -341,6 +334,8 @@
         groupTypePost,
         //编辑群组分类
         groupTypePut,
+        //群组分类导出
+        groupTypeExport,
         //通过id获取编辑回显
         groupType,
     } from '@/api/application/secondClass/index'
@@ -402,7 +397,7 @@
                 }
             }
         },
-        methods: {
+        methods: {        
             getList(option) {
                 this.queryParams.pageNum = option.page
                 this.queryParams.pageSize = option.limit
@@ -546,6 +541,20 @@
                     console.log(value.data,'过滤之前的数据')
                     this.treeData = filterGroupClassificationList(value.data);
                     console.log(this.treeData,'过滤之后的数据');
+                    
+                     //导出群组分类
+                    // var options = {
+                    //     exportUrl: '/admins/group/type/export',
+                    //     columns: [{
+                    //         field: 'id',
+                    //         title: '主键'
+                    //     },
+                    //     {
+                    //         field: 'name',
+                    //         title: '名称'
+                    //     }]
+                    // };
+                    // $.table.init(options);
                    
                 })
 

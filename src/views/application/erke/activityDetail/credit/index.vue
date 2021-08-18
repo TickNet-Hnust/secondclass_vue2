@@ -34,15 +34,14 @@
                                 <span> 积分规则：</span>
                             </el-col>
 
-                            <el-col :span="1" style="min-width:300px;margin-bottom:5px;" 
+                            <el-col :span="8" style="min-width:300px;margin-bottom:5px;" 
                             v-for="(item,index) in integrationRule"
                             :key="index"
                             >
                                 <el-input
                                     :value="
                                         computedRule(
-                                            item.integralType,
-                                            item.integrationRange
+                                            item.children,
                                         )
                                     "
                                 >
@@ -464,9 +463,11 @@
     import {
         courseClassificationList,
         SortListClassificationId,
+        getClassificationId,
     } from '@/api/application/secondClass/courseClassification.js'
     import {
-        transformDate
+        transformDate,
+        filterCourseClassificationList2
     } from '@/utils/gather'
     import { 
         getDept,
@@ -622,7 +623,9 @@
                 //积分申请方式字典
                 dict_sc_activity_integral_apply_way: [],
                 //活动认定状态
-                dict_sc_activity_integral: []
+                dict_sc_activity_integral: [],
+                currentCourseClassification:[],
+                filterCourseClassificationList:[],
             }
         },
         computed: {
@@ -640,19 +643,21 @@
             },
 
             computedRule(){
-                    return (integralType,integrationRange) => {
+                    return (childrens) => {
+                        if(childrens == null||childrens.length==0)
+                           return ;
+                        else{
+                           let array = [];
+                           let str;
+                            childrens.forEach((item=>{
+                                str = item.name+':'+item.integrationRange+'分'
+                                array.push(str)
+                            }))
+                            let arrayStr = array.join('/');
+                            console.log(arrayStr,'要输出的字符串');
+                            return arrayStr 
+                        }
 
-                    if(integralType==null||integrationRange==null||integrationRange==0)
-                    {
-                        return '积分类型或范围为空'
-                    } else {
-                        return (
-                            '积分项(' +
-                            this.dict_sc_integral_type[integralType] +
-                            '):' +
-                            integrationRange
-                        )
-                    }
                 }
             },
             //取活动级别字典计算方法
@@ -952,19 +957,26 @@
                     })
                 })
             },
-            getCourseClassificationList(option) {
-                SortListClassificationId(option).then(value => {                   
-                    console.log(value,'子课程分类列表!');
-                    this.integrationRule = value.data;
-                    // value.data.forEach((item,index)=>{
-                    //     if(item.pid == this.courseClassificationId)
-                    //     {
-                            
-                    //         this.integrationRule.push(item);
-                    //     }
-                    // })
-                    // console.log(this.integrationRule,'integrationRule数组');
-
+            getCourseClassificationList(id) {
+                let option = {
+                    name:'',
+                    type:'',
+                    integralType:'',
+                }
+                courseClassificationList(option).then(value => {                   
+                    console.log(value.data,'课程分类列表!');
+                    value.data.forEach((item)=>{
+                        if(item.id===id)
+                        {
+                            this.currentCourseClassification = JSON.parse(JSON.stringify(item));
+                        }
+                    })
+                    this.filterCourseClassificationList =
+                    filterCourseClassificationList2(value.data,this.currentCourseClassification,id);
+                    console.log(this.filterCourseClassificationList,'过滤完的课程分类');
+                    this.integrationRule = this.filterCourseClassificationList.children
+                    console.log(this.integrationRule,'孩子')
+                    
                 })
             }
         },
@@ -977,7 +989,8 @@
                 activityId: this.$route.params.aid
             })
             /** 获得当前情况下的报名管理列表 */
-            this.fuzzyQuery()
+            this.fuzzyQuery();
+            
         }
     }
 </script>
@@ -987,7 +1000,7 @@
         background-color:#93d6dc;
     } */
     .ruleInput >>> .el-input__inner{
-        width: 180px;
+        width: 300px;
     }
     .el-row >>> .explain{
         background-color:#93d6dc;
