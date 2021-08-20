@@ -94,8 +94,8 @@
                                         </el-tooltip>
                                     </el-col>
 
-                                    <el-col :span="1" style="min-width:100px">
-                                        <el-form-item label="">
+                                    <el-col :span="1" style="min-width:80px">
+                                        <el-form-item >
                                             <a-dropdown>
                                                 <a
                                                     class="ant-dropdown-link"
@@ -786,6 +786,9 @@
                     console.log(value, '批量修改接口返回的数据！！！')
                     this.msgSuccess(value.msg)
                     this.fuzzyQuery()
+                    this.getActivityPrizeRecord({
+                        activityId: this.$route.params.aid
+                    })
                     this.managePrizeDialog.open = false
                 })
             },
@@ -943,10 +946,11 @@
         color: white;
         background-color: #1890ff;
         width: 80px;
-        height: 37px;
+        height: 32px;
         display: block;
         text-align: center;
-        line-height: 37px;
+        line-height: 32px;
+        margin-top: 1px;
     }
     .erke-top {
         /* height: 120px; */

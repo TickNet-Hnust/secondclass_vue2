@@ -217,7 +217,7 @@
                 ></el-table-column>
 
                 <el-table-column
-                    prop="activityStatusId"
+                    prop="enrollNumber"
                     label="报名人数"
                     min-width="80"
                 ></el-table-column>
