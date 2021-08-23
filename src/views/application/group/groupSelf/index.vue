@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-17 11:37:49
+ * @LastEditTime: 2021-08-18 19:27:14
 -->
 <template>
     <div class="app-container">
@@ -304,7 +304,10 @@
                                         <el-form-item
                                             label="推荐群组"
                                         >
-                                            <el-switch></el-switch>
+                                            <el-switch 
+                                                :value="!queryList.recommend"
+                                                @change="queryList.recommend = Number(!$event)"
+                                            ></el-switch>
                                         </el-form-item>
                                     </el-col>
 
@@ -402,7 +405,7 @@
                                 <template slot-scope="scope">
                                     <i 
                                         class="el-icon-check textGreen"
-                                        v-if="scope.row.recommend!=null && !scope.row.recommend"
+                                        v-if="scope.row.recommend!=null && scope.row.recommend"
                                     ></i>
                                 </template>
                             </el-table-column>
@@ -450,14 +453,14 @@
                                         @click="examStatus(scope.row)"
                                     >审核</el-button>
                                     <el-button
-                                        v-if="scope.row.recommend != 0"
+                                        v-if="scope.row.recommend == 0"
                                         type="text"
                                         size="mini"
                                         icon="el-icon-check"
                                         @click="recommend(scope.row)"
                                     >推荐</el-button>
                                     <el-button
-                                        v-if="scope.row.recommend == 0"
+                                        v-if="scope.row.recommend != 0"
                                         type="text"
                                         size="mini"
                                         icon="el-icon-close"
@@ -823,7 +826,7 @@
                 if(state) {
                     this.postData.type = this.typeTreeList[this.fakeData.one].children[this.fakeData.two].id
                     this.postData.orderNum = 0
-                    this.postData.ancestors = 0 + ',' + this.postData.deptId
+                    this.postData.ancestors = 0 + ',' + this.postData.parentId
                     this.postData.status = 2 //待审核
                 } else {
                     
