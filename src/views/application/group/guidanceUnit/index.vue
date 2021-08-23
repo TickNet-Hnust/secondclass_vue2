@@ -2,8 +2,8 @@
  * @Descripttion: 培养方案
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-17 11:52:46
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-08-18 23:45:24
 -->
 <template>
     <div class="app-container">
@@ -301,8 +301,9 @@
         systemDeptPut,
         //通过id获取编辑回显
         systemDeptGet,
-
+        //获取学校列表
         deptUtilSchool,
+
     } from '@/api/application/secondClass/index'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
     export default {
@@ -351,6 +352,7 @@
             }
         },
         methods: {
+       
             sureClass(row){
                 if (row.status == 0) {
                     //ing
