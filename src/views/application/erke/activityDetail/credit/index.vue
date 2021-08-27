@@ -243,7 +243,6 @@
                                     <el-col :span="1" style="min-width:205px">
                                         <el-form-item label="申报理由:">
                                             <el-select
-                                                v-if="maxLayer==3"
                                                 v-model="queryList.reason"
                                                 placeholder="申报理由:不限"
                                                 style="width:120px"
@@ -255,50 +254,14 @@
                                                 ></el-option>
                                                 <el-option
                                                     v-for="(item,
-                                                    index) in integrationRule[0].children"
+                                                    index) in reasonList"
                                                     :key="index"
-                                                    :value="item.name"
-                                                    :label="item.name"
+                                                    :value="item"
+                                                    :label="item"
                                                 ></el-option>
                                             </el-select>
 
-                                            <el-select
-                                                v-else-if="maxLayer==1||(maxLayer==2&&integrationRule.children[0].type==2)"
-                                                v-model="queryList.reason"
-                                                placeholder="申报理由:不限"
-                                                style="width:120px"
-                                                @change="fuzzyQuery"
-                                            >
-                                                <el-option
-                                                    value=""
-                                                    label="申报理由:不限"
-                                                ></el-option>
-                                                <el-option
-                                                    :value="integrationRule.name"
-                                                    :label="integrationRule.name"
-                                                ></el-option>
-                                            </el-select>
-
-                                            <el-select
-                                                v-else
-                                                v-model="queryList.reason"
-                                                placeholder="申报理由:不限"
-                                                style="width:120px"
-                                                @change="fuzzyQuery"
-                                            >
-                                                <el-option
-                                                    value=""
-                                                    label="申报理由:不限"
-                                                ></el-option>
-                                                <el-option
-                                                    v-for="(item,
-                                                    index) in integrationRule.children"
-                                                    :key="index"
-                                                     v-if="item.type!=2"
-                                                    :value="item.name"
-                                                    :label="item.name"
-                                                ></el-option>
-                                            </el-select>
+                                           
                                         </el-form-item>
                                     </el-col>
 
@@ -982,6 +945,7 @@
                         isAsc:'',
                     }
                 },
+                reasonList:[]
             }
         },
         computed: {
@@ -1293,7 +1257,7 @@
                 this.courseClassificationName = value.data.courseClassificationName;
                 this.integralScheme = value.data.integralScheme;
                 // await this.getCourseClassificationList(this.courseClassificationId);
-                await this.getCourseClassificationList(this.courseClassificationId);
+                await this.getCourseClassificationList(89);
                
             })
            },
@@ -1391,22 +1355,64 @@
                     filterCourseClassificationList2(value.data,this.currentCourseClassification,id);
                     console.log(this.filterCourseClassificationList,'过滤完的课程分类');
                     this.maxLayer = this.filterCourseClassificationList.maxLayer;
+
                     // 积分在第三层
                     if(this.maxLayer==3)
                     {
                         this.integrationRule = this.filterCourseClassificationList.children
+                        this.filterCourseClassificationList.children.forEach((item1)=>{
+                        if(item1.type==1||(item1.type==2&&item1.integrationRange)){
+                            this.filterCourseClassificationList.children.forEach((item2)=>{
+                                if(item2.children)
+                                {
+                                    item2.children.push(item1);
+                                }
+                            })
+                        }
+                        })
+
+                        console.log(this.filterCourseClassificationList,'处理之后的课程分类')
+
+                        let reasonSet = new Set();
+
+                        this.filterCourseClassificationList.children.forEach((item1)=>{
+                            if(item1.children){
+                                item1.children.forEach((item2)=>{
+                               reasonSet.add(item2.name)
+                           })
+                        }
+                        })
+                        this.reasonList = Array.from(reasonSet);
+                        console.log(this.reasonList,'申报理由列表');
+                        // this.reasonList = this.filterCourseClassificationList.children
                     }
                     //积分在第二层
                     if(this.maxLayer==2)
                     {
                         this.integrationRule = this.filterCourseClassificationList
+                        this.filterCourseClassificationList.children.forEach((item)=>{
+                            if(item.type==1||(item.type==2&&item.integrationRange))
+                            {
+                                this.reasonList.push(item.name);
+                            }
+                        })
                     }
                     //积分在第一层
                     if(this.maxLayer==1||(this.maxLayer==2&&this.filterCourseClassificationList.children[0].type==2))
                     {
                         this.integrationRule = this.filterCourseClassificationList
+                        this.reasonList.push(this.filterCourseClassificationList.name);
+                        if(this.filterCourseClassificationList.children)
+                        {
+                            this.filterCourseClassificationList.children.forEach((item)=>{
+                                if(item.type==2&&item.integrationRange)
+                                {
+                                    this.data.reasonList.push(item.name);
+                                }
+                        })
+                        }
+                        
                     }
-                    
                 })
             }
         },
