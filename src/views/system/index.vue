@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:22
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-24 17:38:22
+ * @LastEditTime: 2021-08-23 20:16:40
 -->
 <template>
     <div>
@@ -122,4 +122,12 @@
             width: 1320px;
         }
     }
+</style>
+<style scoped>
+.app-container {
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
 </style>

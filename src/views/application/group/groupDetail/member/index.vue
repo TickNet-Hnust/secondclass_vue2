@@ -361,7 +361,6 @@
             <el-form label-width="100px" label-position="left">
                 <el-form-item label="学号-姓名" v-show="addDialog.title=='新增'">
                     <el-autocomplete
-                        label="sdg"
                         :debounce="500"
                         value-key="label"
                         v-model="fakeData.userId"

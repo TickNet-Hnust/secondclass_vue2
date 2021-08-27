@@ -452,7 +452,7 @@
                                         : undefined
                                 "
                                 @change="
-                                    postData.enrollGrade = $event.join(';')
+                                    postData.enrollGrade = $event.join('，')
                                 "
                                 multiple
                                 filterable
@@ -1213,7 +1213,7 @@
              */
 
             enrollGradeChange(value) {
-                this.postData.enrollGrade = value.join(';')
+                this.postData.enrollGrade = value.join('，')
             },
             /**
              * @description: 表单报名范围改变
