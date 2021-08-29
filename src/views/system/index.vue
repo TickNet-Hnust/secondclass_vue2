@@ -124,10 +124,10 @@
     }
 </style>
 <style scoped>
-.app-container {
-  padding: 15px;
-  background-color: #fff;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-}
+    .app-container {
+        padding: 15px;
+        background-color: #fff;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
 </style>

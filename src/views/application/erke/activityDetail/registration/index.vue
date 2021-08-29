@@ -152,7 +152,12 @@
                                                 data-text
                                                 placeholder="学号"
                                                 v-model="queryList.userName"
-                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                                @input="
+                                                    debounceFuzzyQuery(
+                                                        fuzzyQuery,
+                                                        500
+                                                    )()
+                                                "
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -163,7 +168,12 @@
                                                 data-text
                                                 placeholder="姓名"
                                                 v-model="queryList.nickName"
-                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                                @input="
+                                                    debounceFuzzyQuery(
+                                                        fuzzyQuery,
+                                                        500
+                                                    )()
+                                                "
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -382,10 +392,8 @@
         listDeptExcludeChild,
         listDept
     } from '@/api/system/dept.js'
-    
-    import {
-        transformDate
-    } from '@/utils/gather'
+
+    import { transformDate } from '@/utils/gather'
 
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
@@ -488,19 +496,18 @@
         },
         methods: {
             //模糊查询防抖
-            debounceFuzzyQuery(func,delayTime){
-                return function(){
-                    clearTimeout(this.timer);
-                    console.log(this.count,'搜索次数');
-                    if(this.count==0)
-                    {
-                        func();
-                        this.count++;
-                    }else{
-                        this.timer = setTimeout( ()=>{
-                        func();
-                        this.count++;
-                        },delayTime )
+            debounceFuzzyQuery(func, delayTime) {
+                return function() {
+                    clearTimeout(this.timer)
+                    console.log(this.count, '搜索次数')
+                    if (this.count == 0) {
+                        func()
+                        this.count++
+                    } else {
+                        this.timer = setTimeout(() => {
+                            func()
+                            this.count++
+                        }, delayTime)
                     }
                 }.bind(this)
             },
@@ -649,9 +656,9 @@
                     nickName: this.queryList.nickName,
                     status: this.queryList.status,
                     situation: this.queryList.situation,
-                    params:{
-                    // registeStartTime: this.queryList.registeStartTime,
-                    // registeEndTime: this.queryList.registeEndTime,
+                    params: {
+                        // registeStartTime: this.queryList.registeStartTime,
+                        // registeEndTime: this.queryList.registeEndTime,
                     },
                     page: this.queryParams.pageCount,
                     limit: this.queryParams.pageSize,
@@ -660,8 +667,10 @@
                     // isAsc:''
                 }
                 if (this.value2) {
-                    option.params.registeStartTime =  transformDate(this.value2)[0]
-                    option.params.registeEndTime =  transformDate(this.value2 )[1]
+                    option.params.registeStartTime = transformDate(
+                        this.value2
+                    )[0]
+                    option.params.registeEndTime = transformDate(this.value2)[1]
                 }
                 console.log(option, '发送的数据')
                 this.getRegisteList(option)

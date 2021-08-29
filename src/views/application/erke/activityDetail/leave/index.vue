@@ -81,7 +81,12 @@
                                                 placeholder="学号"
                                                 v-model="queryList.userName"
                                                 style="width:100px"
-                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                                @input="
+                                                    debounceFuzzyQuery(
+                                                        fuzzyQuery,
+                                                        500
+                                                    )()
+                                                "
                                             >
                                             </el-input>
                                         </el-form-item>
@@ -94,7 +99,12 @@
                                                 placeholder="姓名"
                                                 v-model="queryList.nickName"
                                                 style="width:100px"
-                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                                @input="
+                                                    debounceFuzzyQuery(
+                                                        fuzzyQuery,
+                                                        500
+                                                    )()
+                                                "
                                             >
                                             </el-input>
                                         </el-form-item>
@@ -330,9 +340,7 @@
         activityLeaveList,
         activityLeaveVerify
     } from '@/api/application/secondClass/index'
-    import {
-        transformDate
-    } from '@/utils/gather'
+    import { transformDate } from '@/utils/gather'
     //导入获取dept信息函数
     import {
         getDept,
@@ -448,19 +456,18 @@
         },
         methods: {
             //模糊查询防抖
-            debounceFuzzyQuery(func,delayTime){
-                return function(){
-                    clearTimeout(this.timer);
-                    console.log(this.count,'搜索次数');
-                    if(this.count==0)
-                    {
-                        func();
-                        this.count++;
-                    }else{
-                        this.timer = setTimeout( ()=>{
-                        func();
-                        this.count++;
-                        },delayTime )
+            debounceFuzzyQuery(func, delayTime) {
+                return function() {
+                    clearTimeout(this.timer)
+                    console.log(this.count, '搜索次数')
+                    if (this.count == 0) {
+                        func()
+                        this.count++
+                    } else {
+                        this.timer = setTimeout(() => {
+                            func()
+                            this.count++
+                        }, delayTime)
                     }
                 }.bind(this)
             },
@@ -482,7 +489,7 @@
                     })
                 ;(this.value2 = ''), this.fuzzyQuery()
             },
-            
+
             //点击左下角部门触发的事件
             handleSelect(index) {
                 console.log(index)
@@ -598,9 +605,9 @@
                     userName: this.queryList.userName,
                     nickName: this.queryList.nickName,
                     status: this.queryList.status,
-                    params:{
-                    // leaveStartTime: this.queryList.leaveStartTime,
-                    // leaveEndTime: this.queryList.leaveEndTime,
+                    params: {
+                        // leaveStartTime: this.queryList.leaveStartTime,
+                        // leaveEndTime: this.queryList.leaveEndTime,
                     },
                     page: this.queryParams.pageCount,
                     limit: this.queryParams.pageSize,
@@ -609,8 +616,8 @@
                     isAsc: ''
                 }
                 if (this.value2) {
-                    option.params.leaveStartTime =  transformDate(this.value2)[0]
-                    option.params.leaveEndTime =  transformDate(this.value2 )[1]
+                    option.params.leaveStartTime = transformDate(this.value2)[0]
+                    option.params.leaveEndTime = transformDate(this.value2)[1]
                 }
                 console.log(option, '发送的数据')
                 this.getLeaveList(option)

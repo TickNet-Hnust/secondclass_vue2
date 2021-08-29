@@ -37,10 +37,7 @@
                             content="清空查询条件"
                             placement="right"
                         >
-                            <el-button
-                                circle
-                                icon="el-icon-refresh"
-                            >
+                            <el-button circle icon="el-icon-refresh">
                             </el-button>
                         </el-tooltip>
                     </div>
@@ -53,25 +50,27 @@
                             class="el-menu-vertical-demo"
                             @select="statusChanged"
                         >
-                            <el-menu-item
-                                index=""
-                            >
+                            <el-menu-item index="">
                                 <template slot="title">
                                     全部
                                     <span class="children">
-                                         {{tabbarList.get('全部')}}
+                                        {{ tabbarList.get('全部') }}
                                     </span>
                                 </template>
                             </el-menu-item>
                             <el-menu-item
-                                v-for="(item,index) in dict_ga_group_user_status"
+                                v-for="(item,
+                                index) in dict_ga_group_user_status"
                                 :key="index"
-                                :index="item.dictValue+''"
+                                :index="item.dictValue + ''"
                             >
                                 <template slot="title">
-                                    {{item && item.dictLabel}}
+                                    {{ item && item.dictLabel }}
                                     <span class="children">
-                                        {{tabbarList.size!=0 && tabbarList.get(item.dictLabel)}}
+                                        {{
+                                            tabbarList.size != 0 &&
+                                                tabbarList.get(item.dictLabel)
+                                        }}
                                     </span>
                                 </template>
                             </el-menu-item>
@@ -96,31 +95,35 @@
                                     justify="space-around"
                                 >
                                     <el-col :span="1" style="min-width:160px">
-                                        <el-form-item
-                                            label="姓名"
-                                        >
-                                            <el-input class="data-text" v-model="queryList.nickName"></el-input>
+                                        <el-form-item label="姓名">
+                                            <el-input
+                                                class="data-text"
+                                                v-model="queryList.nickName"
+                                            ></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="1" style="min-width:160px">
-                                        <el-form-item
-                                            label="学号"
-                                        >
-                                            <el-input class="data-text" v-model="queryList.userName"></el-input>
+                                        <el-form-item label="学号">
+                                            <el-input
+                                                class="data-text"
+                                                v-model="queryList.userName"
+                                            ></el-input>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:170px">
-                                        <el-form-item
-                                            label="性别"
-                                        >
+                                        <el-form-item label="性别">
                                             <el-select
                                                 v-model="queryList.sex"
                                                 style="width:120px"
                                             >
-                                                <el-option value="" label="全部"></el-option>
-                                                <el-option 
-                                                    v-for="(item,index) in dict_sys_user_sex"
+                                                <el-option
+                                                    value=""
+                                                    label="全部"
+                                                ></el-option>
+                                                <el-option
+                                                    v-for="(item,
+                                                    index) in dict_sys_user_sex"
                                                     :key="index"
                                                     :label="item.dictLabel"
                                                     :value="item.dictValue"
@@ -130,16 +133,18 @@
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:200px">
-                                        <el-form-item
-                                            label="所在学院"
-                                        >
+                                        <el-form-item label="所在学院">
                                             <el-select
                                                 v-model="queryList.deptName"
                                                 style="width:120px"
                                             >
-                                                <el-option value="" label="全部"></el-option>
-                                                <el-option 
-                                                    v-for="(item,index) in deptList"
+                                                <el-option
+                                                    value=""
+                                                    label="全部"
+                                                ></el-option>
+                                                <el-option
+                                                    v-for="(item,
+                                                    index) in deptList"
                                                     :key="index"
                                                     :label="item.deptName"
                                                     :value="item.deptId"
@@ -149,27 +154,29 @@
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:200px">
-                                        <el-form-item
-                                            label="届次"
-                                        >
-                                            <el-input class="data-text" v-model="queryList.session"></el-input>
+                                        <el-form-item label="届次">
+                                            <el-input
+                                                class="data-text"
+                                                v-model="queryList.session"
+                                            ></el-input>
                                         </el-form-item>
                                     </el-col>
 
-
                                     <el-col :span="1" style="min-width:200px">
-                                        <el-form-item
-                                            label="群内分组"
-                                        >
-                                            <el-input class="data-text" v-model="queryList.fenzu"></el-input>
+                                        <el-form-item label="群内分组">
+                                            <el-input
+                                                class="data-text"
+                                                v-model="queryList.fenzu"
+                                            ></el-input>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:190px">
-                                        <el-form-item
-                                            label="群内职务"
-                                        >
-                                            <el-input class="data-text" v-model="queryList.job"></el-input>
+                                        <el-form-item label="群内职务">
+                                            <el-input
+                                                class="data-text"
+                                                v-model="queryList.job"
+                                            ></el-input>
                                         </el-form-item>
                                     </el-col>
 
@@ -187,9 +194,7 @@
                                     </el-col> -->
 
                                     <el-col :span="1" style="min-width:430px">
-                                        <el-form-item
-                                            label="加入时间"
-                                        >
+                                        <el-form-item label="加入时间">
                                             <el-date-picker
                                                 v-model="queryList.createTime"
                                                 type="daterange"
@@ -198,14 +203,12 @@
                                                 end-placeholder="结束日期"
                                                 @change="createTimeChaned"
                                             >
-                                                </el-date-picker>
+                                            </el-date-picker>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:430px">
-                                        <el-form-item
-                                            label="退出时间"
-                                        >
+                                        <el-form-item label="退出时间">
                                             <el-date-picker
                                                 v-model="queryList.quitTime"
                                                 type="daterange"
@@ -214,31 +217,29 @@
                                                 end-placeholder="结束日期"
                                                 @change="quitTimeChanged"
                                             >
-                                                </el-date-picker>
+                                            </el-date-picker>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:140px">
-                                        <el-form-item
-                                            label=""
-                                        >
+                                        <el-form-item label="">
                                             <el-button
                                                 size="mini"
                                                 type="primary"
                                                 @click="fuzzyQuery"
-                                            >查询</el-button>
+                                                >查询</el-button
+                                            >
                                             <el-button
                                                 size="mini"
                                                 @click="reset"
-                                            >重置</el-button>
+                                                >重置</el-button
+                                            >
                                         </el-form-item>
                                     </el-col>
                                 </el-row>
                             </el-form>
                         </div>
-                        <el-table
-                            :data="members"
-                        >
+                        <el-table :data="members">
                             <el-table-column
                                 label="ID"
                                 prop="id"
@@ -291,7 +292,14 @@
                                         round
                                         size="mini"
                                         :class="sureClass(scope.row.status)"
-                                    >{{dict_ga_group_user_status.length!=0 && dict_ga_group_user_status[scope.row.status].dictLabel}}</el-button>
+                                        >{{
+                                            dict_ga_group_user_status.length !=
+                                                0 &&
+                                                dict_ga_group_user_status[
+                                                    scope.row.status
+                                                ].dictLabel
+                                        }}</el-button
+                                    >
                                 </template>
                             </el-table-column>
 
@@ -314,30 +322,38 @@
                             >
                                 <template slot-scope="scope">
                                     <el-button
-                                        v-if="[1,2,3,4].includes(scope.row.status)"
+                                        v-if="
+                                            [1, 2, 3, 4].includes(
+                                                scope.row.status
+                                            )
+                                        "
                                         type="text"
                                         size="mini"
                                         icon="el-icon-edit"
                                         @click="editDialog(scope.row)"
-                                    >编辑</el-button>
+                                        >编辑</el-button
+                                    >
                                     <el-button
-                                        v-if="[3,4].includes(scope.row.status)"
+                                        v-if="[3, 4].includes(scope.row.status)"
                                         type="text"
                                         size="mini"
                                         icon="el-icon-delete"
-                                    >清退</el-button>
+                                        >清退</el-button
+                                    >
                                     <el-button
                                         v-if="scope.row.status == 5"
                                         type="text"
                                         size="mini"
                                         icon="el-icon-refresh"
-                                    >恢复</el-button>
+                                        >恢复</el-button
+                                    >
                                     <el-button
                                         v-if="scope.row.status == 0"
                                         type="text"
                                         size="mini"
                                         icon="el-icon-edit-outline"
-                                    >审核</el-button>
+                                        >审核</el-button
+                                    >
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -357,9 +373,12 @@
             :visible.sync="addDialog.open"
             width="800px"
             class="memberAddDialog"
-            >
+        >
             <el-form label-width="100px" label-position="left">
-                <el-form-item label="学号-姓名" v-show="addDialog.title=='新增'">
+                <el-form-item
+                    label="学号-姓名"
+                    v-show="addDialog.title == '新增'"
+                >
                     <el-autocomplete
                         :debounce="500"
                         value-key="label"
@@ -367,7 +386,7 @@
                         :fetch-suggestions="querySearchAsync"
                         placeholder="请输入内容"
                         @select="handName"
-                        ></el-autocomplete>
+                    ></el-autocomplete>
                 </el-form-item>
                 <el-form-item label="群内分组">
                     <el-input v-model="postData.fenzu"></el-input>
@@ -381,10 +400,11 @@
                 <el-form-item label="人员状态">
                     <el-radio-group v-model="postData.status">
                         <el-radio-button
-                            v-for="(item,index) in dict_ga_group_user_status"
+                            v-for="(item, index) in dict_ga_group_user_status"
                             :key="index"
                             :label="item.dictValue"
-                        >{{item.dictLabel}}</el-radio-button>
+                            >{{ item.dictLabel }}</el-radio-button
+                        >
                     </el-radio-group>
                 </el-form-item>
             </el-form>
@@ -407,34 +427,32 @@
         memberPost
     } from '@/api/application/secondClass/index'
 
-    import {
-        transformDate
-    } from '@/utils/gather.js'
+    import { transformDate } from '@/utils/gather.js'
     export default {
         name: 'detail',
         data() {
             return {
-                deptList:[],//部门列表
-                dict_sys_user_sex:[],
-                dict_ga_group_user_status:[],
-                tabbarList:new Map, //map对象
-                members:[],//表格人员
-                fakeData:{
-                    userId:'',
+                deptList: [], //部门列表
+                dict_sys_user_sex: [],
+                dict_ga_group_user_status: [],
+                tabbarList: new Map(), //map对象
+                members: [], //表格人员
+                fakeData: {
+                    userId: ''
                 },
-                postData:{
+                postData: {
                     userId: '',
-                    fenzu:'',
-                    groupId:this.$route.params.gid,
-                    job:'',
-                    session:'',
-                    status:'',
+                    fenzu: '',
+                    groupId: this.$route.params.gid,
+                    job: '',
+                    session: '',
+                    status: ''
                 },
-                addDialog:{
-                    title:'',
-                    open:false
+                addDialog: {
+                    title: '',
+                    open: false
                 },
-                queryList:{
+                queryList: {
                     groupId: this.$route.params.gid,
                     nickName: '',
                     userName: '',
@@ -444,11 +462,11 @@
                     fenzu: '',
                     job: '',
                     status: '',
-                    createTime:'',
+                    createTime: '',
                     beginCreateTime: '',
                     endCreateTime: '',
-                    quitTime:'',
-                    beginQuitTime:'',
+                    quitTime: '',
+                    beginQuitTime: '',
                     endQuitTime: ''
                 },
                 queryParams: {
@@ -456,11 +474,10 @@
                     totalPage: 0,
                     pageNum: 1,
                     pageSize: 10
-                },
+                }
             }
         },
-        computed: {
-        },
+        computed: {},
         methods: {
             statusChanged(index) {
                 console.log(index)
@@ -492,16 +509,16 @@
                 }
             },
             editDialog(row) {
-                let fuckRow = {...row}
-                console.log(fuckRow,'准备编辑的数据')
+                let fuckRow = { ...row }
+                console.log(fuckRow, '准备编辑的数据')
                 this.addDialog.title = '修改'
                 this.addDialog.open = true
                 //id 与userid有差别
                 this.postData = fuckRow
-                
             },
             addMember() {
-                let state = this.addDialog.title =='新增' ? memberPost : memberPut
+                let state =
+                    this.addDialog.title == '新增' ? memberPost : memberPut
                 console.log(this.postData)
                 state(this.postData).then(value => {
                     console.log(value)
@@ -512,31 +529,35 @@
             },
             /**
              * @description: 姓名改变
-             */            
-            handName(item,k) {
-                console.log(item,item.value)
+             */
+
+            handName(item, k) {
+                console.log(item, item.value)
                 this.postData.userId = item.value
             },
             /**
              * @description: 姓名原创搜索
              * @param {*} qs
              * @param {*} cb
-             */            
-            querySearchAsync(qs,cb) {
-                if(qs) {
-                    utilListByName({name:qs}).then(value => {
+             */
+
+            querySearchAsync(qs, cb) {
+                if (qs) {
+                    utilListByName({ name: qs }).then(value => {
                         console.log(value)
-                        cb(value.data.map(item =>({
-                            label: `${item.userName}-${item.nickName}`,
-                            value: item.userId
-                        })))
+                        cb(
+                            value.data.map(item => ({
+                                label: `${item.userName}-${item.nickName}`,
+                                value: item.userId
+                            }))
+                        )
                     })
-                    return 
+                    return
                 }
                 cb([])
             },
             openAddDialog() {
-                this.addDialog.title='新增'
+                this.addDialog.title = '新增'
                 this.addDialog.open = true
                 this.reset()
             },
@@ -548,11 +569,14 @@
             /**
              * @description: 获得成员列表
              * @param {*} option
-             */            
+             */
+
             getMemberList(option) {
                 memberList(option).then(value => {
-                    console.log(value,777)
-                    this.queryParams.totalPage = Math.ceil(this.queryParams.totalCount / this.queryParams.pageSize)
+                    console.log(value, 777)
+                    this.queryParams.totalPage = Math.ceil(
+                        this.queryParams.totalCount / this.queryParams.pageSize
+                    )
                     this.members = value.rows
                 })
             },
@@ -570,21 +594,21 @@
                     fenzu: '',
                     job: '',
                     status: '',
-                    createTime:'',
+                    createTime: '',
                     beginCreateTime: '',
                     endCreateTime: '',
-                    quitTime:'',
-                    beginQuitTime:'',
+                    quitTime: '',
+                    beginQuitTime: '',
                     endQuitTime: ''
                 }
-                this.postData={
+                this.postData = {
                     userId: '',
-                    fenzu:'',
-                    groupId:this.$route.params.gid,
-                    job:'',
-                    session:'',
-                    status:'',
-                    userId:''
+                    fenzu: '',
+                    groupId: this.$route.params.gid,
+                    job: '',
+                    session: '',
+                    status: '',
+                    userId: ''
                 }
                 this.fuzzyQuery()
             },
@@ -600,14 +624,14 @@
                     job: this.queryList.job,
                     status: this.queryList.status,
                     pageNum: this.queryParams.pageNum,
-                    pageSize:this.queryParams.pageSize
+                    pageSize: this.queryParams.pageSize
                 }
-                if(this.queryList.createTime) {
+                if (this.queryList.createTime) {
                     option.params = {}
-                    option.params.beginCreateTime = this.queryList.beginCreateTime,
-                    option.params.endCreateTime = this.queryList.endCreateTime
+                    ;(option.params.beginCreateTime = this.queryList.beginCreateTime),
+                        (option.params.endCreateTime = this.queryList.endCreateTime)
                 }
-                if(this.queryList.quitTime) {
+                if (this.queryList.quitTime) {
                     option.params = {}
                     option.params.beginQuitTime = this.queryList.beginQuitTime
                     option.params.endQuitTime = this.queryList.endQuitTime
@@ -626,7 +650,7 @@
                         'dict_sys_user_sex',
                         'dict_ga_group_user_status'
                     ]
-                    tempArr.forEach((item,index) => {
+                    tempArr.forEach((item, index) => {
                         this[item] = value[index].data
                     })
                 })
@@ -636,7 +660,7 @@
             this.initDict()
             this.fuzzyQuery()
             // this.getMemberList()
-            memberInfo({groupId:this.$route.params.gid}).then(value => {
+            memberInfo({ groupId: this.$route.params.gid }).then(value => {
                 this.tabbarList = new Map(Object.entries(value.data))
                 this.queryParams.totalCount = this.tabbarList.get('全部')
                 console.log(this.tabbarList)

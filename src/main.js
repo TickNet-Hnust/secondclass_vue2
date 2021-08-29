@@ -3,23 +3,25 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-17 14:46:36
+ * @LastEditTime: 2021-08-25 11:48:26
  */
 import Vue from 'vue'
 import Cookies from 'js-cookie'
-import { Steps, Dropdown, Menu, Icon, Anchor } from 'ant-design-vue'
+import { Steps, Dropdown, Menu, Icon, Anchor, Upload } from 'ant-design-vue'
 // import 'ant-design-vue/dist/antd.css'
 import 'ant-design-vue/lib/steps/style/css'
 import 'ant-design-vue/lib/dropdown/style/css'
 import 'ant-design-vue/lib/menu/style/css'
 import 'ant-design-vue/lib/icon/style/css'
 import 'ant-design-vue/lib/anchor/style/css'
+import 'ant-design-vue/lib/upload/style/css'
 
 Vue.use(Steps)
 Vue.use(Dropdown)
 Vue.use(Menu)
 Vue.use(Icon)
 Vue.use(Anchor)
+Vue.use(Upload)
 import Element from 'element-ui'
 import './assets/styles/element-variables.scss'
 
@@ -54,6 +56,7 @@ import RightToolbar from '@/components/RightToolbar'
 
 // 全局方法挂载
 Vue.prototype.getDict = getDict
+Vue.prototype.getDicts = getDict
 Vue.prototype.getConfigKey = getConfigKey
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm

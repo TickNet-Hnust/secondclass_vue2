@@ -96,113 +96,110 @@
                                 </el-col> -->
                             </el-row>
                         </div>
-                        <el-tab-pane
-                            label="全部"
-                            name=""
-                            :key="0"
-                        >
+                        <el-tab-pane label="全部" name="" :key="0">
                             <div class="erke-buttom-right">
-                                    <el-table
-                                        :data="datadata.flatMap(item => item.children)"
-                                        row-key="id"
-                                        v-loading="loading"
-                                        
-                                        :tree-props="{
-                                            children: 'children',
-                                            hasChildren: 'hasChildren'
-                                        }"
-                                        :row-class-name="heightLight"
-                                    >
-                                        <el-table-column type="index">
-                                        </el-table-column>
+                                <el-table
+                                    :data="
+                                        datadata.flatMap(item => item.children)
+                                    "
+                                    row-key="id"
+                                    v-loading="loading"
+                                    :tree-props="{
+                                        children: 'children',
+                                        hasChildren: 'hasChildren'
+                                    }"
+                                    :row-class-name="heightLight"
+                                >
+                                    <el-table-column type="index">
+                                    </el-table-column>
 
-                                        <!-- <el-table-column
+                                    <!-- <el-table-column
                                             prop="id"
                                             label="ID"
                                             width="150"
                                         > -->
-                                        <!-- </el-table-column> -->
-                                        <el-table-column
-                                            prop="name"
-                                            label="项目名称"
-                                            min-width="300"
-                                            :show-overflow-tooltip="true"
-                                        >
-                                        </el-table-column>
-                                        <el-table-column
-                                            prop="type"
-                                            label="类型"
-                                            :formatter="formatType"
-                                        >
-                                        </el-table-column>
-                                        <el-table-column
-                                            prop="integralType"
-                                            label="积分类别"
-                                            min-width="120"
-                                            :formatter="formatIntegralType"
-                                        >
-                                        </el-table-column>
-                                        <el-table-column
-                                            prop="integrationRange"
-                                            label="分值"
-                                        >
-                                        </el-table-column>
-                                        <el-table-column
-                                            prop="updateTime"
-                                            label="修订时间"
-                                            :show-overflow-tooltip="true"
-                                            :formatter="formatUpdateTime"
-                                        >
-                                        </el-table-column>
-                                        <el-table-column
-                                            label="操作"
-                                            fixed="right"
-                                            width="180"
-                                        >
-                                            <template slot-scope="scope">
-                                                <el-button
-                                                    size="mini"
-                                                    type="text"
-                                                    icon="el-icon-edit"
-                                                    @click="
-                                                        updateData(
-                                                            scope.row,
-                                                            scope.$index
-                                                        )
-                                                    "
-                                                    >修改</el-button
-                                                >
-                                                <el-button
-                                                    size="mini"
-                                                    type="text"
-                                                    icon="el-icon-key"
-                                                    @click="sortData(scope.row)"
-                                                    >排序</el-button
-                                                >
-                                                <el-button
-                                                    size="mini"
-                                                    type="text"
-                                                    icon="el-icon-delete"
-                                                    @click="
-                                                        deleteCourseClassificaiton(
-                                                            scope.row
-                                                        )
-                                                    "
-                                                    >删除</el-button
-                                                >
-                                            </template>
-                                        </el-table-column>
-                                    </el-table>
+                                    <!-- </el-table-column> -->
+                                    <el-table-column
+                                        prop="name"
+                                        label="项目名称"
+                                        min-width="300"
+                                        :show-overflow-tooltip="true"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="type"
+                                        label="类型"
+                                        :formatter="formatType"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="integralType"
+                                        label="积分类别"
+                                        min-width="120"
+                                        :formatter="formatIntegralType"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="integrationRange"
+                                        label="分值"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="updateTime"
+                                        label="修订时间"
+                                        :show-overflow-tooltip="true"
+                                        :formatter="formatUpdateTime"
+                                    >
+                                    </el-table-column>
+                                    <el-table-column
+                                        label="操作"
+                                        fixed="right"
+                                        width="180"
+                                    >
+                                        <template slot-scope="scope">
+                                            <el-button
+                                                size="mini"
+                                                type="text"
+                                                icon="el-icon-edit"
+                                                @click="
+                                                    updateData(
+                                                        scope.row,
+                                                        scope.$index
+                                                    )
+                                                "
+                                                >修改</el-button
+                                            >
+                                            <el-button
+                                                size="mini"
+                                                type="text"
+                                                icon="el-icon-key"
+                                                @click="sortData(scope.row)"
+                                                >排序</el-button
+                                            >
+                                            <el-button
+                                                size="mini"
+                                                type="text"
+                                                icon="el-icon-delete"
+                                                @click="
+                                                    deleteCourseClassificaiton(
+                                                        scope.row
+                                                    )
+                                                "
+                                                >删除</el-button
+                                            >
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
                             </div>
                         </el-tab-pane>
                         <!-- 表单下面 -->
                         <template v-for="(item, index) in datadata">
                             <!-- default-expand-all -->
-                            
+
                             <el-tab-pane
                                 :label="item.name"
-                                :key="index+1"
-                                :name="index+1 + ''"
+                                :key="index + 1"
+                                :name="index + 1 + ''"
                             >
                                 <div class="erke-buttom-right">
                                     <el-table
@@ -686,12 +683,19 @@
                     if (!data) {
                         return []
                     }
-                    let temp = filterNameAndType(JSON.parse(JSON.stringify(data,((key,val) => {
-                        if(key != '__parent__')
-                        return val
-                    }))), this.queryList.name)
+                    let temp = filterNameAndType(
+                        JSON.parse(
+                            JSON.stringify(data, (key, val) => {
+                                if (key != '__parent__') return val
+                            })
+                        ),
+                        this.queryList.name
+                    )
                     // return temp
-                    return filterNameAndType(this.clone(data), this.queryList.name)
+                    return filterNameAndType(
+                        this.clone(data),
+                        this.queryList.name
+                    )
                 }
             },
 
@@ -711,7 +715,7 @@
                 let temp = Array.from(o)
                 Object.values(temp).forEach(item => {
                     console.log(item.name)
-                    if(typeof item == 'object') {
+                    if (typeof item == 'object') {
                         this.clone(item)
                     }
                 })
@@ -1075,7 +1079,7 @@
                 return courseClassificationList(option).then(value => {
                     /* value保证存在且唯一 */
                     /* label保证渲染视图 */
-                    
+
                     value.data = value.data.map(item => ({
                         ...item,
                         value: item.id,

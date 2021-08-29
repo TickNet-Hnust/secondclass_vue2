@@ -124,12 +124,9 @@
                                         </el-tooltip>
                                     </el-col>
 
-                                    <el-col
-                                        :span="1"
-                                        style="min-width:80px;"
-                                    >
-                                        <el-form-item >
-                                             <a-dropdown>
+                                    <el-col :span="1" style="min-width:80px;">
+                                        <el-form-item>
+                                            <a-dropdown>
                                                 <a
                                                     class="ant-dropdown-link"
                                                     @click="
@@ -142,19 +139,21 @@
                                                     <a-menu-item>
                                                         <a
                                                             href="javascript:;"
-                                                            @click="mutiExamEnroll"
+                                                            @click="
+                                                                mutiExamEnroll
+                                                            "
                                                             >批量审核</a
                                                         >
                                                     </a-menu-item>
                                                     <a-menu-item>
-                                                        <a href="javascript:;"
-                                                        @click="sortEnroll"
+                                                        <a
+                                                            href="javascript:;"
+                                                            @click="sortEnroll"
                                                             >排序</a
                                                         >
                                                     </a-menu-item>
                                                 </a-menu>
                                             </a-dropdown>
-
                                         </el-form-item>
                                     </el-col>
 
@@ -164,7 +163,12 @@
                                                 data-text
                                                 placeholder="学号"
                                                 v-model="queryList.userName"
-                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                                @input="
+                                                    debounceFuzzyQuery(
+                                                        fuzzyQuery,
+                                                        500
+                                                    )()
+                                                "
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -175,7 +179,12 @@
                                                 data-text
                                                 placeholder="姓名"
                                                 v-model="queryList.nickName"
-                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                                @input="
+                                                    debounceFuzzyQuery(
+                                                        fuzzyQuery,
+                                                        500
+                                                    )()
+                                                "
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -444,40 +453,28 @@
             </div>
         </el-dialog>
 
-         <!-- 批量审核会话框 -->
-         <el-dialog
+        <!-- 批量审核会话框 -->
+        <el-dialog
             :title="mutiExamEnrollDialog.title"
             :visible.sync="mutiExamEnrollDialog.open"
             width="915px"
             append-to-body
         >
             <el-table
-            ref="multipleTable" 
-            :data="mutiExamEnrollDialogDataList" 
-            @selection-change="handleSelectionChange"
+                ref="multipleTable"
+                :data="mutiExamEnrollDialogDataList"
+                @selection-change="handleSelectionChange"
             >
                 <template v-slot:empty>
                     暂无可审核数据
                 </template>
-               
-                <el-table-column
-                    type="selection"
-                    width="55"
-                    >
+
+                <el-table-column type="selection" width="55"> </el-table-column>
+
+                <el-table-column prop="nickName" label="姓名" min-width="100">
                 </el-table-column>
 
-                <el-table-column
-                    prop="nickName"
-                    label="姓名"
-                    min-width="100"
-                >
-                </el-table-column>
-
-                <el-table-column
-                    prop="userName"
-                    label="学号"
-                    min-width="100"
-                >
+                <el-table-column prop="userName" label="学号" min-width="100">
                 </el-table-column>
 
                 <el-table-column
@@ -493,7 +490,6 @@
                     min-width="100"
                 >
                 </el-table-column>
-
             </el-table>
 
             <div slot="footer" class="dialog-footer">
@@ -522,80 +518,59 @@
         </el-dialog>
 
         <!-- 排序会话框 -->
-         <el-dialog
+        <el-dialog
             :title="sortEnrollDialog.title"
             :visible.sync="sortEnrollDialog.open"
             width="400px"
             append-to-body
         >
-         <el-form :inline="true" >  
-
-           <el-row
-           :gutter="0"
-            type="flex"
-            justify="space-around"
-            style="flexWrap:wrap"
-           >
-
-           <el-col :span="8">
-              <el-select
-                v-model="
-                    sortEnrollDialog.data.orderByColumn
-                "
-                placeholder="排序字段"
-                style="width:120px"
-             >
-               <el-option
-                    value="id"
-                    label="ID"
-                ></el-option>
-                <el-option
-                    value="userName"
-                    label="学号"
-                ></el-option>
-                <el-option
-                    value="createTime"
-                    label="报名时间"
-                ></el-option>
-                <el-option
-                    value="cancelTime"
-                    label="取消报名时间"
-                ></el-option>
-             </el-select>
-           </el-col>
-
-           <el-col :span="8">
-              <el-select
-                v-model="
-                    sortEnrollDialog.data.isAsc
-                "
-                placeholder="降序升序"
-                style="width:120px"
-             >
-                <el-option
-                    value="desc"
-                    label="降序"
-                ></el-option>
-                <el-option
-                    value="asc"
-                    label="升序"
-                ></el-option>
-             </el-select>
-           </el-col>
-
-           </el-row>
-
-         </el-form>
-
-         <div slot="footer" class="dialog-footer">
-                <el-button @click="sortCancel">关闭</el-button>
-                <el-button type="primary" @click="sortSubmit"
-                    >确 定</el-button
+            <el-form :inline="true">
+                <el-row
+                    :gutter="0"
+                    type="flex"
+                    justify="space-around"
+                    style="flexWrap:wrap"
                 >
-        </div>
+                    <el-col :span="8">
+                        <el-select
+                            v-model="sortEnrollDialog.data.orderByColumn"
+                            placeholder="排序字段"
+                            style="width:120px"
+                        >
+                            <el-option value="id" label="ID"></el-option>
+                            <el-option
+                                value="userName"
+                                label="学号"
+                            ></el-option>
+                            <el-option
+                                value="createTime"
+                                label="报名时间"
+                            ></el-option>
+                            <el-option
+                                value="cancelTime"
+                                label="取消报名时间"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
 
+                    <el-col :span="8">
+                        <el-select
+                            v-model="sortEnrollDialog.data.isAsc"
+                            placeholder="降序升序"
+                            style="width:120px"
+                        >
+                            <el-option value="desc" label="降序"></el-option>
+                            <el-option value="asc" label="升序"></el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="sortCancel">关闭</el-button>
+                <el-button type="primary" @click="sortSubmit">确 定</el-button>
+            </div>
         </el-dialog>
-
     </div>
 </template>
 
@@ -613,19 +588,16 @@
     } from '@/api/system/dept.js'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
 
-    import {
-        transformDate
-    } from '@/utils/gather'
-import importTableVue from '../../../../tool/gen/importTable.vue'
-
+    import { transformDate } from '@/utils/gather'
+    import importTableVue from '../../../../tool/gen/importTable.vue'
 
     export default {
         name: 'Enroll',
         data() {
             return {
-                count:0,
-                timer:'',
-                loading:false,
+                count: 0,
+                timer: '',
+                loading: false,
                 //单个审核报名会话框表单参数form
                 form: {},
                 //单个审核报名会话框数据
@@ -675,7 +647,7 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
                 tabInfo: [],
                 //部门id转部门名字
                 deptIdMapDeptName: new Map(),
-                
+
                 //部门id 用于模糊查询
                 deptId: '',
                 //分页请求参数
@@ -683,7 +655,7 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
                     totalCount: 0,
                     totalPage: 0,
                     pageNum: 1,
-                    pageSize: 10,
+                    pageSize: 10
                 },
                 //下拉操作
                 action: '',
@@ -692,7 +664,7 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
                     userName: '',
                     nickName: '',
                     enrollStatus: '',
-                    admissionStatus: '',
+                    admissionStatus: ''
                 },
 
                 //报名列表
@@ -743,29 +715,29 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
                 //录取状态方式数组
                 dict_sc_activity_admission_way: [],
                 //批量审批会话框
-                mutiExamEnrollDialog:{
-                   title:'批量审核(已报名且未录取的才可以批量审核)',
-                   open:false,
-                   post:{
-                       activityId:this.$route.params.aid,
-                       content:'',
-                       ids:[],
-                       status:'',
-                       userIds:[],
-                   },
+                mutiExamEnrollDialog: {
+                    title: '批量审核(已报名且未录取的才可以批量审核)',
+                    open: false,
+                    post: {
+                        activityId: this.$route.params.aid,
+                        content: '',
+                        ids: [],
+                        status: '',
+                        userIds: []
+                    }
                 },
-                sortEnrollDialog:{
-                    title:'排序',
-                    open:false,
-                    data:{
-                        orderByColumn:'',
-                        isAsc:'',
+                sortEnrollDialog: {
+                    title: '排序',
+                    open: false,
+                    data: {
+                        orderByColumn: '',
+                        isAsc: ''
                     }
                 },
                 //批量审核初始数据
-                mutiEnrollList:[],
-                 // 批量审核会话框数据数组
-                mutiExamEnrollDialogDataList: [],
+                mutiEnrollList: [],
+                // 批量审核会话框数据数组
+                mutiExamEnrollDialogDataList: []
             }
         },
         computed: {
@@ -798,57 +770,58 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
         },
         methods: {
             //排序对话框点击取消事件
-            sortCancel(){
+            sortCancel() {
                 this.sortEnrollDialog.data.orderByColumn = ''
                 this.sortEnrollDialog.data.isAsc = ''
-                this.sortEnrollDialog.open = false;
+                this.sortEnrollDialog.open = false
             },
             //排序对话框点击确定事件
-            sortSubmit(){
-               console.log(this.sortEnrollDialog.data,'排序点击确认要发送的数据');
-               this.sortEnrollDialog.open = false;
-               this.fuzzyQuery();
+            sortSubmit() {
+                console.log(
+                    this.sortEnrollDialog.data,
+                    '排序点击确认要发送的数据'
+                )
+                this.sortEnrollDialog.open = false
+                this.fuzzyQuery()
             },
             //点击操作中的排序事件
-            sortEnroll(){
+            sortEnroll() {
                 this.sortEnrollDialog.open = true
             },
             //多选取消按钮
-            mutiCancel(){
-               this.mutiExamEnrollDialog.open=false;
+            mutiCancel() {
+                this.mutiExamEnrollDialog.open = false
             },
-            clearSelection(){
-                this.$refs.multipleTable.clearSelection();
+            clearSelection() {
+                this.$refs.multipleTable.clearSelection()
             },
             //多选时触发的事件
-            handleSelectionChange(val){
-              console.log(val,'多选传来的数据');
-              this.mutiExamEnrollDialog.post.ids = [];
-              this.mutiExamEnrollDialog.post.userIds = [];
-              val.forEach((item)=>{
-                  this.mutiExamEnrollDialog.post.ids.push(item.id);
-                  this.mutiExamEnrollDialog.post.userIds.push(item.userId);
-              })
-              
+            handleSelectionChange(val) {
+                console.log(val, '多选传来的数据')
+                this.mutiExamEnrollDialog.post.ids = []
+                this.mutiExamEnrollDialog.post.userIds = []
+                val.forEach(item => {
+                    this.mutiExamEnrollDialog.post.ids.push(item.id)
+                    this.mutiExamEnrollDialog.post.userIds.push(item.userId)
+                })
             },
             //点击操作中的批量选择事件
-            mutiExamEnroll(){
-               this.mutiExamEnrollDialog.open = true;
+            mutiExamEnroll() {
+                this.mutiExamEnrollDialog.open = true
             },
             //模糊查询防抖
-            debounceFuzzyQuery(func,delayTime){
-                return function(){
-                    clearTimeout(this.timer);
-                    console.log(this.count,'搜索次数');
-                    if(this.count==0)
-                    {
-                        func();
-                        this.count++;
-                    }else{
-                        this.timer = setTimeout( ()=>{
-                        func();
-                        this.count++;
-                        },delayTime )
+            debounceFuzzyQuery(func, delayTime) {
+                return function() {
+                    clearTimeout(this.timer)
+                    console.log(this.count, '搜索次数')
+                    if (this.count == 0) {
+                        func()
+                        this.count++
+                    } else {
+                        this.timer = setTimeout(() => {
+                            func()
+                            this.count++
+                        }, delayTime)
                     }
                 }.bind(this)
             },
@@ -869,9 +842,12 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
                         beginCreateTime: '',
                         endCreateTime: ''
                     })
-                ;(this.value2 = '',this.count=0,this.timer='' 
-                ,this.sortEnrollDialog.data.orderByColumn=''
-                ,this.sortEnrollDialog.data.isAsc=''), this.fuzzyQuery()
+                ;((this.value2 = ''),
+                (this.count = 0),
+                (this.timer = ''),
+                (this.sortEnrollDialog.data.orderByColumn = ''),
+                (this.sortEnrollDialog.data.isAsc = '')),
+                    this.fuzzyQuery()
             },
             //格式化群组 要使用群组字典
             formatGroup(row, column, cellValue) {
@@ -957,13 +933,18 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
                 this.examEnrollDialog.open = true
             },
             //会话批量审核确定
-            mutiExamEnrollSubmit(){
-               console.log(this.mutiExamEnrollDialog.post, '批量审核确定后发送的数据')
-               activityEnrollVerify(this.mutiExamEnrollDialog.post).then(value => {
-                    console.log(value,'批量审核接口传来的数据')
-                    this.mutiExamEnrollDialog.open = false
-                    this.fuzzyQuery()
-                })
+            mutiExamEnrollSubmit() {
+                console.log(
+                    this.mutiExamEnrollDialog.post,
+                    '批量审核确定后发送的数据'
+                )
+                activityEnrollVerify(this.mutiExamEnrollDialog.post).then(
+                    value => {
+                        console.log(value, '批量审核接口传来的数据')
+                        this.mutiExamEnrollDialog.open = false
+                        this.fuzzyQuery()
+                    }
+                )
             },
             //会话审核确定
             examEnrollSubmit() {
@@ -1027,7 +1008,7 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
                     console.log(value, 'listDept()接口传来的数据')
                     value.data.forEach(item => {
                         //deptId映射deptName字典
-                        this.deptIdMapDeptName.set(item.deptId,item.deptName)
+                        this.deptIdMapDeptName.set(item.deptId, item.deptName)
                     })
                     console.log(
                         this.deptIdMapDeptName,
@@ -1043,9 +1024,9 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
                     nickName: this.queryList.nickName,
                     enrollStatus: this.queryList.enrollStatus,
                     admissionStatus: this.queryList.admissionStatus,
-                    params:{
-                    // beginCreateTime: this.queryList.beginCreateTime,
-                    // endCreateTime: this.queryList.endCreateTime,
+                    params: {
+                        // beginCreateTime: this.queryList.beginCreateTime,
+                        // endCreateTime: this.queryList.endCreateTime,
                     },
                     pageNum: this.queryParams.pageNum,
                     pageSize: this.queryParams.pageSize,
@@ -1054,8 +1035,10 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
                     isAsc: this.sortEnrollDialog.data.isAsc
                 }
                 if (this.value2) {
-                    option.params.beginCreateTime =  transformDate(this.value2)[0]
-                    option.params.endCreateTime =  transformDate(this.value2 )[1]
+                    option.params.beginCreateTime = transformDate(
+                        this.value2
+                    )[0]
+                    option.params.endCreateTime = transformDate(this.value2)[1]
                 }
                 console.log(option, '发送的数据')
                 this.getEnrollList(option)
@@ -1075,18 +1058,23 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
                     )
                     this.enrollList = value.rows
                     //用于批量审核的数据
-                    this.mutiEnrollList = JSON.parse(JSON.stringify(value.rows));
+                    this.mutiEnrollList = JSON.parse(JSON.stringify(value.rows))
                     console.log(this.enrollList, '传来的数据')
                     console.log(this.mutiEnrollList, '用于批量审核的数据')
                     //每次过滤前初始化，不然会一直累积
-                    this.mutiExamEnrollDialogDataList=[];
-                    this.mutiEnrollList.forEach((item)=>{
-                        if(item.enrollStatus==1&&item.admissionStatus==0)
-                        {
-                            this.mutiExamEnrollDialogDataList.push(item);
+                    this.mutiExamEnrollDialogDataList = []
+                    this.mutiEnrollList.forEach(item => {
+                        if (
+                            item.enrollStatus == 1 &&
+                            item.admissionStatus == 0
+                        ) {
+                            this.mutiExamEnrollDialogDataList.push(item)
                         }
                     })
-                    console.log(this.mutiExamEnrollDialogDataList, '条件过滤后用于批量审核的数据')
+                    console.log(
+                        this.mutiExamEnrollDialogDataList,
+                        '条件过滤后用于批量审核的数据'
+                    )
                     this.loading = false
                 })
             },
@@ -1122,11 +1110,11 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
 
             this.getDeptIdMapDeptName()
         },
-        mounted(){
-          console.log(
+        mounted() {
+            console.log(
+                `
           `
-          `
-          )
+            )
         }
     }
 </script>

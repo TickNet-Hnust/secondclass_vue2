@@ -73,6 +73,6 @@ export function groupIdVerify({ id, status }) {
 export function groupDelete({ id }) {
     return request({
         url: `/admins/group/${id}`,
-        method: 'delete',
+        method: 'delete'
     })
 }

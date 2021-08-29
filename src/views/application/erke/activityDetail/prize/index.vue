@@ -95,7 +95,7 @@
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:80px">
-                                        <el-form-item >
+                                        <el-form-item>
                                             <a-dropdown>
                                                 <a
                                                     class="ant-dropdown-link"
@@ -132,31 +132,49 @@
 
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="姓名:">
-                                            <el-input data-text
-                                            placeholder="姓名"
-                                            v-model="queryList.nickName"
-                                            @input="debounceFuzzyQuery(fuzzyQuery,500)()">
+                                            <el-input
+                                                data-text
+                                                placeholder="姓名"
+                                                v-model="queryList.nickName"
+                                                @input="
+                                                    debounceFuzzyQuery(
+                                                        fuzzyQuery,
+                                                        500
+                                                    )()
+                                                "
+                                            >
                                             </el-input>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="学号:">
-                                            <el-input data-text
-                                            placeholder="学号"
-                                            v-model="queryList.userName"
-                                            @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                            <el-input
+                                                data-text
+                                                placeholder="学号"
+                                                v-model="queryList.userName"
+                                                @input="
+                                                    debounceFuzzyQuery(
+                                                        fuzzyQuery,
+                                                        500
+                                                    )()
+                                                "
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
 
-
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="奖品:">
-                                            <el-input data-text
-                                            placeholder="奖品"
-                                            v-model="queryList.prizeName"
-                                            @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                            <el-input
+                                                data-text
+                                                placeholder="奖品"
+                                                v-model="queryList.prizeName"
+                                                @input="
+                                                    debounceFuzzyQuery(
+                                                        fuzzyQuery,
+                                                        500
+                                                    )()
+                                                "
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -171,7 +189,8 @@
                                                 start-placeholder="开始日期 "
                                                 end-placeholder="  结束日期"
                                                 align="right"
-                                                @change="fuzzyQuery">
+                                                @change="fuzzyQuery"
+                                            >
                                             </el-date-picker>
                                         </el-form-item>
                                     </el-col>
@@ -275,7 +294,9 @@
                                         size="mini"
                                         type="text"
                                         icon="el-icon-s-check"
-                                        @click="deletePrize(scope.row, scope.$index)"
+                                        @click="
+                                            deletePrize(scope.row, scope.$index)
+                                        "
                                         >删除</el-button
                                     >
                                 </template>
@@ -453,7 +474,7 @@
                         发放时间：
                     </el-col>
                     <el-col :span="18">
-                       <el-date-picker
+                        <el-date-picker
                             v-model="value1"
                             @change="prizeUpdateDateChange"
                             type="datetime"
@@ -480,12 +501,9 @@
         activityPrizeManageList,
         activityPrizeManageMulti,
         activityPrizeRecordPost,
-        activityPrizeDelete,
+        activityPrizeDelete
     } from '@/api/application/secondClass/index'
-    import {
-        transformDate,
-        transformDateSingle,
-    } from '@/utils/gather'
+    import { transformDate, transformDateSingle } from '@/utils/gather'
     import {
         trainingProgramDetail,
         trainingProgramList,
@@ -618,13 +636,12 @@
                 managePrizeDialogList2: []
             }
         },
-        methods:{
-            deletePrize(row, index){
-                console.log(row,index,12323);
+        methods: {
+            deletePrize(row, index) {
+                console.log(row, index, 12323)
                 this.alertDialog.call(this, '删除', {
-                    confirm:  () => {
-                         activityPrizeDelete(
-                             row.id)
+                    confirm: () => {
+                        activityPrizeDelete(row.id)
                             .then(value => {
                                 this.msgSuccess('删除成功')
                                 this.fuzzyQuery()
@@ -636,24 +653,23 @@
                 })
             },
             //模糊查询防抖
-            debounceFuzzyQuery(func,delayTime){
-                return function(){
-                    clearTimeout(this.timer);
-                    console.log(this.count,'搜索次数');
-                    if(this.count==0)
-                    {
-                        func();
-                        this.count++;
-                    }else{
-                        this.timer = setTimeout( ()=>{
-                        func();
-                        this.count++;
-                        },delayTime )
+            debounceFuzzyQuery(func, delayTime) {
+                return function() {
+                    clearTimeout(this.timer)
+                    console.log(this.count, '搜索次数')
+                    if (this.count == 0) {
+                        func()
+                        this.count++
+                    } else {
+                        this.timer = setTimeout(() => {
+                            func()
+                            this.count++
+                        }, delayTime)
                     }
                 }.bind(this)
             },
-            handleSelect(index){
-                console.log(this.tabInfo[index].prizeType,'左下角点击的奖项');
+            handleSelect(index) {
+                console.log(this.tabInfo[index].prizeType, '左下角点击的奖项')
                 if (index != '') {
                     this.queryList.prizeType = this.tabInfo[index].prizeType
                 } else {
@@ -661,23 +677,31 @@
                 }
                 this.fuzzyQuery()
             },
-            prizeUpdateDateChange(){
-               if(this.value1!=null)
-               {
-                   console.log(this.value1,'value1');
-                   console.log(transformDateSingle(this.value1),'value1格式化')
-                   this.addPrizeDialogList.data.createTime =transformDateSingle(this.value1);
-               } 
-               
+            prizeUpdateDateChange() {
+                if (this.value1 != null) {
+                    console.log(this.value1, 'value1')
+                    console.log(
+                        transformDateSingle(this.value1),
+                        'value1格式化'
+                    )
+                    this.addPrizeDialogList.data.createTime = transformDateSingle(
+                        this.value1
+                    )
+                }
             },
             //修改和新增的保存按钮
-            save(){
-               //要提交的数据
-               console.log(this.addPrizeDialogList.data,'点击保存要发送的数据');
-               activityPrizeRecordPost(this.addPrizeDialogList.data).then(value=>{
-                   console.log(value,'发布登记修改新增接口返回的数据');
-                   this.fuzzyQuery();
-               })
+            save() {
+                //要提交的数据
+                console.log(
+                    this.addPrizeDialogList.data,
+                    '点击保存要发送的数据'
+                )
+                activityPrizeRecordPost(this.addPrizeDialogList.data).then(
+                    value => {
+                        console.log(value, '发布登记修改新增接口返回的数据')
+                        this.fuzzyQuery()
+                    }
+                )
             },
             filterManagePrizeDialogList(value) {
                 console.log(value, '选中的奖项值！！！')
@@ -709,23 +733,23 @@
                 console.log(row, '点击修改奖项传来的数据')
                 this.renderState(row)
             },
-            renderState(row){
-               this.value1 = row.createTime;
-               this.addPrizeDialogList.data = {
-                    id:row.id,
-                    activityId:this.$route.params.aid,
-                    prizeId:row.prizeId,
-                    prizeType:row.prizeType,
-                    prizeName:row.prizeName,
-                    number:row.number,
-                    userId:row.userId,
+            renderState(row) {
+                this.value1 = row.createTime
+                this.addPrizeDialogList.data = {
+                    id: row.id,
+                    activityId: this.$route.params.aid,
+                    prizeId: row.prizeId,
+                    prizeType: row.prizeType,
+                    prizeName: row.prizeName,
+                    number: row.number,
+                    userId: row.userId,
                     // deptId:row.deptId,
                     //先设成100，等群组出来了再搞
-                    deptId:100,  
-                    deliverUserId:row.deliverUserId,
-                    createTime:this.value1,
-               }
-               this.addPrizeDialogList.open = true
+                    deptId: 100,
+                    deliverUserId: row.deliverUserId,
+                    createTime: this.value1
+                }
+                this.addPrizeDialogList.open = true
             },
             //点击发放登记按钮
             PrizeRegistration() {
@@ -737,16 +761,16 @@
             // 表单重置
             reset() {
                 this.addPrizeDialogList.data = {
-                        activityId:this.$route.params.aid,
-                        prizeId:'',
-                        prizeType:'',
-                        prizeName:'',
-                        number:'',
-                        userId:'',
-                        deptId:100,
-                        id:'',
-                        deliverUserId:'',
-                        createTime:'',
+                    activityId: this.$route.params.aid,
+                    prizeId: '',
+                    prizeType: '',
+                    prizeName: '',
+                    number: '',
+                    userId: '',
+                    deptId: 100,
+                    id: '',
+                    deliverUserId: '',
+                    createTime: ''
                 }
                 this.value1 = ''
             },
@@ -764,8 +788,8 @@
                 ;(this.value2 = ''), this.fuzzyQuery()
             },
             //筛选报名时间触发的事件
-            prizeDateChange(){
-                this.fuzzyQuery();
+            prizeDateChange() {
+                this.fuzzyQuery()
             },
             /**
              * @description: 批量操作奖项管理
@@ -867,21 +891,23 @@
                     userName: this.queryList.userName,
                     nickName: this.queryList.nickName,
                     prizeName: this.queryList.prizeName,
-                    prizeType: this.queryList.prizeType,  
-                    params:{
-                    // beginCreateTime:this.queryList.beginCreateTime,
-                    // endCreateTime:this.queryList.endCreateTime,
+                    prizeType: this.queryList.prizeType,
+                    params: {
+                        // beginCreateTime:this.queryList.beginCreateTime,
+                        // endCreateTime:this.queryList.endCreateTime,
                     },
                     pageNum: this.queryParams.pageNum,
                     pageSize: this.queryParams.pageSize
                     // orderByColumn:'',
                     // isAsc:''
                 }
-                 if (this.value2) {
-                    option.params.beginCreateTime =  transformDate(this.value2)[0]
-                    option.params.endCreateTime =  transformDate(this.value2 )[1]
+                if (this.value2) {
+                    option.params.beginCreateTime = transformDate(
+                        this.value2
+                    )[0]
+                    option.params.endCreateTime = transformDate(this.value2)[1]
                 }
-                console.log(option,'发送的数据')
+                console.log(option, '发送的数据')
                 this.getPrizeList(option)
             },
             getPrizeList(option) {

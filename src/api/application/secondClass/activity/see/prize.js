@@ -74,6 +74,6 @@ export function activityPrizeManageMulti(data) {
 export function activityPrizeDelete(id) {
     return request({
         url: '/admins/secondClass/activity/prize/record' + id,
-        method: 'delete',
+        method: 'delete'
     })
 }

@@ -112,7 +112,6 @@ textarea {
     display: none !important;
 }
 
-
 /* .graph>div:first-child {
     width: 100% !important;
 } */
@@ -134,7 +133,7 @@ textarea {
     overflow: hidden;
 }
 
-.el-button [class*='el-icon-']+span {
+.el-button [class*='el-icon-'] + span {
     margin-left: 0 !important;
 }
 
@@ -151,6 +150,6 @@ textarea {
 }
 
 .el-input.data-text,
-.el-input.data-text>>>.el-input__inner {
+.el-input.data-text >>> .el-input__inner {
     width: 110px;
 }

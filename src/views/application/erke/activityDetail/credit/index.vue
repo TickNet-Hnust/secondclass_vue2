@@ -29,23 +29,22 @@
                             </el-col>
                         </el-row>
 
-                        <el-row 
-                           v-if="maxLayer==3"
-                          :gutter="20" 
-                          class="ruleInput" >
+                        <el-row :gutter="20">
                             <el-col :span="1" style="min-width:90px">
                                 <span> 积分规则：</span>
                             </el-col>
 
-                            <el-col :span="8" style="min-width:300px;margin-bottom:5px;" 
-                            v-for="(item,index) in integrationRule"
-                            :key="index"
+                            <el-col
+                                :span="1"
+                                style="min-width:280px"
+                                v-for="(item, index) in integrationRule"
+                                :key="index"
                             >
                                 <el-input
-                                    v-if="item.type!=2"
                                     :value="
                                         computedRule(
-                                            item.children,
+                                            item.integralType,
+                                            item.integrationRange
                                         )
                                     "
                                 >
@@ -53,89 +52,8 @@
                                         {{ item.name }}
                                     </template>
                                 </el-input>
-
-                                <el-input
-                                    class="remark"
-                                    v-if="item.type==2"
-                                >
-                                    <template slot="prepend">
-                                        {{ item.name }}
-                                    </template>
-                                </el-input>
-
                             </el-col>
                         </el-row>
-                        
-                        <el-row 
-                           v-else-if="maxLayer==1||(maxLayer==2&&integrationRule.children[0].type==2)"
-                          :gutter="20"
-                          class="ruleInput2" 
-                        >
-                            <el-col :span="1" style="min-width:90px">
-                                <span> 积分规则：</span>
-                            </el-col>
-
-                            <el-col :span="18" style="min-width:300px;margin-bottom:5px;" 
-                            >
-                                <el-input
-                                    :value="
-                                        ' '+integrationRule.integrationRange+'分'
-                                    "
-                                    style="margin-bottom:5px"
-                                >
-                                    <template slot="prepend">
-                                        {{ integrationRule.name }}
-                                    </template>
-                                </el-input>
-
-                                <el-input
-                                    class="remark"
-                                    v-for="(item,index) in integrationRule.children"
-                                    :key="index"
-                                >
-                                    <template slot="prepend">
-                                        {{ item.name }}
-                                    </template>
-                                </el-input>
-
-                            </el-col>
-                        </el-row>
-
-                        <el-row 
-                           v-else
-                          :gutter="20" 
-                          class="ruleInput3" >
-                            <el-col :span="1" style="min-width:90px">
-                                <span> 积分规则：</span>
-                            </el-col>
-
-                            <el-col :span="8" style="min-width:300px;margin-bottom:5px;" 
-                            v-for="(item,index) in integrationRule.children"
-                            :key="index"
-                            >
-                                <el-input
-                                    v-if="item.type!=2"
-                                    :value="
-                                        ' '+item.integrationRange+'分'
-                                    "
-                                >
-                                    <template slot="prepend">
-                                        {{ item.name }}
-                                    </template>
-                                </el-input>
-
-                                <el-input
-                                    class="remark"
-                                    v-if="item.type==2"
-                                >
-                                    <template slot="prepend">
-                                        {{ item.name }}
-                                    </template>
-                                </el-input>
-
-                            </el-col>
-                        </el-row>
-
 
                         <el-row style="margin-top: 15px">
                             <el-col
@@ -182,60 +100,49 @@
                                         style="min-width:150px;margin-left: -24px;"
                                     >
                                         <el-form-item label="操作:">
-                                           <a-dropdown>
-                                                <a
-                                                    class="ant-dropdown-link"
-                                                    @click="
-                                                        e => e.preventDefault()
-                                                    "
-                                                >
-                                                    操作 <a-icon type="down" />
-                                                </a>
-                                                <a-menu slot="overlay">
-                                                    <a-menu-item>
-                                                        <a
-                                                            href="javascript:;"
-                                                            @click="mutiCredit"
-                                                            >批量认定</a
-                                                        >
-                                                    </a-menu-item>
-
-                                                    <a-menu-item>
-                                                        <a href="javascript:;"
-                                                        @click="sortCredit"
-                                                            >排序</a
-                                                        >
-                                                    </a-menu-item>
-
-
-                                                    <a-menu-item>
-                                                        <a href="javascript:;"
-                                                            >导出</a
-                                                        >
-                                                    </a-menu-item>
-
-                                                    
-                                                </a-menu>
-                                            </a-dropdown>
+                                            <el-select
+                                                v-model="action"
+                                                style="width:80px"
+                                                placeholder="操作"
+                                            >
+                                                <el-option
+                                                    value="批量修改"
+                                                ></el-option>
+                                                <el-option
+                                                    value="排序"
+                                                ></el-option>
+                                            </el-select>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="姓名:">
-                                            <el-input data-text
-                                            placeholder="姓名"
-                                            v-model="queryList.nickName"
-                                            @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                            <el-input
+                                                data-text
+                                                placeholder="姓名"
+                                                v-model="queryList.nickName"
+                                                @input="
+                                                    debounceFuzzyQuery(
+                                                        fuzzyQuery,
+                                                        500
+                                                    )()
+                                                "
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="学号:">
-                                            <el-input data-text
-                                            placeholder="学号"
-                                            v-model="queryList.userName"
-                                            @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                            <el-input
+                                                data-text
+                                                placeholder="学号"
+                                                v-model="queryList.userName"
+                                                @input="
+                                                    debounceFuzzyQuery(
+                                                        fuzzyQuery,
+                                                        500
+                                                    )()
+                                                "
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -243,7 +150,6 @@
                                     <el-col :span="1" style="min-width:205px">
                                         <el-form-item label="申报理由:">
                                             <el-select
-                                                v-if="maxLayer==3"
                                                 v-model="queryList.reason"
                                                 placeholder="申报理由:不限"
                                                 style="width:120px"
@@ -255,46 +161,8 @@
                                                 ></el-option>
                                                 <el-option
                                                     v-for="(item,
-                                                    index) in integrationRule[0].children"
+                                                    index) in integrationRule"
                                                     :key="index"
-                                                    :value="item.name"
-                                                    :label="item.name"
-                                                ></el-option>
-                                            </el-select>
-
-                                            <el-select
-                                                v-else-if="maxLayer==1||(maxLayer==2&&integrationRule.children[0].type==2)"
-                                                v-model="queryList.reason"
-                                                placeholder="申报理由:不限"
-                                                style="width:120px"
-                                                @change="fuzzyQuery"
-                                            >
-                                                <el-option
-                                                    value=""
-                                                    label="申报理由:不限"
-                                                ></el-option>
-                                                <el-option
-                                                    :value="integrationRule.name"
-                                                    :label="integrationRule.name"
-                                                ></el-option>
-                                            </el-select>
-
-                                            <el-select
-                                                v-else
-                                                v-model="queryList.reason"
-                                                placeholder="申报理由:不限"
-                                                style="width:120px"
-                                                @change="fuzzyQuery"
-                                            >
-                                                <el-option
-                                                    value=""
-                                                    label="申报理由:不限"
-                                                ></el-option>
-                                                <el-option
-                                                    v-for="(item,
-                                                    index) in integrationRule.children"
-                                                    :key="index"
-                                                     v-if="item.type!=2"
                                                     :value="item.name"
                                                     :label="item.name"
                                                 ></el-option>
@@ -358,7 +226,8 @@
                                                 start-placeholder="开始日期"
                                                 end-placeholder="结束日期"
                                                 align="right"
-                                                @change="fuzzyQuery">
+                                                @change="fuzzyQuery"
+                                            >
                                             </el-date-picker>
                                         </el-form-item>
                                     </el-col>
@@ -503,7 +372,7 @@
                         <pagination
                             v-show="queryParams.totalPage > 0"
                             :total="queryParams.totalCount"
-                            :page.sync="queryParams.pageNum"
+                            :page.sync="queryParams.pageCount"
                             :limit.sync="queryParams.pageSize"
                             @pagination="getList($event)"
                         />
@@ -596,190 +465,6 @@
                 >
             </div>
         </el-dialog>
-
-        <!-- 批量积分认定会话框 -->
-         <el-dialog
-            :title="mutiExamCreditDialog.title"
-            :visible.sync="mutiExamCreditDialog.open"
-            width="1200px"
-            append-to-body
-        >
-            <el-table
-            ref="multipleTable" 
-            :data="mutiCreditDialogList" 
-            @selection-change="handleSelectionChange"
-            >
-                <template v-slot:empty>
-                    暂无可审核数据
-                </template>
-               
-                <el-table-column
-                    type="selection"
-                    width="55"
-                    >
-                </el-table-column>
-
-                <el-table-column
-                    prop="id"
-                    label="ID"
-                    min-width="50"
-                >
-                </el-table-column>
-
-                <el-table-column
-                    prop="nickName"
-                    label="姓名"
-                    min-width="80"
-                >
-                </el-table-column>
-
-                <el-table-column
-                    prop="userName"
-                    label="学号"
-                    min-width="100"
-                >
-                </el-table-column>
-
-                <el-table-column
-                    prop="reason"
-                    label="申报理由"
-                    min-width="100"
-                >
-                </el-table-column>
-
-                <el-table-column
-                    prop="status"
-                    label="认定状态"
-                    min-width="80"
-                    :formatter="formatStatus"
-                >
-                </el-table-column>
-
-                <el-table-column
-                    prop="applyWay"
-                    label="申请方式"
-                    :formatter="formatApplyWay"
-                    min-width="80"
-                >
-                </el-table-column>
-
-                <el-table-column
-                    prop="applyIntegral"
-                    label="申请积分"
-                    min-width="50"
-                >
-                </el-table-column>
-
-                <el-table-column prop="confirmIntegral" label="认定积分" min-width="50">
-                    <template slot-scope="scope">
-                        <el-input v-model="scope.row.confirmIntegral" class="nameOfPlan">
-                        </el-input>
-                    </template>
-                </el-table-column>
-
-            </el-table>
-
-            <div slot="footer" class="dialog-footer">
-                <el-radio-group
-                    style="float:left;margin-top:15px"
-                    v-model="mutiExamCreditDialog.post.status"
-                >
-                    <el-radio :label="1">审核通过</el-radio>
-                    <el-radio :label="0">审核未通过</el-radio>
-                </el-radio-group>
-
-                <el-input
-                    type="textarea"
-                    placeholder="填写指导意见"
-                    rows="1"
-                    v-model="mutiExamCreditDialog.post.content"
-                    class="adviceText"
-                ></el-input>
-
-                <el-button @click="clearSelection">取消选择</el-button>
-                <el-button @click="mutiCancel">关闭</el-button>
-                <el-button type="primary" 
-                 @click="mutiExamCreditSubmit"
-                    >确 定</el-button
-                >
-            </div>
-        </el-dialog>
-
-        
-        <!-- 排序会话框 -->
-         <el-dialog
-            :title="sortCreditDialog.title"
-            :visible.sync="sortCreditDialog.open"
-            width="400px"
-            append-to-body
-        >
-         <el-form :inline="true" >  
-
-           <el-row
-           :gutter="0"
-            type="flex"
-            justify="space-around"
-            style="flexWrap:wrap"
-           >
-
-           <el-col :span="8">
-              <el-select
-                v-model="
-                    sortCreditDialog.data.orderByColumn
-                "
-                placeholder="排序字段"
-                style="width:120px"
-             >
-               <el-option
-                    value="id"
-                    label="ID"
-                ></el-option>
-                <el-option
-                    value="userName"
-                    label="学号"
-                ></el-option>
-                <el-option
-                    value="applyIntegral"
-                    label="申请积分"
-                ></el-option>
-                <el-option
-                    value="confirmIntegral"
-                    label="认定积分"
-                ></el-option>
-             </el-select>
-           </el-col>
-
-           <el-col :span="8">
-              <el-select
-                v-model="
-                    sortCreditDialog.data.isAsc
-                "
-                placeholder="降序升序"
-                style="width:120px"
-             >
-                <el-option
-                    value="desc"
-                    label="降序"
-                ></el-option>
-                <el-option
-                    value="asc"
-                    label="升序"
-                ></el-option>
-             </el-select>
-           </el-col>
-
-           </el-row>
-
-         </el-form>
-
-         <div slot="footer" class="dialog-footer">
-                <el-button @click="sortCancel">关闭</el-button>
-                <el-button type="primary" @click="sortSubmit"
-                    >确 定</el-button
-                >
-        </div>
-        </el-dialog>
-
     </div>
 </template>
 
@@ -791,16 +476,9 @@
         activityIntegralVerify
     } from '@/api/application/secondClass/index'
 
+    import { courseClassificationList } from '@/api/application/secondClass/courseClassification.js'
+    import { transformDate } from '@/utils/gather'
     import {
-        courseClassificationList,
-        SortListClassificationId,
-        getClassificationId,
-    } from '@/api/application/secondClass/courseClassification.js'
-    import {
-        transformDate,
-        filterCourseClassificationList2
-    } from '@/utils/gather'
-    import { 
         getDept,
         listDeptExcludeChild,
         listDept
@@ -885,9 +563,10 @@
                 //分页请求参数
                 queryParams: {
                     totalCount: 0,
-                    totalPage: 0,
-                    pageNum: 1,
-                    pageSize: 10,
+                    totalPage: 50,
+                    pageCount: 1,
+                    pageSize: 4,
+                    currPage: 1
                 },
                 //下拉操作
                 action: '',
@@ -953,35 +632,7 @@
                 //积分申请方式字典
                 dict_sc_activity_integral_apply_way: [],
                 //活动认定状态
-                dict_sc_activity_integral: [],
-                currentCourseClassification:[],
-                filterCourseClassificationList:[],
-                maxLayer:null,
-                //批量积分认定会话框
-                mutiExamCreditDialog:{
-                    title:'批量积分认定',
-                    open:false,
-                    post:{
-                      activityId:this.$route.params.aid,
-                      content:'',
-                      status:'',
-                      idIntegral:{
-
-                      },
-                      userIds:[],
-                    },
-                },
-                mutiCreditList:[],
-                mutiCreditDialogList:[],
-                handSelectList:[],
-                sortCreditDialog:{
-                    title:'排序',
-                    open:false,
-                    data:{
-                        orderByColumn:'',
-                        isAsc:'',
-                    }
-                },
+                dict_sc_activity_integral: []
             }
         },
         computed: {
@@ -998,21 +649,18 @@
                 }
             },
 
-            computedRule(){
-                    return (childrens) => {
-                        if(childrens == null||childrens.length==0)
-                           return ;
-                        else{
-                           let array = [];
-                           let str;
-                            childrens.forEach((item=>{
-                                str = item.name+':'+item.integrationRange+'分'
-                                array.push(str)
-                            }))
-                            let arrayStr = array.join('/');
-                            return arrayStr 
-                        }
-
+            computedRule() {
+                return (integralType, integrationRange) => {
+                    if (integralType == null || integrationRange == null) {
+                        return '积分类型或范围为空'
+                    } else {
+                        return (
+                            '积分项(' +
+                            this.dict_sc_integral_type[integralType] +
+                            '):' +
+                            integrationRange
+                        )
+                    }
                 }
             },
             //取活动级别字典计算方法
@@ -1034,69 +682,20 @@
             }
         },
 
-        methods:{
-            //排序对话框点击取消事件
-            sortCancel(){
-                this.sortCreditDialog.data.orderByColumn = ''
-                this.sortCreditDialog.data.isAsc = ''
-                this.sortCreditDialog.open = false;
-            },
-            //排序对话框点击确定事件
-            sortSubmit(){
-               console.log(this.sortCreditDialog.data,'排序点击确认要发送的数据');
-               this.sortCreditDialog.open = false;
-               this.fuzzyQuery();
-            },
-            //点击操作中的排序事件
-            sortCredit(){
-                this.sortCreditDialog.open = true
-            },
-            //多选取消按钮
-            mutiCancel(){
-               this.mutiExamCreditDialog.open=false;
-            },
-            //多选时触发的事件
-            handleSelectionChange(val){
-              console.log(val,'多选传来的数据');
-              this.handSelectList = val;
-            },
-            mutiExamCreditSubmit(){
-                this.mutiExamCreditDialog.post.idIntegral = {};
-                this.mutiExamCreditDialog.post.userIds = [];
-                this.handSelectList.forEach((item)=>{
-                  this.mutiExamCreditDialog.post.idIntegral[item.id]=item.confirmIntegral
-                  
-                  this.mutiExamCreditDialog.post.userIds.push(item.userId);
-              })
-                console.log(this.mutiExamCreditDialog.post,'点击确认发送的数据');
-                activityIntegralVerify(this.mutiExamCreditDialog.post).then(
-                    value => {
-                        console.log(value, '积分认定操作成功的返回！')
-                        this.mutiExamCreditDialog.open = false
-                        this.fuzzyQuery()
-                    }
-                )
-            },
-            clearSelection(){
-                this.$refs.multipleTable.clearSelection();
-            },
-            mutiCredit(){
-                this.mutiExamCreditDialog.open = true;
-            },
+        methods: {
             //模糊查询防抖
-            debounceFuzzyQuery(func,delayTime){
-                return function(){
-                    clearTimeout(this.timer);
-                    console.log(this.count,'搜索次数');
-                    if(this.count==0)
-                    {
-                        func();
-                        this.count++;
-                    }else{
-                        this.timer = setTimeout( ()=>{
-                        func();
-                        this.count++;
-                        },delayTime )
+            debounceFuzzyQuery(func, delayTime) {
+                return function() {
+                    clearTimeout(this.timer)
+                    console.log(this.count, '搜索次数')
+                    if (this.count == 0) {
+                        func()
+                        this.count++
+                    } else {
+                        this.timer = setTimeout(() => {
+                            func()
+                            this.count++
+                        }, delayTime)
                     }
                 }.bind(this)
             },
@@ -1167,8 +766,7 @@
                         beginCreateTime: '',
                         endCreateTime: ''
                     })
-                ;(this.value2 = '',this.sortCreditDialog.data.orderByColumn=''
-                ,this.sortCreditDialog.data.isAsc=''), this.fuzzyQuery()
+                ;(this.value2 = ''), this.fuzzyQuery()
             },
 
             /**
@@ -1285,20 +883,20 @@
                 this.fuzzyQuery()
             },
             //通过活动id获取当前活动报名信息函数
-            getActivityIntegral(option){
-               activityIntegral(option).then(async value => {
-                console.log(value,'活动积分管理总信息');
-                this.activityRank = value.data.activityRank;
-                this.courseClassificationId = value.data.courseClassificationId;
-                this.courseClassificationName = value.data.courseClassificationName;
-                this.integralScheme = value.data.integralScheme;
-                // await this.getCourseClassificationList(this.courseClassificationId);
-                await this.getCourseClassificationList(this.courseClassificationId);
-               
-            })
-           },
-           
-           /**获得当前情况下的报名管理列表  模糊查询 */
+            getActivityIntegral(option) {
+                activityIntegral(option).then(async value => {
+                    console.log(value, '活动积分管理总信息')
+                    this.activityRank = value.data.activityRank
+                    this.courseClassificationId =
+                        value.data.courseClassificationId
+                    this.courseClassificationName =
+                        value.data.courseClassificationName
+                    this.integralScheme = value.data.integralScheme
+                    await this.getCourseClassificationList()
+                })
+            },
+
+            /**获得当前情况下的报名管理列表  模糊查询 */
             fuzzyQuery() {
                 let option = {
                     activityId: this.$route.params.aid,
@@ -1306,23 +904,23 @@
                     nickName: this.queryList.nickName,
                     reason: this.queryList.reason,
                     applyWay: this.queryList.applyWay,
-                    status:this.queryList.status,
-                    params:{
-                    // beginCreateTime:this.queryList.beginCreateTime,
-                    // endCreateTime:this.queryList.endCreateTime,
+                    status: this.queryList.status,
+                    params: {
+                        // beginCreateTime:this.queryList.beginCreateTime,
+                        // endCreateTime:this.queryList.endCreateTime,
                     },
-                    page: this.queryParams.pageNum,
-                    limit: this.queryParams.pageSize,
-                    orderByColumn: this.sortCreditDialog.data.orderByColumn,
-                    isAsc: this.sortCreditDialog.data.isAsc
+                    page: this.queryParams.pageCount,
+                    limit: this.queryParams.pageSize
                     // orderByColumn:'',
                     // isAsc:''
                 }
                 if (this.value2) {
-                    option.params.beginCreateTime =  transformDate(this.value2)[0]
-                    option.params.endCreateTime =  transformDate(this.value2 )[1]
+                    option.params.beginCreateTime = transformDate(
+                        this.value2
+                    )[0]
+                    option.params.endCreateTime = transformDate(this.value2)[1]
                 }
-                console.log(option,'发送的数据')
+                console.log(option, '发送的数据')
                 this.getIntegralList(option)
             },
 
@@ -1334,21 +932,11 @@
                     // this.queryParams.pageSize = value.data.pageSize
                     // this.queryParams.totalPage = value.data.totalPage
                     // this.queryParams.currPage = value.data.currPage
-                    this.queryParams.totalPage = Math.ceil(
+                    this.queryParams.pageCount = Math.ceil(
                         this.queryParams.totalCount / this.queryParams.pageSize
                     )
                     this.integralList = value.rows
-                    this.mutiCreditList = JSON.parse(JSON.stringify(value.rows));
                     console.log(this.integralList, '传来的数据')
-                    //每次过滤前初始化，不然会一直累积
-                    this.mutiCreditDialogList=[];
-                    this.mutiCreditList.forEach((item)=>{
-                        if(item.status==0)
-                        {
-                            this.mutiCreditDialogList.push(item);
-                        }
-                    })
-                    console.log(this.mutiCreditDialogList, '条件过滤后用于批量积分认定的数据')
                     this.loading = false
                 })
             },
@@ -1361,6 +949,7 @@
                     getDict('sc_activity_integral_apply_way'),
                     getDict('sc_activity_integral')
                 ]).then(value => {
+                    console.log(value, 'initDict')
                     let tempArr = [
                         'dict_sc_train_program_rank',
                         'dict_sc_activity_integral_scheme',
@@ -1373,40 +962,15 @@
                     })
                 })
             },
-            getCourseClassificationList(id) {
-                let option = {
-                    name:'',
-                    type:'',
-                    integralType:'',
-                }
-                courseClassificationList(option).then(value => {                   
-                    console.log(value.data,'课程分类列表!');
-                    value.data.forEach((item)=>{
-                        if(item.id===id)
-                        {
-                            this.currentCourseClassification = JSON.parse(JSON.stringify(item));
+            getCourseClassificationList(option) {
+                courseClassificationList(option).then(value => {
+                    console.log(value, '课程分类列表!')
+                    value.data.forEach((item, index) => {
+                        if (item.pid == this.courseClassificationId) {
+                            this.integrationRule.push(item)
                         }
                     })
-                    this.filterCourseClassificationList =
-                    filterCourseClassificationList2(value.data,this.currentCourseClassification,id);
-                    console.log(this.filterCourseClassificationList,'过滤完的课程分类');
-                    this.maxLayer = this.filterCourseClassificationList.maxLayer;
-                    // 积分在第三层
-                    if(this.maxLayer==3)
-                    {
-                        this.integrationRule = this.filterCourseClassificationList.children
-                    }
-                    //积分在第二层
-                    if(this.maxLayer==2)
-                    {
-                        this.integrationRule = this.filterCourseClassificationList
-                    }
-                    //积分在第一层
-                    if(this.maxLayer==1||(this.maxLayer==2&&this.filterCourseClassificationList.children[0].type==2))
-                    {
-                        this.integrationRule = this.filterCourseClassificationList
-                    }
-                    
+                    console.log(this.integrationRule, 'integrationRule数组')
                 })
             }
         },
@@ -1419,8 +983,7 @@
                 activityId: this.$route.params.aid
             })
             /** 获得当前情况下的报名管理列表 */
-            this.fuzzyQuery();
-            
+            this.fuzzyQuery()
         }
     }
 </script>
@@ -1429,35 +992,8 @@
     /* .champion >>> div{
         background-color:#93d6dc;
     } */
-    .ant-dropdown-link {
-        border-radius: 4px;
-        color: white;
-        background-color: #1890ff;
-        width: 80px;
-        height: 32px;
-        display: block;
-        text-align: center;
-        line-height: 32px;
-        margin-top: 1px;
-    }
-    .ruleInput >>> .el-input__inner{
-        width: 300px;
-    }
-    .ruleInput2 >>> .el-input__inner{
-        width: 70px;
-    }
-    .ruleInput3 >>> .el-input__inner{
-        width: 70px;
-    }
-    .remark >>> .el-input__inner{
-        visibility: hidden;
-    }
-    .remark >>> .el-input-group__prepend{
-        background-color: #d2d97a;
-        border-right:1px
-    }
-    .el-row >>> .explain{
-        background-color:#549eff;
+    .el-row >>> .explain {
+        background-color: #93d6dc;
         height: 30px;
         line-height: 30px;
     }
@@ -1471,7 +1007,7 @@
         color: #54d7b4;
     }
     .textyellow {
-        color: rgba(255, 166, 0, 0.993);
+        color: yellow;
     }
     .textPlain {
         color: #8b8b8b;
@@ -1551,6 +1087,7 @@
     .erke-top-foot {
         font-size: 14px;
     }
+
     .operate >>> .el-input__inner[data-text] {
         width: 110px;
     }

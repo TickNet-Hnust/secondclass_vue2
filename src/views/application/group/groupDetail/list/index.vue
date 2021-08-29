@@ -10,13 +10,11 @@
         <div class="erke-bottom">
             <el-row :gutter="10" style="margin-bottom: 20px">
                 <el-col class="operation" :span="5">
-                    <el-button size="small" type="primary"
-                        >新增</el-button
-                    >
+                    <el-button size="small" type="primary">新增</el-button>
                     <el-button size="small" plain>导出</el-button>
                 </el-col>
-                <el-col  :span="19">
-                        <!-- v-model="queryList.activityStatusId" -->
+                <el-col :span="19">
+                    <!-- v-model="queryList.activityStatusId" -->
                     <el-radio-group
                         size="mini"
                         style="float:right"
@@ -155,20 +153,20 @@
     export default {
         data() {
             return {
-                loading:false,
-                status:'',
-                activitys:[],
-                schoolYearIdMapName:[],
-                dict_sc_activity_status:[],
+                loading: false,
+                status: '',
+                activitys: [],
+                schoolYearIdMapName: [],
+                dict_sc_activity_status: [],
                 //活动录取方式
                 dict_sc_activity_admission_way: [],
                 //培养方案级别
                 dict_sc_train_program_rank: [],
                 queryParams: {
-                    totalPage:0,
+                    totalPage: 0,
                     totalCount: 0,
-                    pageNum:1,
-                    pageSize:10
+                    pageNum: 1,
+                    pageSize: 10
                 }
             }
         },
@@ -182,7 +180,7 @@
                 }
             }
         },
-        methods:{
+        methods: {
             formatAdmissionWay(row, column, cellValue) {
                 return (
                     cellValue != null &&
@@ -210,9 +208,9 @@
             searchStatus(value) {
                 console.log(value)
                 activityList({
-                    groupId:this.$route.params.gid,
+                    groupId: this.$route.params.gid,
                     activityStatusId: value
-                }).then(value =>{
+                }).then(value => {
                     console.log(value)
                     this.activitys = value.rows
                 })
@@ -226,29 +224,30 @@
                     let tempArr = [
                         'dict_sc_activity_status',
                         'dict_sc_activity_admission_way',
-                        'dict_sc_train_program_rank',
+                        'dict_sc_train_program_rank'
                     ]
 
                     value.forEach((item, index) => {
                         this[tempArr[index]] = item.data
                     })
                 })
-            },
+            }
         },
         created() {
             this.initDict()
-            activityList({groupId: this.$route.params.gid}).then(value => {
+            activityList({ groupId: this.$route.params.gid }).then(value => {
                 console.log(value)
                 this.activitys = value.rows
                 this.queryParams.totalCount = value.total
-                this.queryParams.totalPage = Math.ceil(value.total / this.queryParams.pageSize)
+                this.queryParams.totalPage = Math.ceil(
+                    value.total / this.queryParams.pageSize
+                )
             })
-                schoolYearList().then(value => {
-                    value.rows.forEach(item => {
-                        this.schoolYearIdMapName[item.id] = item.yearName
-                    })
+            schoolYearList().then(value => {
+                value.rows.forEach(item => {
+                    this.schoolYearIdMapName[item.id] = item.yearName
                 })
-            
+            })
         }
     }
 </script>

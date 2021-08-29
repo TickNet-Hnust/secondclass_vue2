@@ -41,7 +41,8 @@ export function courseClassificationList(params) {
 /* GET子类别排序列表 */
 export function SortListClassificationId(classificationId) {
     return request({
-        url: '/admins/secondClass/courseClassification/sort/list/' +
+        url:
+            '/admins/secondClass/courseClassification/sort/list/' +
             classificationId,
         method: 'get'
     })
@@ -50,8 +51,7 @@ export function SortListClassificationId(classificationId) {
 /* 通过Id GET积分类别详情 */
 export function getClassificationId(classificationId) {
     return request({
-        url: '/secondClass/courseClassification/' +
-            classificationId,
+        url: '/secondClass/courseClassification/' + classificationId,
         method: 'get'
     })
 }

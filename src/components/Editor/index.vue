@@ -67,7 +67,7 @@
                         // 工具栏配置
                         toolbar: [
                             ['bold', 'italic', 'underline', 'strike'], // 加粗 斜体 下划线 删除线
-                            ['blockquote', 'code-block'], // 引用  代码块
+                            ['blockquote'], // 引用  代码块
                             [{ list: 'ordered' }, { list: 'bullet' }], // 有序、无序列表
                             [{ indent: '-1' }, { indent: '+1' }], // 缩进
                             [{ size: ['small', false, 'large', 'huge'] }], // 字体大小

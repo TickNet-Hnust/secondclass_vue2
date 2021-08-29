@@ -200,7 +200,7 @@
                 <el-table-column
                     prop="courseClassificationName"
                     label="课程分类"
-                    min-width="140"
+                    min-width="240"
                     show-overflow-tooltip
                 ></el-table-column>
 
@@ -263,6 +263,14 @@
 
                 <el-table-column label="操作" fixed="right" min-width="350">
                     <template slot-scope="scope">
+                        <el-button
+                            type="text"
+                            size="mini"
+                            icon="el-icon-edit"
+                            @click="updateActivity(scope.row)"
+                        >
+                            编辑
+                        </el-button>
                         <el-button
                             v-for="(item, index) in operation[
                                 scope.row.activityStatusId
@@ -414,7 +422,7 @@
                                     v-for="(item,
                                     index) in dict_sc_activity_admission_way"
                                     :key="index"
-                                    :value="item.dictValue"
+                                    :value="+item.dictValue"
                                     :label="item.dictLabel"
                                 ></el-option>
                             </el-select>
@@ -452,7 +460,7 @@
                                         : undefined
                                 "
                                 @change="
-                                    postData.enrollGrade = $event.join('，')
+                                    postData.enrollGrade = $event.join(';')
                                 "
                                 multiple
                                 filterable
@@ -502,9 +510,10 @@
                         </el-form-item>
 
                         <el-form-item label="报名须知：">
-                            <editor
-                                v-model="postData.enrollNotice"
-                                :min-height="192"
+                            <wangEditor
+                                id="enrollNotice"
+                                :value="postData.enrollNotice"
+                                @change="postData.enrollNotice = $event"
                             />
                         </el-form-item>
 
@@ -521,14 +530,15 @@
                                     v-for="(item,
                                     index) in dict_sc_train_program_rank"
                                     :key="index"
-                                    :value="item.dictValue"
+                                    :value="+item.dictValue"
                                     :label="item.dictLabel"
                                 ></el-option>
                             </el-select>
                         </el-form-item>
 
                         <el-form-item label="活动标签：" class="dialogTags">
-                            <el-tag
+                            <el-input v-model="postData.activityTag"></el-input>
+                            <!-- <el-tag
                                 :key="tag"
                                 v-for="tag in postFakeData.activityTag"
                                 closable
@@ -553,10 +563,10 @@
                                 size="small"
                                 @click="activityShowInput"
                                 >+</el-button
-                            >
+                            > -->
                         </el-form-item>
 
-                        <el-form-item label="课程分类：">
+                        <el-form-item label="积分分类：">
                             <el-cascader
                                 v-model="postFakeData.coursePath"
                                 :options="datadata"
@@ -587,14 +597,14 @@
                         <el-form-item label="积分方案：">
                             <el-radio
                                 v-model="postData.integralScheme"
-                                label="0"
+                                :label="0"
                                 >活动签到获取积分 + 个人申报获取积分，管理员认定
                             </el-radio>
                         </el-form-item>
                         <el-form-item label="">
                             <el-radio
                                 v-model="postData.integralScheme"
-                                label="1"
+                                :label="1"
                                 >主办方申请，管理员认定</el-radio
                             >
                         </el-form-item>
@@ -625,7 +635,7 @@
                                     v-for="(item,
                                     index) in dict_sc_activity_flower_scheme"
                                     :key="index"
-                                    :label="item.dictValue"
+                                    :label="+item.dictValue"
                                     >{{ item.dictLabel }}</el-radio
                                 >
                                 <!-- <el-radio label="1">关闭</el-radio>
@@ -644,7 +654,7 @@
                                     v-for="(item,
                                     index) in dict_sc_activity_evaluate_scheme"
                                     :key="index"
-                                    :label="item.dictValue"
+                                    :label="+item.dictValue"
                                     >{{ item.dictLabel }}</el-radio
                                 >
                                 <!-- <el-radio label="1">关闭</el-radio>
@@ -759,16 +769,23 @@
                             ></el-autocomplete>
                         </el-form-item>
                         <el-form-item label="图片素材：">
-                            <el-upload
-                                :http-request="httpRequest"
-                                action="https://jsonplaceholder.typicode.com/posts/"
+                            <a-upload
+                                name="avatar"
                                 list-type="picture-card"
-                                :on-success="handlePictureCardPreview"
-                                :on-remove="handleRemove"
+                                class="avatar-uploader"
+                                :customRequest="httpRequest"
+                                :show-upload-list="false"
+                                :before-upload="beforeUpload"
+                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                             >
-                                <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
+                                <img v-if="postData.images" :src="postData.images" alt="avatar" style="width:200px;height:100px"/>
+                                <div v-else>
+                                <a-icon :type="loading ? 'loading' : 'plus'" />
+                                <div class="ant-upload-text">
+                                    Upload
+                                </div>
+                                </div>
+                            </a-upload>
                         </el-form-item>
 
                         <el-form-item label="相关附件：">
@@ -789,16 +806,17 @@
                             </el-upload>
                         </el-form-item>
                         <el-form-item label="活动介绍：">
-                            <editor
-                                v-model="postData.activityIntroduce"
-                                :min-height="192"
-                            ></editor>
+                            <wangEditor
+                                id="activityIntroduce"
+                                :value="postData.activityIntroduce"
+                                @change="postData.activityIntroduce = $event"
+                            />
                         </el-form-item>
                     </el-form>
                 </el-col>
             </el-row>
             <div slot="footer" class="dialog-footer">
-                <el-button>关闭</el-button>
+                <el-button @click="close">关闭</el-button>
                 <el-button type="primary" @click="postActivity"
                     >确 定</el-button
                 >
@@ -821,6 +839,7 @@
     import {
         activityList,
         activityPost,
+        activityPut,
         activityIdNextStatus,
         schoolYearList,
         trainingProgramDetail,
@@ -838,12 +857,14 @@
     import { getDict } from '@/api/application/secondClass/dict/type.js'
     import horwheel from 'horwheel'
     import Editor from '@/components/Editor'
+    import wangEditor from '@/components/WangEditor'
     import IMGURL_MIXINS from '@/mixins/upload.js'
     export default {
         name: 'activity',
         mixins: [IMGURL_MIXINS],
         components: {
-            Editor
+            Editor,
+            wangEditor
         },
         data() {
             return {
@@ -865,7 +886,8 @@
                     enrollRange:'',
                     registeDistanceRadio: 0,
                     activityTime: [],
-                    enrollTime: []
+                    enrollTime: [],
+                    enrollRange:[]
                 },
                 postData: {
                     name: '', //活动名称
@@ -876,7 +898,7 @@
                     guideTeacherId: '', //指导老师Id
 
                     enrollStartTime: '', //转后的报名开始时间
-                    emrollEndTime: '', //转后的报名结束时间
+                    enrollEndTime: '', //转后的报名结束时间
                     admissionWay: '', //录取方式
                     enrollRange: '', //报名范围
                     enrollGrade: '', //报名年级
@@ -917,33 +939,12 @@
                 //积分类别
                 integral: '',
                 addActivity: {
-                    title: '新增/修改',
+                    title: '新增活动',
                     open: false
-                },
-                groupTags: {
-                    dynamicTags: ['2003010727 - 张光辉 '],
-                    inputVisible: false,
-                    inputValue: ''
-                },
-                peopleTags: {
-                    dynamicTags: ['2003010727 - 张光辉 '],
-                    inputVisible: false,
-                    inputValue: ''
-                },
-                RangeTags: {
-                    dynamicTags: ['机电工程学院', '土木工程学院'],
-                    inputVisible: false,
-                    inputValue: ''
                 },
                 //报名年级
                 yearTags: {
                     dynamicTags: ['2018', '2019', '2020'],
-                    inputVisible: false,
-                    inputValue: ''
-                },
-                //活动标签
-                activityTags: {
-                    dynamicTags: ['创新创业'],
                     inputVisible: false,
                     inputValue: ''
                 },
@@ -1116,6 +1117,32 @@
             }
         },
         methods: {
+            updateActivity(row) {
+                console.log(row,123)
+                //发布人不能修改
+                //指导老师不能修改
+                Object.keys(this.postData).forEach(key => {
+                    this.postData[key] = row[key]
+                })
+                this.postData.id = row.id
+                console.log(this.postData,456)
+                this.postFakeData.enrollTime = [new Date(row.enrollStartTime),new Date(row.enrollEndTime)]
+                this.postFakeData.enrollRange = row.enrollRange.split(';').map(item => +item)
+                this.postFakeData.maxAdmissionNumber = row.maxAdmissionNumber?1:0
+                this.postFakeData.coursePath = row.courseClassificationPath.split(',').map(item => +item)
+                this.getCourseList({
+                    classificationId: this.postFakeData.coursePath[this.postFakeData.coursePath.length - 1]
+                })
+                this.postFakeData.activityTime = [new Date(row.activityStartTime),new Date(row.activityEndTime)]
+                this.postFakeData.registeTimeRadio = row.registeTimeStartTime?1:0
+                this.postFakeData.registeTime = [new Date(row.registeTimeStartTime),new Date(row.registeTimeEndTime)]
+                this.postFakeData.registeDistanceRadio = row.activityRegisteDistance ? 1 : 0
+                this.imageUrl = row.images
+                
+                // this.postFakeData.enrollTime  
+                this.addActivity.open = true
+                this.addActivity.title = '修改活动'
+            },
             handleTeacher(item) {
                 console.log(item,item.value,'指导老师id')
                 this.postData.guideTeacherId = item.value
@@ -1184,6 +1211,17 @@
                     else this.postData.images += `${value}`
                 })
             },
+            beforeUpload(file) {
+                const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif';
+                if (!isJpgOrPng) {
+                    this.$message.error('图片的格式只能是jpg、png、gif');
+                }
+                const isLt2M = file.size / 1024 / 1024 < 2;
+                if (!isLt2M) {
+                    this.$message.error('图片大小不能超过2M');
+                }
+                return isJpgOrPng && isLt2M;
+            },
             /**
              * @description: 主办方改变
              */
@@ -1250,117 +1288,11 @@
                     this.postData.groupId = value.rows[0]?.deptId
                 })
             },
+            close() {
+                this.addActivity.open = false
+            },
             getContainer() {
                 return document.querySelector('.formDetail')
-            },
-            groupHandleClose(tag) {
-                this.groupTags.dynamicTags.splice(
-                    this.groupTags.dynamicTags.indexOf(tag)
-                )
-            },
-
-            groupShowInput() {
-                this.groupTags.inputVisible = true
-                this.$nextTick(_ => {
-                    this.$refs.groupSaveTagInput.$refs.input.focus()
-                })
-            },
-            groupHandleInputConfirm() {
-                let inputValue = this.groupTags.inputValue
-                if (inputValue) {
-                    this.groupTags.dynamicTags.push(inputValue)
-                }
-                this.groupTags.inputVisible = false
-                this.groupTags.inputValue = ''
-            },
-            //people
-            peopleHandleClose(tag) {
-                this.peopleTags.dynamicTags.splice(
-                    this.peopleTags.dynamicTags.indexOf(tag)
-                )
-            },
-
-            peopleShowInput() {
-                this.peopleTags.inputVisible = true
-                this.$nextTick(_ => {
-                    this.$refs.peopleSaveTagInput.$refs.input.focus()
-                })
-            },
-            peopleHandleInputConfirm() {
-                let inputValue = this.peopleTags.inputValue
-                if (inputValue) {
-                    this.peopleTags.dynamicTags.push(inputValue)
-                }
-                this.peopleTags.inputVisible = false
-                this.peopleTags.inputValue = ''
-            },
-            //actiove
-            activityHandleClose(tag) {
-                this.postFakeData.activityTag.splice(
-                    this.postFakeData.activityTag.indexOf(tag)
-                )
-            },
-
-            activityShowInput() {
-                this.activityTags.inputVisible = true
-                this.$nextTick(_ => {
-                    this.$refs.activitySaveTagInput.$refs.input.focus()
-                })
-            },
-
-            activityHandleInputConfirm() {
-                let inputValue = this.activityTags.inputValue
-                if (inputValue) {
-                    this.postFakeData.activityTag.push(inputValue)
-                }
-                this.activityTags.inputVisible = false
-                this.activityTags.inputValue = ''
-            },
-            //asdf
-            yearHandleClose(tag) {
-                this.yearTags.dynamicTags.splice(
-                    this.yearTags.dynamicTags.indexOf(tag),
-                    1
-                )
-            },
-
-            yearShowInput() {
-                this.yearTags.inputVisible = true
-                this.$nextTick(_ => {
-                    this.$refs.yearSaveTagInput.$refs.input.focus()
-                })
-            },
-
-            yearHandleInputConfirm() {
-                let inputValue = this.yearTags.inputValue
-                if (inputValue) {
-                    this.yearTags.dynamicTags.push(inputValue)
-                }
-                this.yearTags.inputVisible = false
-                this.yearTags.inputValue = ''
-            },
-            //sdf
-            RangeHandleClose(tag) {
-                this.RangeTags.dynamicTags.splice(
-                    this.RangeTags.dynamicTags.indexOf(tag),
-                    1
-                )
-            },
-
-            RangeShowInput() {
-                this.RangeTags.inputVisible = true
-                this.$nextTick(_ => {
-                    this.$refs.RangeSaveTagInput.$refs.input.focus()
-                })
-            },
-
-            RangeHandleInputConfirm() {
-                let inputValue = this.RangeTags.inputValue
-                if (inputValue) {
-                    this.RangeTags.dynamicTags.push(inputValue)
-                }
-                this.RangeTags.inputVisible = false
-                this.RangeTags.inputValue = ''
             },
             openMap() {
                 this.mapDialog.open = true
@@ -1446,8 +1378,9 @@
                 return cellValue != null && this.schoolYearIdMapName[cellValue]
             },
             handChangeNodePost(value) {
+                console.log(value,7777)
                 this.postData.courseClassificationId = value[value.length - 1]
-                this.postData.courseClassificationName = value.join(',')
+                this.postData.courseClassificationPath = value.join(',')
                 // this.postData.courseClassificationName = value.join()
                 this.getCourseList({
                     classificationId: value[value.length - 1]
@@ -1471,12 +1404,11 @@
             },
             postActivity() {
                 this.postData.recommend = 0
-                console.log(this.postData)
-                this.postData.activityTag = this.postFakeData.activityTag.join(
-                    ';'
-                )
-                activityPost(this.postData).then(value => {
-                    this.msgSuccess('添加成功')
+                let state = this.addActivity.title == '修改活动' ? activityPut :activityPost
+                state(this.postData).then(value => {
+                    this.msgSuccess('操作成功')
+                    this.addActivity.open = false
+                    this.fuzzyQuery()
                     console.log(value)
                 })
             },
@@ -1499,6 +1431,55 @@
             },
             handleImport() {
                 this.addActivity.open = true
+                this.addActivity.title = '新增活动'
+                this.postData =  {
+                    name: '', //活动名称
+                    groupPathName: '', //主办方完整名字
+                    groupId: '', //主办方ID
+                    activityReleaserId: '', //发布人ID
+                    deptId: '', //部门Id
+                    guideTeacherId: '', //指导老师Id
+
+                    enrollStartTime: '', //转后的报名开始时间
+                    enrollEndTime: '', //转后的报名结束时间
+                    admissionWay: '', //录取方式
+                    enrollRange: '', //报名范围
+                    enrollGrade: '', //报名年级
+                    maxAdmissionNumber: '', //最大录取人数
+                    enrollNotice: '', //报名须知
+
+                    rankId: '', //活动级别
+                    activityTag: '', //活动标签
+                    courseId:'',
+                    courseClassificationId: '', //课程分类
+                    courseClassificationName: '', //关联的课程的课程分类完整名字
+                    integralScheme: '', //积分方案
+                    activityStartTime: '', //活动开始时间
+                    activityEndTime: '', //活动结束时间
+                    vacate: 1, //允许请假
+                    flowerStatus: '', //是否开启花絮
+                    evaluateStatus: '', //是否开启评价
+                    activityPlace: '', //活动地点坐标
+                    activityRegisteDistance: '', //活动签到距离
+                    activityPlaceName: '', //活动地点名称
+                    registeStartTime: '', //签到开始时间
+                    registeEndTime: '', //签到结束时间
+                    activityManagerId: '', //活动负责人
+                    activityOrganizerId: '', //活动组织者
+                    images: '', //活动素材
+                    enclosure: '', //相关附件链接
+                    activityIntroduce: '', //活动介绍
+                    schoolYearId: ''
+                }
+                this.postFakeData.enrollTime = []
+                this.postFakeData.enrollRange = ''
+                this.postFakeData.maxAdmissionNumber = 0
+                this.postFakeData.coursePath = null
+                this.postFakeData.activityTime = []
+                this.postFakeData.registeTimeRadio = 0
+                this.postFakeData.registeTime = []
+                this.postFakeData.registeDistanceRadio = 0
+                this.imageUrl = ''
             },
             /**
              * @description: 确定课程状态类名
@@ -1619,7 +1600,7 @@
                     beginCreateTime: '',
                     endCreateTime: ''
                 }
-
+                
                 this.fuzzyQuery()
             },
             fuzzyQuery() {
@@ -1648,7 +1629,6 @@
                     option.params.beginCreateTime = fuckMan[0]
                     option.params.endCreateTime = fuckMan[1]
                 }
-                console.log(option,'发送的数据')
                 this.getActivityList(option)
             }
         },
@@ -1721,8 +1701,10 @@
     }
     .erke-bottom {
         background-color: #fff;
+        max-height: calc(100vh - 230px);
         border: 1px solid #ddd;
         padding: 15px;
+        overflow: auto;
     }
     .el-input {
         width: 200px;

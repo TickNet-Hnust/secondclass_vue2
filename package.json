@@ -65,6 +65,7 @@
         "vue-router": "3.4.9",
         "vuedraggable": "2.24.3",
         "vuex": "3.6.0",
+        "wangeditor": "^4.7.7",
         "x-scrollbar": "^3.1.0"
     },
     "devDependencies": {

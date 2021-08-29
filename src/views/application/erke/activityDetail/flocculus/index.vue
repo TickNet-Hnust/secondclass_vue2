@@ -21,7 +21,12 @@
                                                 data-text
                                                 placeholder="学号"
                                                 v-model="queryList.userName"
-                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                                @input="
+                                                    debounceFuzzyQuery(
+                                                        fuzzyQuery,
+                                                        500
+                                                    )()
+                                                "
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -31,7 +36,12 @@
                                                 data-text
                                                 placeholder="姓名"
                                                 v-model="queryList.nickName"
-                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                                @input="
+                                                    debounceFuzzyQuery(
+                                                        fuzzyQuery,
+                                                        500
+                                                    )()
+                                                "
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -169,9 +179,7 @@
         activityFlowerList,
         activityFlowerVerify
     } from '@/api/application/secondClass/index'
-    import {
-        transformDate
-    } from '@/utils/gather'
+    import { transformDate } from '@/utils/gather'
     import {
         trainingProgramDetail,
         trainingProgramList,
@@ -287,25 +295,24 @@
 
         methods: {
             //模糊查询防抖
-            debounceFuzzyQuery(func,delayTime){
-                return function(){
-                    clearTimeout(this.timer);
-                    console.log(this.count,'搜索次数');
-                    if(this.count==0)
-                    {
-                        func();
-                        this.count++;
-                    }else{
-                        this.timer = setTimeout( ()=>{
-                        func();
-                        this.count++;
-                        },delayTime )
+            debounceFuzzyQuery(func, delayTime) {
+                return function() {
+                    clearTimeout(this.timer)
+                    console.log(this.count, '搜索次数')
+                    if (this.count == 0) {
+                        func()
+                        this.count++
+                    } else {
+                        this.timer = setTimeout(() => {
+                            func()
+                            this.count++
+                        }, delayTime)
                     }
                 }.bind(this)
             },
-            yes(row){
-                this.alertDialog.call(this,'同意发布',{
-                    confirm:() => {
+            yes(row) {
+                this.alertDialog.call(this, '同意发布', {
+                    confirm: () => {
                         let option = {
                             ids: row.id,
                             status: 1
@@ -363,9 +370,9 @@
                     userName: this.queryList.userName,
                     nickName: this.queryList.nickName,
                     status: this.queryList.status,
-                    params:{
-                    // createStartTime: this.queryList.createStartTime,
-                    // createEndTime: this.queryList.createEndTime,
+                    params: {
+                        // createStartTime: this.queryList.createStartTime,
+                        // createEndTime: this.queryList.createEndTime,
                     },
                     page: this.queryParams.pageCount,
                     limit: this.queryParams.pageSize
@@ -374,8 +381,10 @@
                     // isAsc:''
                 }
                 if (this.value2) {
-                    option.params.createStartTime =  transformDate(this.value2)[0]
-                    option.params.createEndTime =  transformDate(this.value2 )[1]
+                    option.params.createStartTime = transformDate(
+                        this.value2
+                    )[0]
+                    option.params.createEndTime = transformDate(this.value2)[1]
                 }
                 console.log(option, 'fuzzyQuery发送的数据')
                 this.getFlowerList(option)

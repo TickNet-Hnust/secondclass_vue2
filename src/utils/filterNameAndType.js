@@ -29,5 +29,3 @@ export function filterNameAndType(data, name) {
     dfs(data)
     return [...tempSet]
 }
-
-
