@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container">
+    <div class="app-container credit">
         <el-row :gutter="20">
             <el-col :span="24" :xs="24">
                 <div class="erke-top">
@@ -225,7 +225,7 @@
                                             <el-input data-text
                                             placeholder="姓名"
                                             v-model="queryList.nickName"
-                                            @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                            @input="debounceFuzzyQuery(fuzzyQuery,300)"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -235,7 +235,7 @@
                                             <el-input data-text
                                             placeholder="学号"
                                             v-model="queryList.userName"
-                                            @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                            @input="debounceFuzzyQuery(fuzzyQuery,300)"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -334,8 +334,6 @@
                             v-loading="loading"
                             class="integralMainTable"
                         >
-                            <el-table-column type="selection" min-width="55">
-                            </el-table-column>
 
                             <el-table-column
                                 prop="id"
@@ -395,6 +393,27 @@
                                 label="申请积分"
                                 min-width="100"
                             >
+                            </el-table-column>
+
+                            <el-table-column
+                                label="申报材料"
+                                :min-width="150"
+                            >   
+                                <template slot-scope="{ row }">
+                                    <div
+                                    v-if="row.material==null"
+                                   >
+                                       无材料
+                                   </div>
+
+                                    <img
+                                        v-else
+                                        :src="row.material"
+                                        class="imgs"  
+                                        alt="图片失效"
+                                        @click="show(row.material)"
+                                    />
+                                </template>
                             </el-table-column>
 
                             <el-table-column
@@ -524,7 +543,7 @@
 
                 <el-row>
                     <el-col :span="10">认定积分：</el-col>
-                    <el-col :span="2">
+                    <el-col :span="3">
                         <el-input
                             data-text
                             placeholder="认定积分"
@@ -631,6 +650,27 @@
                     label="申请积分"
                     min-width="50"
                 >
+                </el-table-column>
+
+                <el-table-column
+                    label="申报材料"
+                    :min-width="100"
+                >   
+                    <template slot-scope="scope">
+                        <div
+                        v-if="scope.row.material==null"
+                        >
+                            无材料
+                        </div>
+
+                        <img
+                            v-else
+                            :src="scope.row.material"
+                            class="imgs"  
+                            alt="图片失效"
+                            @click="show(scope.row.material)"
+                        />
+                    </template>
                 </el-table-column>
 
                 <el-table-column prop="confirmIntegral" label="认定积分" min-width="50">
@@ -809,6 +849,8 @@
         components: { Treeselect },
         data() {
             return {
+                count:0,
+                timer:0,
                 //积分规则数组:
                 integrationRule: [],
                 //单个认定报名会话框表单参数form
@@ -999,6 +1041,11 @@
         },
 
         methods:{
+            show(material) {
+                this.$viewerApi({
+                images:[material],
+                })
+            },
             //排序对话框点击取消事件
             sortCancel(){
                 this.sortCreditDialog.data.orderByColumn = ''
@@ -1033,13 +1080,20 @@
                   this.mutiExamCreditDialog.post.userIds.push(item.userId);
               })
                 console.log(this.mutiExamCreditDialog.post,'点击确认发送的数据');
-                activityIntegralVerify(this.mutiExamCreditDialog.post).then(
+                if(this.mutiExamCreditDialog.post.userIds.length==0)
+                {
+                    this.msgInfo('请选择要申报的人！')
+                }
+                else{
+                   activityIntegralVerify(this.mutiExamCreditDialog.post).then(
                     value => {
                         console.log(value, '积分认定操作成功的返回！')
                         this.mutiExamCreditDialog.open = false
                         this.fuzzyQuery()
                     }
-                )
+                ) 
+                }
+                
             },
             clearSelection(){
                 this.$refs.multipleTable.clearSelection();
@@ -1049,7 +1103,6 @@
             },
             //模糊查询防抖
             debounceFuzzyQuery(func,delayTime){
-                return function(){
                     clearTimeout(this.timer);
                     console.log(this.count,'搜索次数');
                     if(this.count==0)
@@ -1062,7 +1115,6 @@
                         this.count++;
                         },delayTime )
                     }
-                }.bind(this)
             },
             formatStatus(row, column, cellValue) {
                 return (
@@ -1257,7 +1309,7 @@
                 this.courseClassificationName = value.data.courseClassificationName;
                 this.integralScheme = value.data.integralScheme;
                 // await this.getCourseClassificationList(this.courseClassificationId);
-                await this.getCourseClassificationList(89);
+                await this.getCourseClassificationList(this.courseClassificationId);
                
             })
            },
@@ -1275,8 +1327,8 @@
                     // beginCreateTime:this.queryList.beginCreateTime,
                     // endCreateTime:this.queryList.endCreateTime,
                     },
-                    page: this.queryParams.pageNum,
-                    limit: this.queryParams.pageSize,
+                    pageNum: this.queryParams.pageNum,
+                    pageSize: this.queryParams.pageSize,
                     orderByColumn: this.sortCreditDialog.data.orderByColumn,
                     isAsc: this.sortCreditDialog.data.isAsc
                     // orderByColumn:'',
@@ -1435,6 +1487,10 @@
     /* .champion >>> div{
         background-color:#93d6dc;
     } */
+    .imgs{
+        width: 80px;
+        height: 60px;
+    }
     .ant-dropdown-link {
         border-radius: 4px;
         color: white;
@@ -1544,6 +1600,7 @@
         padding: 16px;
         border: 1px solid #ddd;
         border-radius: 5px;
+        overflow: auto
     }
     .labelSpan {
         height: 20px;

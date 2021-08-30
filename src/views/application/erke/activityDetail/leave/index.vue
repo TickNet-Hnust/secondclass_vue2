@@ -22,13 +22,13 @@
                             </el-menu-item>
 
                             <el-menu-item
-                                v-for="(item, index) in Object.entries(tabInfo)"
+                                v-for="(item, index) in tabInfo"
                                 :key="index"
                                 :index="index + ''"
                             >
                                 <span slot="title"
-                                    >{{ deptIdMapDeptName[item[0]] }}
-                                    <span class="numbers">{{ item[1] }}</span>
+                                    >{{item.deptName}}
+                                    <span class="numbers">{{ item.number }}</span>
                                 </span>
                             </el-menu-item>
                         </el-menu>
@@ -57,20 +57,41 @@
                                             </el-button>
                                         </el-tooltip>
                                     </el-col>
+
                                     <el-col :span="1" style="min-width: 90px">
                                         <el-form-item label="">
-                                            <el-select
-                                                v-model="action"
-                                                style="width:80px"
-                                                placeholder="操作"
-                                            >
-                                                <el-option
-                                                    value="批量修改"
-                                                ></el-option>
-                                                <el-option
-                                                    value="排序"
-                                                ></el-option>
-                                            </el-select>
+
+                                             <a-dropdown>
+                                                <a
+                                                    class="ant-dropdown-link"
+                                                    @click="
+                                                        e => e.preventDefault()
+                                                    "
+                                                >
+                                                    操作 <a-icon type="down" />
+                                                </a>
+                                                <a-menu slot="overlay">
+                                                    <!-- <a-menu-item>
+                                                        <a
+                                                            href="javascript:;"
+                                                           @click="mutiExamLeave"
+                                                            >批量审核</a
+                                                        >
+                                                    </a-menu-item> -->
+                                                    <a-menu-item>
+                                                        <a href="javascript:;"
+                                                        @click="leaveRegister"
+                                                            >请假登记</a
+                                                        >
+                                                    </a-menu-item>
+                                                    <a-menu-item>
+                                                        <a href="javascript:;"
+                                                            >导出</a
+                                                        >
+                                                    </a-menu-item>
+                                                </a-menu>
+                                            </a-dropdown>
+
                                         </el-form-item>
                                     </el-col>
 
@@ -81,7 +102,7 @@
                                                 placeholder="学号"
                                                 v-model="queryList.userName"
                                                 style="width:100px"
-                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                                @input="debounceFuzzyQuery(fuzzyQuery,300)"
                                             >
                                             </el-input>
                                         </el-form-item>
@@ -94,7 +115,7 @@
                                                 placeholder="姓名"
                                                 v-model="queryList.nickName"
                                                 style="width:100px"
-                                                @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                                @input="debounceFuzzyQuery(fuzzyQuery,300)"
                                             >
                                             </el-input>
                                         </el-form-item>
@@ -248,7 +269,7 @@
                         <pagination
                             v-show="queryParams.totalPage > 0"
                             :total="queryParams.totalCount"
-                            :page.sync="queryParams.pageCount"
+                            :page.sync="queryParams.pageNum"
                             :limit.sync="queryParams.pageSize"
                             @pagination="getList($event)"
                         />
@@ -320,6 +341,89 @@
                 >
             </div>
         </el-dialog>
+
+          <!-- 请假登记会话框 -->
+         <el-dialog
+            :title="leaveRegisterDialog.title"
+            :visible.sync="leaveRegisterDialog.open"
+            width="915px"
+            append-to-body
+        >
+        
+        <el-form ref="form1" :model="form1" label-width="300px">
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="6">
+                        请假人：
+                    </el-col>
+                    <el-col :span="18">
+                        <!-- 感觉这里还是要防抖 到时候再说 -->
+                        <el-autocomplete
+                            value-key="label"
+                            v-model="postFakeData.userId"
+                            :fetch-suggestions="querySearchAsync"
+                            placeholder="请手动输入完整姓名"
+                            style="width: 200px;"
+                            @select="handUserId"
+                        ></el-autocomplete>
+                    </el-col>
+                </el-row>
+
+                
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="6">
+                        请假理由：
+                    </el-col>
+                    <el-col :span="18">
+
+                        <el-input
+                            type="textarea"
+                            v-model="leaveRegisterDialog.data.reason"
+                            rows="2"
+                            style="width: 300px;"
+                        ></el-input>
+                    </el-col>
+                </el-row>
+
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="6">
+                        批假人：
+                    </el-col>
+                    <el-col :span="18">
+                        <el-autocomplete
+                            value-key="label"
+                            v-model="postFakeData.approveUserId"
+                            :fetch-suggestions="querySearchAsync"
+                            placeholder="请手动输入完整姓名"
+                            style="width: 200px;"
+                            @select="handApproveUserId"
+                        ></el-autocomplete>
+                    </el-col>
+                </el-row>
+
+
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="6">
+                        批假时间：
+                    </el-col>
+                    <el-col :span="18">
+                       <el-date-picker
+                            v-model="value1"
+                            @change="prizeLeaveDateChange"
+                            type="datetime"
+                            placeholder="选择日期时间"
+                        >
+                        </el-date-picker>
+                    </el-col>
+                </el-row>
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="registerCancel">关闭</el-button>
+                <el-button type="primary" @click="save">保存</el-button>
+            </div>
+
+        </el-dialog>
+
     </div>
 </template>
 
@@ -328,10 +432,15 @@
     import {
         activityLeave,
         activityLeaveList,
-        activityLeaveVerify
+        //请假批量审核
+        activityLeaveVerify,
+        //请假登记
+        activityLeavePost,
+        utilListByName,
     } from '@/api/application/secondClass/index'
     import {
-        transformDate
+        transformDate,
+        transformDateSingle,
     } from '@/utils/gather'
     //导入获取dept信息函数
     import {
@@ -345,8 +454,15 @@
         name: 'Leave',
         data() {
             return {
+                timer:0,
+                count:0,
                 //单个审核请假会话框表单参数form
                 form: {},
+                form1:{},
+                postFakeData:{
+                    userId:'',
+                    approveUserId:'',
+                },
                 //单个审核请假会话框数据
                 examLeaveDialog: {
                     title: '请假审核',
@@ -364,14 +480,11 @@
                         status: 0
                     }
                 },
-                //  批量审核 会话框数据数组 以后应该会用到
-                mutiExamLeaveDialogDataList: [],
                 queryParams: {
                     totalCount: 0,
-                    totalPage: 50,
-                    pageCount: 1,
-                    pageSize: 4,
-                    currPage: 1
+                    totalPage: 0,
+                    pageNum: 1,
+                    pageSize: 10,
                 },
                 deptId: '',
                 queryList: {
@@ -434,7 +547,20 @@
                     ]
                 },
                 //绑定请假时间
-                value2: ''
+                value2: '',
+                value1:'',
+                leaveRegisterDialog:{
+                    title:'请假登记',
+                    open:false,
+                    data:{
+                        activityId:this.$route.params.aid,
+                        userId:'',
+                        approveUserId:'',
+                        reason:'',
+                        createTime:'',
+                        status:1,
+                    }
+                }
             }
         },
         computed: {
@@ -447,9 +573,54 @@
             }
         },
         methods: {
+            registerCancel(){
+                 this.leaveRegisterDialog.data={
+                        activityId:this.$route.params.aid,
+                        userId:'',
+                        approveUserId:'',
+                        reason:'',
+                        createTime:'',
+                        status:1,
+                    }
+                this.leaveRegisterDialog.open=false;
+            },
+            handUserId(item){
+               this.leaveRegisterDialog.data.userId = item.value
+            },
+            handApproveUserId(item){
+               this.leaveRegisterDialog.data.approveUserId = item.value
+            },
+           //点击请假登记触发的事件
+            leaveRegister(){
+                this.leaveRegisterDialog.open = true
+            },
+            prizeLeaveDateChange(){
+                if(this.value1!=null)
+               {
+                   this.leaveRegisterDialog.data.createTime =transformDateSingle(this.value1);
+               } 
+            },
+            save(){
+               console.log(this.leaveRegisterDialog.data,'点击保存要发送的数据');
+               activityLeavePost(this.leaveRegisterDialog.data).then(value=>{
+                   console.log(value,'请假登记接口返回的数据');
+                   this.fuzzyQuery();
+               })
+            },
+            querySearchAsync(queryString,cb) {
+                if(queryString) {
+                    utilListByName({name:queryString}).then(value => {
+                        console.log(value)
+                        cb(value.data.map(item =>({
+                            label: `${item.userName}-${item.nickName}`,
+                            value: item.userId
+                        })))
+                        // cb(value.data)
+                    })
+                } 
+            },
             //模糊查询防抖
             debounceFuzzyQuery(func,delayTime){
-                return function(){
                     clearTimeout(this.timer);
                     console.log(this.count,'搜索次数');
                     if(this.count==0)
@@ -462,7 +633,6 @@
                         this.count++;
                         },delayTime )
                     }
-                }.bind(this)
             },
             //操作分页触发的事件
             getList(option) {
@@ -487,7 +657,7 @@
             handleSelect(index) {
                 console.log(index)
                 if (index != '') {
-                    this.deptId = Object.entries(this.tabInfo)[index][0]
+                    this.deptId = this.tabInfo[index].deptId
                 } else {
                     this.deptId = ''
                 }
@@ -576,21 +746,10 @@
                 activityLeave(option).then(async value => {
                     console.log(value, '请假总信息')
                     this.recordsNumber = value.data.recordsNumber
-                    this.tabInfo = value.data.tabInfo
+                    this.tabInfo = value.data.tab
                 })
             },
-            getDeptIdMapDeptName() {
-                listDept().then(value => {
-                    value.data.forEach(item => {
-                        //deptId映射deptName字典
-                        this.deptIdMapDeptName[item.deptId] = item.deptName
-                    })
-                    console.log(
-                        this.deptIdMapDeptName,
-                        '这是deptid和deptname的map'
-                    )
-                })
-            },
+           
             /**获得当前情况下的请假管理列表  模糊查询 */
             fuzzyQuery() {
                 let option = {
@@ -602,8 +761,8 @@
                     // leaveStartTime: this.queryList.leaveStartTime,
                     // leaveEndTime: this.queryList.leaveEndTime,
                     },
-                    page: this.queryParams.pageCount,
-                    limit: this.queryParams.pageSize,
+                    pageNum: this.queryParams.pageNum,
+                    pageSize: this.queryParams.pageSize,
                     activityId: this.$route.params.aid,
                     orderByColumn: '',
                     isAsc: ''
@@ -619,7 +778,7 @@
                 this.loading = true
                 activityLeaveList(option).then(value => {
                     this.queryParams.totalCount = value.total
-                    this.queryParams.pageCount = Math.ceil(
+                   this.queryParams.totalPage = Math.ceil(
                         this.queryParams.totalCount / this.queryParams.pageSize
                     )
                     this.leaveList = value.rows
@@ -643,19 +802,28 @@
         async created() {
             //初始化字典
             this.initDict()
-
+            
             /** 通过活动id获取当前活动请假信息，aid代码活动id*/
             this.getActivityLeave({
                 activityId: this.$route.params.aid
             })
             this.fuzzyQuery()
-
-            this.getDeptIdMapDeptName()
         }
     }
 </script>
 
 <style scoped>
+    .ant-dropdown-link {
+        border-radius: 4px;
+        color: white;
+        background-color: #1890ff;
+        width: 80px;
+        height: 32px;
+        display: block;
+        text-align: center;
+        line-height: 32px;
+        margin-top: 1px;
+    }
     /* 状态样式 */
     .adviceText {
         margin: 10px 0px;

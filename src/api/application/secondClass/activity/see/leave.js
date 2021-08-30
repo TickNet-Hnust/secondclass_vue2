@@ -2,8 +2,8 @@
  * @Descripttion:
  * @Author: 林舒恒
  * @Date: 2021-08-05 11:10:23
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-05 11:17:14
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-08-30 11:48:14
  */
 import request from '@/utils/request.js'
 
@@ -40,5 +40,17 @@ export function activityLeaveVerify(params) {
         url: '/admins/secondClass/activity/leave/verify',
         method: 'put',
         params
+    })
+}
+
+/**
+ * @description: 请假登记
+ * @param {*} data
+ */
+ export function activityLeavePost(data) {
+    return request({
+        url: '/admins/secondClass/activity/leave',
+        method: 'post',
+        data
     })
 }

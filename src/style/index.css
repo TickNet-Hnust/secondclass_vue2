@@ -13,7 +13,9 @@
     font-weight: 700;
     height: 64px;
 }
-
+.credit  .el-dialog__wrapper {
+z-index: 100 !important;
+}
 #app {
     background-color: #f1f2f6;
 }

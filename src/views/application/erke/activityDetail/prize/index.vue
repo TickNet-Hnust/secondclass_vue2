@@ -120,11 +120,6 @@
                                                             >导出</a
                                                         >
                                                     </a-menu-item>
-                                                    <a-menu-item>
-                                                        <a href="javascript:;"
-                                                            >排序</a
-                                                        >
-                                                    </a-menu-item>
                                                 </a-menu>
                                             </a-dropdown>
                                         </el-form-item>
@@ -135,7 +130,7 @@
                                             <el-input data-text
                                             placeholder="姓名"
                                             v-model="queryList.nickName"
-                                            @input="debounceFuzzyQuery(fuzzyQuery,500)()">
+                                            @input="debounceFuzzyQuery(fuzzyQuery,300)">
                                             </el-input>
                                         </el-form-item>
                                     </el-col>
@@ -145,7 +140,7 @@
                                             <el-input data-text
                                             placeholder="学号"
                                             v-model="queryList.userName"
-                                            @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                            @input="debounceFuzzyQuery(fuzzyQuery,300)"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -156,7 +151,7 @@
                                             <el-input data-text
                                             placeholder="奖品"
                                             v-model="queryList.prizeName"
-                                            @input="debounceFuzzyQuery(fuzzyQuery,500)()"
+                                            @input="debounceFuzzyQuery(fuzzyQuery,300)"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -319,14 +314,7 @@
                         >
                     </template>
                 </el-table-column>
-                <!-- <el-table-column prop="sort" label="排序" width="80">
-                        <template slot-scope="scope">
-                            <el-input
-                                class="sortInput"
-                                v-model="scope.row.sort"
-                            ></el-input>
-                        </template>
-                    </el-table-column> -->
+                
                 <el-table-column prop="sort" label="排序" min-width="60">
                     <template slot-scope="scope">
                         <el-input v-model="scope.row.sort" class="nameOfPlan">
@@ -429,10 +417,14 @@
                         发放对象：
                     </el-col>
                     <el-col :span="18">
-                        <el-input
-                            v-model="addPrizeDialogList.data.userId"
+                        <el-autocomplete
+                            value-key="label"
+                            v-model="postFakeData.userId"
+                            :fetch-suggestions="querySearchAsync"
+                            :placeholder="addPrizeDialogList.data.nickName"
                             style="width: 200px;"
-                        ></el-input>
+                            @select="handUserId"
+                        ></el-autocomplete>
                     </el-col>
                 </el-row>
 
@@ -441,10 +433,14 @@
                         发放人：
                     </el-col>
                     <el-col :span="18">
-                        <el-input
-                            v-model="addPrizeDialogList.data.deliverUserId"
+                        <el-autocomplete
+                            value-key="label"
+                            v-model="postFakeData.deliverUserId"
+                            :fetch-suggestions="querySearchAsync"
+                            :placeholder="addPrizeDialogList.data.deliverUserName"
                             style="width: 200px;"
-                        ></el-input>
+                            @select="handDeliverUserId"
+                        ></el-autocomplete>
                     </el-col>
                 </el-row>
 
@@ -465,7 +461,7 @@
             </el-form>
 
             <div slot="footer" class="dialog-footer">
-                <el-button>关闭</el-button>
+                <el-button @click="cancel"> 关闭 </el-button>
                 <el-button type="primary" @click="save">保存</el-button>
             </div>
         </el-dialog>
@@ -481,6 +477,7 @@
         activityPrizeManageMulti,
         activityPrizeRecordPost,
         activityPrizeDelete,
+        utilListByName,
     } from '@/api/application/secondClass/index'
     import {
         transformDate,
@@ -533,11 +530,13 @@
                 prizePerson: '',
                 prizeNumber: '',
                 tabInfo: '',
+                timer:0,
+                count:0,
                 queryParams: {
                     totalCount: 0,
                     totalPage: 0,
                     pageNum: 1,
-                    pageSize: 5
+                    pageSize: 10,
                 },
                 queryList: {
                     userName: '',
@@ -553,6 +552,10 @@
                 managePrizeDialog: {
                     title: '奖项管理',
                     open: false
+                },
+                postFakeData:{
+                    userId:'',
+                    deliverUserId:'',
                 },
                 //奖项管理列表
                 managePrizeDialogList: [],
@@ -611,7 +614,9 @@
                         userId: '',
                         deptId: '',
                         deliverUserId: '',
-                        createTime: ''
+                        createTime: '',
+                        nickName:'',
+                        deliverUserName:'',
                     }
                 },
                 //managePrizeDialogList第一次过滤后的数组
@@ -619,8 +624,26 @@
             }
         },
         methods:{
+            handUserId(item){
+               this.addPrizeDialogList.data.userId = item.value
+            },
+            handDeliverUserId(item){
+               this.addPrizeDialogList.data.deliverUserId = item.value
+            },
+            querySearchAsync(queryString,cb) {
+                if(queryString) {
+                    utilListByName({name:queryString}).then(value => {
+                        console.log(value)
+                        cb(value.data.map(item =>({
+                            label: `${item.userName}-${item.nickName}`,
+                            value: item.userId
+                        })))
+                        // cb(value.data)
+                    })
+                } 
+            },
             deletePrize(row, index){
-                console.log(row,index,12323);
+                console.log(row.id,'要删除的id');
                 this.alertDialog.call(this, '删除', {
                     confirm:  () => {
                          activityPrizeDelete(
@@ -637,7 +660,6 @@
             },
             //模糊查询防抖
             debounceFuzzyQuery(func,delayTime){
-                return function(){
                     clearTimeout(this.timer);
                     console.log(this.count,'搜索次数');
                     if(this.count==0)
@@ -650,7 +672,6 @@
                         this.count++;
                         },delayTime )
                     }
-                }.bind(this)
             },
             handleSelect(index){
                 console.log(this.tabInfo[index].prizeType,'左下角点击的奖项');
@@ -668,7 +689,6 @@
                    console.log(transformDateSingle(this.value1),'value1格式化')
                    this.addPrizeDialogList.data.createTime =transformDateSingle(this.value1);
                } 
-               
             },
             //修改和新增的保存按钮
             save(){
@@ -676,8 +696,13 @@
                console.log(this.addPrizeDialogList.data,'点击保存要发送的数据');
                activityPrizeRecordPost(this.addPrizeDialogList.data).then(value=>{
                    console.log(value,'发布登记修改新增接口返回的数据');
+                   this.addPrizeDialogList.open = false;
                    this.fuzzyQuery();
+                   
                })
+            },
+            cancel(){
+                this.addPrizeDialogList.open = false;
             },
             filterManagePrizeDialogList(value) {
                 console.log(value, '选中的奖项值！！！')
@@ -719,11 +744,11 @@
                     prizeName:row.prizeName,
                     number:row.number,
                     userId:row.userId,
-                    // deptId:row.deptId,
-                    //先设成100，等群组出来了再搞
-                    deptId:100,  
                     deliverUserId:row.deliverUserId,
                     createTime:this.value1,
+                    nickName:row.nickName,
+                    deliverUserName:row.deliverUserName,
+                    deptId:100,
                }
                this.addPrizeDialogList.open = true
             },
@@ -743,8 +768,8 @@
                         prizeName:'',
                         number:'',
                         userId:'',
-                        deptId:100,
                         id:'',
+                        deptId:100,
                         deliverUserId:'',
                         createTime:'',
                 }
@@ -771,7 +796,7 @@
              * @description: 批量操作奖项管理
              */
             multiPrizeMange() {
-                console.log(this.managePrizeDialogList)
+                console.log(this.managePrizeDialogList,'要发送的奖项管理数据')
                 let isFull = this.managePrizeDialogList.every(item => {
                     return item.name && item.sort && item.type && item.number
                 })
@@ -785,11 +810,13 @@
                 }).then(value => {
                     console.log(value, '批量修改接口返回的数据！！！')
                     this.msgSuccess(value.msg)
+                    this.managePrizeDialog.open = false
                     this.fuzzyQuery()
                     this.getActivityPrizeRecord({
                         activityId: this.$route.params.aid
                     })
-                    this.managePrizeDialog.open = false
+                    this.getPrizeManageList()
+                    
                 })
             },
             /**
@@ -844,7 +871,8 @@
                     sort: '',
                     type: '',
                     name: '',
-                    number: ''
+                    number: '',
+                    activityId: this.$route.params.aid,
                 })
                 // this.preAddSchoolYear()
                 // this.$nextTick(() => {

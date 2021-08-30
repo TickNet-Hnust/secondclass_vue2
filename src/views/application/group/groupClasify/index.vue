@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-18 23:45:43
+ * @LastEditTime: 2021-08-29 21:31:47
 -->
 <template>
     <div class="app-container">
@@ -32,13 +32,14 @@
                 </el-col>
                 <el-col :span="1.5">
                     <el-button
-                        type="warning"
-                        plain
-                        icon="el-icon-download"
-                        size="mini"
-                        v-hasPermi="['system:user:export']"
-                        >导出</el-button
-                    >
+                    type="warning"
+                    plain
+                    icon="el-icon-download"
+                    size="mini"
+                    :loading="exportLoading"
+                    @click="handleExport"
+                    v-hasPermi="['system:role:export']"
+                    >导出</el-button>
                 </el-col>
 
                 <el-col :span="1" style="min-width:290px">
@@ -338,6 +339,8 @@
         groupTypeExport,
         //通过id获取编辑回显
         groupType,
+        //导出群组分裂
+        exportGroupClasify
     } from '@/api/application/secondClass/index'
     import{
          filterGroupClassificationList
@@ -387,7 +390,8 @@
                         category:'',
                         layer:'',
                     }
-                }
+                },
+                exportLoading: false,
             }
         },
         computed: {
@@ -402,6 +406,21 @@
                 this.queryParams.pageNum = option.page
                 this.queryParams.pageSize = option.limit
                 this.fuzzyQuery()
+            },
+            /** 导出按钮操作 */
+            handleExport() {
+            // const queryParams = this.queryParams;
+            this.$confirm('是否确认导出所有群组分类项?', "警告", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+                }).then(() => {
+                this.exportLoading = true;
+                return exportGroupClasify();
+                }).then(response => {
+                this.download(response.msg);
+                this.exportLoading = false;
+                }).catch(() => {});
             },
             //新增时选中上级节点之后计算当先layer
             filterLayer(value){
