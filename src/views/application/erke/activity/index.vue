@@ -143,7 +143,7 @@
                 </el-col>
                 <el-col :span="19">
                     <el-radio-group
-                        v-model="queryList.activityStatusId"
+                        v-model="queryList.status"
                         size="mini"
                         style="float:right"
                         @change="fuzzyQuery"
@@ -227,8 +227,8 @@
                         <el-button
                             size="mini"
                             round
-                            :class="sureClass(scope.row.activityStatusId)"
-                            >{{ computedStatus(scope.row.activityStatusId) }}
+                            :class="sureClass(scope.row.status)"
+                            >{{ computedStatus(scope.row.status) }}
                         </el-button>
                     </template>
                 </el-table-column>
@@ -261,19 +261,38 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column label="操作" fixed="right" min-width="350">
+                <el-table-column label="操作" fixed="right" min-width="320">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             size="mini"
-                            icon="el-icon-edit"
+                            icon="el-icon-edit-outline"
                             @click="updateActivity(scope.row)"
                         >
                             编辑
                         </el-button>
                         <el-button
+                            type="text"
+                            size="mini"
+                            v-if="scope.row.recommend == 0"
+                            icon="el-icon-check"
+                            @click="recommendActivity(scope.row)"
+                        >
+                            推荐
+                        </el-button>
+                        <el-button
+                            type="text"
+                            size="mini"
+                            v-if="scope.row.recommend == 1"
+                            icon="el-icon-close"
+                            @click="recommendActivity(scope.row)"
+                        >
+                            取消推荐
+                        </el-button>
+                        <br>
+                        <el-button
                             v-for="(item, index) in operation[
-                                scope.row.activityStatusId
+                                scope.row.status
                             ]"
                             :key="index"
                             type="text"
@@ -841,6 +860,7 @@
         activityPost,
         activityPut,
         activityIdNextStatus,
+        activityRecommendChange,
         schoolYearList,
         trainingProgramDetail,
         courseClassificationList,
@@ -964,7 +984,7 @@
                     coursePath: '',
                     courseClassificationId: '', //活动分类Id
                     recommend: '', //是否推荐
-                    activityStatusId: '',
+                    status: '',
                     beginCreateTime: '',
                     endCreateTime: ''
                 },
@@ -1117,6 +1137,22 @@
             }
         },
         methods: {
+            /**
+             * @description: 改变活动状态
+             * @param {*} row
+             */            
+            recommendActivity(row) {
+                activityRecommendChange({
+                    id: row.id,
+                    isRecomment: Number(!row.recommend)
+                }).then(value => {
+                    this.fuzzyQuery()
+                })
+            },
+            /**
+             * @description: 编辑活动
+             * @param {*} row
+             */            
             updateActivity(row) {
                 console.log(row,123)
                 //发布人不能修改
@@ -1561,7 +1597,7 @@
              * @param admissionWay 录取方式
              * @param courseClassificationId 分类id
              * @param recommend 是否推荐
-             * @param activityStatusId 活动状态id
+             * @param status 活动状态id
              * @param pageNum 第几页
              * @param pageSize 多少条
              * @param {(2)Array} params 开始时间与结束时间
@@ -1596,7 +1632,7 @@
                     time: '', //发布时间
                     courseClassificationId: '', //活动分类Id
                     recommend: '', //是否推荐
-                    activityStatusId: '',
+                    status: '',
                     beginCreateTime: '',
                     endCreateTime: ''
                 }
@@ -1616,7 +1652,7 @@
                     courseClassificationId: this.queryList
                         .courseClassificationId,
                     recommend: this.queryList.recommend,
-                    activityStatusId: this.queryList.activityStatusId,
+                    status: this.queryList.status,
                     pageNum: this.queryParams.pageNum,
                     pageSize: this.queryParams.pageSize,
                     params: {
