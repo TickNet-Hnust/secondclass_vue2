@@ -94,13 +94,13 @@
                             </el-menu-item>
 
                             <el-menu-item
-                                v-for="(item, index) in Object.entries(tabInfo)"
+                                v-for="(item, index) in tabInfo"
                                 :key="index"
                                 :index="index + ''"
                             >
                                 <span slot="title"
-                                    >{{ deptIdMapDeptName[item[0]] }}
-                                    <span class="numbers">{{ item[1] }}</span>
+                                    >{{item.deptName}}
+                                    <span class="numbers">{{ item.number }}</span>
                                 </span>
                             </el-menu-item>
                         </el-menu>
@@ -129,22 +129,6 @@
                                             </el-button>
                                         </el-tooltip>
                                     </el-col>
-                                    <el-col :span="1" style="min-width:150px">
-                                        <el-form-item label="操作:">
-                                            <el-select
-                                                v-model="action"
-                                                style="width:80px"
-                                                placeholder="操作"
-                                            >
-                                                <el-option
-                                                    value="批量修改"
-                                                ></el-option>
-                                                <el-option
-                                                    value="排序"
-                                                ></el-option>
-                                            </el-select>
-                                        </el-form-item>
-                                    </el-col>
 
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="学号:">
@@ -152,12 +136,7 @@
                                                 data-text
                                                 placeholder="学号"
                                                 v-model="queryList.userName"
-                                                @input="
-                                                    debounceFuzzyQuery(
-                                                        fuzzyQuery,
-                                                        500
-                                                    )()
-                                                "
+                                                @input="debounceFuzzyQuery(fuzzyQuery,300)"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -168,12 +147,7 @@
                                                 data-text
                                                 placeholder="姓名"
                                                 v-model="queryList.nickName"
-                                                @input="
-                                                    debounceFuzzyQuery(
-                                                        fuzzyQuery,
-                                                        500
-                                                    )()
-                                                "
+                                                @input="debounceFuzzyQuery(fuzzyQuery,300)"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -369,7 +343,7 @@
                         <pagination
                             v-show="queryParams.totalPage > 0"
                             :total="queryParams.totalCount"
-                            :page.sync="queryParams.pageCount"
+                            :page.sync="queryParams.pageNum"
                             :limit.sync="queryParams.pageSize"
                             @pagination="getList($event)"
                         />
@@ -401,6 +375,8 @@
         name: 'regiter',
         data() {
             return {
+                timer:0,
+                count:0,
                 loading: false,
                 action: '',
                 //部门id 用于模糊查询
@@ -420,9 +396,9 @@
                 deptIdMapDeptName: [],
                 queryParams: {
                     totalCount: 0,
-                    totalPage: 50,
-                    pageCount: 1,
-                    pageSize: 4
+                    totalPage: 0,
+                    pageNum: 1,
+                    pageSize: 10,
                 },
                 queryList: {
                     userName: '',
@@ -496,20 +472,19 @@
         },
         methods: {
             //模糊查询防抖
-            debounceFuzzyQuery(func, delayTime) {
-                return function() {
-                    clearTimeout(this.timer)
-                    console.log(this.count, '搜索次数')
-                    if (this.count == 0) {
-                        func()
-                        this.count++
-                    } else {
-                        this.timer = setTimeout(() => {
-                            func()
-                            this.count++
-                        }, delayTime)
+            debounceFuzzyQuery(func,delayTime){
+                    clearTimeout(this.timer);
+                    console.log(this.count,'搜索次数');
+                    if(this.count==0)
+                    {
+                        func();
+                        this.count++;
+                    }else{
+                        this.timer = setTimeout( ()=>{
+                        func();
+                        this.count++;
+                        },delayTime )
                     }
-                }.bind(this)
             },
             refresh() {
                 ;(this.action = ''),
@@ -560,7 +535,7 @@
             handleSelect(index) {
                 console.log(index)
                 if (index != '') {
-                    this.deptId = Object.entries(this.tabInfo)[index][0]
+                    this.deptId = this.tabInfo[index].deptId
                 } else {
                     this.deptId = ''
                 }
@@ -632,23 +607,11 @@
                     this.registeLate = value.data.registeLate
                     this.registeYes = value.data.registeYes
                     this.registeNo = value.data.registeNo
-                    this.tabInfo = value.data.tabInfo
+                    this.tabInfo = value.data.tab
                     console.log(value, '活动签到总信息')
                 })
             },
-            getDeptIdMapDeptName() {
-                listDept().then(value => {
-                    console.log(value, 'listDept()接口传来的数据')
-                    value.data.forEach(item => {
-                        //deptId映射deptName字典
-                        this.deptIdMapDeptName[item.deptId] = item.deptName
-                    })
-                    console.log(
-                        this.deptIdMapDeptName,
-                        '这是deptid和deptname的map'
-                    )
-                })
-            },
+            
             fuzzyQuery() {
                 let option = {
                     deptId: this.deptId,
@@ -660,8 +623,8 @@
                         // registeStartTime: this.queryList.registeStartTime,
                         // registeEndTime: this.queryList.registeEndTime,
                     },
-                    page: this.queryParams.pageCount,
-                    limit: this.queryParams.pageSize,
+                    pageNum: this.queryParams.pageNum,
+                    pageSize: this.queryParams.pageSize,
                     activityId: this.$route.params.aid
                     // orderByColumn:'',
                     // isAsc:''
@@ -684,7 +647,7 @@
                     // this.queryParams.pageSize = value.data.pageSize
                     // this.queryParams.totalPage = value.data.totalPage
                     // this.queryParams.currPage = value.data.currPage
-                    this.queryParams.pageCount = Math.ceil(
+                   this.queryParams.totalPage = Math.ceil(
                         this.queryParams.totalCount / this.queryParams.pageSize
                     )
                     this.leaveList = value.rows
@@ -720,7 +683,6 @@
             /** 获得当前情况下的报名管理列表 */
             this.fuzzyQuery()
 
-            this.getDeptIdMapDeptName()
         }
     }
 </script>
@@ -805,6 +767,7 @@
         padding: 16px;
         border: 1px solid #ddd;
         border-radius: 5px;
+        overflow: auto;
     }
     .labelSpan {
         display: inline-block;

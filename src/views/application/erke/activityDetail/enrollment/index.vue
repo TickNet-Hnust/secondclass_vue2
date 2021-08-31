@@ -88,13 +88,13 @@
                             </el-menu-item>
 
                             <el-menu-item
-                                v-for="(item, index) in Object.entries(tabInfo)"
+                                v-for="(item, index) in tabInfo"
                                 :key="index"
                                 :index="index + ''"
                             >
                                 <span slot="title"
-                                    >{{ deptIdMapDeptName.get(+item[0]) }}
-                                    <span class="numbers">{{ item[1] }}</span>
+                                    >{{item.deptName}}
+                                    <span class="numbers">{{ item.number }}</span>
                                 </span>
                             </el-menu-item>
                         </el-menu>
@@ -152,6 +152,12 @@
                                                             >排序</a
                                                         >
                                                     </a-menu-item>
+                                                    <a-menu-item>
+                                                        <a href="javascript:;"
+                                                        @click="handleExport"
+                                                            >导出</a
+                                                        >
+                                                    </a-menu-item>
                                                 </a-menu>
                                             </a-dropdown>
                                         </el-form-item>
@@ -163,12 +169,16 @@
                                                 data-text
                                                 placeholder="学号"
                                                 v-model="queryList.userName"
+<<<<<<< HEAD
                                                 @input="
                                                     debounceFuzzyQuery(
                                                         fuzzyQuery,
                                                         500
                                                     )()
                                                 "
+=======
+                                                @input="debounceFuzzyQuery(fuzzyQuery,300)"
+>>>>>>> 0569ec8173519e8f0192c13064af2ed961eff6e0
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -179,12 +189,16 @@
                                                 data-text
                                                 placeholder="姓名"
                                                 v-model="queryList.nickName"
+<<<<<<< HEAD
                                                 @input="
                                                     debounceFuzzyQuery(
                                                         fuzzyQuery,
                                                         500
                                                     )()
                                                 "
+=======
+                                                @input="debounceFuzzyQuery(fuzzyQuery,300)"
+>>>>>>> 0569ec8173519e8f0192c13064af2ed961eff6e0
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -579,7 +593,8 @@
     import {
         activityEnroll,
         activityEnrollList,
-        activityEnrollVerify
+        activityEnrollVerify,
+        activityEnrollExport,
     } from '@/api/application/secondClass/index'
     import {
         getDept,
@@ -758,7 +773,6 @@
                         ?.dictLabel
                 }
             },
-
             //取录取方式字典计算方法
             computedAdmissionWay() {
                 return value => {
@@ -769,6 +783,21 @@
             }
         },
         methods: {
+            //报名表导出
+            handleExport() {
+            const queryParams = this.queryParams;
+            this.$confirm('是否确认导出所有群组分类项?', "警告", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+                }).then(() => {
+                this.exportLoading = true;
+                return activityEnrollExport();
+                }).then(response => {
+                this.download(response.msg);
+                this.exportLoading = false;
+                }).catch(() => {});
+            },
             //排序对话框点击取消事件
             sortCancel() {
                 this.sortEnrollDialog.data.orderByColumn = ''
@@ -809,6 +838,7 @@
             mutiExamEnroll() {
                 this.mutiExamEnrollDialog.open = true
             },
+<<<<<<< HEAD
             //模糊查询防抖
             debounceFuzzyQuery(func, delayTime) {
                 return function() {
@@ -822,8 +852,25 @@
                             func()
                             this.count++
                         }, delayTime)
+=======
+            //模糊查询防抖 Vue里面不要放在函数里面return
+            //它不会还没触发事件就直接执行func
+            debounceFuzzyQuery(func,delayTime){
+                // return function(){
+                    clearTimeout(this.timer);
+                    console.log(this.count,'搜索次数');
+                    if(this.count==0)
+                    {
+                        func();
+                        this.count++;
+                    }else{
+                        this.timer = setTimeout( ()=>{
+                        func();
+                        this.count++;
+                        },delayTime )
+>>>>>>> 0569ec8173519e8f0192c13064af2ed961eff6e0
                     }
-                }.bind(this)
+                // }.bind(this)
             },
             //操作分页触发的事件
             getList(option) {
@@ -979,7 +1026,7 @@
             handleSelect(index) {
                 console.log(index)
                 if (index != '') {
-                    this.deptId = Object.entries(this.tabInfo)[index][0]
+                    this.deptId = this.tabInfo[index].deptId
                 } else {
                     this.deptId = ''
                 }
@@ -987,7 +1034,7 @@
             },
             //通过活动id获取当前活动报名信息函数
             getActivityEnroll(option) {
-                activityEnroll(option).then(value => {
+                return  activityEnroll(option).then(value => {
                     console.log(value, '活动总信息')
                     this.enrollStartTime = value.data.enrollStartTime
                     this.enrollEndTime = value.data.enrollEndTime
@@ -1000,6 +1047,7 @@
                     this.admissionYes = value.data.admissionYes
                     this.admissionNo = value.data.admissionNo
                     this.enrollRecordsNumber = value.data.enrollRecordsNumber
+<<<<<<< HEAD
                     this.tabInfo = value.data.tabInfo
                 })
             },
@@ -1014,6 +1062,9 @@
                         this.deptIdMapDeptName,
                         '这是deptid和deptname的map'
                     )
+=======
+                    this.tabInfo = value.data.tab
+>>>>>>> 0569ec8173519e8f0192c13064af2ed961eff6e0
                 })
             },
             /**获得当前情况下的报名管理列表  模糊查询 */
@@ -1101,20 +1152,25 @@
         async created() {
             //初始化字典
             this.initDict()
+            
+            // this.getDeptIdMapDeptName()
             /** 通过活动id获取当前活动报名信息，aid代码活动id*/
-            this.getActivityEnroll({
+            await this.getActivityEnroll({
                 activityId: this.$route.params.aid
             })
             /** 获得当前情况下的报名管理列表 */
             this.fuzzyQuery()
 
-            this.getDeptIdMapDeptName()
         },
+<<<<<<< HEAD
         mounted() {
             console.log(
                 `
           `
             )
+=======
+        mounted(){
+>>>>>>> 0569ec8173519e8f0192c13064af2ed961eff6e0
         }
     }
 </script>

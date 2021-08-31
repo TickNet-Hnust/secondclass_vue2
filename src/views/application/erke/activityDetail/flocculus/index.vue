@@ -15,18 +15,30 @@
                                     justify="start"
                                     style="flexWrap:wrap"
                                 >
+                                    
+                                    <el-col :span="1" style="min-width:80px;">
+                                        <el-tooltip
+                                            class="item"
+                                            effect="dark"
+                                            content="清空查询条件"
+                                            placement="right"
+                                        >
+                                            <el-button
+                                                circle
+                                                icon="el-icon-refresh"
+                                                @click="refresh"
+                                            >
+                                            </el-button>
+                                        </el-tooltip>
+                                    </el-col>
+
                                     <el-col :span="1" style="min-width: 185px">
                                         <el-form-item label="学号：">
                                             <el-input
                                                 data-text
                                                 placeholder="学号"
                                                 v-model="queryList.userName"
-                                                @input="
-                                                    debounceFuzzyQuery(
-                                                        fuzzyQuery,
-                                                        500
-                                                    )()
-                                                "
+                                                @input="debounceFuzzyQuery(fuzzyQuery,300)"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -36,12 +48,7 @@
                                                 data-text
                                                 placeholder="姓名"
                                                 v-model="queryList.nickName"
-                                                @input="
-                                                    debounceFuzzyQuery(
-                                                        fuzzyQuery,
-                                                        500
-                                                    )()
-                                                "
+                                                @input="debounceFuzzyQuery(fuzzyQuery,300)"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -118,17 +125,20 @@
                                 :min-width="computedLength"
                             >
                                 <template slot-scope="{ row }">
+                                    <div
+                                   v-if="row.picture==null"
+                                   >
+                                       该活动无图片
+                                   </div>
                                     <img
+                                        v-else
                                         v-for="(item, index) in row.picture"
                                         :key="index"
                                         :src="item"
-                                        class="imgs"
+                                        class="imgs"  
+                                        alt="图片失效"
                                     />
                                 </template>
-
-                                <!-- <template v-if="row.picture==null" slot-scope="{ row }">
-                                    该活动暂无图片上传
-                                </template> -->
                             </el-table-column>
 
                             <el-table-column
@@ -162,7 +172,7 @@
                         <pagination
                             v-show="queryParams.totalPage > 0"
                             :total="queryParams.totalCount"
-                            :page.sync="queryParams.pageCount"
+                            :page.sync="queryParams.pageNum"
                             :limit.sync="queryParams.pageSize"
                             @pagination="getList($event)"
                         />
@@ -220,13 +230,15 @@
         components: { Treeselect },
         data() {
             return {
+                count:0,
+                timer:0,
                 maxLength: 0,
                 flocculus: [],
                 queryParams: {
                     totalCount: 0,
-                    totalPage: 50,
-                    pageCount: 1,
-                    pageSize: 4
+                    totalPage: 0,
+                    pageNum: 1,
+                    pageSize: 10,
                 },
                 queryList: {
                     userName: '',
@@ -294,21 +306,30 @@
         },
 
         methods: {
+            refresh() {
+                this.queryList = {
+                    userName: '',
+                    nickName: '',
+                    status: '',
+                    createStartTime: '',
+                    createEndTime: ''
+                }
+                ;(this.value2 = ''), this.fuzzyQuery()
+            },
             //模糊查询防抖
-            debounceFuzzyQuery(func, delayTime) {
-                return function() {
-                    clearTimeout(this.timer)
-                    console.log(this.count, '搜索次数')
-                    if (this.count == 0) {
-                        func()
-                        this.count++
-                    } else {
-                        this.timer = setTimeout(() => {
-                            func()
-                            this.count++
-                        }, delayTime)
+            debounceFuzzyQuery(func,delayTime){
+                    clearTimeout(this.timer);
+                    console.log(this.count,'搜索次数');
+                    if(this.count==0)
+                    {
+                        func();
+                        this.count++;
+                    }else{
+                        this.timer = setTimeout( ()=>{
+                        func();
+                        this.count++;
+                        },delayTime )
                     }
-                }.bind(this)
             },
             yes(row) {
                 this.alertDialog.call(this, '同意发布', {
@@ -374,8 +395,8 @@
                         // createStartTime: this.queryList.createStartTime,
                         // createEndTime: this.queryList.createEndTime,
                     },
-                    page: this.queryParams.pageCount,
-                    limit: this.queryParams.pageSize
+                    pageNum: this.queryParams.pageNum,
+                    pageSize: this.queryParams.pageSize
 
                     // orderByColumn:'',
                     // isAsc:''
@@ -398,7 +419,7 @@
                     // this.queryParams.pageSize = value.data.pageSize
                     // this.queryParams.totalPage = value.data.totalPage
                     // this.queryParams.currPage = value.data.currPage
-                    this.queryParams.pageCount = Math.ceil(
+                    this.queryParams.totalPage = Math.ceil(
                         this.queryParams.totalCount / this.queryParams.pageSize
                     )
                     this.flowerList = value.rows

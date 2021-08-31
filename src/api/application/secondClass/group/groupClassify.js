@@ -3,7 +3,7 @@
  * @Autor: 张津瑞
  * @Date: 2021-08-13 21:38:39
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-29 10:51:09
+ * @LastEditTime: 2021-08-31 17:45:50
  */
 
 import request from '@/utils/request.js'
@@ -52,9 +52,10 @@ export function deptUtilSchool() {
 }
 
 //导出分类列表
-export function groupTypeExport() {
+export function exportGroupClasify(query) {
     return request({
         url: '/admins/group/type/export',
-        method: 'get'
+        method: 'get',
+        params: query
     })
 }

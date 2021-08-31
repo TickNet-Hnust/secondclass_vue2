@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-08-05 11:09:58
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-10 12:26:21
+ * @LastEditTime: 2021-08-31 14:17:28
  */
 import request from '@/utils/request.js'
 
@@ -28,6 +28,18 @@ export function activityEnrollList(params) {
         url: '/admins/secondClass/activity/enroll/list',
         method: 'get',
         params
+    })
+}
+
+/**
+ * @description: 导出活动报名列表
+ * @param {*} params
+ */
+ export function activityEnrollExport(query) {
+    return request({
+        url: '/admins/secondClass/activity/enroll/export',
+        method: 'get',
+        params: query
     })
 }
 

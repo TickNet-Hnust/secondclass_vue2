@@ -89,6 +89,10 @@
     import { getCodeImg } from '@/api/login'
     import Cookies from 'js-cookie'
     import { encrypt, decrypt } from '@/utils/jsencrypt'
+    import {
+        courseClassificationList,
+        courseClassificationUpdateTime
+    } from '@/api/application/secondClass/courseClassification.js'
 
     export default {
         name: 'Login',
@@ -173,11 +177,15 @@
                             this.$store
                                 .dispatch('LoginByCode', code)
                                 .then(() => {
-                                    this.$router
-                                        .push({ path: this.redirect || '/' })
-                                        .catch(err => {
-                                            console.log(err)
+                                    courseClassificationList().then(value=>{
+                                     localStorage.setItem('courseList',JSON.stringify(value.data))
+                                        courseClassificationUpdateTime().then(value=>{
+                                            localStorage.setItem('courseUpdateTime',value.data)
+                                            this.$router
+                                                .push({ path: this.redirect || '/' })
+                                                .catch(() => {})
                                         })
+                                    })
                                 })
                                 .catch(() => {
                                     this.loading = false
@@ -253,9 +261,15 @@
                         this.$store
                             .dispatch('Login', this.loginForm)
                             .then(() => {
-                                this.$router
-                                    .push({ path: this.redirect || '/' })
-                                    .catch(() => {})
+                                courseClassificationList().then(value=>{
+                                     localStorage.setItem('courseList',JSON.stringify(value.data))
+                                     courseClassificationUpdateTime().then(value=>{
+                                        localStorage.setItem('courseUpdateTime',value.data)
+                                        this.$router
+                                            .push({ path: this.redirect || '/' })
+                                            .catch(() => {})
+                                     })
+                                })
                             })
                             .catch(() => {
                                 this.loading = false

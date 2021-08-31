@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-14 16:47:58
+ * @LastEditTime: 2021-08-31 17:41:43
 -->
 <template>
     <div class="app-container">
@@ -113,83 +113,78 @@
                                     <el-table-column type="index">
                                     </el-table-column>
 
-                                    <!-- <el-table-column
-                                            prop="id"
-                                            label="ID"
-                                            width="150"
-                                        > -->
-                                    <!-- </el-table-column> -->
-                                    <el-table-column
-                                        prop="name"
-                                        label="项目名称"
-                                        min-width="300"
-                                        :show-overflow-tooltip="true"
-                                    >
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="type"
-                                        label="类型"
-                                        :formatter="formatType"
-                                    >
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="integralType"
-                                        label="积分类别"
-                                        min-width="120"
-                                        :formatter="formatIntegralType"
-                                    >
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="integrationRange"
-                                        label="分值"
-                                    >
-                                    </el-table-column>
-                                    <el-table-column
-                                        prop="updateTime"
-                                        label="修订时间"
-                                        :show-overflow-tooltip="true"
-                                        :formatter="formatUpdateTime"
-                                    >
-                                    </el-table-column>
-                                    <el-table-column
-                                        label="操作"
-                                        fixed="right"
-                                        width="180"
-                                    >
-                                        <template slot-scope="scope">
-                                            <el-button
-                                                size="mini"
-                                                type="text"
-                                                icon="el-icon-edit"
-                                                @click="
-                                                    updateData(
-                                                        scope.row,
-                                                        scope.$index
-                                                    )
-                                                "
-                                                >修改</el-button
-                                            >
-                                            <el-button
-                                                size="mini"
-                                                type="text"
-                                                icon="el-icon-key"
-                                                @click="sortData(scope.row)"
-                                                >排序</el-button
-                                            >
-                                            <el-button
-                                                size="mini"
-                                                type="text"
-                                                icon="el-icon-delete"
-                                                @click="
-                                                    deleteCourseClassificaiton(
-                                                        scope.row
-                                                    )
-                                                "
-                                                >删除</el-button
-                                            >
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
+                                        
+                                        <el-table-column
+                                            prop="name"
+                                            label="项目名称"
+                                            min-width="300"
+                                            :show-overflow-tooltip="true"
+                                        >
+                                        </el-table-column>
+                                        <el-table-column
+                                            prop="type"
+                                            label="类型"
+                                            :formatter="formatType"
+                                        >
+                                        </el-table-column>
+                                        <el-table-column
+                                            prop="integralType"
+                                            label="积分类别"
+                                            min-width="120"
+                                            :formatter="formatIntegralType"
+                                        >
+                                        </el-table-column>
+                                        <el-table-column
+                                            prop="integrationRange"
+                                            label="分值"
+                                        >
+                                        </el-table-column>
+                                        <el-table-column
+                                            prop="updateTime"
+                                            label="修订时间"
+                                            :show-overflow-tooltip="true"
+                                            :formatter="formatUpdateTime"
+                                        >
+                                        </el-table-column>
+                                        <el-table-column
+                                            label="操作"
+                                            fixed="right"
+                                            width="180"
+                                        >
+                                            <template slot-scope="scope">
+                                                <el-button
+                                                    size="mini"
+                                                    type="text"
+                                                    icon="el-icon-edit"
+                                                    @click="
+                                                        updateData(
+                                                            scope.row,
+                                                            scope.$index
+                                                        )
+                                                    "
+                                                    >修改</el-button
+                                                >
+                                                <el-button
+                                                    size="mini"
+                                                    type="text"
+                                                    icon="el-icon-key"
+                                                    @click="sortData(scope.row)"
+                                                    >排序</el-button
+                                                >
+                                                <el-button
+                                                    size="mini"
+                                                    type="text"
+                                                    icon="el-icon-delete"
+                                                    @click="
+                                                        deleteCourseClassificaiton(
+                                                            scope.row
+                                                        )
+                                                    "
+                                                    >删除</el-button
+                                                >
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
                             </div>
                         </el-tab-pane>
                         <!-- 表单下面 -->
@@ -550,12 +545,9 @@
 
 <script>
     import {
-        courseClassificationSortList,
         courseClassificationMulti,
-        courseClassificationJudgeId,
         courseClassificationList,
-        courseClassificationIds,
-        courseClassification
+        courseClassificationUpdateTime,
     } from '@/api/application/secondClass/index'
     import {
         filterCourseClassificationList,
@@ -829,14 +821,14 @@
             },
             formatIntegralType(row, column, cellValue) {
                 if (cellValue != null) {
-                    return this.dict_sc_integral_type[cellValue].dictLabel
+                    return this.dict_sc_integral_type[cellValue]?.dictLabel
                 }
                 return cellValue
             },
             formatType(row, column, cellValue) {
                 return (
                     cellValue != null &&
-                    this.dict_sc_course_classification_type[cellValue].dictLabel
+                    this.dict_sc_course_classification_type[cellValue]?.dictLabel
                 )
             },
             formatUpdateTime(row, column, cellValue) {
@@ -1074,23 +1066,45 @@
              * @param integralType 积分类别
              */
 
-            getCourseClassificationList(option) {
+            getCourseClassificationList() {
                 this.loading = true
-                return courseClassificationList(option).then(value => {
-                    /* value保证存在且唯一 */
-                    /* label保证渲染视图 */
-
-                    value.data = value.data.map(item => ({
+                let courseUpdateTime = localStorage.getItem('courseUpdateTime')
+                courseClassificationUpdateTime().then(value=>{
+                    if(value.data===courseUpdateTime)
+                    {
+                        console.log('使用了local的缓存');
+                        let courseList = JSON.parse(localStorage.getItem('courseList'))
+                         courseList = courseList.map(item => ({
                         ...item,
                         value: item.id,
                         label: item.name
-                    }))
-                    console.log(value, '过滤之前的courseClassificationList')
-                    //挂载算法
-                    this.datadata = filterCourseClassificationList(value)
-                    console.log(this.datadata, '过滤之后的datadata')
-                    this.loading = false
+                        }))
+                        console.log(courseList, '过滤之前的courseClassificationList')
+                        //挂载算法
+                        this.datadata = filterCourseClassificationList(courseList)
+                        console.log(this.datadata, '过滤之后的datadata')
+                        this.loading = false
+                    }
+                    else{
+                        localStorage.setItem('courseUpdateTime',value.data)
+                        courseClassificationList().then(value => {
+                        console.log('重新请求了数据并且更新');
+                        //更新local里面的courseList
+                        localStorage.setItem('courseList',JSON.stringify(value.data))
+                        value.data = value.data.map(item => ({
+                            ...item,
+                            value: item.id,
+                            label: item.name
+                        }))
+                        console.log(value, '过滤之前的courseClassificationList')
+                        //挂载算法
+                        this.datadata = filterCourseClassificationList(value.data)
+                        console.log(this.datadata, '过滤之后的datadata')
+                        this.loading = false
+                        })
+                    }
                 })
+                
             },
             /**
              * @description:  初始化字典
@@ -1108,7 +1122,7 @@
                         this[item] = value[index].data
                         console.log(item, value[index])
                     })
-                    this.label = this.dict_sc_course_classification_type[0].dictLabel
+                    this.label = this.dict_sc_course_classification_type[0]?.dictLabel
                 })
             }
         },

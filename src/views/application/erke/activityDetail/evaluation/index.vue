@@ -33,31 +33,19 @@
 
                                     <el-col :span="1" style="min-width: 185px">
                                         <el-form-item label="学号：">
-                                            <el-input
-                                                data-text
-                                                placeholder="学号"
-                                                v-model="queryList.userName"
-                                                @input="
-                                                    debounceFuzzyQuery(
-                                                        fuzzyQuery,
-                                                        500
-                                                    )()
-                                                "
+                                            <el-input data-text
+                                            placeholder="学号"
+                                            v-model="queryList.userName"
+                                            @input="debounceFuzzyQuery(fuzzyQuery,300)"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
                                     <el-col :span="1" style="min-width: 185px">
                                         <el-form-item label="姓名：">
-                                            <el-input
-                                                data-text
-                                                placeholder="姓名"
-                                                v-model="queryList.nickName"
-                                                @input="
-                                                    debounceFuzzyQuery(
-                                                        fuzzyQuery,
-                                                        500
-                                                    )()
-                                                "
+                                            <el-input data-text
+                                            placeholder="姓名"
+                                            v-model="queryList.nickName"
+                                            @input="debounceFuzzyQuery(fuzzyQuery,300)"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -209,7 +197,7 @@
                         <pagination
                             v-show="queryParams.totalPage > 0"
                             :total="queryParams.totalCount"
-                            :page.sync="queryParams.pageCount"
+                            :page.sync="queryParams.pageNum"
                             :limit.sync="queryParams.pageSize"
                             @pagination="getList($event)"
                         />
@@ -331,11 +319,13 @@
         components: { Treeselect },
         data() {
             return {
+                timer:0,
+                count:0,
                 queryParams: {
                     totalCount: 0,
-                    totalPage: 50,
-                    pageCount: 1,
-                    pageSize: 4
+                    totalPage: 0,
+                    pageNum: 1,
+                    pageSize: 10,
                 },
                 queryList: {
                     userName: '',
@@ -417,20 +407,19 @@
         },
         methods: {
             //模糊查询防抖
-            debounceFuzzyQuery(func, delayTime) {
-                return function() {
-                    clearTimeout(this.timer)
-                    console.log(this.count, '搜索次数')
-                    if (this.count == 0) {
-                        func()
-                        this.count++
-                    } else {
-                        this.timer = setTimeout(() => {
-                            func()
-                            this.count++
-                        }, delayTime)
+            debounceFuzzyQuery(func,delayTime){
+                    clearTimeout(this.timer);
+                    console.log(this.count,'搜索次数');
+                    if(this.count==0)
+                    {
+                        func();
+                        this.count++;
+                    }else{
+                        this.timer = setTimeout( ()=>{
+                        func();
+                        this.count++;
+                        },delayTime )
                     }
-                }.bind(this)
             },
             //会话框取消
             cancel() {
@@ -547,8 +536,8 @@
                         // beginCreateTime:this.queryList.createStartTime,
                         // endCreateTime:this.queryList.createEndTime,
                     },
-                    page: this.queryParams.pageCount,
-                    limit: this.queryParams.pageSize
+                    pageNum: this.queryParams.pageNum,
+                    pageSize: this.queryParams.pageSize
                     // orderByColumn:'',
                     // isAsc:''
                 }
@@ -570,7 +559,7 @@
                     // this.queryParams.pageSize = value.data.pageSize
                     // this.queryParams.totalPage = value.data.totalPage
                     // this.queryParams.currPage = value.data.currPage
-                    this.queryParams.pageCount = Math.ceil(
+                    this.queryParams.totalPage = Math.ceil(
                         this.queryParams.totalCount / this.queryParams.pageSize
                     )
                     this.evaluationList = value.rows

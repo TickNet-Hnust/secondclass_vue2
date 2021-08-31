@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container">
+    <div class="app-container credit">
         <el-row :gutter="20">
             <el-col :span="24" :xs="24">
                 <div class="erke-top">
@@ -117,32 +117,20 @@
 
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="姓名:">
-                                            <el-input
-                                                data-text
-                                                placeholder="姓名"
-                                                v-model="queryList.nickName"
-                                                @input="
-                                                    debounceFuzzyQuery(
-                                                        fuzzyQuery,
-                                                        500
-                                                    )()
-                                                "
+                                            <el-input data-text
+                                            placeholder="姓名"
+                                            v-model="queryList.nickName"
+                                            @input="debounceFuzzyQuery(fuzzyQuery,300)"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="学号:">
-                                            <el-input
-                                                data-text
-                                                placeholder="学号"
-                                                v-model="queryList.userName"
-                                                @input="
-                                                    debounceFuzzyQuery(
-                                                        fuzzyQuery,
-                                                        500
-                                                    )()
-                                                "
+                                            <el-input data-text
+                                            placeholder="学号"
+                                            v-model="queryList.userName"
+                                            @input="debounceFuzzyQuery(fuzzyQuery,300)"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -161,12 +149,14 @@
                                                 ></el-option>
                                                 <el-option
                                                     v-for="(item,
-                                                    index) in integrationRule"
+                                                    index) in reasonList"
                                                     :key="index"
-                                                    :value="item.name"
-                                                    :label="item.name"
+                                                    :value="item"
+                                                    :label="item"
                                                 ></el-option>
                                             </el-select>
+
+                                           
                                         </el-form-item>
                                     </el-col>
 
@@ -240,8 +230,6 @@
                             v-loading="loading"
                             class="integralMainTable"
                         >
-                            <el-table-column type="selection" min-width="55">
-                            </el-table-column>
 
                             <el-table-column
                                 prop="id"
@@ -301,6 +289,27 @@
                                 label="申请积分"
                                 min-width="100"
                             >
+                            </el-table-column>
+
+                            <el-table-column
+                                label="申报材料"
+                                :min-width="150"
+                            >   
+                                <template slot-scope="{ row }">
+                                    <div
+                                    v-if="row.material==null"
+                                   >
+                                       无材料
+                                   </div>
+
+                                    <img
+                                        v-else
+                                        :src="row.material"
+                                        class="imgs"  
+                                        alt="图片失效"
+                                        @click="show(row.material)"
+                                    />
+                                </template>
                             </el-table-column>
 
                             <el-table-column
@@ -430,7 +439,7 @@
 
                 <el-row>
                     <el-col :span="10">认定积分：</el-col>
-                    <el-col :span="2">
+                    <el-col :span="3">
                         <el-input
                             data-text
                             placeholder="认定积分"
@@ -465,6 +474,211 @@
                 >
             </div>
         </el-dialog>
+
+        <!-- 批量积分认定会话框 -->
+         <el-dialog
+            :title="mutiExamCreditDialog.title"
+            :visible.sync="mutiExamCreditDialog.open"
+            width="1200px"
+            append-to-body
+        >
+            <el-table
+            ref="multipleTable" 
+            :data="mutiCreditDialogList" 
+            @selection-change="handleSelectionChange"
+            >
+                <template v-slot:empty>
+                    暂无可审核数据
+                </template>
+               
+                <el-table-column
+                    type="selection"
+                    width="55"
+                    >
+                </el-table-column>
+
+                <el-table-column
+                    prop="id"
+                    label="ID"
+                    min-width="50"
+                >
+                </el-table-column>
+
+                <el-table-column
+                    prop="nickName"
+                    label="姓名"
+                    min-width="80"
+                >
+                </el-table-column>
+
+                <el-table-column
+                    prop="userName"
+                    label="学号"
+                    min-width="100"
+                >
+                </el-table-column>
+
+                <el-table-column
+                    prop="reason"
+                    label="申报理由"
+                    min-width="100"
+                >
+                </el-table-column>
+
+                <el-table-column
+                    prop="status"
+                    label="认定状态"
+                    min-width="80"
+                    :formatter="formatStatus"
+                >
+                </el-table-column>
+
+                <el-table-column
+                    prop="applyWay"
+                    label="申请方式"
+                    :formatter="formatApplyWay"
+                    min-width="80"
+                >
+                </el-table-column>
+
+                <el-table-column
+                    prop="applyIntegral"
+                    label="申请积分"
+                    min-width="50"
+                >
+                </el-table-column>
+
+                <el-table-column
+                    label="申报材料"
+                    :min-width="100"
+                >   
+                    <template slot-scope="scope">
+                        <div
+                        v-if="scope.row.material==null"
+                        >
+                            无材料
+                        </div>
+
+                        <img
+                            v-else
+                            :src="scope.row.material"
+                            class="imgs"  
+                            alt="图片失效"
+                            @click="show(scope.row.material)"
+                        />
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="confirmIntegral" label="认定积分" min-width="50">
+                    <template slot-scope="scope">
+                        <el-input v-model="scope.row.confirmIntegral" class="nameOfPlan">
+                        </el-input>
+                    </template>
+                </el-table-column>
+
+            </el-table>
+
+            <div slot="footer" class="dialog-footer">
+                <el-radio-group
+                    style="float:left;margin-top:15px"
+                    v-model="mutiExamCreditDialog.post.status"
+                >
+                    <el-radio :label="1">审核通过</el-radio>
+                    <el-radio :label="0">审核未通过</el-radio>
+                </el-radio-group>
+
+                <el-input
+                    type="textarea"
+                    placeholder="填写指导意见"
+                    rows="1"
+                    v-model="mutiExamCreditDialog.post.content"
+                    class="adviceText"
+                ></el-input>
+
+                <el-button @click="clearSelection">取消选择</el-button>
+                <el-button @click="mutiCancel">关闭</el-button>
+                <el-button type="primary" 
+                 @click="mutiExamCreditSubmit"
+                    >确 定</el-button
+                >
+            </div>
+        </el-dialog>
+
+        
+        <!-- 排序会话框 -->
+         <el-dialog
+            :title="sortCreditDialog.title"
+            :visible.sync="sortCreditDialog.open"
+            width="400px"
+            append-to-body
+        >
+         <el-form :inline="true" >  
+
+           <el-row
+           :gutter="0"
+            type="flex"
+            justify="space-around"
+            style="flexWrap:wrap"
+           >
+
+           <el-col :span="8">
+              <el-select
+                v-model="
+                    sortCreditDialog.data.orderByColumn
+                "
+                placeholder="排序字段"
+                style="width:120px"
+             >
+               <el-option
+                    value="id"
+                    label="ID"
+                ></el-option>
+                <el-option
+                    value="userName"
+                    label="学号"
+                ></el-option>
+                <el-option
+                    value="applyIntegral"
+                    label="申请积分"
+                ></el-option>
+                <el-option
+                    value="confirmIntegral"
+                    label="认定积分"
+                ></el-option>
+             </el-select>
+           </el-col>
+
+           <el-col :span="8">
+              <el-select
+                v-model="
+                    sortCreditDialog.data.isAsc
+                "
+                placeholder="降序升序"
+                style="width:120px"
+             >
+                <el-option
+                    value="desc"
+                    label="降序"
+                ></el-option>
+                <el-option
+                    value="asc"
+                    label="升序"
+                ></el-option>
+             </el-select>
+           </el-col>
+
+           </el-row>
+
+         </el-form>
+
+         <div slot="footer" class="dialog-footer">
+                <el-button @click="sortCancel">关闭</el-button>
+                <el-button type="primary" @click="sortSubmit"
+                    >确 定</el-button
+                >
+        </div>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -479,6 +693,14 @@
     import { courseClassificationList } from '@/api/application/secondClass/courseClassification.js'
     import { transformDate } from '@/utils/gather'
     import {
+        courseClassificationList,
+        courseClassificationUpdateTime,
+    } from '@/api/application/secondClass/courseClassification.js'
+    import {
+        transformDate,
+        filterCourseClassificationList2
+    } from '@/utils/gather'
+    import { 
         getDept,
         listDeptExcludeChild,
         listDept
@@ -524,6 +746,8 @@
         components: { Treeselect },
         data() {
             return {
+                count:0,
+                timer:0,
                 //积分规则数组:
                 integrationRule: [],
                 //单个认定报名会话框表单参数form
@@ -632,7 +856,36 @@
                 //积分申请方式字典
                 dict_sc_activity_integral_apply_way: [],
                 //活动认定状态
-                dict_sc_activity_integral: []
+                dict_sc_activity_integral: [],
+                currentCourseClassification:[],
+                filterCourseClassificationList:[],
+                maxLayer:null,
+                //批量积分认定会话框
+                mutiExamCreditDialog:{
+                    title:'批量积分认定',
+                    open:false,
+                    post:{
+                      activityId:this.$route.params.aid,
+                      content:'',
+                      status:'',
+                      idIntegral:{
+
+                      },
+                      userIds:[],
+                    },
+                },
+                mutiCreditList:[],
+                mutiCreditDialogList:[],
+                handSelectList:[],
+                sortCreditDialog:{
+                    title:'排序',
+                    open:false,
+                    data:{
+                        orderByColumn:'',
+                        isAsc:'',
+                    }
+                },
+                reasonList:[]
             }
         },
         computed: {
@@ -682,22 +935,81 @@
             }
         },
 
-        methods: {
-            //模糊查询防抖
-            debounceFuzzyQuery(func, delayTime) {
-                return function() {
-                    clearTimeout(this.timer)
-                    console.log(this.count, '搜索次数')
-                    if (this.count == 0) {
-                        func()
-                        this.count++
-                    } else {
-                        this.timer = setTimeout(() => {
-                            func()
-                            this.count++
-                        }, delayTime)
+        methods:{
+            show(material) {
+                this.$viewerApi({
+                images:[material],
+                })
+            },
+            //排序对话框点击取消事件
+            sortCancel(){
+                this.sortCreditDialog.data.orderByColumn = ''
+                this.sortCreditDialog.data.isAsc = ''
+                this.sortCreditDialog.open = false;
+            },
+            //排序对话框点击确定事件
+            sortSubmit(){
+               console.log(this.sortCreditDialog.data,'排序点击确认要发送的数据');
+               this.sortCreditDialog.open = false;
+               this.fuzzyQuery();
+            },
+            //点击操作中的排序事件
+            sortCredit(){
+                this.sortCreditDialog.open = true
+            },
+            //多选取消按钮
+            mutiCancel(){
+               this.mutiExamCreditDialog.open=false;
+            },
+            //多选时触发的事件
+            handleSelectionChange(val){
+              console.log(val,'多选传来的数据');
+              this.handSelectList = val;
+            },
+            mutiExamCreditSubmit(){
+                this.mutiExamCreditDialog.post.idIntegral = {};
+                this.mutiExamCreditDialog.post.userIds = [];
+                this.handSelectList.forEach((item)=>{
+                  this.mutiExamCreditDialog.post.idIntegral[item.id]=item.confirmIntegral
+                  
+                  this.mutiExamCreditDialog.post.userIds.push(item.userId);
+              })
+                console.log(this.mutiExamCreditDialog.post,'点击确认发送的数据');
+                if(this.mutiExamCreditDialog.post.userIds.length==0)
+                {
+                    this.msgInfo('请选择要申报的人！')
+                }
+                else{
+                   activityIntegralVerify(this.mutiExamCreditDialog.post).then(
+                    value => {
+                        console.log(value, '积分认定操作成功的返回！')
+                        this.mutiExamCreditDialog.open = false
+                        this.fuzzyQuery()
                     }
-                }.bind(this)
+                ) 
+                }
+                
+            },
+            clearSelection(){
+                this.$refs.multipleTable.clearSelection();
+            },
+            mutiCredit(){
+                this.mutiExamCreditDialog.open = true;
+            },
+            //模糊查询防抖
+            debounceFuzzyQuery(func,delayTime){
+                    clearTimeout(this.timer);
+                    console.log(this.count,'搜索次数');
+                    if(this.count==0)
+                    {
+                        func();
+                        this.count++;
+                    }else{
+                        this.timer = setTimeout( ()=>{
+                        func();
+                        this.count++;
+                        },delayTime )
+                    }
             },
             formatStatus(row, column, cellValue) {
                 return (
@@ -909,8 +1221,10 @@
                         // beginCreateTime:this.queryList.beginCreateTime,
                         // endCreateTime:this.queryList.endCreateTime,
                     },
-                    page: this.queryParams.pageCount,
-                    limit: this.queryParams.pageSize
+                    pageNum: this.queryParams.pageNum,
+                    pageSize: this.queryParams.pageSize,
+                    orderByColumn: this.sortCreditDialog.data.orderByColumn,
+                    isAsc: this.sortCreditDialog.data.isAsc
                     // orderByColumn:'',
                     // isAsc:''
                 }
@@ -962,16 +1276,161 @@
                     })
                 })
             },
-            getCourseClassificationList(option) {
-                courseClassificationList(option).then(value => {
-                    console.log(value, '课程分类列表!')
-                    value.data.forEach((item, index) => {
-                        if (item.pid == this.courseClassificationId) {
-                            this.integrationRule.push(item)
+            getCourseClassificationList(id) {
+                let courseUpdateTime = localStorage.getItem('courseUpdateTime')
+                courseClassificationUpdateTime().then(value=>{
+                    if(courseUpdateTime===value.data)
+                    {
+                        console.log('使用了local的缓存');
+                        let courseList = JSON.parse(localStorage.getItem('courseList'))
+                        courseList.forEach((item)=>{
+                            if(item.id===id)
+                            {
+                                this.currentCourseClassification = JSON.parse(JSON.stringify(item));
+                            }
+                        })
+                        this.filterCourseClassificationList =
+                        filterCourseClassificationList2(courseList,this.currentCourseClassification,id);
+                        console.log(this.filterCourseClassificationList,'过滤完的课程分类');
+                        this.maxLayer = this.filterCourseClassificationList.maxLayer;
+
+                        // 积分在第三层
+                        if(this.maxLayer==3)
+                        {
+                            this.integrationRule = this.filterCourseClassificationList.children
+                            this.filterCourseClassificationList.children.forEach((item1)=>{
+                            if(item1.type==1||(item1.type==2&&item1.integrationRange)){
+                                this.filterCourseClassificationList.children.forEach((item2)=>{
+                                    if(item2.children)
+                                    {
+                                        item2.children.push(item1);
+                                    }
+                                })
+                            }
+                            })
+
+                            console.log(this.filterCourseClassificationList,'处理之后的课程分类')
+
+                            let reasonSet = new Set();
+
+                            this.filterCourseClassificationList.children.forEach((item1)=>{
+                                if(item1.children){
+                                    item1.children.forEach((item2)=>{
+                                reasonSet.add(item2.name)
+                            })
+                            }
+                            })
+                            this.reasonList = Array.from(reasonSet);
+                            console.log(this.reasonList,'申报理由列表');
+                            // this.reasonList = this.filterCourseClassificationList.children
                         }
-                    })
-                    console.log(this.integrationRule, 'integrationRule数组')
-                })
+                        //积分在第二层
+                        if(this.maxLayer==2)
+                        {
+                            this.integrationRule = this.filterCourseClassificationList
+                            this.filterCourseClassificationList.children.forEach((item)=>{
+                                if(item.type==1||(item.type==2&&item.integrationRange))
+                                {
+                                    this.reasonList.push(item.name);
+                                }
+                            })
+                        }
+                        //积分在第一层
+                        if(this.maxLayer==1||(this.maxLayer==2&&this.filterCourseClassificationList.children[0].type==2))
+                        {
+                            this.integrationRule = this.filterCourseClassificationList
+                            this.reasonList.push(this.filterCourseClassificationList.name);
+                            if(this.filterCourseClassificationList.children)
+                            {
+                                this.filterCourseClassificationList.children.forEach((item)=>{
+                                    if(item.type==2&&item.integrationRange)
+                                    {
+                                        this.data.reasonList.push(item.name);
+                                    }
+                            })
+                            }
+                            
+                        }
+                    }
+                    else{
+                        //更新local里面的updateTime
+                        localStorage.setItem('courseUpdateTime',value.data)
+                        courseClassificationList().then(value => {                   
+                        console.log('重新请求了数据并且更新');
+                        //更新local里面的courseList
+                        localStorage.setItem('courseList',JSON.stringify(value.data))
+                        value.data.forEach((item)=>{
+                            if(item.id===id)
+                            {
+                                this.currentCourseClassification = JSON.parse(JSON.stringify(item));
+                            }
+                        })
+                        this.filterCourseClassificationList =
+                        filterCourseClassificationList2(value.data,this.currentCourseClassification,id);
+                        console.log(this.filterCourseClassificationList,'过滤完的课程分类');
+                        this.maxLayer = this.filterCourseClassificationList.maxLayer;
+
+                        // 积分在第三层
+                        if(this.maxLayer==3)
+                        {
+                            this.integrationRule = this.filterCourseClassificationList.children
+                            this.filterCourseClassificationList.children.forEach((item1)=>{
+                            if(item1.type==1||(item1.type==2&&item1.integrationRange)){
+                                this.filterCourseClassificationList.children.forEach((item2)=>{
+                                    if(item2.children)
+                                    {
+                                        item2.children.push(item1);
+                                    }
+                                })
+                            }
+                            })
+
+                            console.log(this.filterCourseClassificationList,'处理之后的课程分类')
+
+                            let reasonSet = new Set();
+
+                            this.filterCourseClassificationList.children.forEach((item1)=>{
+                                if(item1.children){
+                                    item1.children.forEach((item2)=>{
+                                reasonSet.add(item2.name)
+                            })
+                            }
+                            })
+                            this.reasonList = Array.from(reasonSet);
+                            console.log(this.reasonList,'申报理由列表');
+                            // this.reasonList = this.filterCourseClassificationList.children
+                        }
+                        //积分在第二层
+                        if(this.maxLayer==2)
+                        {
+                            this.integrationRule = this.filterCourseClassificationList
+                            this.filterCourseClassificationList.children.forEach((item)=>{
+                                if(item.type==1||(item.type==2&&item.integrationRange))
+                                {
+                                    this.reasonList.push(item.name);
+                                }
+                            })
+                        }
+                        //积分在第一层
+                        if(this.maxLayer==1||(this.maxLayer==2&&this.filterCourseClassificationList.children[0].type==2))
+                        {
+                            this.integrationRule = this.filterCourseClassificationList
+                            this.reasonList.push(this.filterCourseClassificationList.name);
+                            if(this.filterCourseClassificationList.children)
+                            {
+                                this.filterCourseClassificationList.children.forEach((item)=>{
+                                    if(item.type==2&&item.integrationRange)
+                                    {
+                                        this.data.reasonList.push(item.name);
+                                    }
+                            })
+                            }
+                            
+                        }
+                        })
+                    }
+
+                })     
             }
         },
 
@@ -992,8 +1451,39 @@
     /* .champion >>> div{
         background-color:#93d6dc;
     } */
-    .el-row >>> .explain {
-        background-color: #93d6dc;
+    .imgs{
+        width: 80px;
+        height: 60px;
+    }
+    .ant-dropdown-link {
+        border-radius: 4px;
+        color: white;
+        background-color: #1890ff;
+        width: 80px;
+        height: 32px;
+        display: block;
+        text-align: center;
+        line-height: 32px;
+        margin-top: 1px;
+    }
+    .ruleInput >>> .el-input__inner{
+        width: 300px;
+    }
+    .ruleInput2 >>> .el-input__inner{
+        width: 70px;
+    }
+    .ruleInput3 >>> .el-input__inner{
+        width: 70px;
+    }
+    .remark >>> .el-input__inner{
+        visibility: hidden;
+    }
+    .remark >>> .el-input-group__prepend{
+        background-color: #d2d97a;
+        border-right:1px
+    }
+    .el-row >>> .explain{
+        background-color:#549eff;
         height: 30px;
         line-height: 30px;
     }
@@ -1074,6 +1564,7 @@
         padding: 16px;
         border: 1px solid #ddd;
         border-radius: 5px;
+        overflow: auto
     }
     .labelSpan {
         height: 20px;

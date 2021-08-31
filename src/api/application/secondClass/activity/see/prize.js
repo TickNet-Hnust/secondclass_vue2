@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-08-05 11:10:30
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-10 17:28:30
+ * @LastEditTime: 2021-08-31 17:46:11
  */
 import request from '@/utils/request.js'
 
@@ -28,6 +28,18 @@ export function activityPrizeRecordList(params) {
         url: '/admins/secondClass/activity/prize/record/list',
         method: 'get',
         params
+    })
+}
+
+/**
+ * @description: 获取活动奖项列表
+ * @param {*} params
+ */
+export function activityPrizeExport(query) {
+    return request({
+        url: '/admins/secondClass/activity/prize/record/export',
+        method: 'get',
+        params: query
     })
 }
 
@@ -71,9 +83,9 @@ export function activityPrizeManageMulti(data) {
  * @description: 删除奖项信息
  * @param {*} data
  */
-export function activityPrizeDelete(id) {
+export function activityPrizeDelete({ id }) {
     return request({
-        url: '/admins/secondClass/activity/prize/record' + id,
-        method: 'delete'
+        url: `/admins/secondClass/activity/prize/record/${id}`,
+        method: 'delete',
     })
 }

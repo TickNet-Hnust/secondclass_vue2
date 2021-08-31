@@ -2,8 +2,13 @@
  * @Descripttion:
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
+<<<<<<< HEAD
  * @LastEditors: 林舒恒
  * @LastEditTime: 2021-08-25 11:48:26
+=======
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-08-28 15:32:06
+>>>>>>> 0569ec8173519e8f0192c13064af2ed961eff6e0
  */
 import Vue from 'vue'
 import Cookies from 'js-cookie'
@@ -25,6 +30,9 @@ Vue.use(Upload)
 import Element from 'element-ui'
 import './assets/styles/element-variables.scss'
 
+import VueViewer from 'v-viewer'
+import 'viewerjs/dist/viewer.css'
+Vue.use(VueViewer)
 import '@/assets/styles/index.scss' // global cs
 import '@/assets/styles/ruoyi.scss' // ruoyi css
 import './style/index.css'
