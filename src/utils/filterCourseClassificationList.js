@@ -3,18 +3,18 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-18 23:08:36
+ * @LastEditTime: 2021-08-31 16:59:35
  */
 /**
  * @description: 
  * @param {*} obj 传入的对象
  */
 
-export function filterCourseClassificationList(obj) {
+export function filterCourseClassificationList(data) {
     //挂载子节点与父节点
     let filter = (father, layer) => {
             let array = []
-            obj.data.forEach(item => {
+            data.forEach(item => {
                 if (item.pid === layer) {
                     array.push(item)
                 }

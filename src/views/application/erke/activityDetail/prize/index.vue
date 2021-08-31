@@ -117,6 +117,7 @@
                                                     </a-menu-item>
                                                     <a-menu-item>
                                                         <a href="javascript:;"
+                                                        @click="handleExport"
                                                             >导出</a
                                                         >
                                                     </a-menu-item>
@@ -478,6 +479,7 @@
         activityPrizeRecordPost,
         activityPrizeDelete,
         utilListByName,
+        activityPrizeExport,
     } from '@/api/application/secondClass/index'
     import {
         transformDate,
@@ -624,6 +626,20 @@
             }
         },
         methods:{
+            handleExport() {
+            const queryParams = this.queryParams;
+            this.$confirm('是否确认导出所有群组分类项?', "警告", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+                }).then(() => {
+                this.exportLoading = true;
+                return activityPrizeExport();
+                }).then(response => {
+                this.download(response.msg);
+                this.exportLoading = false;
+                }).catch(() => {});
+            },
             handUserId(item){
                this.addPrizeDialogList.data.userId = item.value
             },
@@ -643,11 +659,13 @@
                 } 
             },
             deletePrize(row, index){
-                console.log(row.id,'要删除的id');
+                let id = row.id
                 this.alertDialog.call(this, '删除', {
                     confirm:  () => {
+                        console.log(id,'要删除的id');
                          activityPrizeDelete(
-                             row.id)
+                             {id}
+                        )
                             .then(value => {
                                 this.msgSuccess('删除成功')
                                 this.fuzzyQuery()

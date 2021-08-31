@@ -825,6 +825,7 @@
         schoolYearList,
         trainingProgramDetail,
         courseClassificationList,
+        courseClassificationUpdateTime,
         groupList,
         utilListByName,
         utilListCollege
@@ -1546,16 +1547,38 @@
              */
 
             getClassificationList() {
-                courseClassificationList().then(value => {
-                    value.data = value.data.map(item => ({
+                let courseUpdateTime = localStorage.getItem('courseUpdateTime')
+                courseClassificationUpdateTime().then(value=>{
+                    if(value.data===courseUpdateTime){
+                        console.log('使用了local的缓存');
+                        let courseList = JSON.parse(localStorage.getItem('courseList'))
+                        courseList = courseList.map(item => ({
                         ...item,
                         value: item.id,
                         label: item.name
-                    }))
-                    //挂载算法
-                    this.datadata = filterTwoLayer(value.data)
-                    console.log(this.datadata)
+                        }))
+                        //挂载算法
+                        this.datadata = filterTwoLayer(courseList)
+                        console.log(this.datadata)
+                    }
+                    else{
+                        localStorage.setItem('courseUpdateTime',value.data)
+                        courseClassificationList().then(value => {
+                        console.log('重新请求了数据并且更新');
+                        //更新local里面的courseList
+                        localStorage.setItem('courseList',JSON.stringify(value.data))
+                        value.data = value.data.map(item => ({
+                            ...item,
+                            value: item.id,
+                            label: item.name
+                        }))
+                        //挂载算法
+                        this.datadata = filterTwoLayer(value.data)
+                        console.log(this.datadata)
+                        })
+                    }
                 })
+                
             },
             /**
              * @description: 获得学年列表

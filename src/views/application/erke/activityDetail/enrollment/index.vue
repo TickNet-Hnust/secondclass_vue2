@@ -793,7 +793,6 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
                         ?.dictLabel
                 }
             },
-
             //取录取方式字典计算方法
             computedAdmissionWay() {
                 return value => {
@@ -813,7 +812,6 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
                 type: "warning"
                 }).then(() => {
                 this.exportLoading = true;
-                console.log('导出前一步')
                 return activityEnrollExport();
                 }).then(response => {
                 this.download(response.msg);

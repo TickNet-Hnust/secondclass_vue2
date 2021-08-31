@@ -2,8 +2,8 @@
  * @Descripttion: 培养方案详情
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-13 12:30:06
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-08-31 17:25:47
 -->
 <template>
     <div class="app-container">
@@ -832,6 +832,7 @@
         trainingProgramList,
         trainingProgramId,
         courseClassificationList,
+        courseClassificationUpdateTime,
         schoolYearList,
         schoolYearMulti,
         courseId,
@@ -1422,23 +1423,52 @@
              * @param integralType
              */
 
-            getCourseClassificationList(option) {
-                courseClassificationList(option).then(value => {
-                    value.data.forEach(item => {
+            getCourseClassificationList() {
+                let courseUpdateTime = localStorage.getItem('courseUpdateTime')
+                courseClassificationUpdateTime().then(value=>{
+                    if(value.data===courseUpdateTime)
+                    {
+                        console.log('使用了local的缓存');
+                        let courseList = JSON.parse(localStorage.getItem('courseList'))
+                        courseList.forEach(item => {
                         this.classificationIdMapName[item.id] = item.name
-                    })
+                        })
 
-                    /* value保证存在且唯一 */
-                    /* label保证渲染视图 */
-                    console.log(value, 'courseClassificationList')
-                    // 往value里面加value和label属性 用于级联展示课程分类
-                    value.data = value.data.map(item => ({
-                        ...item,
-                        value: item.id,
-                        label: item.name
-                    }))
-                    this.datadata = filterTwoLayer(value.data)
-                    console.log(this.datadata, 'datadata')
+                        /* value保证存在且唯一 */
+                        /* label保证渲染视图 */
+                        console.log(courseList, 'courseClassificationList')
+                        // 往value里面加value和label属性 用于级联展示课程分类
+                        courseList = courseList.map(item => ({
+                            ...item,
+                            value: item.id,
+                            label: item.name
+                        }))
+                        this.datadata = filterTwoLayer(courseList)
+                        console.log(this.datadata, 'datadata')
+                        }
+                    else{
+                        localStorage.setItem('courseUpdateTime',value.data)
+                        courseClassificationList().then(value => {
+                        console.log('重新请求了数据并且更新');
+                        //更新local里面的courseList
+                        localStorage.setItem('courseList',JSON.stringify(value.data))
+                        value.data.forEach(item => {
+                            this.classificationIdMapName[item.id] = item.name
+                        })
+
+                        /* value保证存在且唯一 */
+                        /* label保证渲染视图 */
+                        console.log(value, 'courseClassificationList')
+                        // 往value里面加value和label属性 用于级联展示课程分类
+                        value.data = value.data.map(item => ({
+                            ...item,
+                            value: item.id,
+                            label: item.name
+                        }))
+                        this.datadata = filterTwoLayer(value.data)
+                        console.log(this.datadata, 'datadata')
+                        })
+                    }
                 })
             }
         },

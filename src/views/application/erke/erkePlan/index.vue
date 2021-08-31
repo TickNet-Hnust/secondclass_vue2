@@ -2,8 +2,8 @@
  * @Descripttion: 培养方案
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-10 15:27:22
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-08-31 14:10:32
 -->
 <template>
     <div class="app-container">
@@ -592,7 +592,9 @@
         trainingProgramList,
         trainingProgram,
         schoolYearList,
-        schoolYearMulti
+        schoolYearMulti,
+        courseClassificationList,
+        courseClassificationUpdateTime,
     } from '@/api/application/secondClass/index'
     import { format } from '@/utils/gather'
 

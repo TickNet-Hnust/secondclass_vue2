@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-18 21:36:35
+ * @LastEditTime: 2021-08-31 13:59:43
  */
 import request from '@/utils/request.js'
 /* PUT批量修改分类排序 */
@@ -72,3 +72,13 @@ export function courseClassification(data) {
         data: data
     })
 }
+
+/* 课程分类协商缓存标识 */
+export function courseClassificationUpdateTime() {
+    return request({
+        url: '/utils/getCourseClassificationUpdateTime',
+        method: 'get',
+    })
+}
+
+

@@ -796,8 +796,7 @@
 
     import {
         courseClassificationList,
-        SortListClassificationId,
-        getClassificationId,
+        courseClassificationUpdateTime,
     } from '@/api/application/secondClass/courseClassification.js'
     import {
         transformDate,
@@ -1390,82 +1389,160 @@
                 })
             },
             getCourseClassificationList(id) {
-                let option = {
-                    name:'',
-                    type:'',
-                    integralType:'',
-                }
-                courseClassificationList(option).then(value => {                   
-                    console.log(value.data,'课程分类列表!');
-                    value.data.forEach((item)=>{
-                        if(item.id===id)
-                        {
-                            this.currentCourseClassification = JSON.parse(JSON.stringify(item));
-                        }
-                    })
-                    this.filterCourseClassificationList =
-                    filterCourseClassificationList2(value.data,this.currentCourseClassification,id);
-                    console.log(this.filterCourseClassificationList,'过滤完的课程分类');
-                    this.maxLayer = this.filterCourseClassificationList.maxLayer;
-
-                    // 积分在第三层
-                    if(this.maxLayer==3)
+                let courseUpdateTime = localStorage.getItem('courseUpdateTime')
+                courseClassificationUpdateTime().then(value=>{
+                    if(courseUpdateTime===value.data)
                     {
-                        this.integrationRule = this.filterCourseClassificationList.children
-                        this.filterCourseClassificationList.children.forEach((item1)=>{
-                        if(item1.type==1||(item1.type==2&&item1.integrationRange)){
-                            this.filterCourseClassificationList.children.forEach((item2)=>{
-                                if(item2.children)
+                        console.log('使用了local的缓存');
+                        let courseList = JSON.parse(localStorage.getItem('courseList'))
+                        courseList.forEach((item)=>{
+                            if(item.id===id)
+                            {
+                                this.currentCourseClassification = JSON.parse(JSON.stringify(item));
+                            }
+                        })
+                        this.filterCourseClassificationList =
+                        filterCourseClassificationList2(courseList,this.currentCourseClassification,id);
+                        console.log(this.filterCourseClassificationList,'过滤完的课程分类');
+                        this.maxLayer = this.filterCourseClassificationList.maxLayer;
+
+                        // 积分在第三层
+                        if(this.maxLayer==3)
+                        {
+                            this.integrationRule = this.filterCourseClassificationList.children
+                            this.filterCourseClassificationList.children.forEach((item1)=>{
+                            if(item1.type==1||(item1.type==2&&item1.integrationRange)){
+                                this.filterCourseClassificationList.children.forEach((item2)=>{
+                                    if(item2.children)
+                                    {
+                                        item2.children.push(item1);
+                                    }
+                                })
+                            }
+                            })
+
+                            console.log(this.filterCourseClassificationList,'处理之后的课程分类')
+
+                            let reasonSet = new Set();
+
+                            this.filterCourseClassificationList.children.forEach((item1)=>{
+                                if(item1.children){
+                                    item1.children.forEach((item2)=>{
+                                reasonSet.add(item2.name)
+                            })
+                            }
+                            })
+                            this.reasonList = Array.from(reasonSet);
+                            console.log(this.reasonList,'申报理由列表');
+                            // this.reasonList = this.filterCourseClassificationList.children
+                        }
+                        //积分在第二层
+                        if(this.maxLayer==2)
+                        {
+                            this.integrationRule = this.filterCourseClassificationList
+                            this.filterCourseClassificationList.children.forEach((item)=>{
+                                if(item.type==1||(item.type==2&&item.integrationRange))
                                 {
-                                    item2.children.push(item1);
+                                    this.reasonList.push(item.name);
                                 }
                             })
                         }
-                        })
-
-                        console.log(this.filterCourseClassificationList,'处理之后的课程分类')
-
-                        let reasonSet = new Set();
-
-                        this.filterCourseClassificationList.children.forEach((item1)=>{
-                            if(item1.children){
-                                item1.children.forEach((item2)=>{
-                               reasonSet.add(item2.name)
-                           })
-                        }
-                        })
-                        this.reasonList = Array.from(reasonSet);
-                        console.log(this.reasonList,'申报理由列表');
-                        // this.reasonList = this.filterCourseClassificationList.children
-                    }
-                    //积分在第二层
-                    if(this.maxLayer==2)
-                    {
-                        this.integrationRule = this.filterCourseClassificationList
-                        this.filterCourseClassificationList.children.forEach((item)=>{
-                            if(item.type==1||(item.type==2&&item.integrationRange))
+                        //积分在第一层
+                        if(this.maxLayer==1||(this.maxLayer==2&&this.filterCourseClassificationList.children[0].type==2))
+                        {
+                            this.integrationRule = this.filterCourseClassificationList
+                            this.reasonList.push(this.filterCourseClassificationList.name);
+                            if(this.filterCourseClassificationList.children)
                             {
-                                this.reasonList.push(item.name);
+                                this.filterCourseClassificationList.children.forEach((item)=>{
+                                    if(item.type==2&&item.integrationRange)
+                                    {
+                                        this.data.reasonList.push(item.name);
+                                    }
+                            })
+                            }
+                            
+                        }
+                    }
+                    else{
+                        //更新local里面的updateTime
+                        localStorage.setItem('courseUpdateTime',value.data)
+                        courseClassificationList().then(value => {                   
+                        console.log('重新请求了数据并且更新');
+                        //更新local里面的courseList
+                        localStorage.setItem('courseList',JSON.stringify(value.data))
+                        value.data.forEach((item)=>{
+                            if(item.id===id)
+                            {
+                                this.currentCourseClassification = JSON.parse(JSON.stringify(item));
                             }
                         })
-                    }
-                    //积分在第一层
-                    if(this.maxLayer==1||(this.maxLayer==2&&this.filterCourseClassificationList.children[0].type==2))
-                    {
-                        this.integrationRule = this.filterCourseClassificationList
-                        this.reasonList.push(this.filterCourseClassificationList.name);
-                        if(this.filterCourseClassificationList.children)
+                        this.filterCourseClassificationList =
+                        filterCourseClassificationList2(value.data,this.currentCourseClassification,id);
+                        console.log(this.filterCourseClassificationList,'过滤完的课程分类');
+                        this.maxLayer = this.filterCourseClassificationList.maxLayer;
+
+                        // 积分在第三层
+                        if(this.maxLayer==3)
                         {
-                            this.filterCourseClassificationList.children.forEach((item)=>{
-                                if(item.type==2&&item.integrationRange)
-                                {
-                                    this.data.reasonList.push(item.name);
-                                }
-                        })
+                            this.integrationRule = this.filterCourseClassificationList.children
+                            this.filterCourseClassificationList.children.forEach((item1)=>{
+                            if(item1.type==1||(item1.type==2&&item1.integrationRange)){
+                                this.filterCourseClassificationList.children.forEach((item2)=>{
+                                    if(item2.children)
+                                    {
+                                        item2.children.push(item1);
+                                    }
+                                })
+                            }
+                            })
+
+                            console.log(this.filterCourseClassificationList,'处理之后的课程分类')
+
+                            let reasonSet = new Set();
+
+                            this.filterCourseClassificationList.children.forEach((item1)=>{
+                                if(item1.children){
+                                    item1.children.forEach((item2)=>{
+                                reasonSet.add(item2.name)
+                            })
+                            }
+                            })
+                            this.reasonList = Array.from(reasonSet);
+                            console.log(this.reasonList,'申报理由列表');
+                            // this.reasonList = this.filterCourseClassificationList.children
                         }
-                        
+                        //积分在第二层
+                        if(this.maxLayer==2)
+                        {
+                            this.integrationRule = this.filterCourseClassificationList
+                            this.filterCourseClassificationList.children.forEach((item)=>{
+                                if(item.type==1||(item.type==2&&item.integrationRange))
+                                {
+                                    this.reasonList.push(item.name);
+                                }
+                            })
+                        }
+                        //积分在第一层
+                        if(this.maxLayer==1||(this.maxLayer==2&&this.filterCourseClassificationList.children[0].type==2))
+                        {
+                            this.integrationRule = this.filterCourseClassificationList
+                            this.reasonList.push(this.filterCourseClassificationList.name);
+                            if(this.filterCourseClassificationList.children)
+                            {
+                                this.filterCourseClassificationList.children.forEach((item)=>{
+                                    if(item.type==2&&item.integrationRange)
+                                    {
+                                        this.data.reasonList.push(item.name);
+                                    }
+                            })
+                            }
+                            
+                        }
+                        })
                     }
-                })
+
+                })     
             }
         },
 

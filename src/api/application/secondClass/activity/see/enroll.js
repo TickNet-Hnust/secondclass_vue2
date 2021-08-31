@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-08-05 11:09:58
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-30 22:04:32
+ * @LastEditTime: 2021-08-31 14:17:28
  */
 import request from '@/utils/request.js'
 
@@ -32,7 +32,7 @@ export function activityEnrollList(params) {
 }
 
 /**
- * @description: 获取活动报名列表
+ * @description: 导出活动报名列表
  * @param {*} params
  */
  export function activityEnrollExport(query) {
