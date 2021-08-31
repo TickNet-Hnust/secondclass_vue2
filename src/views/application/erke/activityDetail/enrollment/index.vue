@@ -160,7 +160,6 @@
                                                     </a-menu-item>
                                                 </a-menu>
                                             </a-dropdown>
-
                                         </el-form-item>
                                     </el-col>
 
@@ -806,7 +805,7 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
             //报名表导出
             handleExport() {
             const queryParams = this.queryParams;
-            this.$confirm('是否确认导出所有群组分类项?', "警告", {
+            this.$confirm('是否确认导出所有报名分类项?', "警告", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning"
@@ -981,20 +980,39 @@ import importTableVue from '../../../../tool/gen/importTable.vue'
             //会话批量审核确定
             mutiExamEnrollSubmit(){
                console.log(this.mutiExamEnrollDialog.post, '批量审核确定后发送的数据')
-               activityEnrollVerify(this.mutiExamEnrollDialog.post).then(value => {
+               if(this.mutiExamEnrollDialog.post.ids.length==0||
+               this.mutiExamEnrollDialog.post.status==''||
+               this.mutiExamEnrollDialog.post.userIds.length==0
+               )
+               {
+                   this.msgInfo('请填写完整信息')
+               }else{
+                   activityEnrollVerify(this.mutiExamEnrollDialog.post).then(value => {
                     console.log(value,'批量审核接口传来的数据')
                     this.mutiExamEnrollDialog.open = false
                     this.fuzzyQuery()
-                })
+                    })
+               }
+               
             },
             //会话审核确定
             examEnrollSubmit() {
                 console.log(this.examEnrollDialog.post, '审核确定后发送的数据')
-                activityEnrollVerify(this.examEnrollDialog.post).then(value => {
+                if(
+                this.examEnrollDialog.post.ids.length==0||
+                this.examEnrollDialog.post.userIds.length==0||
+                this.examEnrollDialog.post.status==''
+                )
+                {
+                    this.msgInfo('请填写完整信息')
+                }
+                else{
+                    activityEnrollVerify(this.examEnrollDialog.post).then(value => {
                     console.log(value)
                     this.examEnrollDialog.open = false
                     this.fuzzyQuery()
-                })
+                    })
+                }
             },
             //会话框取消
             cancel() {

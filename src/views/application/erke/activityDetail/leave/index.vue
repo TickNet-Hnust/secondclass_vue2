@@ -86,6 +86,7 @@
                                                     </a-menu-item>
                                                     <a-menu-item>
                                                         <a href="javascript:;"
+                                                        @click="handleExport"
                                                             >导出</a
                                                         >
                                                     </a-menu-item>
@@ -436,6 +437,7 @@
         activityLeaveVerify,
         //请假登记
         activityLeavePost,
+        activityLeaveExport,
         utilListByName,
     } from '@/api/application/secondClass/index'
     import {
@@ -573,6 +575,20 @@
             }
         },
         methods: {
+            handleExport() {
+            const queryParams = this.queryParams;
+            this.$confirm('是否确认导出所有请假列表?', "警告", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+                }).then(() => {
+                this.exportLoading = true;
+                return activityLeaveExport();
+                }).then(response => {
+                this.download(response.msg);
+                this.exportLoading = false;
+                }).catch(() => {});
+            },
             registerCancel(){
                  this.leaveRegisterDialog.data={
                         activityId:this.$route.params.aid,
@@ -602,10 +618,19 @@
             },
             save(){
                console.log(this.leaveRegisterDialog.data,'点击保存要发送的数据');
-               activityLeavePost(this.leaveRegisterDialog.data).then(value=>{
+               if(this.leaveRegisterDialog.data.approveUserId==''||
+               this.leaveRegisterDialog.data.userId==''||
+               this.leaveRegisterDialog.data.reason==''
+               ){
+                   this.msgInfo('请填写完整信息')
+               }
+               else{
+                   activityLeavePost(this.leaveRegisterDialog.data).then(value=>{
                    console.log(value,'请假登记接口返回的数据');
                    this.fuzzyQuery();
-               })
+                  })
+               }
+               
             },
             querySearchAsync(queryString,cb) {
                 if(queryString) {
@@ -698,11 +723,16 @@
             //会话审核确定
             examLeaveSubmit() {
                 console.log(this.examLeaveDialog.post, '审核确定后发送的数据')
-                activityLeaveVerify(this.examLeaveDialog.post).then(value => {
+                if(this.examLeaveDialog.post.status==0){
+                    this.msgInfo('请选择审核状态')
+                }else{
+                    activityLeaveVerify(this.examLeaveDialog.post).then(value => {
                     console.log(value)
                     this.examLeaveDialog.open = false
                     this.fuzzyQuery()
-                })
+                    })
+                }
+                
             },
             //会话框取消
             cancel() {

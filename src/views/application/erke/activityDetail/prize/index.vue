@@ -422,7 +422,7 @@
                             value-key="label"
                             v-model="postFakeData.userId"
                             :fetch-suggestions="querySearchAsync"
-                            :placeholder="addPrizeDialogList.data.nickName"
+                            :placeholder="addPrizeDialogList.data.nickName||('请手动输入完整姓名')"
                             style="width: 200px;"
                             @select="handUserId"
                         ></el-autocomplete>
@@ -438,7 +438,7 @@
                             value-key="label"
                             v-model="postFakeData.deliverUserId"
                             :fetch-suggestions="querySearchAsync"
-                            :placeholder="addPrizeDialogList.data.deliverUserName"
+                            :placeholder="addPrizeDialogList.data.deliverUserName||('请手动输入完整姓名')"
                             style="width: 200px;"
                             @select="handDeliverUserId"
                         ></el-autocomplete>
@@ -614,7 +614,6 @@
                         prizeName: '',
                         number: '',
                         userId: '',
-                        deptId: '',
                         deliverUserId: '',
                         createTime: '',
                         nickName:'',
@@ -628,7 +627,7 @@
         methods:{
             handleExport() {
             const queryParams = this.queryParams;
-            this.$confirm('是否确认导出所有群组分类项?', "警告", {
+            this.$confirm('是否确认导出所有奖项列表?', "警告", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning"
@@ -641,10 +640,14 @@
                 }).catch(() => {});
             },
             handUserId(item){
+               console.log(item,'handUserId选择传来的数据')
                this.addPrizeDialogList.data.userId = item.value
+               this.addPrizeDialogList.data.nickName = item.label.split('-')[1]
             },
             handDeliverUserId(item){
+               console.log(item,'handDeliverUserId选择传来的数据')
                this.addPrizeDialogList.data.deliverUserId = item.value
+               this.addPrizeDialogList.data.deliverUserName = item.label.split('-')[1]
             },
             querySearchAsync(queryString,cb) {
                 if(queryString) {
@@ -712,18 +715,25 @@
             save(){
                //要提交的数据
                console.log(this.addPrizeDialogList.data,'点击保存要发送的数据');
+               
                activityPrizeRecordPost(this.addPrizeDialogList.data).then(value=>{
                    console.log(value,'发布登记修改新增接口返回的数据');
                    this.addPrizeDialogList.open = false;
+                  this.managePrizeDialogList2=[];
                    this.fuzzyQuery();
                    
                })
+               this.reset()
             },
             cancel(){
+                this.managePrizeDialogList2 = [];
                 this.addPrizeDialogList.open = false;
+                this.reset()
             },
             filterManagePrizeDialogList(value) {
                 console.log(value, '选中的奖项值！！！')
+                this.addPrizeDialogList.data.prizeName =''
+                this.managePrizeDialogList2 = [];
                 this.managePrizeDialogList.forEach((item, index) => {
                     if (item.type == value) {
                         this.managePrizeDialogList2.push(item)
@@ -749,10 +759,10 @@
             //点击修改
             updatePrize(row) {
                 this.addPrizeDialogList.title = '修改奖项记录'
-                console.log(row, '点击修改奖项传来的数据')
                 this.renderState(row)
             },
             renderState(row){
+               console.log(row,'要渲染的数据')
                this.value1 = row.createTime;
                this.addPrizeDialogList.data = {
                     id:row.id,
@@ -766,7 +776,6 @@
                     createTime:this.value1,
                     nickName:row.nickName,
                     deliverUserName:row.deliverUserName,
-                    deptId:100,
                }
                this.addPrizeDialogList.open = true
             },
@@ -787,10 +796,13 @@
                         number:'',
                         userId:'',
                         id:'',
-                        deptId:100,
                         deliverUserId:'',
                         createTime:'',
                 }
+                this.postFakeData={
+                    userId:'',
+                    deliverUserId:'',
+                },
                 this.value1 = ''
             },
             //清空查询条件

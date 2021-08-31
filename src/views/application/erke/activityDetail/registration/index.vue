@@ -114,7 +114,7 @@
                                     justify="space-around"
                                     style="flexWrap:wrap"
                                 >
-                                    <el-col :span="1" style="min-width:80px;">
+                                    <el-col :span="1" style="min-width:60px;">
                                         <el-tooltip
                                             class="item"
                                             effect="dark"
@@ -128,6 +128,32 @@
                                             >
                                             </el-button>
                                         </el-tooltip>
+                                    </el-col>
+
+                                      <el-col
+                                        :span="1"
+                                        style="min-width:80px;"
+                                    >
+                                        <el-form-item >
+                                             <a-dropdown>
+                                                <a
+                                                    class="ant-dropdown-link"
+                                                    @click="
+                                                        e => e.preventDefault()
+                                                    "
+                                                >
+                                                    操作 <a-icon type="down" />
+                                                </a>
+                                                <a-menu slot="overlay">                                            
+                                                    <a-menu-item>
+                                                        <a href="javascript:;"
+                                                        @click="handleExport"
+                                                            >导出</a
+                                                        >
+                                                    </a-menu-item>
+                                                </a-menu>
+                                            </a-dropdown>
+                                        </el-form-item>
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:165px">
@@ -359,7 +385,8 @@
     import {
         activityRegiste,
         activityRegisteList,
-        activityRegisteVerify
+        activityRegisteVerify,
+        activityRegisteExport
     } from '@/api/application/secondClass/index'
     import {
         getDept,
@@ -473,6 +500,20 @@
             }
         },
         methods: {
+            handleExport() {
+            const queryParams = this.queryParams;
+            this.$confirm('是否确认导出所有签到列表?', "警告", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+                }).then(() => {
+                this.exportLoading = true;
+                return activityRegisteExport();
+                }).then(response => {
+                this.download(response.msg);
+                this.exportLoading = false;
+                }).catch(() => {});
+            },
             //模糊查询防抖
             debounceFuzzyQuery(func,delayTime){
                     clearTimeout(this.timer);
@@ -688,6 +729,17 @@
 </script>
 
 <style scoped>
+    .ant-dropdown-link {
+        border-radius: 4px;
+        color: white;
+        background-color: #1890ff;
+        width: 80px;
+        height: 32px;
+        display: block;
+        text-align: center;
+        line-height: 32px;
+        margin-top: 1px;
+    }
     .adviceText {
         margin: 10px 0px;
     }
