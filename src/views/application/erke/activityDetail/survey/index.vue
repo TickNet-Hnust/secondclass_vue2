@@ -383,10 +383,10 @@
         data() {
             return {
                 dict_sc_activity_status: [],
-                dict_sc_activity_admission_way:[],
-                dict_sc_train_program_rank:[],
-                dict_sc_activity_vacate:[],
-                deptListMap:[],
+                dict_sc_activity_admission_way: [],
+                dict_sc_train_program_rank: [],
+                dict_sc_activity_vacate: [],
+                deptListMap: [],
                 activityVo: {
                     groupName: '', //活动主办方
                     admissionWay: '', //录取方式
@@ -521,27 +521,30 @@
                 today: {}
             }
         },
-        computed:{
+        computed: {
             computedRank() {
-                return (value) => {
+                return value => {
                     return this.dict_sc_train_program_rank[value]?.dictLabel
                 }
             },
             computedAdmissionWay() {
-                return (value) => {
+                return value => {
                     return this.dict_sc_activity_admission_way[value]?.dictLabel
                 }
             },
             computedVacate() {
-                return (value) => {
+                return value => {
                     return this.dict_sc_activity_vacate[value]?.dictLabel
                 }
             },
             computedDept() {
-                return (_array) => {
-                    return _array.split(';').map(item => {
-                        return this.deptListMap[item]
-                    }).join('、')
+                return _array => {
+                    return _array
+                        .split(';')
+                        .map(item => {
+                            return this.deptListMap[item]
+                        })
+                        .join('、')
                 }
             }
         },
@@ -647,35 +650,32 @@
                     getDict('sc_activity_status'),
                     getDict('sc_activity_admission_way'),
                     getDict('sc_train_program_rank'),
-                    getDict('sc_activity_vacate'),
-                ]).then(
-                    value => {
-                        let tempArr = [
-                            'dict_sc_activity_status',
-                            'dict_sc_activity_admission_way',
-                            'dict_sc_train_program_rank',
-                            'dict_sc_activity_vacate'
-                        ]
-                        tempArr.forEach((item, index) => {
-                            this[item] = value[index].data
-                        })
-                    }
-                )
+                    getDict('sc_activity_vacate')
+                ]).then(value => {
+                    let tempArr = [
+                        'dict_sc_activity_status',
+                        'dict_sc_activity_admission_way',
+                        'dict_sc_train_program_rank',
+                        'dict_sc_activity_vacate'
+                    ]
+                    tempArr.forEach((item, index) => {
+                        this[item] = value[index].data
+                    })
+                })
             }
         },
         async created() {
             this.initDict()
             utilListCollege().then(value => {
-                console.log(value,'部门')
-                value.data.forEach((item,index) => {
+                console.log(value, '部门')
+                value.data.forEach((item, index) => {
                     this.deptListMap[item.deptId] = item.deptName
                 })
-                
             })
             activityIdDetail({
                 id: this.$route.params.aid
             }).then(value => {
-                console.log(value,'活动详情')
+                console.log(value, '活动详情')
                 // this.activityVo = value.data.activitVo
                 Object.keys(this.activityVo).forEach(item => {
                     this.activityVo[item] = value.data.activityVo[item]

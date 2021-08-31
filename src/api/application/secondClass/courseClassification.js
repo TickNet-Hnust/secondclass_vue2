@@ -2,8 +2,8 @@
  * @Descripttion:
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
- * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-31 13:59:43
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-08-31 17:46:02
  */
 import request from '@/utils/request.js'
 /* PUT批量修改分类排序 */
@@ -50,8 +50,7 @@ export function SortListClassificationId(classificationId) {
 /* 通过Id GET积分类别详情 */
 export function getClassificationId(classificationId) {
     return request({
-        url: '/secondClass/courseClassification/' +
-            classificationId,
+        url: '/secondClass/courseClassification/' + classificationId,
         method: 'get'
     })
 }
@@ -80,5 +79,3 @@ export function courseClassificationUpdateTime() {
         method: 'get',
     })
 }
-
-

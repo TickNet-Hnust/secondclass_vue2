@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-08-05 11:12:10
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-05 14:35:29
+ * @LastEditTime: 2021-08-31 16:12:17
  */
 import request from '@/utils/request.js'
 
@@ -59,6 +59,17 @@ export function activityPut(data) {
 export function activityIdNextStatus({ id, nextStatus }) {
     return request({
         url: `/admins/secondClass/activity/${id}/${nextStatus}`,
+        method: 'put'
+    })
+}
+/**
+ * @description: 
+ * @param {*} id 活动id
+ * @param {*} isRecomment 1推荐，0不推荐
+ */
+export function activityRecommendChange({ id, isRecomment }) {
+    return request({
+        url: `/admins/secondClass/activity/recommendChange/${id}/${isRecomment}`,
         method: 'put'
     })
 }

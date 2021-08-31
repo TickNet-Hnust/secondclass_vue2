@@ -155,7 +155,7 @@
                             >
                                 <template slot-scope="scope">
                                     <el-button
-                                        v-if="scope.row.status<4"
+                                        v-if="scope.row.status < 4"
                                         size="mini"
                                         round
                                         :class="sureClassEvaluation(scope.row)"
@@ -278,9 +278,7 @@
         activityEvaluationList,
         activityEvaluationVerify
     } from '@/api/application/secondClass/index'
-    import {
-        transformDate
-    } from '@/utils/gather'
+    import { transformDate } from '@/utils/gather'
     import {
         trainingProgramDetail,
         trainingProgramList,
@@ -407,7 +405,7 @@
                 }
             }
         },
-        methods:{
+        methods: {
             //模糊查询防抖
             debounceFuzzyQuery(func,delayTime){
                     clearTimeout(this.timer);
@@ -500,7 +498,7 @@
                 }
                 ;(this.value2 = ''), this.fuzzyQuery()
             },
-            
+
             /**
              * @description: 确定CSS类
              * @param {*} row
@@ -533,10 +531,10 @@
                     activityId: this.$route.params.aid,
                     userName: this.queryList.userName,
                     nickName: this.queryList.nickName,
-                    status:this.queryList.status,
-                    params:{
-                    // beginCreateTime:this.queryList.createStartTime,
-                    // endCreateTime:this.queryList.createEndTime,
+                    status: this.queryList.status,
+                    params: {
+                        // beginCreateTime:this.queryList.createStartTime,
+                        // endCreateTime:this.queryList.createEndTime,
                     },
                     pageNum: this.queryParams.pageNum,
                     pageSize: this.queryParams.pageSize
@@ -544,10 +542,12 @@
                     // isAsc:''
                 }
                 if (this.value2) {
-                    option.params.beginCreateTime =  transformDate(this.value2)[0]
-                    option.params.endCreateTime =  transformDate(this.value2 )[1]
+                    option.params.beginCreateTime = transformDate(
+                        this.value2
+                    )[0]
+                    option.params.endCreateTime = transformDate(this.value2)[1]
                 }
-                console.log(option,'fuzzyQuery发送的数据')
+                console.log(option, 'fuzzyQuery发送的数据')
                 this.getEvaluationList(option)
             },
             getEvaluationList(option) {

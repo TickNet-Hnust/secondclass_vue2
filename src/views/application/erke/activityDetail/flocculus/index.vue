@@ -189,9 +189,7 @@
         activityFlowerList,
         activityFlowerVerify
     } from '@/api/application/secondClass/index'
-    import {
-        transformDate
-    } from '@/utils/gather'
+    import { transformDate } from '@/utils/gather'
     import {
         trainingProgramDetail,
         trainingProgramList,
@@ -333,9 +331,9 @@
                         },delayTime )
                     }
             },
-            yes(row){
-                this.alertDialog.call(this,'同意发布',{
-                    confirm:() => {
+            yes(row) {
+                this.alertDialog.call(this, '同意发布', {
+                    confirm: () => {
                         let option = {
                             ids: row.id,
                             status: 1
@@ -393,9 +391,9 @@
                     userName: this.queryList.userName,
                     nickName: this.queryList.nickName,
                     status: this.queryList.status,
-                    params:{
-                    // createStartTime: this.queryList.createStartTime,
-                    // createEndTime: this.queryList.createEndTime,
+                    params: {
+                        // createStartTime: this.queryList.createStartTime,
+                        // createEndTime: this.queryList.createEndTime,
                     },
                     pageNum: this.queryParams.pageNum,
                     pageSize: this.queryParams.pageSize
@@ -404,8 +402,10 @@
                     // isAsc:''
                 }
                 if (this.value2) {
-                    option.params.createStartTime =  transformDate(this.value2)[0]
-                    option.params.createEndTime =  transformDate(this.value2 )[1]
+                    option.params.createStartTime = transformDate(
+                        this.value2
+                    )[0]
+                    option.params.createEndTime = transformDate(this.value2)[1]
                 }
                 console.log(option, 'fuzzyQuery发送的数据')
                 this.getFlowerList(option)

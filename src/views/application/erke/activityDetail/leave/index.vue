@@ -677,7 +677,7 @@
                     })
                 ;(this.value2 = ''), this.fuzzyQuery()
             },
-            
+
             //点击左下角部门触发的事件
             handleSelect(index) {
                 console.log(index)
@@ -787,9 +787,9 @@
                     userName: this.queryList.userName,
                     nickName: this.queryList.nickName,
                     status: this.queryList.status,
-                    params:{
-                    // leaveStartTime: this.queryList.leaveStartTime,
-                    // leaveEndTime: this.queryList.leaveEndTime,
+                    params: {
+                        // leaveStartTime: this.queryList.leaveStartTime,
+                        // leaveEndTime: this.queryList.leaveEndTime,
                     },
                     pageNum: this.queryParams.pageNum,
                     pageSize: this.queryParams.pageSize,
@@ -798,8 +798,8 @@
                     isAsc: ''
                 }
                 if (this.value2) {
-                    option.params.leaveStartTime =  transformDate(this.value2)[0]
-                    option.params.leaveEndTime =  transformDate(this.value2 )[1]
+                    option.params.leaveStartTime = transformDate(this.value2)[0]
+                    option.params.leaveEndTime = transformDate(this.value2)[1]
                 }
                 console.log(option, '发送的数据')
                 this.getLeaveList(option)

@@ -15,9 +15,7 @@
                         <el-radio-button label="change"
                             >管理变更</el-radio-button
                         >
-                        <el-radio-button label="list"
-                            >活动列表</el-radio-button
-                        >
+                        <el-radio-button label="list">活动列表</el-radio-button>
                     </el-radio-group>
                 </el-col>
                 <el-col :span="1" style="min-width:130px">
@@ -57,14 +55,14 @@
 
     export default {
         name: 'activityDetail',
-        components:{
+        components: {
             change,
             list,
             member
         },
         data() {
             return {
-                hackReset:true,
+                hackReset: true,
                 status: 'member',
                 queryParams: {
                     totalCount: 50,
@@ -141,5 +139,4 @@
         /* height: 475px !important; */
         overflow: hidden;
     }
-    
 </style>

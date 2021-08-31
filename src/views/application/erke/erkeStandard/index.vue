@@ -2,8 +2,8 @@
  * @Descripttion: 积分标准
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
- * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-31 17:34:42
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-08-31 17:41:43
 -->
 <template>
     <div class="app-container">
@@ -96,25 +96,22 @@
                                 </el-col> -->
                             </el-row>
                         </div>
-                        <el-tab-pane
-                            label="全部"
-                            name=""
-                            :key="0"
-                        >
+                        <el-tab-pane label="全部" name="" :key="0">
                             <div class="erke-buttom-right">
-                                    <el-table
-                                        :data="datadata.flatMap(item => item.children)"
-                                        row-key="id"
-                                        v-loading="loading"
-                                        
-                                        :tree-props="{
-                                            children: 'children',
-                                            hasChildren: 'hasChildren'
-                                        }"
-                                        :row-class-name="heightLight"
-                                    >
-                                        <el-table-column type="index">
-                                        </el-table-column>
+                                <el-table
+                                    :data="
+                                        datadata.flatMap(item => item.children)
+                                    "
+                                    row-key="id"
+                                    v-loading="loading"
+                                    :tree-props="{
+                                        children: 'children',
+                                        hasChildren: 'hasChildren'
+                                    }"
+                                    :row-class-name="heightLight"
+                                >
+                                    <el-table-column type="index">
+                                    </el-table-column>
 
                                         
                                         <el-table-column
@@ -193,11 +190,11 @@
                         <!-- 表单下面 -->
                         <template v-for="(item, index) in datadata">
                             <!-- default-expand-all -->
-                            
+
                             <el-tab-pane
                                 :label="item.name"
-                                :key="index+1"
-                                :name="index+1 + ''"
+                                :key="index + 1"
+                                :name="index + 1 + ''"
                             >
                                 <div class="erke-buttom-right">
                                     <el-table
@@ -678,12 +675,19 @@
                     if (!data) {
                         return []
                     }
-                    let temp = filterNameAndType(JSON.parse(JSON.stringify(data,((key,val) => {
-                        if(key != '__parent__')
-                        return val
-                    }))), this.queryList.name)
+                    let temp = filterNameAndType(
+                        JSON.parse(
+                            JSON.stringify(data, (key, val) => {
+                                if (key != '__parent__') return val
+                            })
+                        ),
+                        this.queryList.name
+                    )
                     // return temp
-                    return filterNameAndType(this.clone(data), this.queryList.name)
+                    return filterNameAndType(
+                        this.clone(data),
+                        this.queryList.name
+                    )
                 }
             },
 
@@ -703,7 +707,7 @@
                 let temp = Array.from(o)
                 Object.values(temp).forEach(item => {
                     console.log(item.name)
-                    if(typeof item == 'object') {
+                    if (typeof item == 'object') {
                         this.clone(item)
                     }
                 })

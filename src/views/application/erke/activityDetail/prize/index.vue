@@ -95,7 +95,7 @@
                                     </el-col>
 
                                     <el-col :span="1" style="min-width:80px">
-                                        <el-form-item >
+                                        <el-form-item>
                                             <a-dropdown>
                                                 <a
                                                     class="ant-dropdown-link"
@@ -146,7 +146,6 @@
                                         </el-form-item>
                                     </el-col>
 
-
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="奖品:">
                                             <el-input data-text
@@ -167,7 +166,8 @@
                                                 start-placeholder="开始日期 "
                                                 end-placeholder="  结束日期"
                                                 align="right"
-                                                @change="fuzzyQuery">
+                                                @change="fuzzyQuery"
+                                            >
                                             </el-date-picker>
                                         </el-form-item>
                                     </el-col>
@@ -271,7 +271,9 @@
                                         size="mini"
                                         type="text"
                                         icon="el-icon-s-check"
-                                        @click="deletePrize(scope.row, scope.$index)"
+                                        @click="
+                                            deletePrize(scope.row, scope.$index)
+                                        "
                                         >删除</el-button
                                     >
                                 </template>
@@ -450,7 +452,7 @@
                         发放时间：
                     </el-col>
                     <el-col :span="18">
-                       <el-date-picker
+                        <el-date-picker
                             v-model="value1"
                             @change="prizeUpdateDateChange"
                             type="datetime"
@@ -481,10 +483,7 @@
         utilListByName,
         activityPrizeExport,
     } from '@/api/application/secondClass/index'
-    import {
-        transformDate,
-        transformDateSingle,
-    } from '@/utils/gather'
+    import { transformDate, transformDateSingle } from '@/utils/gather'
     import {
         trainingProgramDetail,
         trainingProgramList,
@@ -694,8 +693,8 @@
                         },delayTime )
                     }
             },
-            handleSelect(index){
-                console.log(this.tabInfo[index].prizeType,'左下角点击的奖项');
+            handleSelect(index) {
+                console.log(this.tabInfo[index].prizeType, '左下角点击的奖项')
                 if (index != '') {
                     this.queryList.prizeType = this.tabInfo[index].prizeType
                 } else {
@@ -819,8 +818,8 @@
                 ;(this.value2 = ''), this.fuzzyQuery()
             },
             //筛选报名时间触发的事件
-            prizeDateChange(){
-                this.fuzzyQuery();
+            prizeDateChange() {
+                this.fuzzyQuery()
             },
             /**
              * @description: 批量操作奖项管理
@@ -925,21 +924,23 @@
                     userName: this.queryList.userName,
                     nickName: this.queryList.nickName,
                     prizeName: this.queryList.prizeName,
-                    prizeType: this.queryList.prizeType,  
-                    params:{
-                    // beginCreateTime:this.queryList.beginCreateTime,
-                    // endCreateTime:this.queryList.endCreateTime,
+                    prizeType: this.queryList.prizeType,
+                    params: {
+                        // beginCreateTime:this.queryList.beginCreateTime,
+                        // endCreateTime:this.queryList.endCreateTime,
                     },
                     pageNum: this.queryParams.pageNum,
                     pageSize: this.queryParams.pageSize
                     // orderByColumn:'',
                     // isAsc:''
                 }
-                 if (this.value2) {
-                    option.params.beginCreateTime =  transformDate(this.value2)[0]
-                    option.params.endCreateTime =  transformDate(this.value2 )[1]
+                if (this.value2) {
+                    option.params.beginCreateTime = transformDate(
+                        this.value2
+                    )[0]
+                    option.params.endCreateTime = transformDate(this.value2)[1]
                 }
-                console.log(option,'发送的数据')
+                console.log(option, '发送的数据')
                 this.getPrizeList(option)
             },
             getPrizeList(option) {

@@ -29,23 +29,22 @@
                             </el-col>
                         </el-row>
 
-                        <el-row 
-                           v-if="maxLayer==3"
-                          :gutter="20" 
-                          class="ruleInput" >
+                        <el-row :gutter="20">
                             <el-col :span="1" style="min-width:90px">
                                 <span> 积分规则：</span>
                             </el-col>
 
-                            <el-col :span="8" style="min-width:300px;margin-bottom:5px;" 
-                            v-for="(item,index) in integrationRule"
-                            :key="index"
+                            <el-col
+                                :span="1"
+                                style="min-width:280px"
+                                v-for="(item, index) in integrationRule"
+                                :key="index"
                             >
                                 <el-input
-                                    v-if="item.type!=2"
                                     :value="
                                         computedRule(
-                                            item.children,
+                                            item.integralType,
+                                            item.integrationRange
                                         )
                                     "
                                 >
@@ -53,89 +52,8 @@
                                         {{ item.name }}
                                     </template>
                                 </el-input>
-
-                                <el-input
-                                    class="remark"
-                                    v-if="item.type==2"
-                                >
-                                    <template slot="prepend">
-                                        {{ item.name }}
-                                    </template>
-                                </el-input>
-
                             </el-col>
                         </el-row>
-                        
-                        <el-row 
-                           v-else-if="maxLayer==1||(maxLayer==2&&integrationRule.children[0].type==2)"
-                          :gutter="20"
-                          class="ruleInput2" 
-                        >
-                            <el-col :span="1" style="min-width:90px">
-                                <span> 积分规则：</span>
-                            </el-col>
-
-                            <el-col :span="18" style="min-width:300px;margin-bottom:5px;" 
-                            >
-                                <el-input
-                                    :value="
-                                        ' '+integrationRule.integrationRange+'分'
-                                    "
-                                    style="margin-bottom:5px"
-                                >
-                                    <template slot="prepend">
-                                        {{ integrationRule.name }}
-                                    </template>
-                                </el-input>
-
-                                <el-input
-                                    class="remark"
-                                    v-for="(item,index) in integrationRule.children"
-                                    :key="index"
-                                >
-                                    <template slot="prepend">
-                                        {{ item.name }}
-                                    </template>
-                                </el-input>
-
-                            </el-col>
-                        </el-row>
-
-                        <el-row 
-                           v-else
-                          :gutter="20" 
-                          class="ruleInput3" >
-                            <el-col :span="1" style="min-width:90px">
-                                <span> 积分规则：</span>
-                            </el-col>
-
-                            <el-col :span="8" style="min-width:300px;margin-bottom:5px;" 
-                            v-for="(item,index) in integrationRule.children"
-                            :key="index"
-                            >
-                                <el-input
-                                    v-if="item.type!=2"
-                                    :value="
-                                        ' '+item.integrationRange+'分'
-                                    "
-                                >
-                                    <template slot="prepend">
-                                        {{ item.name }}
-                                    </template>
-                                </el-input>
-
-                                <el-input
-                                    class="remark"
-                                    v-if="item.type==2"
-                                >
-                                    <template slot="prepend">
-                                        {{ item.name }}
-                                    </template>
-                                </el-input>
-
-                            </el-col>
-                        </el-row>
-
 
                         <el-row style="margin-top: 15px">
                             <el-col
@@ -322,7 +240,8 @@
                                                 start-placeholder="开始日期"
                                                 end-placeholder="结束日期"
                                                 align="right"
-                                                @change="fuzzyQuery">
+                                                @change="fuzzyQuery"
+                                            >
                                             </el-date-picker>
                                         </el-form-item>
                                     </el-col>
@@ -486,7 +405,7 @@
                         <pagination
                             v-show="queryParams.totalPage > 0"
                             :total="queryParams.totalCount"
-                            :page.sync="queryParams.pageNum"
+                            :page.sync="queryParams.pageCount"
                             :limit.sync="queryParams.pageSize"
                             @pagination="getList($event)"
                         />
@@ -891,9 +810,10 @@
                 //分页请求参数
                 queryParams: {
                     totalCount: 0,
-                    totalPage: 0,
-                    pageNum: 1,
-                    pageSize: 10,
+                    totalPage: 50,
+                    pageCount: 1,
+                    pageSize: 4,
+                    currPage: 1
                 },
                 //下拉操作
                 action: '',
@@ -1005,21 +925,18 @@
                 }
             },
 
-            computedRule(){
-                    return (childrens) => {
-                        if(childrens == null||childrens.length==0)
-                           return ;
-                        else{
-                           let array = [];
-                           let str;
-                            childrens.forEach((item=>{
-                                str = item.name+':'+item.integrationRange+'分'
-                                array.push(str)
-                            }))
-                            let arrayStr = array.join('/');
-                            return arrayStr 
-                        }
-
+            computedRule() {
+                return (integralType, integrationRange) => {
+                    if (integralType == null || integrationRange == null) {
+                        return '积分类型或范围为空'
+                    } else {
+                        return (
+                            '积分项(' +
+                            this.dict_sc_integral_type[integralType] +
+                            '):' +
+                            integrationRange
+                        )
+                    }
                 }
             },
             //取活动级别字典计算方法
@@ -1206,8 +1123,7 @@
                         beginCreateTime: '',
                         endCreateTime: ''
                     })
-                ;(this.value2 = '',this.sortCreditDialog.data.orderByColumn=''
-                ,this.sortCreditDialog.data.isAsc=''), this.fuzzyQuery()
+                ;(this.value2 = ''), this.fuzzyQuery()
             },
 
             /**
@@ -1325,20 +1241,20 @@
                 this.fuzzyQuery()
             },
             //通过活动id获取当前活动报名信息函数
-            getActivityIntegral(option){
-               activityIntegral(option).then(async value => {
-                console.log(value,'活动积分管理总信息');
-                this.activityRank = value.data.activityRank;
-                this.courseClassificationId = value.data.courseClassificationId;
-                this.courseClassificationName = value.data.courseClassificationName;
-                this.integralScheme = value.data.integralScheme;
-                // await this.getCourseClassificationList(this.courseClassificationId);
-                await this.getCourseClassificationList(this.courseClassificationId);
-               
-            })
-           },
-           
-           /**获得当前情况下的报名管理列表  模糊查询 */
+            getActivityIntegral(option) {
+                activityIntegral(option).then(async value => {
+                    console.log(value, '活动积分管理总信息')
+                    this.activityRank = value.data.activityRank
+                    this.courseClassificationId =
+                        value.data.courseClassificationId
+                    this.courseClassificationName =
+                        value.data.courseClassificationName
+                    this.integralScheme = value.data.integralScheme
+                    await this.getCourseClassificationList()
+                })
+            },
+
+            /**获得当前情况下的报名管理列表  模糊查询 */
             fuzzyQuery() {
                 let option = {
                     activityId: this.$route.params.aid,
@@ -1346,10 +1262,10 @@
                     nickName: this.queryList.nickName,
                     reason: this.queryList.reason,
                     applyWay: this.queryList.applyWay,
-                    status:this.queryList.status,
-                    params:{
-                    // beginCreateTime:this.queryList.beginCreateTime,
-                    // endCreateTime:this.queryList.endCreateTime,
+                    status: this.queryList.status,
+                    params: {
+                        // beginCreateTime:this.queryList.beginCreateTime,
+                        // endCreateTime:this.queryList.endCreateTime,
                     },
                     pageNum: this.queryParams.pageNum,
                     pageSize: this.queryParams.pageSize,
@@ -1359,10 +1275,12 @@
                     // isAsc:''
                 }
                 if (this.value2) {
-                    option.params.beginCreateTime =  transformDate(this.value2)[0]
-                    option.params.endCreateTime =  transformDate(this.value2 )[1]
+                    option.params.beginCreateTime = transformDate(
+                        this.value2
+                    )[0]
+                    option.params.endCreateTime = transformDate(this.value2)[1]
                 }
-                console.log(option,'发送的数据')
+                console.log(option, '发送的数据')
                 this.getIntegralList(option)
             },
 
@@ -1374,21 +1292,11 @@
                     // this.queryParams.pageSize = value.data.pageSize
                     // this.queryParams.totalPage = value.data.totalPage
                     // this.queryParams.currPage = value.data.currPage
-                    this.queryParams.totalPage = Math.ceil(
+                    this.queryParams.pageCount = Math.ceil(
                         this.queryParams.totalCount / this.queryParams.pageSize
                     )
                     this.integralList = value.rows
-                    this.mutiCreditList = JSON.parse(JSON.stringify(value.rows));
                     console.log(this.integralList, '传来的数据')
-                    //每次过滤前初始化，不然会一直累积
-                    this.mutiCreditDialogList=[];
-                    this.mutiCreditList.forEach((item)=>{
-                        if(item.status==0)
-                        {
-                            this.mutiCreditDialogList.push(item);
-                        }
-                    })
-                    console.log(this.mutiCreditDialogList, '条件过滤后用于批量积分认定的数据')
                     this.loading = false
                 })
             },
@@ -1401,6 +1309,7 @@
                     getDict('sc_activity_integral_apply_way'),
                     getDict('sc_activity_integral')
                 ]).then(value => {
+                    console.log(value, 'initDict')
                     let tempArr = [
                         'dict_sc_train_program_rank',
                         'dict_sc_activity_integral_scheme',
@@ -1579,8 +1488,7 @@
                 activityId: this.$route.params.aid
             })
             /** 获得当前情况下的报名管理列表 */
-            this.fuzzyQuery();
-            
+            this.fuzzyQuery()
         }
     }
 </script>
@@ -1635,7 +1543,7 @@
         color: #54d7b4;
     }
     .textyellow {
-        color: rgba(255, 166, 0, 0.993);
+        color: yellow;
     }
     .textPlain {
         color: #8b8b8b;
@@ -1716,6 +1624,7 @@
     .erke-top-foot {
         font-size: 14px;
     }
+
     .operate >>> .el-input__inner[data-text] {
         width: 110px;
     }

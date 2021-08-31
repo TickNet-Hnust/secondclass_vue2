@@ -34,8 +34,12 @@
                     <i class="el-icon-setting"></i>
                     <span>群组</span>
                 </template>
-                <el-menu-item index="/application/group/groupClasify">分类</el-menu-item>
-                <el-menu-item index="/application/group/groupSelf">群组</el-menu-item>
+                <el-menu-item index="/application/group/groupClasify"
+                    >分类</el-menu-item
+                >
+                <el-menu-item index="/application/group/groupSelf"
+                    >群组</el-menu-item
+                >
             </el-submenu>
         </el-menu>
     </div>

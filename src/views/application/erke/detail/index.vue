@@ -695,7 +695,7 @@
                 <el-row :gutter="4">
                     <el-col :span="3"> 分类明细： </el-col>
                     <el-col :span="5.5">
-                            <!-- :props="{ checkStrictly: true }" -->
+                        <!-- :props="{ checkStrictly: true }" -->
                         <el-cascader
                             :options="datadata"
                             :value="
@@ -743,7 +743,10 @@
                                 <span
                                     class="addOrMine"
                                     @click="mineLowest(index)"
-                                    v-show="addDetailDialog.lowestValueArray.length != 1"
+                                    v-show="
+                                        addDetailDialog.lowestValueArray
+                                            .length != 1
+                                    "
                                     >-</span
                                 >
                             </el-col>
@@ -1072,7 +1075,9 @@
             handleNodeChange(value) {
                 this.addDetailDialog.config.classificationId =
                     value[value.length - 1]
-                this.addDetailDialog.config.classificationIdPath = value.join(',')
+                this.addDetailDialog.config.classificationIdPath = value.join(
+                    ','
+                )
                 this.addDetailDialog.config.layer = value.length
                 console.log(value)
             },
@@ -1176,14 +1181,14 @@
                 this.addDetailDialog.config.lowestValue = this.addDetailDialog.lowestValueArray
                     .map(item => {
                         return item.join(':')
-                    }).join(',')
-                
+                    })
+                    .join(',')
+
                 let state =
                     this.addDetailDialog.title == '新增'
                         ? coursePost
                         : coursePut
                 state(this.addDetailDialog.config).then(value => {
-                    
                     this.addDetailDialog.open = false
                     this.fuzzyQuery()
                 })

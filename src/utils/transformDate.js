@@ -15,7 +15,7 @@ export function transformDate(date) {
 }
 
 export function transformDateSingle(date) {
-    function format(t){
+    function format(t) {
         let time = new Date(t)
         let yy = time.getFullYear()
         let mm = time.getMonth() + 1

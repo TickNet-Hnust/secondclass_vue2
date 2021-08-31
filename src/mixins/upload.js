@@ -23,20 +23,20 @@ export default {
                 .then(ossData => {
                     // 上传
                     ossFileUrl = getOssFileUrl(ossData, file)
-                        // console.log(ossFileUrl, 777)
-                        // fileObj.status = 'uploading' // 设置为上传中
+                    // console.log(ossFileUrl, 777)
+                    // fileObj.status = 'uploading' // 设置为上传中
                     return upload(ossData, file, ossFileUrl)
                 })
                 .then(res => {
                     if (res.status === 200) {
                         console.log('上传成功')
-                            // fileObj.status = 'done'
-                            // if (this.imgUrls.length) {
-                            // this.imgUrls += ';' + ossFileUrl
-                            // } else {
-                            // this.imgUrls += ossFileUrl
-                            // }
-                            // console.log(this.imgUrls,555)
+                        // fileObj.status = 'done'
+                        // if (this.imgUrls.length) {
+                        // this.imgUrls += ';' + ossFileUrl
+                        // } else {
+                        // this.imgUrls += ossFileUrl
+                        // }
+                        // console.log(this.imgUrls,555)
                     }
                 })
             return Promise.resolve(ossFileUrl)

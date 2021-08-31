@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-08-04 16:19:11
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-16 21:06:56
+ * @LastEditTime: 2021-08-26 19:11:10
  */
 // import { getUUID } from '@/utils/utils'
 import request from '@/utils/request.js'
@@ -73,22 +73,21 @@ export function upload(ossData, file, ossFileUrl) {
     param.append('Signature', `${signature}`)
     param.append('success_action_status', 200)
         // param.append('callback', `${callback}`)
-        // return new Promise((resolve, reject) => {
-        //     console.log("debug", file.file)
-        //     new Compressor(file.file, {
-        //         quality: 0.8,
-        //         success: resolve,
-        //         error: reject
-        //     })
-        // }).then(res => {
-    param.append('file', file.file)
-    return axios
-        .post(host, param)
-        .then(res => {
-            return Promise.resolve(res)
+    return new Promise((resolve, reject) => {
+        new Compressor(file.file, {
+            quality: 0.1,
+            success: resolve,
+            error: reject
         })
-        .catch(err => {
-            return Promise.reject(err)
-        })
-        // })
+    }).then(res => {
+        param.append('file', res)
+        return axios
+            .post(host, param)
+            .then(res => {
+                return Promise.resolve(res)
+            })
+            .catch(err => {
+                return Promise.reject(err)
+            })
+    })
 }
