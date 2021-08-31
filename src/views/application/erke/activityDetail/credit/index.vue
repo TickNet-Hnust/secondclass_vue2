@@ -690,8 +690,6 @@
         activityIntegralVerify
     } from '@/api/application/secondClass/index'
 
-    import { courseClassificationList } from '@/api/application/secondClass/courseClassification.js'
-    import { transformDate } from '@/utils/gather'
     import {
         courseClassificationList,
         courseClassificationUpdateTime,

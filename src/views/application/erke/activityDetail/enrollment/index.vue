@@ -169,16 +169,7 @@
                                                 data-text
                                                 placeholder="学号"
                                                 v-model="queryList.userName"
-<<<<<<< HEAD
-                                                @input="
-                                                    debounceFuzzyQuery(
-                                                        fuzzyQuery,
-                                                        500
-                                                    )()
-                                                "
-=======
                                                 @input="debounceFuzzyQuery(fuzzyQuery,300)"
->>>>>>> 0569ec8173519e8f0192c13064af2ed961eff6e0
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -189,16 +180,7 @@
                                                 data-text
                                                 placeholder="姓名"
                                                 v-model="queryList.nickName"
-<<<<<<< HEAD
-                                                @input="
-                                                    debounceFuzzyQuery(
-                                                        fuzzyQuery,
-                                                        500
-                                                    )()
-                                                "
-=======
                                                 @input="debounceFuzzyQuery(fuzzyQuery,300)"
->>>>>>> 0569ec8173519e8f0192c13064af2ed961eff6e0
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -838,21 +820,6 @@
             mutiExamEnroll() {
                 this.mutiExamEnrollDialog.open = true
             },
-<<<<<<< HEAD
-            //模糊查询防抖
-            debounceFuzzyQuery(func, delayTime) {
-                return function() {
-                    clearTimeout(this.timer)
-                    console.log(this.count, '搜索次数')
-                    if (this.count == 0) {
-                        func()
-                        this.count++
-                    } else {
-                        this.timer = setTimeout(() => {
-                            func()
-                            this.count++
-                        }, delayTime)
-=======
             //模糊查询防抖 Vue里面不要放在函数里面return
             //它不会还没触发事件就直接执行func
             debounceFuzzyQuery(func,delayTime){
@@ -868,7 +835,6 @@
                         func();
                         this.count++;
                         },delayTime )
->>>>>>> 0569ec8173519e8f0192c13064af2ed961eff6e0
                     }
                 // }.bind(this)
             },
@@ -1047,24 +1013,7 @@
                     this.admissionYes = value.data.admissionYes
                     this.admissionNo = value.data.admissionNo
                     this.enrollRecordsNumber = value.data.enrollRecordsNumber
-<<<<<<< HEAD
-                    this.tabInfo = value.data.tabInfo
-                })
-            },
-            getDeptIdMapDeptName() {
-                listDept().then(value => {
-                    console.log(value, 'listDept()接口传来的数据')
-                    value.data.forEach(item => {
-                        //deptId映射deptName字典
-                        this.deptIdMapDeptName.set(item.deptId, item.deptName)
-                    })
-                    console.log(
-                        this.deptIdMapDeptName,
-                        '这是deptid和deptname的map'
-                    )
-=======
                     this.tabInfo = value.data.tab
->>>>>>> 0569ec8173519e8f0192c13064af2ed961eff6e0
                 })
             },
             /**获得当前情况下的报名管理列表  模糊查询 */
@@ -1162,15 +1111,7 @@
             this.fuzzyQuery()
 
         },
-<<<<<<< HEAD
-        mounted() {
-            console.log(
-                `
-          `
-            )
-=======
         mounted(){
->>>>>>> 0569ec8173519e8f0192c13064af2ed961eff6e0
         }
     }
 </script>

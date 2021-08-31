@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-31 17:40:54
+ * @LastEditTime: 2021-08-31 18:02:08
 -->
 <template>
     <div class="app-container">
@@ -41,26 +41,6 @@
                     v-hasPermi="['system:role:export']"
                     >导出</el-button>
                 </el-col>
-
-                <el-col :span="1" style="min-width:290px">
-                    <el-form-item label="分类名称:">
-                        <el-button
-                            size="mini"
-                            v-hasPermi="['system:user:add']"
-                            @click="addData"
-                            >新增</el-button
-                        >
-                    </el-col>
-                    <el-col :span="1.5">
-                        <el-button
-                            type="warning"
-                            plain
-                            icon="el-icon-download"
-                            size="mini"
-                            v-hasPermi="['system:user:export']"
-                            >导出</el-button
-                        >
-                    </el-col>
 
                     <el-col :span="1" style="min-width:290px">
                         <el-form-item label="分类名称:">
