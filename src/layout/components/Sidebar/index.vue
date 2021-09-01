@@ -120,7 +120,7 @@
                         {
                             name: 'js',
                             path: 'js',
-                            hidden: false,
+                            hidden: true,
                             meta: {
                                 title: '竞赛报名',
                                 icon: '',
@@ -130,7 +130,7 @@
                         {
                             name: 'dz',
                             path: 'dz',
-                            hidden: false,
+                            hidden: true,
                             meta: {
                                 title: '电子证书',
                                 icon: '',
