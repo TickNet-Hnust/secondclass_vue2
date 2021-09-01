@@ -144,14 +144,10 @@
             // TODO Update
             WwLogin({
                 id: 'wxLogin',
-                appid: 'ww0a8e41e741c02880',
-                agentid: '1000008',
+                appid: 'wx6219dbfa9b86489e',
+                agentid: '1000054',
                 scope: 'snsapi_login',
-                redirect_uri: encodeURIComponent(
-                    window.location.href
-                    // 'http://www.loxg.top/login?redirect=/system/user'
-                ),
-                // redirect_uri: encodeURIComponent('http://www.loxg.top/loginByCode/'),
+                redirect_uri:'https://secondclass.ticknet.hnust.cn',
                 state: '',
                 href: ''
             }),
