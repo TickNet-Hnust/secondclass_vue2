@@ -1,3 +1,10 @@
+<!--
+ * @Descripttion: 
+ * @Author: 林舒恒
+ * @Date: 2021-07-18 16:20:23
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-09-01 19:20:16
+-->
 <template>
     <div class="menubar">
         <div class="menubar-title">
@@ -33,10 +40,10 @@
                 <el-menu-item index="/application/erke/activity"
                     >活动管理</el-menu-item
                 >
-                <el-menu-item index="2-2">场地申请</el-menu-item>
-                <el-menu-item index="2-3">成长记录认证</el-menu-item>
-                <el-menu-item index="2-4">内容管理</el-menu-item>
-                <el-menu-item index="2-5">待办管理</el-menu-item>
+                <el-menu-item  @click="dev">场地申请</el-menu-item>
+                <el-menu-item  @click="dev">成长记录认证</el-menu-item>
+                <el-menu-item  @click="dev">内容管理</el-menu-item>
+                <el-menu-item  @click="dev">待办管理</el-menu-item>
             </el-submenu>
         </el-menu>
     </div>
@@ -48,6 +55,12 @@
         name: 'erkeMenubar',
         data() {
             return {}
+        },
+        methods:{
+            dev() {
+                this.msgInfo('该功能正在开发中')
+                return
+            }
         },
         mounted() {
             // console.log(this.$router,this.$route)

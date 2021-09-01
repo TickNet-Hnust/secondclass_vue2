@@ -76,17 +76,14 @@ const groupSelf = resolve =>
 const groupDetail = resolve =>
     require(['@/views/application/group/groupDetail/index.vue'], resolve)
 
-export const constantRoutes = [
-    {
+export const constantRoutes = [{
         path: '/redirect',
         component: Layout,
         hidden: true,
-        children: [
-            {
-                path: '/redirect/:path(.*)',
-                component: resolve => require(['@/views/redirect'], resolve)
-            }
-        ]
+        children: [{
+            path: '/redirect/:path(.*)',
+            component: resolve => require(['@/views/redirect'], resolve)
+        }]
     },
     {
         path: '/login',
@@ -126,22 +123,18 @@ export const constantRoutes = [
                 meta: {
                     title: ''
                 },
-                children: [
-                    {
-                        path: '/home',
-                        name: 'home',
-                        meta: {
-                            title: '首页'
-                        },
-                        component: home,
-                        children: [
-                            {
-                                path: '/home/homeContent',
-                                component: homeContent
-                            }
-                        ]
-                    }
-                ]
+                children: [{
+                    path: '/home',
+                    name: 'home',
+                    meta: {
+                        title: '首页'
+                    },
+                    component: home,
+                    children: [{
+                        path: '/home/homeContent',
+                        component: homeContent
+                    }]
+                }]
             },
             {
                 path: '/application',
@@ -151,8 +144,7 @@ export const constantRoutes = [
                 meta: {
                     title: '应用'
                 },
-                children: [
-                    {
+                children: [{
                         path: '/application/erke',
                         component: erke,
                         name: 'erke',
@@ -160,8 +152,7 @@ export const constantRoutes = [
                             title: '第二课堂成绩单'
                         },
                         redirect: '/application/erke/erkePlan',
-                        children: [
-                            {
+                        children: [{
                                 path: '/application/erke/erkePlan',
                                 component: erkePlan,
                                 name: 'erkePlan',
@@ -229,8 +220,7 @@ export const constantRoutes = [
                             title: '群组管理'
                         },
                         redirect: '/application/group/guidance',
-                        children: [
-                            {
+                        children: [{
                                 path: '/application/group/guidance',
                                 component: guidance,
                                 name: 'guidance',
@@ -274,92 +264,89 @@ export const constantRoutes = [
                 meta: {
                     title: '系统'
                 },
-                children: [
-                    {
-                        path: '/system',
-                        component: system,
-                        name: 'erke',
-                        redirect: '/system/user',
-                        meta: {
-                            title: '系统'
-                        },
-                        children: [
-                            {
-                                path: '/system/user',
-                                component: user,
-                                name: 'user',
-                                meta: {
-                                    title: '用户管理'
-                                }
-                            },
-                            {
-                                path: '/system/role',
-                                component: role,
-                                name: 'role',
-                                meta: {
-                                    title: '角色管理'
-                                }
-                            },
-                            {
-                                path: '/system/menu',
-                                component: menu,
-                                name: 'menu',
-                                meta: {
-                                    title: '菜单管理'
-                                }
-                            },
-                            {
-                                path: '/system/dept',
-                                component: dept,
-                                name: 'dept',
-                                meta: {
-                                    title: '部门管理'
-                                }
-                            },
-                            {
-                                path: '/system/post',
-                                component: post,
-                                name: 'post',
-                                meta: {
-                                    title: '岗位管理'
-                                }
-                            },
-                            {
-                                path: '/system/dict',
-                                component: dict,
-                                name: 'dict',
-                                meta: {
-                                    title: '字典管理'
-                                }
-                            },
-                            {
-                                path: '/system/config',
-                                component: config,
-                                name: 'config',
-                                meta: {
-                                    title: '参数管理'
-                                }
-                            },
-                            {
-                                path: '/system/notice',
-                                component: notice,
-                                name: 'notice',
-                                meta: {
-                                    title: '通知管理'
-                                }
-                            },
-                            {
-                                path: '/dict/type/data/:dictId(\\d+)',
-                                component: resolve =>
-                                    require([
-                                        '@/views/system/dict/data'
-                                    ], resolve),
-                                name: 'Data',
-                                meta: { title: '字典数据', icon: '' }
+                children: [{
+                    path: '/system',
+                    component: system,
+                    name: 'erke',
+                    redirect: '/system/user',
+                    meta: {
+                        title: '系统'
+                    },
+                    children: [{
+                            path: '/system/user',
+                            component: user,
+                            name: 'user',
+                            meta: {
+                                title: '用户管理'
                             }
-                        ]
-                    }
-                ]
+                        },
+                        {
+                            path: '/system/role',
+                            component: role,
+                            name: 'role',
+                            meta: {
+                                title: '角色管理'
+                            }
+                        },
+                        {
+                            path: '/system/menu',
+                            component: menu,
+                            name: 'menu',
+                            meta: {
+                                title: '菜单管理'
+                            }
+                        },
+                        {
+                            path: '/system/dept',
+                            component: dept,
+                            name: 'dept',
+                            meta: {
+                                title: '部门管理'
+                            }
+                        },
+                        {
+                            path: '/system/post',
+                            component: post,
+                            name: 'post',
+                            meta: {
+                                title: '岗位管理'
+                            }
+                        },
+                        {
+                            path: '/system/dict',
+                            component: dict,
+                            name: 'dict',
+                            meta: {
+                                title: '字典管理'
+                            }
+                        },
+                        {
+                            path: '/system/config',
+                            component: config,
+                            name: 'config',
+                            meta: {
+                                title: '参数管理'
+                            }
+                        },
+                        {
+                            path: '/system/notice',
+                            component: notice,
+                            name: 'notice',
+                            meta: {
+                                title: '通知管理'
+                            }
+                        },
+                        {
+                            path: '/dict/type/data/:dictId(\\d+)',
+                            component: resolve =>
+                                require([
+                                    '@/views/system/dict/data'
+                                ], resolve),
+                            name: 'Data',
+                            meta: { title: '字典数据', icon: '' }
+                        }
+                    ]
+                }]
             }
             // {
             //     path: '/application/erke',
@@ -386,62 +373,54 @@ export const constantRoutes = [
         component: Layout,
         hidden: true,
         redirect: 'noredirect',
-        children: [
-            {
-                path: 'profile',
-                component: resolve =>
-                    require(['@/views/system/user/profile/index'], resolve),
-                name: 'Profile',
-                meta: { title: '个人中心', icon: 'user' }
-            }
-        ]
+        children: [{
+            path: 'profile',
+            component: resolve =>
+                require(['@/views/system/user/profile/index'], resolve),
+            name: 'Profile',
+            meta: { title: '个人中心', icon: 'user' }
+        }]
     },
     {
         path: '/dict',
         component: Layout,
         hidden: true,
-        children: [
-            {
-                path: 'type/data/:dictId(\\d+)',
-                component: resolve =>
-                    require(['@/views/system/dict/data'], resolve),
-                name: 'Data',
-                meta: { title: '字典数据', icon: '' }
-            }
-        ]
+        children: [{
+            path: 'type/data/:dictId(\\d+)',
+            component: resolve =>
+                require(['@/views/system/dict/data'], resolve),
+            name: 'Data',
+            meta: { title: '字典数据', icon: '' }
+        }]
     },
     {
         path: '/job',
         component: Layout,
         hidden: true,
-        children: [
-            {
-                path: 'log',
-                component: resolve =>
-                    require(['@/views/monitor/job/log'], resolve),
-                name: 'JobLog',
-                meta: { title: '调度日志' }
-            }
-        ]
+        children: [{
+            path: 'log',
+            component: resolve =>
+                require(['@/views/monitor/job/log'], resolve),
+            name: 'JobLog',
+            meta: { title: '调度日志' }
+        }]
     },
     {
         path: '/gen',
         component: Layout,
         hidden: true,
-        children: [
-            {
-                path: 'edit/:tableId(\\d+)',
-                component: resolve =>
-                    require(['@/views/tool/gen/editTable'], resolve),
-                name: 'GenEdit',
-                meta: { title: '修改生成配置' }
-            }
-        ]
+        children: [{
+            path: 'edit/:tableId(\\d+)',
+            component: resolve =>
+                require(['@/views/tool/gen/editTable'], resolve),
+            name: 'GenEdit',
+            meta: { title: '修改生成配置' }
+        }]
     }
 ]
 
 export default new Router({
-    mode: 'history', // 去掉url中的#
+    mode: 'hash', // 去掉url中的#
     scrollBehavior: () => ({ y: 0 }),
     routes: constantRoutes
 })

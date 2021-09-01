@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-26 17:03:54
+ * @LastEditTime: 2021-09-01 18:37:58
 -->
 <template>
     <div class="app-container">
@@ -453,7 +453,7 @@
                                         >审核</el-button
                                     >
                                     <el-button
-                                        v-if="scope.row.recommend == 0"
+                                        v-if="scope.row.recommend != 1"
                                         type="text"
                                         size="mini"
                                         icon="el-icon-check"
@@ -461,7 +461,7 @@
                                         >推荐</el-button
                                     >
                                     <el-button
-                                        v-if="scope.row.recommend != 0"
+                                        v-if="scope.row.recommend == 1"
                                         type="text"
                                         size="mini"
                                         icon="el-icon-close"
@@ -701,7 +701,8 @@
                         groupId({ id: row.deptId })
                             .then(value => {
                                 console.log(value, 'ty')
-                                value.data.recommend = 0
+                                value.data.recommend = 1
+                                value.data.orderNum = 0
                                 return value.data
                             })
                             .then(value => {
@@ -719,7 +720,8 @@
                     confirm: () => {
                         groupId({ id: row.deptId })
                             .then(value => {
-                                value.data.recommend = 1
+                                value.data.recommend = 0
+                                value.data.orderNum = 0
                                 return value.data
                             })
                             .then(value => {

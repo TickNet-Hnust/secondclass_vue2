@@ -167,6 +167,20 @@
                 ></el-table-column>
 
                 <el-table-column
+                    prop=""
+                    label="宣传图"
+                    min-width="80"
+                >
+                    <template slot-scope="scope">
+                        <img 
+                            :src="scope.row.images" 
+                            class="activityImage"
+                            @click="showImg(scope.row.images)"
+                        >
+                    </template>
+                </el-table-column>
+
+                <el-table-column
                     prop="name"
                     label="活动名称"
                     fixed="left"
@@ -1243,9 +1257,7 @@
                 console.log(file)
                 this.getImgUrl(file).then(value => {
                     console.log(value,'图片路径')
-                    if (this.postData.images.length)
-                        this.postData.images += `;${value}`
-                    else this.postData.images += `${value}`
+                    this.postData.images = value
                 })
             },
             beforeUpload(file) {
@@ -1323,6 +1335,11 @@
                     console.log(value,'group')
                     this.groupList = value.rows
                     this.postData.groupId = value.rows[0]?.deptId
+                })
+            },
+            showImg(img) {
+                this.$viewerApi({
+                    images: [img],
                 })
             },
             close() {
@@ -1440,6 +1457,7 @@
                 })
             },
             postActivity() {
+                console.log(this.postData)
                 this.postData.recommend = 0
                 let state = this.addActivity.title == '修改活动' ? activityPut :activityPost
                 state(this.postData).then(value => {
@@ -1866,5 +1884,9 @@
     }
     .data-number >>> .el-input__inner {
         width: 131px;
+    }
+    .activityImage {
+        width: 50px;
+        height: 50px;
     }
 </style>
