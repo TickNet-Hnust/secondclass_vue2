@@ -216,6 +216,27 @@
                             </el-table-column>
 
                             <el-table-column
+                                label="请假材料"
+                                :min-width="120"
+                            >   
+                                <template slot-scope="{ row }">
+                                    <div
+                                    v-if="row.material==null"
+                                   >
+                                       无材料
+                                   </div>
+
+                                    <img
+                                        v-else
+                                        :src="row.material"
+                                        class="imgs"  
+                                        alt="图片失效"
+                                        @click="show(row.material)"
+                                    />
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column
                                 prop="createTime"
                                 label="请假时间"
                                 min-width="120"
@@ -575,6 +596,11 @@
             }
         },
         methods: {
+            show(material) {
+                this.$viewerApi({
+                images:[material],
+                })
+            },
             handleExport() {
             const queryParams = this.queryParams;
             this.$confirm('是否确认导出所有请假列表?', "警告", {
@@ -843,6 +869,10 @@
 </script>
 
 <style scoped>
+    .imgs{
+        width: 80px;
+        height: 60px;
+    }
     .ant-dropdown-link {
         border-radius: 4px;
         color: white;
