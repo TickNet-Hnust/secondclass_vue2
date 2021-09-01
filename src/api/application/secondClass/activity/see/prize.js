@@ -2,8 +2,8 @@
  * @Descripttion:
  * @Author: 林舒恒
  * @Date: 2021-08-05 11:10:30
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-31 17:46:11
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-08-31 23:06:00
  */
 import request from '@/utils/request.js'
 
@@ -32,7 +32,7 @@ export function activityPrizeRecordList(params) {
 }
 
 /**
- * @description: 获取活动奖项列表
+ * @description: 导出活动奖项列表
  * @param {*} params
  */
 export function activityPrizeExport(query) {

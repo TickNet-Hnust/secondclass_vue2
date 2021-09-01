@@ -100,18 +100,42 @@
                                         style="min-width:150px;margin-left: -24px;"
                                     >
                                         <el-form-item label="操作:">
-                                            <el-select
-                                                v-model="action"
-                                                style="width:80px"
-                                                placeholder="操作"
-                                            >
-                                                <el-option
-                                                    value="批量修改"
-                                                ></el-option>
-                                                <el-option
-                                                    value="排序"
-                                                ></el-option>
-                                            </el-select>
+                                           <a-dropdown>
+                                                <a
+                                                    class="ant-dropdown-link"
+                                                    @click="
+                                                        e => e.preventDefault()
+                                                    "
+                                                >
+                                                    操作 <a-icon type="down" />
+                                                </a>
+                                                <a-menu slot="overlay">
+                                                    <a-menu-item>
+                                                        <a
+                                                            href="javascript:;"
+                                                            @click="mutiCredit"
+                                                            >批量认定</a
+                                                        >
+                                                    </a-menu-item>
+
+                                                    <a-menu-item>
+                                                        <a href="javascript:;"
+                                                        @click="sortCredit"
+                                                            >排序</a
+                                                        >
+                                                    </a-menu-item>
+
+
+                                                    <a-menu-item>
+                                                        <a href="javascript:;"
+                                                        @click="handleExport"
+                                                            >导出</a
+                                                        >
+                                                    </a-menu-item>
+
+                                                    
+                                                </a-menu>
+                                            </a-dropdown>
                                         </el-form-item>
                                     </el-col>
 
@@ -687,7 +711,8 @@
     import {
         activityIntegral,
         activityIntegralList,
-        activityIntegralVerify
+        activityIntegralVerify,
+        activityIntegralExport,
     } from '@/api/application/secondClass/index'
 
     import {
@@ -934,6 +959,20 @@
         },
 
         methods:{
+            handleExport() {
+            const queryParams = this.queryParams;
+            this.$confirm('是否确认导出所有积分列表?', "警告", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+                }).then(() => {
+                this.exportLoading = true;
+                return activityIntegralExport();
+                }).then(response => {
+                this.download(response.msg);
+                this.exportLoading = false;
+                }).catch(() => {});
+            },
             show(material) {
                 this.$viewerApi({
                 images:[material],
@@ -948,8 +987,13 @@
             //排序对话框点击确定事件
             sortSubmit(){
                console.log(this.sortCreditDialog.data,'排序点击确认要发送的数据');
-               this.sortCreditDialog.open = false;
-               this.fuzzyQuery();
+               if(this.sortCreditDialog.data.isAsc==''||this.sortCreditDialog.data.orderByColumn=='')
+               {
+                   this.msgInfo('请填写完整信息')
+               }else{
+                   this.sortCreditDialog.open = false;
+                    this.fuzzyQuery();
+               }
             },
             //点击操作中的排序事件
             sortCredit(){
@@ -976,6 +1020,9 @@
                 if(this.mutiExamCreditDialog.post.userIds.length==0)
                 {
                     this.msgInfo('请选择要申报的人！')
+                }
+                else if(this.mutiExamCreditDialog.post.status==''){
+                     this.msgInfo('请选择认定状态！')
                 }
                 else{
                    activityIntegralVerify(this.mutiExamCreditDialog.post).then(
@@ -1156,6 +1203,7 @@
                     this.examIntegralDialog.post,
                     '积分认定确定后发送的数据'
                 )
+                
                 activityIntegralVerify(this.examIntegralDialog.post).then(
                     value => {
                         console.log(value, '积分认定操作成功的返回！')

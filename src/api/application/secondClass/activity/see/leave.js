@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-08-05 11:10:23
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-30 11:48:14
+ * @LastEditTime: 2021-08-31 20:17:13
  */
 import request from '@/utils/request.js'
 
@@ -28,6 +28,18 @@ export function activityLeaveList(params) {
         url: '/admins/secondClass/activity/leave/list',
         method: 'get',
         params
+    })
+}
+
+/**
+ * @description: 导出活动请假列表
+ * @param {*} params
+ */
+ export function activityLeaveExport(query) {
+    return request({
+        url: '/admins/secondClass/activity/Leave/export',
+        method: 'get',
+        params: query
     })
 }
 

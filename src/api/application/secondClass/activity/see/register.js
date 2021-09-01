@@ -2,8 +2,8 @@
  * @Descripttion:
  * @Author: 林舒恒
  * @Date: 2021-08-05 11:10:04
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-05 14:34:19
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-08-31 20:12:33
  */
 import request from '@/utils/request.js'
 
@@ -28,6 +28,18 @@ export function activityRegisteList(params) {
         url: '/admins/secondClass/activity/registe/list',
         method: 'get',
         params
+    })
+}
+
+/**
+ * @description: 导出活动签到信息列表
+ * @param {*} params
+ */
+ export function activityRegisteExport(query) {
+    return request({
+        url: '/admins/secondClass/activity/registe/export',
+        method: 'get',
+        params: query
     })
 }
 
