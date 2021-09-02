@@ -714,15 +714,22 @@
             save(){
                //要提交的数据
                console.log(this.addPrizeDialogList.data,'点击保存要发送的数据');
-               
-               activityPrizeRecordPost(this.addPrizeDialogList.data).then(value=>{
+               if(this.addPrizeDialogList.data.prizeName==''||this.addPrizeDialogList.data.prizeType==''||
+               this.addPrizeDialogList.data.number=='')
+               {
+                   this.msgInfo('请填写完整信息')
+               }
+               else{
+                   activityPrizeRecordPost(this.addPrizeDialogList.data).then(value=>{
                    console.log(value,'发布登记修改新增接口返回的数据');
                    this.addPrizeDialogList.open = false;
-                  this.managePrizeDialogList2=[];
+                   this.managePrizeDialogList2=[];
                    this.fuzzyQuery();
                    
-               })
-               this.reset()
+                    })
+                    this.reset()
+               }
+               
             },
             cancel(){
                 this.managePrizeDialogList2 = [];
