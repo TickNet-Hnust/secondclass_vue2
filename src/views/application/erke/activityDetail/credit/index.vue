@@ -1250,7 +1250,7 @@
                     this.courseClassificationName =
                         value.data.courseClassificationName
                     this.integralScheme = value.data.integralScheme
-                    await this.getCourseClassificationList()
+                    await this.getCourseClassificationList(this.courseClassificationId)
                 })
             },
 
