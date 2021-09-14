@@ -5,10 +5,12 @@ import { getToken } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
+
+const baseURL = process.env.NODE_ENV == 'development' ? 'http://localhost:8080' : 'http://1.117.222.187:8080'
     // 创建axios实例
 const service = axios.create({
     // axios中请求配置有baseURL选项，表示请求URL公共部分
-    baseURL: 'http://192.168.124.8:8080',
+    baseURL: baseURL,
     // 超时
     timeout: 10000
 })

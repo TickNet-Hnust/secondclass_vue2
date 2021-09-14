@@ -153,6 +153,7 @@
             :visible.sync="open"
             width="600px"
             append-to-body
+            class="menuDialog"
         >
             <el-form ref="form" :model="form" :rules="rules" label-width="80px">
                 <el-row>
@@ -547,5 +548,8 @@
         background-color: #fff;
         border-radius: 5px;
         border: 1px solid #ddd;
+    }
+    .menuDialog >>> .el-dialog__body {
+        height: 400px;
     }
 </style>
