@@ -2,8 +2,8 @@
  * @Descripttion: 培养方案详情
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
- * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-31 17:25:47
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-09-14 21:10:19
 -->
 <template>
     <div class="app-container">
@@ -349,6 +349,7 @@
                                 prop="classificationId"
                                 label="分类"
                                 min-width="150"
+                                show-overflow-tooltip
                                 :formatter="formatClassificationId"
                             >
                             </el-table-column>

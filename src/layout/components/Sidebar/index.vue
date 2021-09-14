@@ -15,6 +15,7 @@
         <!-- <logo v-if="showLogo" :collapse="isCollapse" /> -->
         <el-scrollbar
             :class="settings.sideTheme"
+            style="width: 300% !important"
             wrap-class="scrollbar-wrapper"
         >
             <el-menu

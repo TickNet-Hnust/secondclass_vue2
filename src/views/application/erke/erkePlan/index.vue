@@ -2,8 +2,8 @@
  * @Descripttion: 培养方案
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
- * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-31 14:10:32
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-09-14 21:04:12
 -->
 <template>
     <div class="app-container">
@@ -111,6 +111,19 @@
                     min-width="180"
                     :show-overflow-tooltip="true"
                 >
+                    <template slot-scope="scope">
+                        <router-link
+                            :to="
+                                    '/application/erke/detail/' +
+                                        scope.row.schoolYearId +
+                                        '/' +
+                                        scope.row.id
+                            "
+                            style="color:#1890ff"
+                        >
+                         {{scope.row.name}}
+                        </router-link>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="schoolYearId" label="学年ID" width="80">
                 </el-table-column>
@@ -171,7 +184,6 @@
                             "
                             >修改</el-button
                         >
-                        <el-button size="mini" type="text" icon="el-icon-view">
                             <router-link
                                 type="info"
                                 :to="
@@ -180,20 +192,14 @@
                                         '/' +
                                         scope.row.id
                                 "
-                                >详情</router-link
+                                >
+                                    <el-button style="margin-left:10px" size="mini" type="text" icon="el-icon-view">
+                                        详情
+                                    </el-button>
+                                </router-link
                             >
-                        </el-button>
-                        <!-- <router-link
-                            type="info"
-                            :to="
-                                '/application/erke/detail/' +
-                                    scope.row.schoolYearId +
-                                    '/' +
-                                    scope.row.id
-                            "
-                            >详情</router-link
-                        > -->
                         <el-button
+                            style="margin-left:10px"
                             size="mini"
                             type="text"
                             icon="el-icon-delete"
