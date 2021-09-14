@@ -36,7 +36,7 @@
                                             <el-input data-text
                                             placeholder="学号"
                                             v-model="queryList.userName"
-                                            @input="debounceFuzzyQuery(fuzzyQuery,300)"
+                                            @input="debounceFuzzyQuery(fuzzyQuery,500)"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
@@ -45,7 +45,7 @@
                                             <el-input data-text
                                             placeholder="姓名"
                                             v-model="queryList.nickName"
-                                            @input="debounceFuzzyQuery(fuzzyQuery,300)"
+                                            @input="debounceFuzzyQuery(fuzzyQuery,500)"
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>

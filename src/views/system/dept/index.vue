@@ -76,6 +76,7 @@
                 prop="deptName"
                 label="部门名称"
                 width="260"
+                show-overflow-tooltip
             ></el-table-column>
             <el-table-column
                 prop="orderNum"
@@ -139,6 +140,7 @@
             :visible.sync="open"
             width="600px"
             append-to-body
+            class="deptDialog"
         >
             <el-form ref="form" :model="form" :rules="rules" label-width="80px">
                 <el-row>
@@ -427,5 +429,10 @@
         background-color: #fff;
         border-radius: 5px;
         border: 1px solid #ddd;
+        height: calc(100vh - 50px);
+        overflow: auto;
+    }
+    .deptDialog >>> .el-dialog__body {
+        height: 300px;
     }
 </style>

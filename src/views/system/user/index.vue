@@ -2,7 +2,7 @@
     <div class="app-container">
         <el-row :gutter="20">
             <!--部门数据-->
-            <el-col :span="4" :xs="24">
+            <el-col :span="4" :xs="24" class="Cbottom">
                 <div class="head-container">
                     <el-input
                         v-model="deptName"
@@ -292,6 +292,7 @@
             :visible.sync="open"
             width="600px"
             append-to-body
+            class="userDialog"
         >
             <el-form ref="form" :model="form" :rules="rules" label-width="80px">
                 <el-row>
@@ -888,5 +889,14 @@
         background-color: #fff;
         border-radius: 5px;
         border: 1px solid #ddd;
+        height: calc(100vh - 50px);
+        overflow: auto;
+    }
+    .Cbottom {
+        height: calc(100vh - 80px);
+        overflow: auto;
+    }
+    .userDialog >>> .el-dialog__body {
+        height: 400px;
     }
 </style>

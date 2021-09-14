@@ -1261,14 +1261,15 @@
                 })
             },
             beforeUpload(file) {
-                const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif';
-                if (!isJpgOrPng) {
-                    this.$message.error('图片的格式只能是jpg、png、gif');
-                }
-                const isLt2M = file.size / 1024 / 1024 < 2;
-                if (!isLt2M) {
-                    this.$message.error('图片大小不能超过2M');
-                }
+                // const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif';
+                // if (!isJpgOrPng) {
+                //     this.$message.error('图片的格式只能是jpg、png、gif');
+                // }
+                // const isLt2M = file.size / 1024 / 1024 < 2;
+                // if (!isLt2M) {
+                //     this.$message.error('图片大小不能超过2M');
+                // }
+                return true
                 return isJpgOrPng && isLt2M;
             },
             /**

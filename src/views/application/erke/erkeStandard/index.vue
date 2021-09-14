@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-31 17:41:43
+ * @LastEditTime: 2021-09-14 11:32:32
 -->
 <template>
     <div class="app-container">
@@ -892,7 +892,11 @@
             },
 
             // 取消按钮
-            cancel() {},
+            cancel() {
+                this.managerDialog.open = false
+                this.addStardardDialog.open = false
+                this.exportDialog.topen = false
+            },
             // 表单重置
             reset() {
                 this.form = {
