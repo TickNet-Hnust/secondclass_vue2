@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-14 21:10:19
+ * @LastEditTime: 2021-09-17 19:25:23
 -->
 <template>
     <div class="app-container">
@@ -325,7 +325,7 @@
                             <el-table-column
                                 prop="name"
                                 label="课程名称"
-                                min-width="200"
+                                min-width="150"
                                 show-overflow-tooltip
                             >
                             </el-table-column>
@@ -333,7 +333,8 @@
                             <el-table-column
                                 prop="trainingProgramId"
                                 label="培养方案"
-                                min-width="150"
+                                min-width="120"
+                                show-overflow-tooltip
                                 :formatter="formatTrainingProgram"
                             >
                             </el-table-column>
@@ -342,6 +343,7 @@
                                 prop="schoolYearName"
                                 label="学年"
                                 min-width="120"
+                                show-overflow-tooltip
                             >
                             </el-table-column>
 
@@ -357,7 +359,7 @@
                             <el-table-column
                                 prop="classificationIdPath"
                                 label="分类明细"
-                                min-width="280"
+                                min-width="150"
                                 show-overflow-tooltip
                                 :formatter="formatClassificationDetail"
                             >
@@ -435,7 +437,8 @@
                             >
                             </el-table-column>
 
-                            <el-table-column prop="createUserId" label="创建人">
+                            <!-- 后端还没有数据 -->
+                            <!-- <el-table-column prop="createUserId" label="创建人">
                             </el-table-column>
 
                             <el-table-column prop="updateUserId" label="修改人">
@@ -446,7 +449,7 @@
                                 label="备注"
                                 min-width="200"
                             >
-                            </el-table-column>
+                            </el-table-column> -->
 
                             <el-table-column
                                 prop="operate"
@@ -1193,15 +1196,6 @@
                     this.addDetailDialog.open = false
                     this.fuzzyQuery()
                 })
-                // ;(function(that) {
-                //     if (that.addDetailDialog.title == '新增')
-                //         return coursePost(that.addDetailDialog.config)
-                //     else return coursePut(that.addDetailDialog.config)
-                // })(this).then(value => {
-                //     // console.log(value, 789789)
-                //     this.addDetailDialog.open = false
-                //     this.fuzzyQuery()
-                // })
             },
             /**
              * @description: 回显
@@ -1399,7 +1393,7 @@
                         validCoun: value.data.validCount
                     }
                     this.courseList = value.data.pageData.list
-
+                    console.error(this.courseList)
                     this.loading = false
                 })
             },
