@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-17 19:25:23
+ * @LastEditTime: 2021-09-17 20:50:06
 -->
 <template>
     <div class="app-container">
@@ -12,7 +12,8 @@
 
             <!--用户数据-->
             <el-col :span="24" :xs="24">
-                <div class="erke-top">
+                 <transition name="el-fade-in-linear">
+                <div class="erke-top" v-show="isFull">
                     <div class="erke-top-head">
                         <router-link to="/application/erke/erkePlan"
                             ><el-button
@@ -124,9 +125,10 @@
                         </el-tooltip>
                     </div>
                 </div>
-
+                </transition>
                 <div class="erke-bottom">
-                    <div class="erke-buttom-left">
+                    <transition name="el-fade-in-linear">
+                    <div class="erke-buttom-left" v-show="isFull">
                         <el-menu
                             default-active=""
                             class="el-menu-vertical-demo"
@@ -144,17 +146,9 @@
                                 <span slot="title">{{ item.name }}</span>
                             </el-menu-item>
                         </el-menu>
-                        <!-- <ul>
-                            <li
-                                v-for="(item, index) in classificationList"
-                                :key="index"
-                                @click="renderPlanData(item.id)"
-                            >
-                                {{ item.name }}
-                            </li>
-                        </ul> -->
                     </div>
-                    <div class="erke-buttom-right">
+                    </transition>
+                    <div class="erke-buttom-right" ref="erkeButtomRight">
                         <div class="operate">
                             <el-row
                                 :gutter="10"
@@ -162,6 +156,9 @@
                                 type="flex"
                                 justify="space-around"
                             >
+                                <el-col :span="1" style="min-width:40px">
+                                    <el-button @click="changeIsFullState" icon="el-icon-full-screen" circle></el-button>
+                                </el-col>
                                 <el-col :span="1" style="min-width:80px">
                                     <el-select
                                         style="width: 80px"
@@ -860,6 +857,7 @@
         name: 'detail',
         data() {
             return {
+                isFull: true, //是否全屏
                 /** 学年度列表 */
                 schoolYearList: {
                     value: Number(this.$route.params.sid),
@@ -1007,6 +1005,18 @@
             }
         },
         methods: {
+            // 控制全屏
+            changeIsFullState() {
+                let height = window.innerHeight
+                    this.isFull = !this.isFull
+                if(!this.isFull) {
+                    this.$refs.erkeButtomRight.style.height = `${height - 50}px`
+                    // this.$refs.erkeButtomRight.style.marginLeft = '0'
+                } else {
+                    this.$refs.erkeButtomRight.style.height = `${height - 260}px`
+                    // this.$refs.erkeButtomRight.style.marginLeft = '228px'
+                }
+            },
             formatDate(row, column, cellValue) {
                 return cellValue != null && format(cellValue)
             },
@@ -1499,7 +1509,18 @@
             this.getCourseClassificationList()
         },
         async beforeMount() {},
-        async mounted() {}
+        async mounted() {
+            window.addEventListener('resize',() => {
+                let height = window.innerHeight
+                if(!this.isFull) {
+                    this.$refs.erkeButtomRight.style.height = `${height - 50}px`
+                    this.$refs.erkeButtomRight.style.marginLeft = '0'
+                } else {
+                    this.$refs.erkeButtomRight.style.height = `${height - 260}px`
+                    this.$refs.erkeButtomRight.style.marginLeft = '228px'
+                }
+            })
+        }
     }
 </script>
 
@@ -1540,14 +1561,16 @@
         width: 220px;
         float: left;
         padding: 16px;
+        margin-right: 8px;
         height: calc(100vh - 260px);
         background-color: #fff;
         border: 1px solid #ddd;
         border-radius: 5px;
+        overflow: hidden;
     }
     .erke-buttom-right {
+        transition: all .5s;
         background-color: #fff;
-        margin-left: 225px;
         height: calc(100vh - 260px);
         padding: 16px;
         border: 1px solid #ddd;
