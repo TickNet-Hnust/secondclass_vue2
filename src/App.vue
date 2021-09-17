@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-05-31 20:38:44
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-25 09:27:05
+ * @LastEditTime: 2021-09-16 19:43:24
 -->
 <template>
     <div id="app">
@@ -14,7 +14,9 @@
 <script>
     export default {
         name: 'App',
-        mounted() {}
+        mounted() {
+            
+        }
     }
 </script>
 
