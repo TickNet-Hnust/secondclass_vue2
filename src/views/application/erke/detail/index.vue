@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-17 20:50:06
+ * @LastEditTime: 2021-09-17 20:55:44
 -->
 <template>
     <div class="app-container">
@@ -308,6 +308,7 @@
                             v-loading="loading"
                             stripe
                             class="detailMainTable"
+                            highlight-current-row
                         >
                             <el-table-column type="selection" min-width="55">
                             </el-table-column>

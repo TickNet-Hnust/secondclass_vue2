@@ -160,7 +160,11 @@
                     </el-radio-group>
                 </el-col>
             </el-row>
-            <el-table :data="activityData" v-loading="loading">
+            <el-table 
+                :data="activityData" 
+                v-loading="loading"
+                highlight-current-row
+            >
                 <el-table-column
                     prop="id"
                     label="活动ID"

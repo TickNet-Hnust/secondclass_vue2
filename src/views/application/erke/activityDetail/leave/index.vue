@@ -168,6 +168,7 @@
                         <el-table
                             :data="leaveList"
                             v-loading="loading"
+                            highlight-current-row
                             class="enrollMainTable"
                         >
                             <el-table-column type="selection" min-width="55">

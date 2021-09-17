@@ -252,6 +252,7 @@
                         <el-table
                             :data="integralList"
                             v-loading="loading"
+                            highlight-current-row
                             class="integralMainTable"
                         >
 

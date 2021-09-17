@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-14 21:04:12
+ * @LastEditTime: 2021-09-17 20:55:23
 -->
 <template>
     <div class="app-container">
@@ -101,6 +101,7 @@
                 :data="planData"
                 stripe
                 v-loading="loading"
+                highlight-current-row
                 class="erkePlanMainTable"
             >
                 <el-table-column prop="id" label="批次ID" width="80">

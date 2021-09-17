@@ -246,6 +246,7 @@
                         <el-table
                             :data="leaveList"
                             v-loading="loading"
+                            highlight-current-row
                             class="leaveMainTable"
                         >
                             <el-table-column type="selection" min-width="55">

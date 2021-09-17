@@ -96,6 +96,7 @@
                             :data="flowerList"
                             height="550"
                             class="msgTable"
+                            highlight-current-row
                         >
                             <el-table-column
                                 label="发布者信息"
