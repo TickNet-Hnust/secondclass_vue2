@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-05-31 20:38:44
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-18 20:03:00
+ * @LastEditTime: 2021-09-18 20:14:14
 -->
 <template>
     <div id="app">
@@ -12,12 +12,9 @@
 </template>
 
 <script>
-import XScrollbar from 'x-scrollbar'
+
     export default {
         name: 'App',
-        mounted() {
-            new XScrollbar(document.querySelector('#app'))
-        }
     }
 </script>
 

@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import XScrollbar from 'x-scrollbar'
     import RightPanel from '@/components/RightPanel'
     import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
     import ResizeMixin from './mixin/ResizeHandler.js'
@@ -83,6 +84,11 @@
                     withoutAnimation: false
                 })
             }
+        },
+        mounted() {
+            this.$nextTick(() => {
+                new XScrollbar(document.querySelector('.app-wrapper'))
+            })
         }
     }
 </script>
