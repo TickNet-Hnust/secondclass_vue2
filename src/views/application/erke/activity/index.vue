@@ -169,7 +169,8 @@
                     prop="id"
                     label="活动ID"
                     fixed="left"
-                    min-width="60"
+                    show-overflow-tooltip
+                    min-width="80"
                 ></el-table-column>
 
 
