@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-17 20:55:44
+ * @LastEditTime: 2021-09-19 15:43:11
 -->
 <template>
     <div class="app-container">
@@ -106,11 +106,12 @@
                             plain
                             icon="el-icon-download"
                             size="mini"
+                            @click="kaifa"
                             :load="exportLoading"
-                            @click="handleExport"
                             v-hasPermi="['system:user:export']"
                             >导出</el-button
                         >
+                            <!-- @click="handleExport" -->
                         <el-tooltip
                             effect="dark"
                             content="清空查询条件"
@@ -562,6 +563,7 @@
                             <el-col :span="6">发布单位：</el-col>
                             <el-col :span="18">
                                 <el-select
+                                disabled
                                     v-model="addDetailDialog.unitValue"
                                     class="unitValue"
                                 >
@@ -650,6 +652,7 @@
                             <el-col :span="5">分类：</el-col>
                             <el-col :span="19">
                                 <el-select
+                                    
                                     v-model="
                                         addDetailDialog.config.classificationId
                                     "
