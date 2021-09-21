@@ -103,7 +103,7 @@
                         <el-col :span="12" style="min-width:50px">
                             <span class="labelSpan"> 活动分类：</span>
                             <span class="textSpan">{{
-                                activityVo.courseClassificationId
+                                activityVo.courseClassificationName
                             }}</span>
                         </el-col>
                         <el-col :span="12">
@@ -209,8 +209,10 @@
                         </el-col>
                     </el-row>
                 </div>
+                
                 <div class="msgGraph">
                     <el-row>
+                        <el-tooltip class="item" effect="dark" content="暂无数据，统计图还在开发中" placement="top">
                         <el-col :span="17">
                             <div class="graphTitle">
                                 <el-radio-group
@@ -234,8 +236,10 @@
                             </div>
                             <div class="graph" ref="graph"></div>
                         </el-col>
+                        </el-tooltip>
+                        <el-tooltip class="item" effect="dark" content="暂无数据，排行榜还在开发中" placement="right">
                         <el-col :span="7" class="rank">
-                            <el-date-picker style="float:right">
+                            <el-date-picker disabled style="float:right">
                             </el-date-picker>
                             <div class="Ratetitle">
                                 群组报名率（ 报名人数 / 群组人数 ）
@@ -276,6 +280,7 @@
                                 <el-col :span="3">95.42%</el-col>
                             </el-row>
                         </el-col>
+                        </el-tooltip>
                     </el-row>
                 </div>
             </el-col>
@@ -305,7 +310,7 @@
                                         item.enrollNumber
                                     }}</el-col>
                                     <el-col :span="4">{{
-                                        item.enrollRate * 100 + '%'
+                                        (item.enrollRate * 100).toFixed(2) + '%'
                                     }}</el-col>
                                 </el-row>
                             </div>
@@ -406,7 +411,7 @@
                     activityTag: '', //活动标签
                     activityPlaceName: '', //活动地点
 
-                    courseClassificationId: '', //活动分类
+                    courseClassificationName: '', //活动分类
                     activityManagerName: '', //活动负责人
 
                     enrollStartTime: '', //报名开始时间

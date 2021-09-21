@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-19 15:43:11
+ * @LastEditTime: 2021-09-20 11:49:21
 -->
 <template>
     <div class="app-container">
@@ -158,7 +158,13 @@
                                 justify="space-around"
                             >
                                 <el-col :span="1" style="min-width:40px">
-                                    <el-button @click="changeIsFullState" icon="el-icon-full-screen" circle></el-button>
+                                    <el-tooltip
+                                        effect="dark"
+                                        content="表格放大"
+                                        placement="top"
+                                    >
+                                        <el-button @click="changeIsFullState" icon="el-icon-full-screen" circle></el-button>
+                                    </el-tooltip>
                                 </el-col>
                                 <el-col :span="1" style="min-width:80px">
                                     <el-select
@@ -251,14 +257,19 @@
                                         style="width: 120px"
                                         v-model="queryList.departmentId"
                                         placeholder="发布单位：不限"
+                                        @change="fuzzyQuery"
                                     >
                                         <el-option
                                             value="0"
                                             label="发布单位：不限"
                                         ></el-option>
 
-                                        <el-option value="保卫处"></el-option>
-                                        <el-option value="网络中心"></el-option>
+                                        <el-option 
+                                            v-for="(item,index) in deptList"
+                                            :key="index"
+                                            :value="item.deptId"
+                                            :label="item.deptName"
+                                        ></el-option>
                                     </el-select>
                                 </el-col>
 
@@ -563,21 +574,14 @@
                             <el-col :span="6">发布单位：</el-col>
                             <el-col :span="18">
                                 <el-select
-                                disabled
                                     v-model="addDetailDialog.unitValue"
                                     class="unitValue"
                                 >
-                                    <el-option
-                                        label="校团委"
-                                        value="1"
-                                    ></el-option>
-                                    <el-option
-                                        label="校团委2"
-                                        value="2"
-                                    ></el-option>
-                                    <el-option
-                                        label="校团委3"
-                                        value="3"
+                                   <el-option 
+                                        v-for="(item,index) in deptList"
+                                        :key="index"
+                                        :value="item.deptId"
+                                        :label="item.deptName"
                                     ></el-option>
                                 </el-select>
                             </el-col>
@@ -846,7 +850,8 @@
         courseId,
         coursePost,
         coursePut,
-        courseDelete
+        courseDelete,
+        utilListCollege
     } from '@/api/application/secondClass/index'
 
     import { getDict } from '@/api/application/secondClass/dict/type.js'
@@ -861,6 +866,7 @@
         name: 'detail',
         data() {
             return {
+                deptList: [],//指导单位列表
                 isFull: true, //是否全屏
                 /** 学年度列表 */
                 schoolYearList: {
@@ -968,7 +974,7 @@
                         type: '0',
                         status: 0,
                         lowestValue: '',
-                        remark: ''
+                        remark: '',
                     },
                     lowestValueArray: [[1, 1]],
                     //发布单位，现在没用
@@ -1418,7 +1424,7 @@
                     trainingProgramId: this.trainingProgramList.value,
                     classificationId: this.classificationList.value,
                     name: this.queryList.name,
-                    departmentId: '',
+                    departmentId: this.queryList.departmentId,
                     joinType: this.queryList.joinType,
                     necessary: this.queryList.necessary,
                     status: this.queryList.status,
@@ -1510,7 +1516,14 @@
             /** 获得当前学年下 当前培养方案下 当前课程分类下 课程列表 */
             this.fuzzyQuery()
 
+            //获得分类列表
             this.getCourseClassificationList()
+
+            //
+            utilListCollege().then(value => {
+                console.error(value)
+                this.deptList = value.data
+            })
         },
         async beforeMount() {},
         async mounted() {

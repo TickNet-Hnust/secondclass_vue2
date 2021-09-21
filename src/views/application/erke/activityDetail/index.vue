@@ -3,7 +3,7 @@
         <div class="erke-top">
             <el-row type="flex" justify="space-between">
                 <el-col :span="1" class="erke-top-head" style="min-width:380px">
-                    <span> <i>✈</i>『百年征程，党史回眸』书法展览学习活动</span>
+                    <span>{{$route.params.name}}</span>
                 </el-col>
                 <el-col :span="2" style=";padding:10px 0;min-width:630px">
                     <el-radio-group
@@ -72,10 +72,6 @@
     import evaluation from '@/views/application/erke/activityDetail/evaluation/index.vue'
     import credit from '@/views/application/erke/activityDetail/credit/index.vue'
 
-    import { format } from '@/utils/gather.js'
-    import horwheel from 'horwheel'
-    import { getToken } from '@/utils/auth'
-
     export default {
         name: 'activityDetail',
         components: {
@@ -101,6 +97,9 @@
                 },
                 aliveComponent: 'survey'
             }
+        },
+        created() {
+            
         },
         methods: {
             switchStatus(target) {
@@ -138,22 +137,12 @@
         background-color: #e8f4ff;
         font-weight: 700;
         height: 37px;
-        width: 370px;
+        /* width: 370px; */
+        padding: 0 20px;
         border-radius: 20px;
         text-align: center;
         line-height: 40px;
         color: #549eff;
-    }
-    .erke-top-head span i {
-        display: inline-block;
-        height: 24px;
-        width: 24px;
-        color: initial;
-        border-radius: 12px;
-        margin-left: -18px;
-        margin-right: 8px;
-        line-height: 28px;
-        background-color: #1890ff;
     }
     .erke-bottom {
         background-color: #fff;

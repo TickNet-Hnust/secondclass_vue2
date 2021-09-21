@@ -185,7 +185,7 @@ export const constantRoutes = [{
                                 }
                             },
                             {
-                                path: '/application/erke/activityDetail/:aid',
+                                path: '/application/erke/activityDetail/:aid/:name',
                                 component: activityDetail,
                                 // redirect: '/application/erke/activityDetail/:id/survey',
                                 name: 'activityDetail',

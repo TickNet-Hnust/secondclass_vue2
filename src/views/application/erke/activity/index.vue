@@ -186,7 +186,7 @@
                             class="textBlue"
                             :to="
                                 '/application/erke/activityDetail/' +
-                                    scope.row.id
+                                    scope.row.id + '/' + scope.row.name
                             "
                             >{{ scope.row.name }}</router-link
                         >
@@ -1757,10 +1757,6 @@
         },
         mounted() {
             this.$nextTick(() => {
-                // new XScrollbar(document.querySelector('.el-table--scrollable-x .el-table__body-wrapper'),{
-                //     onlyHorizontal:true,
-                //     preventDefault:false
-                // })
             })
             window.addEventListener('resize',() => {
                 let height = window.innerHeight

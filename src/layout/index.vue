@@ -87,7 +87,7 @@ import XScrollbar from 'x-scrollbar'
         },
         mounted() {
             this.$nextTick(() => {
-                new XScrollbar(document.querySelector('.app-wrapper'))
+                // new XScrollbar(document.querySelector('.app-wrapper'))
             })
         }
     }
