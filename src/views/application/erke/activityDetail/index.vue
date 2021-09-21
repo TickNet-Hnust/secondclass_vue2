@@ -3,7 +3,13 @@
         <div class="erke-top">
             <el-row type="flex" justify="space-between">
                 <el-col :span="1" class="erke-top-head" style="min-width:380px">
-                    <span>{{$route.params.name}}</span>
+                    <el-button
+                        icon="el-icon-arrow-left"
+                        circle
+                        @click="back"
+                        style="marginRight:15px"
+                    ></el-button>
+                    <span>{{name}}</span>
                 </el-col>
                 <el-col :span="2" style=";padding:10px 0;min-width:630px">
                     <el-radio-group
@@ -36,16 +42,15 @@
                     </el-radio-group>
                 </el-col>
                 <el-col :span="1" style="min-width:130px">
-                    <el-button icon="el-icon-edit" circle></el-button>
+                    <el-button 
+                        icon="el-icon-edit" 
+                        circle
+                        disabled
+                    ></el-button>
                     <el-button
                         icon="el-icon-refresh"
                         circle
                         @click="refresh"
-                    ></el-button>
-                    <el-button
-                        icon="el-icon-close"
-                        circle
-                        @click="back"
                     ></el-button>
                 </el-col>
             </el-row>
@@ -86,6 +91,7 @@
         },
         data() {
             return {
+                name:this.$route.params.name,
                 hackReset: true,
                 /* 单选条件 */
                 status: 'survey',
