@@ -769,7 +769,7 @@
         overflow: hidden;
     }
     .erke-buttom-left {
-        width: 300px;
+        width: 260px;
         float: left;
         padding: 16px;
         height: calc(100vh - 350px);
@@ -807,14 +807,15 @@
     }
     .erke-buttom-left .numbers {
         position: absolute;
-        right: -220px;
+        right: -190px;
         width: 20px;
         text-align: center;
         top: 0;
     }
     .erke-buttom-right {
+        overflow: auto;
         background-color: #fff;
-        margin-left: 305px;
+        margin-left: 268px;
         height: calc(100vh - 350px);
         padding: 16px;
         border: 1px solid #ddd;

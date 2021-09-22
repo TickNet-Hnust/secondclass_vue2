@@ -3,7 +3,7 @@
         <div class="erke-top">
             <el-row type="flex" justify="space-between">
                 <el-col :span="1" class="erke-top-head" style="min-width:380px">
-                    <span> <i>✈</i>『百年征程，党史回眸』书法展览学习活动</span>
+                    <span> <i>✈</i>{{aName}}</span>
                 </el-col>
                 <el-col :span="2" style=";padding:10px 0;min-width:630px">
                     <el-radio-group
@@ -99,7 +99,9 @@
                     pageCount: 1,
                     pageSize: 4
                 },
-                aliveComponent: 'survey'
+                aliveComponent: 'survey',
+                aid:'',
+                aName:'',
             }
         },
         methods: {
@@ -114,8 +116,15 @@
             },
             back() {
                 this.$router.push('/application/erke/activity')
+            },
+            getParams() {
+                this.aid = this.$route.params.aid
+                this.aName = this.$route.params.aName
             }
-        }
+        },
+        created(){
+            this.getParams();
+        },
     }
 </script>
 

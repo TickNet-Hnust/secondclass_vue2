@@ -183,15 +183,16 @@
                 <el-table-column
                     prop="name"
                     label="活动名称"
+                    show-overflow-tooltip
                     fixed="left"
-                    min-width="330"
+                    min-width="180"
                 >
                     <template slot-scope="scope">
                         <router-link
                             class="textBlue"
                             :to="
-                                '/application/erke/activityDetail/' +
-                                    scope.row.id
+                                `/application/erke/activityDetail/
+                                    ${scope.row.id}/${scope.row.name}`
                             "
                             >{{ scope.row.name }}</router-link
                         >
@@ -201,13 +202,16 @@
                 <el-table-column
                     prop="rankId"
                     label="级别"
+                    show-overflow-tooltip
+                    min-width="50"
                     :formatter="formatRank"
                 ></el-table-column>
 
                 <el-table-column
                     prop="schoolYearId"
                     label="学年"
-                    min-width="120"
+                    show-overflow-tooltip
+                    min-width="110"
                     :formatter="formatSchoolYear"
                 ></el-table-column>
 
@@ -236,7 +240,7 @@
                     min-width="80"
                 ></el-table-column>
 
-                <el-table-column prop="status" label="状态" min-width="110">
+                <el-table-column prop="status" label="状态" min-width="90">
                     <template slot-scope="scope">
                         <el-button
                             size="mini"
