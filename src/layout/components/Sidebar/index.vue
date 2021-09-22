@@ -13,6 +13,7 @@
         </div>
 
         <!-- <logo v-if="showLogo" :collapse="isCollapse" /> -->
+            <!-- style="width: 300% !important" -->
         <el-scrollbar
             :class="settings.sideTheme"
             wrap-class="scrollbar-wrapper"

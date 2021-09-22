@@ -3,7 +3,13 @@
         <div class="erke-top">
             <el-row type="flex" justify="space-between">
                 <el-col :span="1" class="erke-top-head" style="min-width:380px">
-                    <span> <i>✈</i>{{aName}}</span>
+                    <el-button
+                        icon="el-icon-arrow-left"
+                        circle
+                        @click="back"
+                        style="marginRight:15px"
+                    ></el-button>
+                    <span>{{name}}</span>
                 </el-col>
                 <el-col :span="2" style=";padding:10px 0;min-width:630px">
                     <el-radio-group
@@ -36,16 +42,15 @@
                     </el-radio-group>
                 </el-col>
                 <el-col :span="1" style="min-width:130px">
-                    <el-button icon="el-icon-edit" circle></el-button>
+                    <el-button 
+                        icon="el-icon-edit" 
+                        circle
+                        disabled
+                    ></el-button>
                     <el-button
                         icon="el-icon-refresh"
                         circle
                         @click="refresh"
-                    ></el-button>
-                    <el-button
-                        icon="el-icon-close"
-                        circle
-                        @click="back"
                     ></el-button>
                 </el-col>
             </el-row>
@@ -72,10 +77,6 @@
     import evaluation from '@/views/application/erke/activityDetail/evaluation/index.vue'
     import credit from '@/views/application/erke/activityDetail/credit/index.vue'
 
-    import { format } from '@/utils/gather.js'
-    import horwheel from 'horwheel'
-    import { getToken } from '@/utils/auth'
-
     export default {
         name: 'activityDetail',
         components: {
@@ -90,6 +91,7 @@
         },
         data() {
             return {
+                name:this.$route.params.name,
                 hackReset: true,
                 /* 单选条件 */
                 status: 'survey',
@@ -103,6 +105,9 @@
                 aid:'',
                 aName:'',
             }
+        },
+        created() {
+            
         },
         methods: {
             switchStatus(target) {
@@ -147,22 +152,12 @@
         background-color: #e8f4ff;
         font-weight: 700;
         height: 37px;
-        width: 370px;
+        /* width: 370px; */
+        padding: 0 20px;
         border-radius: 20px;
         text-align: center;
         line-height: 40px;
         color: #549eff;
-    }
-    .erke-top-head span i {
-        display: inline-block;
-        height: 24px;
-        width: 24px;
-        color: initial;
-        border-radius: 12px;
-        margin-left: -18px;
-        margin-right: 8px;
-        line-height: 28px;
-        background-color: #1890ff;
     }
     .erke-bottom {
         background-color: #fff;

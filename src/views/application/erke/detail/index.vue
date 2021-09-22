@@ -2,8 +2,8 @@
  * @Descripttion: 培养方案详情
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
- * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-31 17:25:47
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-09-20 11:49:21
 -->
 <template>
     <div class="app-container">
@@ -12,7 +12,8 @@
 
             <!--用户数据-->
             <el-col :span="24" :xs="24">
-                <div class="erke-top">
+                 <transition name="el-fade-in-linear">
+                <div class="erke-top" v-show="isFull">
                     <div class="erke-top-head">
                         <router-link to="/application/erke/erkePlan"
                             ><el-button
@@ -105,11 +106,12 @@
                             plain
                             icon="el-icon-download"
                             size="mini"
+                            @click="kaifa"
                             :load="exportLoading"
-                            @click="handleExport"
                             v-hasPermi="['system:user:export']"
                             >导出</el-button
                         >
+                            <!-- @click="handleExport" -->
                         <el-tooltip
                             effect="dark"
                             content="清空查询条件"
@@ -124,9 +126,10 @@
                         </el-tooltip>
                     </div>
                 </div>
-
+                </transition>
                 <div class="erke-bottom">
-                    <div class="erke-buttom-left">
+                    <transition name="el-fade-in-linear">
+                    <div class="erke-buttom-left" v-show="isFull">
                         <el-menu
                             default-active=""
                             class="el-menu-vertical-demo"
@@ -144,17 +147,9 @@
                                 <span slot="title">{{ item.name }}</span>
                             </el-menu-item>
                         </el-menu>
-                        <!-- <ul>
-                            <li
-                                v-for="(item, index) in classificationList"
-                                :key="index"
-                                @click="renderPlanData(item.id)"
-                            >
-                                {{ item.name }}
-                            </li>
-                        </ul> -->
                     </div>
-                    <div class="erke-buttom-right">
+                    </transition>
+                    <div class="erke-buttom-right" ref="erkeButtomRight">
                         <div class="operate">
                             <el-row
                                 :gutter="10"
@@ -162,6 +157,15 @@
                                 type="flex"
                                 justify="space-around"
                             >
+                                <el-col :span="1" style="min-width:40px">
+                                    <el-tooltip
+                                        effect="dark"
+                                        content="表格放大"
+                                        placement="top"
+                                    >
+                                        <el-button @click="changeIsFullState" icon="el-icon-full-screen" circle></el-button>
+                                    </el-tooltip>
+                                </el-col>
                                 <el-col :span="1" style="min-width:80px">
                                     <el-select
                                         style="width: 80px"
@@ -253,14 +257,19 @@
                                         style="width: 120px"
                                         v-model="queryList.departmentId"
                                         placeholder="发布单位：不限"
+                                        @change="fuzzyQuery"
                                     >
                                         <el-option
                                             value="0"
                                             label="发布单位：不限"
                                         ></el-option>
 
-                                        <el-option value="保卫处"></el-option>
-                                        <el-option value="网络中心"></el-option>
+                                        <el-option 
+                                            v-for="(item,index) in deptList"
+                                            :key="index"
+                                            :value="item.deptId"
+                                            :label="item.deptName"
+                                        ></el-option>
                                     </el-select>
                                 </el-col>
 
@@ -311,6 +320,7 @@
                             v-loading="loading"
                             stripe
                             class="detailMainTable"
+                            highlight-current-row
                         >
                             <el-table-column type="selection" min-width="55">
                             </el-table-column>
@@ -325,7 +335,7 @@
                             <el-table-column
                                 prop="name"
                                 label="课程名称"
-                                min-width="200"
+                                min-width="150"
                                 show-overflow-tooltip
                             >
                             </el-table-column>
@@ -333,7 +343,8 @@
                             <el-table-column
                                 prop="trainingProgramId"
                                 label="培养方案"
-                                min-width="150"
+                                min-width="120"
+                                show-overflow-tooltip
                                 :formatter="formatTrainingProgram"
                             >
                             </el-table-column>
@@ -342,6 +353,7 @@
                                 prop="schoolYearName"
                                 label="学年"
                                 min-width="120"
+                                show-overflow-tooltip
                             >
                             </el-table-column>
 
@@ -349,6 +361,7 @@
                                 prop="classificationId"
                                 label="分类"
                                 min-width="150"
+                                show-overflow-tooltip
                                 :formatter="formatClassificationId"
                             >
                             </el-table-column>
@@ -356,7 +369,7 @@
                             <el-table-column
                                 prop="classificationIdPath"
                                 label="分类明细"
-                                min-width="280"
+                                min-width="150"
                                 show-overflow-tooltip
                                 :formatter="formatClassificationDetail"
                             >
@@ -434,7 +447,8 @@
                             >
                             </el-table-column>
 
-                            <el-table-column prop="createUserId" label="创建人">
+                            <!-- 后端还没有数据 -->
+                            <!-- <el-table-column prop="createUserId" label="创建人">
                             </el-table-column>
 
                             <el-table-column prop="updateUserId" label="修改人">
@@ -445,7 +459,7 @@
                                 label="备注"
                                 min-width="200"
                             >
-                            </el-table-column>
+                            </el-table-column> -->
 
                             <el-table-column
                                 prop="operate"
@@ -563,17 +577,11 @@
                                     v-model="addDetailDialog.unitValue"
                                     class="unitValue"
                                 >
-                                    <el-option
-                                        label="校团委"
-                                        value="1"
-                                    ></el-option>
-                                    <el-option
-                                        label="校团委2"
-                                        value="2"
-                                    ></el-option>
-                                    <el-option
-                                        label="校团委3"
-                                        value="3"
+                                   <el-option 
+                                        v-for="(item,index) in deptList"
+                                        :key="index"
+                                        :value="item.deptId"
+                                        :label="item.deptName"
                                     ></el-option>
                                 </el-select>
                             </el-col>
@@ -648,6 +656,7 @@
                             <el-col :span="5">分类：</el-col>
                             <el-col :span="19">
                                 <el-select
+                                    
                                     v-model="
                                         addDetailDialog.config.classificationId
                                     "
@@ -841,7 +850,8 @@
         courseId,
         coursePost,
         coursePut,
-        courseDelete
+        courseDelete,
+        utilListCollege
     } from '@/api/application/secondClass/index'
 
     import { getDict } from '@/api/application/secondClass/dict/type.js'
@@ -856,6 +866,8 @@
         name: 'detail',
         data() {
             return {
+                deptList: [],//指导单位列表
+                isFull: true, //是否全屏
                 /** 学年度列表 */
                 schoolYearList: {
                     value: Number(this.$route.params.sid),
@@ -962,7 +974,7 @@
                         type: '0',
                         status: 0,
                         lowestValue: '',
-                        remark: ''
+                        remark: '',
                     },
                     lowestValueArray: [[1, 1]],
                     //发布单位，现在没用
@@ -1003,6 +1015,18 @@
             }
         },
         methods: {
+            // 控制全屏
+            changeIsFullState() {
+                let height = window.innerHeight
+                    this.isFull = !this.isFull
+                if(!this.isFull) {
+                    this.$refs.erkeButtomRight.style.height = `${height - 50}px`
+                    // this.$refs.erkeButtomRight.style.marginLeft = '0'
+                } else {
+                    this.$refs.erkeButtomRight.style.height = `${height - 260}px`
+                    // this.$refs.erkeButtomRight.style.marginLeft = '228px'
+                }
+            },
             formatDate(row, column, cellValue) {
                 return cellValue != null && format(cellValue)
             },
@@ -1192,15 +1216,6 @@
                     this.addDetailDialog.open = false
                     this.fuzzyQuery()
                 })
-                // ;(function(that) {
-                //     if (that.addDetailDialog.title == '新增')
-                //         return coursePost(that.addDetailDialog.config)
-                //     else return coursePut(that.addDetailDialog.config)
-                // })(this).then(value => {
-                //     // console.log(value, 789789)
-                //     this.addDetailDialog.open = false
-                //     this.fuzzyQuery()
-                // })
             },
             /**
              * @description: 回显
@@ -1398,7 +1413,7 @@
                         validCoun: value.data.validCount
                     }
                     this.courseList = value.data.pageData.list
-
+                    console.error(this.courseList)
                     this.loading = false
                 })
             },
@@ -1409,7 +1424,7 @@
                     trainingProgramId: this.trainingProgramList.value,
                     classificationId: this.classificationList.value,
                     name: this.queryList.name,
-                    departmentId: '',
+                    departmentId: this.queryList.departmentId,
                     joinType: this.queryList.joinType,
                     necessary: this.queryList.necessary,
                     status: this.queryList.status,
@@ -1501,10 +1516,28 @@
             /** 获得当前学年下 当前培养方案下 当前课程分类下 课程列表 */
             this.fuzzyQuery()
 
+            //获得分类列表
             this.getCourseClassificationList()
+
+            //
+            utilListCollege().then(value => {
+                console.error(value)
+                this.deptList = value.data
+            })
         },
         async beforeMount() {},
-        async mounted() {}
+        async mounted() {
+            window.addEventListener('resize',() => {
+                let height = window.innerHeight
+                if(!this.isFull) {
+                    this.$refs.erkeButtomRight.style.height = `${height - 50}px`
+                    this.$refs.erkeButtomRight.style.marginLeft = '0'
+                } else {
+                    this.$refs.erkeButtomRight.style.height = `${height - 260}px`
+                    this.$refs.erkeButtomRight.style.marginLeft = '228px'
+                }
+            })
+        }
     }
 </script>
 
@@ -1545,14 +1578,16 @@
         width: 220px;
         float: left;
         padding: 16px;
+        margin-right: 8px;
         height: calc(100vh - 260px);
         background-color: #fff;
         border: 1px solid #ddd;
         border-radius: 5px;
+        overflow: hidden;
     }
     .erke-buttom-right {
+        transition: all .5s;
         background-color: #fff;
-        margin-left: 225px;
         height: calc(100vh - 260px);
         padding: 16px;
         border: 1px solid #ddd;

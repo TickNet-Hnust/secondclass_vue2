@@ -93,6 +93,7 @@
                         <el-table
                             :data="evaluationList"
                             v-loading="loading"
+                            highlight-current-row
                             class="evaluationMainTable"
                         >
                             <el-table-column type="selection" min-width="55">

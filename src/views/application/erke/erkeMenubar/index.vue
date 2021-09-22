@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:20:23
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-01 19:20:16
+ * @LastEditTime: 2021-09-17 19:17:37
 -->
 <template>
     <div class="menubar">
@@ -18,17 +18,16 @@
             text-color="#333"
             active-text-color="#1890ff"
             :default-active="$route.path"
-            :router="true"
         >
             <el-submenu index="1">
                 <template slot="title">
                     <i class="el-icon-location"></i>
                     <span>课程</span>
                 </template>
-                <el-menu-item index="/application/erke/erkePlan">
+                <el-menu-item index="/application/erke/erkePlan" @click="jump('/application/erke/erkePlan')">
                     培养方案
                 </el-menu-item>
-                <el-menu-item index="/application/erke/erkeStandard">
+                <el-menu-item index="/application/erke/erkeStandard" @click="jump('/application/erke/erkeStandard')">
                     积分标准
                 </el-menu-item>
             </el-submenu>
@@ -37,13 +36,13 @@
                     <i class="el-icon-setting"></i>
                     <span>活动</span>
                 </template>
-                <el-menu-item index="/application/erke/activity"
+                <el-menu-item index="/application/erke/activity" @click="jump('/application/erke/activity')"
                     >活动管理</el-menu-item
                 >
-                <el-menu-item  @click="dev">场地申请</el-menu-item>
-                <el-menu-item  @click="dev">成长记录认证</el-menu-item>
-                <el-menu-item  @click="dev">内容管理</el-menu-item>
-                <el-menu-item  @click="dev">待办管理</el-menu-item>
+                <el-menu-item index="1" @click="dev">场地申请</el-menu-item>
+                <el-menu-item index="2" @click="dev">成长记录认证</el-menu-item>
+                <el-menu-item index="3" @click="dev">内容管理</el-menu-item>
+                <el-menu-item index="4" @click="dev">待办管理</el-menu-item>
             </el-submenu>
         </el-menu>
     </div>
@@ -57,9 +56,12 @@
             return {}
         },
         methods:{
-            dev() {
+            dev(e) {
                 this.msgInfo('该功能正在开发中')
                 return
+            },
+            jump(path) {
+                this.$router.push(path)
             }
         },
         mounted() {

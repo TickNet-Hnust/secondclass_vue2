@@ -1,6 +1,7 @@
 <template>
     <div class="app-container">
-        <div class="erke-top">
+        <transition name="el-zoom-in-top">
+        <div class="erke-top" v-show="isFull">
             <div class="erke-top-head">
                 <span> <i>✈</i> 活动管理</span>
             </div>
@@ -132,14 +133,15 @@
                 </el-row>
             </div>
         </div>
-
-        <div class="erke-bottom">
+        </transition>
+        <div class="erke-bottom" ref="erkeBottom">
             <el-row style="margin-bottom:10px">
                 <el-col class="operation" :span="5">
                     <el-button size="small" type="primary" @click="handleImport"
                         >新增</el-button
                     >
                     <el-button size="small" plain>导出</el-button>
+                    <el-button @click="changeIsFullState" icon="el-icon-full-screen" circle></el-button>
                 </el-col>
                 <el-col :span="19">
                     <el-radio-group
@@ -158,13 +160,38 @@
                     </el-radio-group>
                 </el-col>
             </el-row>
-            <el-table :data="activityData" v-loading="loading">
+            <el-table 
+                :data="activityData" 
+                v-loading="loading"
+                highlight-current-row
+            >
                 <el-table-column
                     prop="id"
                     label="活动ID"
                     fixed="left"
+                    show-overflow-tooltip
                     min-width="80"
                 ></el-table-column>
+
+
+                <el-table-column
+                    prop="name"
+                    label="活动名称"
+                    fixed="left"
+                    min-width="160"
+                    show-overflow-tooltip
+                >
+                    <template slot-scope="scope">
+                        <router-link
+                            class="textBlue"
+                            :to="
+                                '/application/erke/activityDetail/' +
+                                    scope.row.id + '/' + scope.row.name
+                            "
+                            >{{ scope.row.name }}</router-link
+                        >
+                    </template>
+                </el-table-column>
 
                 <el-table-column
                     prop=""
@@ -181,25 +208,6 @@
                 </el-table-column>
 
                 <el-table-column
-                    prop="name"
-                    label="活动名称"
-                    show-overflow-tooltip
-                    fixed="left"
-                    min-width="180"
-                >
-                    <template slot-scope="scope">
-                        <router-link
-                            class="textBlue"
-                            :to="
-                                `/application/erke/activityDetail/
-                                    ${scope.row.id}/${scope.row.name}`
-                            "
-                            >{{ scope.row.name }}</router-link
-                        >
-                    </template>
-                </el-table-column>
-
-                <el-table-column
                     prop="rankId"
                     label="级别"
                     show-overflow-tooltip
@@ -210,15 +218,15 @@
                 <el-table-column
                     prop="schoolYearId"
                     label="学年"
-                    show-overflow-tooltip
                     min-width="110"
+                    show-overflow-tooltip
                     :formatter="formatSchoolYear"
                 ></el-table-column>
 
                 <el-table-column
                     prop="courseClassificationName"
                     label="课程分类"
-                    min-width="240"
+                    min-width="140"
                     show-overflow-tooltip
                 ></el-table-column>
 
@@ -231,7 +239,7 @@
                 <el-table-column
                     prop="maxAdmissionNumber"
                     label="最大报名人数"
-                    min-width="110"
+                    min-width="100"
                 ></el-table-column>
 
                 <el-table-column
@@ -254,7 +262,8 @@
                 <el-table-column
                     prop="createTime"
                     label="发布时间"
-                    min-width="160"
+                    min-width="110"
+                    show-overflow-tooltip
                 ></el-table-column>
 
                 <el-table-column
@@ -266,7 +275,8 @@
                 <el-table-column
                     prop="activityStartTime"
                     label="开始时间"
-                    min-width="160"
+                    min-width="110"
+                    show-overflow-tooltip
                 ></el-table-column>
 
                 <el-table-column
@@ -907,6 +917,7 @@
         },
         data() {
             return {
+                isFull: true, //控制table是否放大
                 dialogImageUrl: '',
                 imageUrl:'',
                 dialogVisible: false,
@@ -1156,6 +1167,16 @@
             }
         },
         methods: {
+            changeIsFullState() {
+                console.log(this.$refs.erkeBottom.style)
+                const height = window.innerHeight
+                if(this.isFull == true) {
+                    this.$refs.erkeBottom.style.height = `${height - 50}px`
+                } else {
+                    this.$refs.erkeBottom.style.height = `${height - 230}px`
+                }
+                    this.isFull = !this.isFull
+            },
             /**
              * @description: 改变活动状态
              * @param {*} row
@@ -1737,10 +1758,14 @@
         },
         mounted() {
             this.$nextTick(() => {
-                // new XScrollbar(document.querySelector('.el-table--scrollable-x .el-table__body-wrapper'),{
-                //     onlyHorizontal:true,
-                //     preventDefault:false
-                // })
+            })
+            window.addEventListener('resize',() => {
+                let height = window.innerHeight
+                if(this.isFull == false) {
+                    this.$refs.erkeBottom.style.height = `${height - 50}px`
+                } else {
+                    this.$refs.erkeBottom.style.height = `${height - 230}px`
+                }
             })
             this.targetOffset = window.innerHeight / 2
         }
@@ -1782,8 +1807,9 @@
         background-color: #1890ff;
     }
     .erke-bottom {
+        transition: all .5s;
         background-color: #fff;
-        max-height: calc(100vh - 230px);
+        height: calc(100vh - 230px);
         border: 1px solid #ddd;
         padding: 15px;
         overflow: auto;

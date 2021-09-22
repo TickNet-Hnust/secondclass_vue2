@@ -255,6 +255,7 @@
                         <el-table
                             :data="enrollList"
                             v-loading="loading"
+                            highlight-current-row
                             class="enrollMainTable"
                         >
                             <el-table-column type="selection" min-width="55">

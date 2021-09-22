@@ -4,6 +4,9 @@
         class="app-wrapper"
         :style="{ '--current-color': theme }"
     >
+        <div class="avatar" @click="logout">
+            注销
+        </div>
         <div
             v-if="device === 'mobile' && sidebar.opened"
             class="drawer-bg"
@@ -38,11 +41,16 @@
 </template>
 
 <script>
+    import XScrollbar from 'x-scrollbar'
     import RightPanel from '@/components/RightPanel'
     import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
     import ResizeMixin from './mixin/ResizeHandler.js'
     import { mapState } from 'vuex'
     import variables from '@/assets/styles/variables.scss'
+    import {
+        getInfo,
+        logout
+    } from '@/api/login.js'
 
     export default {
         name: 'Layout',
@@ -82,7 +90,23 @@
                 this.$store.dispatch('app/closeSideBar', {
                     withoutAnimation: false
                 })
+            },
+            logout() {
+                this.$confirm('确定注销并退出系统吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$store.dispatch('LogOut').then(() => {
+                        location.href = '/index'
+                    })
+                })
             }
+        },
+        mounted() {
+            getInfo().then(value => {
+                console.error(value)
+            })
         }
     }
 </script>
@@ -128,5 +152,20 @@
 
     .mobile .fixed-header {
         width: 100%;
+    }
+    .avatar {
+        cursor: pointer;
+        text-align: center;
+        line-height: 45px;
+        width: 45px;
+        position: fixed;
+        bottom: 7px;
+        border-radius: 5px;
+        background-color: #fff;
+        font-size: 7px;
+        color: #000;
+        left: 7px;
+        height: 45px;
+        z-index: 1111;
     }
 </style>

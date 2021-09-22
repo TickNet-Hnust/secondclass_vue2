@@ -96,6 +96,7 @@
                             :data="flowerList"
                             height="550"
                             class="msgTable"
+                            highlight-current-row
                         >
                             <el-table-column
                                 label="发布者信息"
@@ -105,7 +106,7 @@
                                 <template slot-scope="{ row }">
                                     <img
                                         :src="row.userImage"
-                                        alt="图片失效"
+                                        
                                         class="avatar"
                                     />
                                     <br />{{ row.nickName }} <br />{{
@@ -132,11 +133,10 @@
                                    </div>
                                     <img
                                         v-else
-                                        v-for="(item, index) in row.picture"
+                                        v-for="(item, index) in row.picture.split(';')"
                                         :key="index"
                                         :src="item"
-                                        class="imgs"  
-                                        alt="图片失效"
+                                        class="imgs"
                                     />
                                 </template>
                             </el-table-column>
@@ -376,7 +376,7 @@
                     if (item.picture != null) {
                         this.maxLength = Math.max(
                             this.maxLength,
-                            item.picture.length
+                            item.picture.split(';').length
                         )
                     } else {
                         this.maxLength = 1

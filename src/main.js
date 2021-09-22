@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-25 11:48:26
+ * @LastEditTime: 2021-09-19 15:33:38
  */
 import Vue from 'vue'
 import Cookies from 'js-cookie'
@@ -22,7 +22,7 @@ Vue.use(Menu)
 Vue.use(Icon)
 Vue.use(Anchor)
 Vue.use(Upload)
-import Element from 'element-ui'
+import Element, { Message } from 'element-ui'
 import './assets/styles/element-variables.scss'
 
 import VueViewer from 'v-viewer'
@@ -72,6 +72,10 @@ Vue.prototype.handleTree = handleTree
 Vue.prototype.XScrollbar = XScrollbar
 
 Vue.prototype.alertDialog = alertDialog
+
+Vue.prototype.kaifa = function(msg) {
+    Message.info('该功能正在开发中...')
+}
 
 Vue.prototype.msgSuccess = function(msg) {
     this.$message({ showClose: true, message: msg, type: 'success' })

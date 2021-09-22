@@ -2,8 +2,8 @@
  * @Descripttion: 培养方案
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
- * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-31 14:10:32
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-09-19 15:33:47
 -->
 <template>
     <div class="app-container">
@@ -26,11 +26,11 @@
                     >
                     </el-option>
                 </el-select>
-                <el-button
+                <!-- <el-button
                     style="margin-left: 10px"
                     circle
                     icon="el-icon-refresh"
-                ></el-button>
+                ></el-button> -->
                 <el-button style="margin:0 10px" @click="handleManager"
                     >管理</el-button
                 >
@@ -64,10 +64,11 @@
                         plain
                         icon="el-icon-upload2"
                         size="mini"
-                        @click="handleImport"
+                        @click="kaifa"
                         v-hasPermi="['system:user:import']"
                         >导入</el-button
                     >
+                        <!-- @click="handleImport" -->
                 </el-col>
                 <el-col :span="1.5">
                     <el-button
@@ -75,10 +76,11 @@
                         plain
                         icon="el-icon-download"
                         size="mini"
-                        @click="handleExport"
+                        @click="kaifa"
                         v-hasPermi="['system:user:export']"
                         >导出</el-button
                     >
+                        <!-- @click="handleExport" -->
                 </el-col>
                 <el-col :span="1.5">
                     <el-input
@@ -101,6 +103,7 @@
                 :data="planData"
                 stripe
                 v-loading="loading"
+                highlight-current-row
                 class="erkePlanMainTable"
             >
                 <el-table-column prop="id" label="批次ID" width="80">
@@ -111,9 +114,24 @@
                     min-width="180"
                     :show-overflow-tooltip="true"
                 >
+                    <template slot-scope="scope">
+                        <router-link
+                            :to="
+                                    '/application/erke/detail/' +
+                                        scope.row.schoolYearId +
+                                        '/' +
+                                        scope.row.id
+                            "
+                            style="color:#1890ff"
+                        >
+                         {{scope.row.name}}
+                        </router-link>
+                    </template>
                 </el-table-column>
+
                 <el-table-column prop="schoolYearId" label="学年ID" width="80">
                 </el-table-column>
+                
                 <el-table-column
                     prop="schoolYearId"
                     label="学年"
@@ -171,7 +189,6 @@
                             "
                             >修改</el-button
                         >
-                        <el-button size="mini" type="text" icon="el-icon-view">
                             <router-link
                                 type="info"
                                 :to="
@@ -180,20 +197,14 @@
                                         '/' +
                                         scope.row.id
                                 "
-                                >详情</router-link
+                                >
+                                    <el-button style="margin-left:10px" size="mini" type="text" icon="el-icon-view">
+                                        详情
+                                    </el-button>
+                                </router-link
                             >
-                        </el-button>
-                        <!-- <router-link
-                            type="info"
-                            :to="
-                                '/application/erke/detail/' +
-                                    scope.row.schoolYearId +
-                                    '/' +
-                                    scope.row.id
-                            "
-                            >详情</router-link
-                        > -->
                         <el-button
+                            style="margin-left:10px"
                             size="mini"
                             type="text"
                             icon="el-icon-delete"
@@ -985,6 +996,7 @@
             },
             // 取消按钮
             cancel() {
+                this.managerDialog.open = false
                 this.open = false
                 this.reset()
             },
@@ -1028,8 +1040,15 @@
                 this.preAddplanData.forEach(async item => {
                     trainingProgram(item).then(value => {
                         this.msgSuccess('添加成功')
+                        this.getTrainingProgramList({
+                            pageNum: 1,
+                            pageSize: 10
+                        })
                     })
                 })
+                this.list.value != -1 && (option.schoolYearId = this.list.value)
+                
+                
                 this.cancelAdd()
             },
             submitUpdateForm() {
@@ -1103,7 +1122,7 @@
                     this.queryParams.totalPage =
                         value.total / this.queryParams.pageSize
                     console.log(value, 'trainingProgramList')
-                    console.log(this.queryParams)
+                    
                 })
             },
             /**
@@ -1140,7 +1159,6 @@
             this.queryParams.pageSize = 10
             /* 调用 查询培养方案分页 */
             this.getTrainingProgramList({
-                // schoolYearId: this.list.rows[this.managerDialog.radio].id,
                 pageNum: 1,
                 pageSize: 10
             })
