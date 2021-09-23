@@ -64,7 +64,7 @@
                 />
             </el-menu>
         </el-scrollbar>
-        <span style="width:100px;height:100px">退出登录</span>
+        <span style="">退出登录</span>
     </div>
 </template>
 

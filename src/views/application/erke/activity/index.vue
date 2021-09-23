@@ -316,19 +316,31 @@
                         >
                             取消推荐
                         </el-button>
-                        <br>
                         <el-button
-                            v-for="(item, index) in operation[
-                                scope.row.status
-                            ]"
-                            :key="index"
                             type="text"
                             size="mini"
-                            :icon="item.icon"
-                            @click="changeStatus(scope.row.id, item.status)"
+                            icon="el-icon-close"
+                            
                         >
-                            {{ item.title }}
+                            <el-dropdown >
+                            <span class="">
+                                更多<i class="el-icon-arrow-down el-icon--right"></i>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item 
+                                    v-for="(item, index) in operation[
+                                        scope.row.status
+                                    ]"
+                                    :key="index"
+                                    type="text"
+                                    size="mini"
+                                    :icon="item.icon"
+                                    @click="changeStatus(scope.row.id, item.status)"
+                                > {{ item.title }}</el-dropdown-item>
+                            </el-dropdown-menu>
+                            </el-dropdown>
                         </el-button>
+                         
                     </template>
                 </el-table-column>
             </el-table>
