@@ -29,22 +29,32 @@
                             </el-col>
                         </el-row>
 
-                        <el-row :gutter="20">
+                        <el-row style="margin-bottom: 15px">
+                            <el-col :span="10" style="min-width:900px">
+                                <span class="labelSpan"> 活动分类：</span>
+                                <span class="textSpan">{{
+                                    courseClassificationName
+                                }}</span>
+                            </el-col>
+                        </el-row>
+
+                        <el-row 
+                           v-if="maxLayer==3"
+                          :gutter="20" 
+                          class="ruleInput" >
                             <el-col :span="1" style="min-width:90px">
                                 <span> 积分规则：</span>
                             </el-col>
 
-                            <el-col
-                                :span="1"
-                                style="min-width:280px"
-                                v-for="(item, index) in integrationRule"
-                                :key="index"
+                            <el-col :span="8" style="min-width:300px;margin-bottom:5px;" 
+                            v-for="(item,index) in integrationRule"
+                            :key="index"
                             >
                                 <el-input
+                                    v-if="item.type!=2"
                                     :value="
                                         computedRule(
-                                            item.integralType,
-                                            item.integrationRange
+                                            item.children,
                                         )
                                     "
                                 >
@@ -52,6 +62,86 @@
                                         {{ item.name }}
                                     </template>
                                 </el-input>
+
+                                <el-input
+                                    class="remark"
+                                    v-if="item.type==2"
+                                >
+                                    <template slot="prepend">
+                                        {{ item.name }}
+                                    </template>
+                                </el-input>
+
+                            </el-col>
+                        </el-row>
+                        
+                        <el-row 
+                           v-else-if="maxLayer==1||(maxLayer==2&&integrationRule.children[0].type==2)"
+                          :gutter="20"
+                          class="ruleInput2" 
+                        >
+                            <el-col :span="1" style="min-width:90px">
+                                <span> 积分规则：</span>
+                            </el-col>
+
+                            <el-col :span="18" style="min-width:300px;margin-bottom:5px;" 
+                            >
+                                <el-input
+                                    :value="
+                                        ' '+integrationRule.integrationRange+'分'
+                                    "
+                                    style="margin-bottom:5px"
+                                >
+                                    <template slot="prepend">
+                                        {{ integrationRule.name }}
+                                    </template>
+                                </el-input>
+
+                                <el-input
+                                    class="remark"
+                                    v-for="(item,index) in integrationRule.children"
+                                    :key="index"
+                                >
+                                    <template slot="prepend">
+                                        {{ item.name }}
+                                    </template>
+                                </el-input>
+
+                            </el-col>
+                        </el-row>
+
+                        <el-row 
+                           v-else
+                          :gutter="20" 
+                          class="ruleInput3" >
+                            <el-col :span="1" style="min-width:90px">
+                                <span> 积分规则：</span>
+                            </el-col>
+
+                            <el-col :span="8" style="min-width:300px;margin-bottom:5px;" 
+                            v-for="(item,index) in integrationRule.children"
+                            :key="index"
+                            >
+                                <el-input
+                                    v-if="item.type!=2"
+                                    :value="
+                                        ' '+item.integrationRange+'分'
+                                    "
+                                >
+                                    <template slot="prepend">
+                                        {{ item.name }}
+                                    </template>
+                                </el-input>
+
+                                <el-input
+                                    class="remark"
+                                    v-if="item.type==2"
+                                >
+                                    <template slot="prepend">
+                                        {{ item.name }}
+                                    </template>
+                                </el-input>
+
                             </el-col>
                         </el-row>
 
@@ -257,10 +347,9 @@
                         >
 
                             <el-table-column
-                                prop="id"
-                                label="ID"
-                                min-width="50"
-                            >
+                                 label="ID"
+                                type="index"
+                                width="50">
                             </el-table-column>
 
                             <el-table-column
@@ -287,7 +376,8 @@
                             <el-table-column
                                 prop="reason"
                                 label="申报理由"
-                                min-width="120"
+                                min-width="80"
+                                show-overflow-tooltip
                             >
                             </el-table-column>
 
@@ -312,13 +402,13 @@
                             <el-table-column
                                 prop="applyIntegral"
                                 label="申请积分"
-                                min-width="100"
+                                min-width="72"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 label="申报材料"
-                                :min-width="150"
+                                :min-width="100"
                             >   
                                 <template slot-scope="{ row }">
                                     <div
@@ -340,7 +430,7 @@
                             <el-table-column
                                 prop="confirmIntegral"
                                 label="认定积分"
-                                min-width="100"
+                                min-width="72"
                             >
                             </el-table-column>
 
@@ -365,21 +455,24 @@
                             <el-table-column
                                 prop="confirmUserNickName"
                                 label="认定人"
-                                min-width="100"
+                                min-width="70"
+                                show-overflow-tooltip
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="createTime"
                                 label="申请时间"
-                                min-width="100"
+                                min-width="108"
+                                show-overflow-tooltip
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="confirmTime"
                                 label="认定时间"
-                                min-width="100"
+                                min-width="108"
+                                show-overflow-tooltip
                             >
                             </el-table-column>
 
@@ -387,7 +480,8 @@
                                 prop="operate"
                                 label="操作"
                                 fixed="right"
-                                width="100"
+                                show-overflow-tooltip
+                                width="70"
                             >
                                 <template slot-scope="scope">
                                     <el-button
@@ -927,17 +1021,20 @@
             },
 
             computedRule() {
-                return (integralType, integrationRange) => {
-                    if (integralType == null || integrationRange == null) {
-                        return '积分类型或范围为空'
-                    } else {
-                        return (
-                            '积分项(' +
-                            this.dict_sc_integral_type[integralType] +
-                            '):' +
-                            integrationRange
-                        )
-                    }
+                return (childrens) => {
+                        if(childrens == null||childrens.length==0)
+                           return ;
+                        else{
+                           let array = [];
+                           let str;
+                            childrens.forEach((item=>{
+                                str = item.name+':'+item.integrationRange+'分'
+                                array.push(str)
+                            }))
+                            let arrayStr = array.join('/');
+                            return arrayStr 
+                        }
+
                 }
             },
             //取活动级别字典计算方法
@@ -1251,7 +1348,7 @@
                     this.courseClassificationName =
                         value.data.courseClassificationName
                     this.integralScheme = value.data.integralScheme
-                    await this.getCourseClassificationList(this.courseClassificationId)
+                    await this.getCourseClassificationList(88)
                 })
             },
 

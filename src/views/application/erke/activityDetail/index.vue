@@ -101,7 +101,9 @@
                     pageCount: 1,
                     pageSize: 4
                 },
-                aliveComponent: 'survey'
+                aliveComponent: 'survey',
+                aid:'',
+                aName:'',
             }
         },
         created() {
@@ -119,8 +121,15 @@
             },
             back() {
                 this.$router.push('/application/erke/activity')
+            },
+            getParams() {
+                this.aid = this.$route.params.aid
+                this.aName = this.$route.params.aName
             }
-        }
+        },
+        created(){
+            this.getParams();
+        },
     }
 </script>
 

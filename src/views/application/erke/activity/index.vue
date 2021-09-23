@@ -210,6 +210,7 @@
                 <el-table-column
                     prop="rankId"
                     label="级别"
+                    show-overflow-tooltip
                     min-width="50"
                     :formatter="formatRank"
                 ></el-table-column>
@@ -247,7 +248,7 @@
                     min-width="80"
                 ></el-table-column>
 
-                <el-table-column prop="status" label="状态" min-width="100">
+                <el-table-column prop="status" label="状态" min-width="90">
                     <template slot-scope="scope">
                         <el-button
                             size="mini"

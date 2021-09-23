@@ -187,14 +187,15 @@
                             <el-table-column
                                 prop="id"
                                 label="ID"
-                                min-width="50"
+                                min-width="40"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="nickName"
                                 label="姓名"
-                                min-width="80"
+                                show-overflow-tooltip
+                                min-width="70"
                             >
                             </el-table-column>
 
@@ -208,6 +209,7 @@
                             <el-table-column
                                 prop="className"
                                 label="所在班级"
+                                show-overflow-tooltip
                                 min-width="120"
                             >
                             </el-table-column>
@@ -215,42 +217,47 @@
                             <el-table-column
                                 prop="groupName"
                                 label="群组"
-                                min-width="120"
+                                show-overflow-tooltip
+                                min-width="110"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="prizeType"
                                 label="奖项"
-                                min-width="120"
+                                show-overflow-tooltip
+                                min-width="80"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="prizeName"
                                 label="奖品"
-                                min-width="120"
+                                show-overflow-tooltip
+                                min-width="80"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="number"
                                 label="发放数量"
-                                min-width="100"
+                                min-width="75"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="deliverUserName"
                                 label="发放人"
-                                min-width="120"
+                                show-overflow-tooltip
+                                min-width="70"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="createTime"
                                 label="发放时间"
-                                min-width="120"
+                                show-overflow-tooltip
+                                min-width="104"
                             >
                             </el-table-column>
 
@@ -1033,7 +1040,7 @@
         overflow: hidden;
     }
     .erke-buttom-left {
-        width: 320px;
+        width: 220px;
         float: left;
         padding: 16px;
         height: calc(100vh - 250px);
@@ -1070,7 +1077,7 @@
     }
     .erke-buttom-left .numbers {
         position: absolute;
-        right: -240px;
+        right: -140px;
         width: 20px;
         text-align: center;
         top: 0;
@@ -1078,7 +1085,7 @@
     .erke-buttom-right {
         overflow: auto;
         background-color: #fff;
-        margin-left: 330px;
+        margin-left: 227px;
         height: calc(100vh - 250px);
         padding: 16px;
         border: 1px solid #ddd;

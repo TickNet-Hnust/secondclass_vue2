@@ -264,14 +264,15 @@
                             <el-table-column
                                 prop="id"
                                 label="ID"
-                                min-width="50"
+                                min-width="40"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="nickName"
                                 label="姓名"
-                                min-width="80"
+                                show-overflow-tooltip
+                                min-width="70"
                             >
                             </el-table-column>
 
@@ -285,6 +286,7 @@
                             <el-table-column
                                 prop="className"
                                 label="所在班级"
+                                show-overflow-tooltip
                                 min-width="120"
                             >
                             </el-table-column>
@@ -292,14 +294,15 @@
                             <el-table-column
                                 prop="groupName"
                                 label="群组"
-                                min-width="120"
+                                show-overflow-tooltip
+                                min-width="110"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="enrollStatus"
                                 label="报名状态"
-                                min-width="100"
+                                min-width="90"
                                 :formatter="formatEnrollStatus"
                             >
                                 <template slot-scope="scope">
@@ -319,7 +322,7 @@
                             <el-table-column
                                 prop="admissionStatus"
                                 label="录取状态"
-                                min-width="100"
+                                min-width="90"
                                 :formatter="formatAdmissionStatus"
                             >
                                 <template slot-scope="scope">
@@ -339,21 +342,22 @@
                             <el-table-column
                                 prop="createTime"
                                 label="报名时间"
-                                min-width="100"
+                                show-overflow-tooltip
+                                min-width="104"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="cancelTime"
                                 label="取消报名时间"
-                                min-width="100"
+                                show-overflow-tooltip
+                                min-width="104"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="operate"
                                 label="操作"
-                                fixed="right"
                                 width="50"
                             >
                                 <template slot-scope="scope">
@@ -1172,7 +1176,7 @@
         overflow: hidden;
     }
     .erke-buttom-left {
-        width: 300px;
+        width: 260px;
         float: left;
         padding: 16px;
         height: calc(100vh - 315px);
@@ -1209,7 +1213,7 @@
     }
     .erke-buttom-left .numbers {
         position: absolute;
-        right: -220px;
+        right: -190px;
         width: 20px;
         text-align: center;
         top: 0;
@@ -1217,7 +1221,7 @@
     .erke-buttom-right {
         overflow: auto;
         background-color: #fff;
-        margin-left: 305px;
+        margin-left: 268px;
         height: calc(100vh - 315px);
         padding: 16px;
         border: 1px solid #ddd;
