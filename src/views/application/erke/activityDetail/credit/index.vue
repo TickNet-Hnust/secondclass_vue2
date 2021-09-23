@@ -347,10 +347,9 @@
                         >
 
                             <el-table-column
-                                prop="id"
-                                label="ID"
-                                min-width="50"
-                            >
+                                 label="ID"
+                                type="index"
+                                width="50">
                             </el-table-column>
 
                             <el-table-column
@@ -377,7 +376,8 @@
                             <el-table-column
                                 prop="reason"
                                 label="申报理由"
-                                min-width="120"
+                                min-width="80"
+                                show-overflow-tooltip
                             >
                             </el-table-column>
 
@@ -402,13 +402,13 @@
                             <el-table-column
                                 prop="applyIntegral"
                                 label="申请积分"
-                                min-width="100"
+                                min-width="72"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 label="申报材料"
-                                :min-width="150"
+                                :min-width="100"
                             >   
                                 <template slot-scope="{ row }">
                                     <div
@@ -430,7 +430,7 @@
                             <el-table-column
                                 prop="confirmIntegral"
                                 label="认定积分"
-                                min-width="100"
+                                min-width="72"
                             >
                             </el-table-column>
 
@@ -455,21 +455,24 @@
                             <el-table-column
                                 prop="confirmUserNickName"
                                 label="认定人"
-                                min-width="100"
+                                min-width="70"
+                                show-overflow-tooltip
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="createTime"
                                 label="申请时间"
-                                min-width="100"
+                                min-width="108"
+                                show-overflow-tooltip
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="confirmTime"
                                 label="认定时间"
-                                min-width="100"
+                                min-width="108"
+                                show-overflow-tooltip
                             >
                             </el-table-column>
 
@@ -477,7 +480,8 @@
                                 prop="operate"
                                 label="操作"
                                 fixed="right"
-                                width="100"
+                                show-overflow-tooltip
+                                width="70"
                             >
                                 <template slot-scope="scope">
                                     <el-button
