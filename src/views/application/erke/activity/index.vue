@@ -311,20 +311,19 @@
                         <el-button
                             type="text"
                             size="mini"
+                            
                             v-if="scope.row.recommend == 1"
                             icon="el-icon-close"
                             @click="recommendActivity(scope.row)"
                         >
                             取消推荐
                         </el-button>
-                        <el-button
-                            type="text"
-                            size="mini"
-                            icon="el-icon-close"
-                            
-                        >
-                            <el-dropdown >
-                            <span class="">
+
+                            <el-dropdown 
+                                style="fontSize: 12px;marginLeft:15px"
+                                @command="itemClick"
+                            >
+                            <span style="color:#409EFF;cursor:point">
                                 更多<i class="el-icon-arrow-down el-icon--right"></i>
                             </span>
                             <el-dropdown-menu slot="dropdown">
@@ -336,11 +335,12 @@
                                     type="text"
                                     size="mini"
                                     :icon="item.icon"
-                                    @click="changeStatus(scope.row.id, item.status)"
+                                    :newStatus="scope.row.id"
+                                    :nextStatus="item.status"
                                 > {{ item.title }}</el-dropdown-item>
                             </el-dropdown-menu>
                             </el-dropdown>
-                        </el-button>
+                     
                          
                     </template>
                 </el-table-column>
@@ -900,6 +900,7 @@
         activityPost,
         activityPut,
         activityIdNextStatus,
+        activityId,
         activityRecommendChange,
         schoolYearList,
         trainingProgramDetail,
@@ -1059,7 +1060,6 @@
                 //操作映射
                 operation: [
                     [
-                        { title: '修改', status: 0, icon: 'el-icon-edit' },
                         {
                             title: '申请发布',
                             status: 1,
@@ -1102,7 +1102,7 @@
                         }
                     ],
                     [
-                        { title: '修改', status: 0, icon: 'el-icon-edit' },
+                        { status: 0, icon: 'el-icon-edit' },
                         {
                             title: '取消',
                             status: 4,
@@ -1204,9 +1204,13 @@
             /**
              * @description: 编辑活动
              * @param {*} row
-             */            
-            updateActivity(row) {
-                console.log(row,123)
+             */
+            async updateActivity(row) {
+                await activityId({
+                    id:row.id
+                }).then(value => {
+                    row = value.data
+                })
                 //发布人不能修改
                 //指导老师不能修改
                 Object.keys(this.postData).forEach(key => {
@@ -1215,11 +1219,11 @@
                 this.postData.id = row.id
                 console.log(this.postData,456)
                 this.postFakeData.enrollTime = [new Date(row.enrollStartTime),new Date(row.enrollEndTime)]
-                this.postFakeData.enrollRange = row.enrollRange.split(';').map(item => +item)
+                this.postFakeData.enrollRange = row.enrollRange?.split(';').map(item => +item)
                 this.postFakeData.maxAdmissionNumber = row.maxAdmissionNumber?1:0
-                this.postFakeData.coursePath = row.courseClassificationPath.split(',').map(item => +item)
+                this.postFakeData.coursePath = row.courseClassificationPath?.split(',').map(item => +item)
                 this.getCourseList({
-                    classificationId: this.postFakeData.coursePath[this.postFakeData.coursePath.length - 1]
+                    classificationId: this.postFakeData.coursePath[this.postFakeData?.coursePath?.length - 1]
                 })
                 this.postFakeData.activityTime = [new Date(row.activityStartTime),new Date(row.activityEndTime)]
                 this.postFakeData.registeTimeRadio = row.registeTimeStartTime?1:0
@@ -1521,6 +1525,13 @@
 
                     this.fuzzyQuery()
                 })
+            },
+            itemClick(_,w) {
+                this.changeStatus(
+                    w.$el.getAttribute('newStatus'),
+                    w.$el.getAttribute('nextStatus')
+                )
+                
             },
             handleImport() {
                 this.addActivity.open = true
