@@ -12,7 +12,7 @@
                     <!-- <span>{{name}}</span> -->
                     <span style="max-width:420px; vertical-align: middle;">{{name}}</span>
                 </el-col>
-                <el-col :span="2" style=";padding:10px 0;min-width:630px">
+                <el-col :span="2" style=";padding:13px 0;min-width:630px">
                     <el-radio-group
                         v-model="status"
                         size="mini"
@@ -42,7 +42,7 @@
                         >
                     </el-radio-group>
                 </el-col>
-                <el-col :span="1" style="min-width:130px">
+                <el-col :span="1" style="min-width:130px;padding:8px 0;">
                     <el-button 
                         icon="el-icon-edit" 
                         circle
