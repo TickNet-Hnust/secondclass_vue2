@@ -2,16 +2,17 @@
     <div class="app-container">
         <div class="erke-top">
             <el-row type="flex" justify="space-between">
-                <el-col :span="1" class="erke-top-head" style="min-width:380px">
+                <el-col :span="1" class="erke-top-head" style="min-width:480px" >
                     <el-button
                         icon="el-icon-arrow-left"
                         circle
                         @click="back"
-                        style="marginRight:15px"
+                        style="marginRight:15px;marginBottom:15px"
                     ></el-button>
-                    <span>{{name}}</span>
+                    <!-- <span>{{name}}</span> -->
+                    <span style="max-width:420px; vertical-align: middle;">{{name}}</span>
                 </el-col>
-                <el-col :span="2" style=";padding:10px 0;min-width:630px">
+                <el-col :span="2" style=";padding:13px 0;min-width:630px">
                     <el-radio-group
                         v-model="status"
                         size="mini"
@@ -41,7 +42,7 @@
                         >
                     </el-radio-group>
                 </el-col>
-                <el-col :span="1" style="min-width:130px">
+                <el-col :span="1" style="min-width:130px;padding:8px 0;">
                     <el-button 
                         icon="el-icon-edit" 
                         circle
@@ -158,6 +159,9 @@
         text-align: center;
         line-height: 40px;
         color: #549eff;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
     }
     .erke-bottom {
         background-color: #fff;
