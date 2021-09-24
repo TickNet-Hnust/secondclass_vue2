@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-09-24 12:37:51
+ * @LastEditTime: 2021-09-24 16:55:19
 -->
 <template>
     <div class="app-container">
@@ -1077,11 +1077,13 @@
     }
     .father {
         position: relative;
+        width: 180px;
     }
     .children {
         position: absolute;
         top: 0;
         right: 0;
+        margin-right: 15px;
     }
     .groupAddDialog >>> .el-dialog__body {
         max-height: 50vh;
