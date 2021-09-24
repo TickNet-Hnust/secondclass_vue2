@@ -258,14 +258,14 @@
                             highlight-current-row
                             class="enrollMainTable"
                         >
-                            <el-table-column type="selection" min-width="55">
-                            </el-table-column>
+                            
+                            <!-- <el-table-column type="selection" min-width="55">
+                            </el-table-column> -->
 
                             <el-table-column
-                                prop="id"
                                 label="ID"
-                                min-width="40"
-                            >
+                                type="index"
+                                width="50">
                             </el-table-column>
 
                             <el-table-column
@@ -279,7 +279,8 @@
                             <el-table-column
                                 prop="userName"
                                 label="学号"
-                                min-width="100"
+                                show-overflow-tooltip
+                                min-width="90"
                             >
                             </el-table-column>
 

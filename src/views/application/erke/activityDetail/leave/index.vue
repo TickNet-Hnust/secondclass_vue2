@@ -171,13 +171,11 @@
                             highlight-current-row
                             class="enrollMainTable"
                         >
-                            <el-table-column type="selection" min-width="55">
-                            </el-table-column>
 
                             <el-table-column
                                 prop="id"
-                                label="ID"
-                                min-width="50"
+                                type="index"
+                                min-width="40"
                             >
                             </el-table-column>
 

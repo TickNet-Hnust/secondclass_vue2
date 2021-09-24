@@ -96,54 +96,58 @@
                             highlight-current-row
                             class="evaluationMainTable"
                         >
-                            <el-table-column type="selection" min-width="55">
-                            </el-table-column>
 
                             <el-table-column
                                 prop="id"
-                                label="ID"
-                                min-width="50"
+                                type="index"
+                                min-width="40"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="nickName"
                                 label="姓名"
-                                min-width="80"
+                                show-overflow-tooltip
+                                min-width="40"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="userName"
                                 label="学号"
-                                min-width="100"
+                                show-overflow-tooltip
+                                min-width="60"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="className"
                                 label="所在班级"
-                                min-width="120"
+                                min-width="100"
+                                show-overflow-tooltip
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="groupName"
                                 label="群组"
-                                min-width="120"
+                                show-overflow-tooltip
+                                min-width="100"
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="createTime"
                                 label="评价时间"
-                                min-width="100"
+                                min-width="65"
+                                show-overflow-tooltip
                             >
                             </el-table-column>
 
                             <el-table-column
                                 prop="score"
                                 label="评价"
+                                show-overflow-tooltip
                                 min-width="100"
                             >
                             </el-table-column>
@@ -151,7 +155,7 @@
                             <el-table-column
                                 prop="status"
                                 label="评论发布审核"
-                                min-width="100"
+                                min-width="80"
                                 :formatter="formatEvaluationStatus"
                             >
                                 <template slot-scope="scope">
@@ -172,7 +176,8 @@
                             <el-table-column
                                 prop="content"
                                 label="评论"
-                                min-width="200"
+                                show-overflow-tooltip
+                                min-width="100"
                             >
                             </el-table-column>
 
