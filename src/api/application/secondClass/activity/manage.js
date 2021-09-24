@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-08-05 11:12:10
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-31 16:12:17
+ * @LastEditTime: 2021-09-23 21:06:23
  */
 import request from '@/utils/request.js'
 
@@ -60,6 +60,16 @@ export function activityIdNextStatus({ id, nextStatus }) {
     return request({
         url: `/admins/secondClass/activity/${id}/${nextStatus}`,
         method: 'put'
+    })
+}
+/**
+ * @description: 活动详细
+ * @param {*} id 当前id
+ */
+export function activityId({ id }) {
+    return request({
+        url: `/admins/secondClass/activity/${id}`,
+        method: 'get'
     })
 }
 /**
