@@ -1,6 +1,7 @@
 'use strict'
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
 function resolve(dir) {
     return path.join(__dirname, dir)
@@ -46,13 +47,18 @@ module.exports = {
     configureWebpack: {
         name: name,
         externals: {
-          'wxLogin': 'WwLogin'
+            'wxLogin': 'WwLogin'
         },
         resolve: {
             alias: {
                 '@': resolve('src')
             }
-        }
+        },
+        plugins: [
+            new CompressionWebpackPlugin({
+                test: /\.js|\.css/, // 对匹配的文件类型进行压缩
+            })
+        ]
     },
     chainWebpack(config) {
 

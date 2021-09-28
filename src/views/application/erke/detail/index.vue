@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-20 11:49:21
+ * @LastEditTime: 2021-09-26 13:51:41
 -->
 <template>
     <div class="app-container">
@@ -106,12 +106,11 @@
                             plain
                             icon="el-icon-download"
                             size="mini"
-                            @click="kaifa"
+                            @click="handleExport"
                             :load="exportLoading"
                             v-hasPermi="['system:user:export']"
                             >导出</el-button
                         >
-                            <!-- @click="handleExport" -->
                         <el-tooltip
                             effect="dark"
                             content="清空查询条件"
@@ -851,6 +850,7 @@
         coursePost,
         coursePut,
         courseDelete,
+        courseExport,
         utilListCollege
     } from '@/api/application/secondClass/index'
 
@@ -1159,7 +1159,23 @@
             submitForm() {},
             /** 导出按钮操作 */
             handleExport() {
-                this.exportDialog.open = true
+                // this.exportDialog.open = true
+                const queryParams = this.queryList
+                
+                this.$confirm('是否确认导出所有课程数据项?', '警告', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.exportLoading = true
+                        return courseExport(queryParams)
+                    })
+                    .then(response => {
+                        this.download(response.msg)
+                        this.exportLoading = false
+                    })
+                    .catch(() => {})
             },
             /** 导入按钮操作 */
             handleImport() {
