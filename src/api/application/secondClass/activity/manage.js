@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-08-05 11:12:10
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-23 21:06:23
+ * @LastEditTime: 2021-10-05 20:14:15
  */
 import request from '@/utils/request.js'
 
@@ -81,5 +81,45 @@ export function activityRecommendChange({ id, isRecomment }) {
     return request({
         url: `/admins/secondClass/activity/recommendChange/${id}/${isRecomment}`,
         method: 'put'
+    })
+}
+
+/**
+ * @description: 获得培养方案列表
+ */
+export function ActivityTrainingProgramList() {
+    return request({
+        url: `/secondClass/trainingProgram/list`,
+        method: 'get'
+    })
+}
+/**
+ * @description: 根据大类选择下一级积分标准
+ */
+export function ActivityListByParentId(params) {
+    return request({
+        url: `/secondClass/courseClassification/listByParentId`,
+        method: 'get',
+        params
+    })
+}
+/**
+ * @description: 根据参数查询课程
+ * @param {*} params
+ */
+export function ActivityCourseList(params) {
+    return request({
+        url: `/secondClass/course/list`,
+        method: 'get',
+        params
+    })
+}
+/**
+ * @description: 获得当前学年
+ */
+export function ActivityNowYear() {
+    return request({
+        url: `/secondClass/schoolYear/nowYear`,
+        method: 'get'
     })
 }

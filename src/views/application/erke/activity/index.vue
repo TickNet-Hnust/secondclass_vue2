@@ -441,7 +441,8 @@
                             ></el-autocomplete>
                         </el-form-item>
 
-                        <el-form-item label="学年：">
+                        <!-- 当前学年 -->
+                        <!-- <el-form-item label="学年：">
                             <el-select
                                 v-model="postData.schoolYearId"
                                 placeholder="请选择学年"
@@ -453,7 +454,7 @@
                                     :label="item.yearName"
                                 ></el-option>
                             </el-select>
-                        </el-form-item>
+                        </el-form-item> -->
 
                         <el-form-item label="报名信息" class="bold"
                             ><a id="bm"></a
@@ -594,63 +595,71 @@
                                 ></el-option>
                             </el-select>
                         </el-form-item>
-
-                        <el-form-item label="活动标签：" class="dialogTags">
-                            <el-input v-model="postData.activityTag"></el-input>
-                            <!-- <el-tag
-                                :key="tag"
-                                v-for="tag in postFakeData.activityTag"
-                                closable
-                                :disable-transitions="false"
-                                @close="activityHandleClose(tag)"
-                            >
-                                {{ tag }}
-                            </el-tag>
-                            <el-input
-                                class="input-new-tag"
-                                v-if="activityTags.inputVisible"
-                                v-model="activityTags.inputValue"
-                                ref="activitySaveTagInput"
-                                size="small"
-                                @keyup.enter.native="activityHandleInputConfirm"
-                                @blur="activityHandleInputConfirm"
-                            >
-                            </el-input>
-                            <el-button
-                                v-else
-                                class="button-new-tag"
-                                size="small"
-                                @click="activityShowInput"
-                                >+</el-button
-                            > -->
-                        </el-form-item>
-
-                        <el-form-item label="积分分类：">
-                            <el-cascader
-                                v-model="postFakeData.coursePath"
-                                :options="datadata"
-                                
-                                :show-all-levels="false"
-                                class="activityCascader"
-                                @change="handChangeNodePost"
-                                placeholder="请选择课程分类"
-                            ></el-cascader>
                         
 
-                        </el-form-item>
-                        <el-form-item label="课程分类：">
+                        <el-form-item label="培养方案：">
                             <el-select
-                                v-model="postData.courseId"
-                                placeholder="请先选择分类"
+                                v-model="postFakeData.trainingProgramId"
+                                placeholder="请选择培养方案"
                             >
-                                <!-- <el-option label="无" value=""></el-option> -->
                                 <el-option
-                                    v-for="(item, index) in courseList"
+                                    v-for="(item,
+                                    index) in trainingProgramList"
                                     :key="index"
                                     :value="item.id"
                                     :label="item.name"
                                 ></el-option>
                             </el-select>
+                        </el-form-item>
+
+                        <el-form-item label="积分分类：">
+                            <el-select
+                                v-model="postData.courseClassificationId"
+                                placeholder="请选择积分分类"
+                            >
+                                <el-option
+                                    v-for="(item,
+                                    index) in datadata"
+                                    :key="index"
+                                    :value="item.id"
+                                    :label="item.name"
+                                ></el-option>
+                            </el-select>
+                        </el-form-item>
+
+                        <el-form-item label="课程：">
+                            <el-select
+                                v-model="postData.courseId"
+                                placeholder="请先选择培养方案和积分分类"
+                            >
+                                <el-option
+                                    v-for="(item,
+                                    index) in courseListNew"
+                                    :key="index"
+                                    :value="item.id"
+                                    :label="item.name"
+                                ></el-option>
+                            </el-select>
+                        </el-form-item>
+
+                        <el-form-item label="二级积分：">
+                            <el-select
+                                v-model="postFakeData.classificationIdTwo"
+                                placeholder="请先选择分类"
+                            >
+                                <!-- <el-option label="无" value=""></el-option> -->
+                                <el-option
+                                    v-for="(item, index) in classificationTwoList"
+                                    :key="index"
+                                    :value="item.id"
+                                    :label="item.name"
+                                ></el-option>
+                            </el-select>
+                        </el-form-item>
+                        
+                        <el-form-item label="活动标签：" class="dialogTags">
+                            <el-input v-model="postData.activityTag"></el-input>
+
                         </el-form-item>
 
                         <el-form-item label="积分方案：">
@@ -902,6 +911,10 @@
         activityIdNextStatus,
         activityId,
         activityRecommendChange,
+        ActivityTrainingProgramList,
+        ActivityListByParentId,
+        ActivityCourseList,
+        ActivityNowYear,
         schoolYearList,
         trainingProgramDetail,
         courseClassificationList,
@@ -935,8 +948,16 @@
                 imageUrl:'',
                 dialogVisible: false,
                 disabled: false,
-                courseList: [],
+                nowYear:'', //当前学年
+                courseList: [], //从llq缓存拿课程
+                courseListNew: [], //新的课程列表
+                trainingProgramList:[],
+                classificationTwoList:[],//二级分类列表
                 postFakeData: {
+                    trainingProgramId:'',
+                    classificationId:'',
+                    classificationIdTwo:'', //二级分类
+                    courseId:'',
                     activityTag: [],
                     maxAdmissionNumber: 0,
                     registeTime: [],
@@ -1176,6 +1197,21 @@
                     ]
                 ],
                 imgUrls: ''
+            }
+        },
+        watch:{
+            'postFakeData.trainingProgramId'() {
+                this.findCourse()
+            },
+            'postData.courseClassificationId'(nv,ov) {
+                this.findCourse()
+                this.findClassificationTwoList(nv)
+            },
+            'postFakeData.classificationIdTwo'(nv) {
+                this.postData.courseClassificationPath = this.postData.courseClassificationId + '、'+ nv
+                let nameFront = this.datadata.find(item => item.id == this.postData.courseClassificationId).name
+                let nameEnd = this.classificationTwoList.find(item => item.id == nv).name
+                this.postData.courseClassificationName = `${nameFront}、${nameEnd}`
             }
         },
         methods: {
@@ -1573,7 +1609,7 @@
                     images: '', //活动素材
                     enclosure: '', //相关附件链接
                     activityIntroduce: '', //活动介绍
-                    schoolYearId: ''
+                    schoolYearId: this.nowYear
                 }
                 this.postFakeData.enrollTime = []
                 this.postFakeData.enrollRange = ''
@@ -1756,6 +1792,26 @@
                     option.params.endCreateTime = fuckMan[1]
                 }
                 this.getActivityList(option)
+            },
+            findCourse() {
+                if(this.postData.courseClassificationId && this.postData.schoolYearId && this.postFakeData.trainingProgramId)  {
+                    ActivityCourseList({
+                        classificationId: this.postData.courseClassificationId,
+                        schoolYearId: this.nowYear,
+                        status: 1,
+                        rank: 0, //todo ,现在假设都是院级
+                        trainingProgramId: this.postFakeData.trainingProgramId
+                    }).then(value => {
+                        this.courseListNew = value.data
+                    })
+                }
+            },
+            findClassificationTwoList(value) {
+                ActivityListByParentId({
+                    pid: value
+                }).then(value => {
+                    this.classificationTwoList = value.data
+                })
             }
         },
         computed: {
@@ -1778,6 +1834,16 @@
                 this.deptList = value.data
                 console.log(value, 'deptlist')
             })
+            //获得培养方案列表
+            ActivityTrainingProgramList().then(value => {
+                this.trainingProgramList = value.data
+            })
+            //获取当前学年
+            ActivityNowYear().then(value => {
+                this.nowYear = Object.keys(value.data)[0]
+                this.postData.schoolYearId = this.nowYear
+            })
+            
         },
         mounted() {
             this.$nextTick(() => {
