@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-28 14:18:40
+ * @LastEditTime: 2021-10-05 16:18:09
 -->
 <template>
     <div class="app-container">
@@ -366,7 +366,7 @@
                                 show-overflow-tooltip
                             >
                             </el-table-column>
-
+                            <!-- todo 分类应该有name，而不是从id里面过滤 -->
                             <el-table-column
                                 prop="classificationId"
                                 label="分类"
@@ -376,14 +376,14 @@
                             >
                             </el-table-column>
 
-                            <el-table-column
+                            <!-- <el-table-column
                                 prop="classificationIdPath"
                                 label="分类明细"
                                 min-width="150"
                                 show-overflow-tooltip
                                 :formatter="formatClassificationDetail"
                             >
-                            </el-table-column>
+                            </el-table-column> -->
 
                             <el-table-column
                                 prop="joinType"
@@ -584,7 +584,7 @@
                             <el-col :span="6">发布单位：</el-col>
                             <el-col :span="18">
                                 <el-select
-                                    v-model="addDetailDialog.unitValue"
+                                    v-model="addDetailDialog.config.departmentId"
                                     class="unitValue"
                                 >
                                    <el-option 
@@ -711,10 +711,10 @@
                     </el-col>
                 </el-row>
 
-                <el-row :gutter="4">
+                <!-- <el-row :gutter="4">
                     <el-col :span="3"> 分类明细： </el-col>
                     <el-col :span="5.5">
-                        <!-- :props="{ checkStrictly: true }" -->
+                        
                         <el-cascader
                             :options="datadata"
                             :value="
@@ -725,7 +725,7 @@
                             @change="handleNodeChange"
                         ></el-cascader>
                     </el-col>
-                </el-row>
+                </el-row> -->
 
                 <el-row>
                     <el-col :span="3"> 积分下限要求： </el-col>
@@ -762,10 +762,6 @@
                                 <span
                                     class="addOrMine"
                                     @click="mineLowest(index)"
-                                    v-show="
-                                        addDetailDialog.lowestValueArray
-                                            .length != 1
-                                    "
                                     >-</span
                                 >
                             </el-col>
@@ -1042,17 +1038,19 @@
                         trainingProgramId: 8,
                         name: '',
                         classificationId: '',
-                        classificationIdPath: '',
-                        joinType: '0',
+                        classificationName: '',
+                        // classificationIdPath: '',
+                        joinType: '',
                         necessary: 1,
-                        type: '0',
+                        type: '',
                         status: 0,
                         lowestValue: '',
                         remark: '',
+                        departmentId: '', //发布单位Id
+                        departmentName: '', //发布单位Name
                     },
                     lowestValueArray: [[1, 1]],
                     //发布单位，现在没用
-                    unitValue: '1'
                 },
                 /** 分类树 */
                 datadata: [],
@@ -1062,6 +1060,15 @@
                 exportLoading: false,
                 // 表单参数，以后有用
                 form: {}
+            }
+        },
+        watch:{
+            'addDetailDialog.config.classificationId'(nval,oval) {
+                console.log(nval,oval)
+                this.addDetailDialog.config.classificationName = this.classificationList.rows.find(item => item.id == nval).name
+            },
+            'addDetailDialog.config.departmentId'(nval,oval) {
+                this.addDetailDialog.config.departmentName = this.deptList.find(item => item.deptId == nval).deptName
             }
         },
         computed: {
@@ -1198,18 +1205,20 @@
             reset() {
                 this.addDetailDialog.config = {
                     id: null,
-                    schoolYearId: 0,
+                    schoolYearId: this.$route.params.sid,
                     schoolYearName: '',
-                    trainingProgramId: 8,
+                    trainingProgramId: this.$route.params.tid,
                     name: '',
                     classificationId: '',
-                    classificationIdPath: '',
-                    joinType: '0',
+                    classificationName: '',
+                    joinType: '',
                     necessary: 1,
-                    type: '0',
+                    type: '',
                     status: 0,
                     lowestValue: '',
-                    remark: ''
+                    remark: '',
+                    departmentId: '', //发布单位Id
+                    departmentName: '', //发布单位Name
                 }
                 this.addDetailDialog.lowestValueArray = [[1, 1]]
             },
@@ -1282,8 +1291,7 @@
                     .map(item => {
                         return item.join(':')
                     })
-                    .join(',')
-
+                    .join(',') 
                 let state =
                     this.addDetailDialog.title == '新增'
                         ? coursePost
