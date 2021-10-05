@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-26 13:57:16
+ * @LastEditTime: 2021-09-28 14:18:10
  */
 import request from '@/utils/request.js'
 
@@ -41,10 +41,16 @@ export function courseDelete(id) {
     })
 }
 
-export function courseExport(query) {
+export function courseExport({ id }) {
     return request({
-        url: `/admins/secondClass/course/export/8`,
-        method: 'get',
-        params: query
+        url: `/admins/secondClass/course/export/${id}`,
+        method: 'get'
+    })
+}
+
+export function courseTemplate() {
+    return request({
+        url: '/admins/secondClass/course/importTemplate',
+        method: 'get'
     })
 }

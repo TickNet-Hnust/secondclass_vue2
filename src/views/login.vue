@@ -86,6 +86,7 @@
 </template>
 
 <script>
+    import querystring from 'querystring'
     import { getCodeImg } from '@/api/login'
     import Cookies from 'js-cookie'
     import { encrypt, decrypt } from '@/utils/jsencrypt'
@@ -107,7 +108,7 @@
                 cookiePassword: '',
                 loginForm: {
                     username: 'admin',
-                    password: 'admin123',
+                    password: 'ticknet666',
                     rememberMe: false,
                     code: '',
                     uuid: ''
@@ -142,33 +143,35 @@
         },
         mounted() {
             // TODO Update
-            WwLogin({
-                id: 'wxLogin',
-                appid: 'wx6219dbfa9b86489e',
-                agentid: '1000054',
-                scope: 'snsapi_login',
-                redirect_uri:'https://secondclass.ticknet.hnust.cn',
-                state: '',
-                href: ''
-            }),
-                console.log(
-                    encodeURIComponent(window.location.href),
-                    'window.location.href的值'
-                )
-            console.log(window.location.href)
-            console.log('http://www.loxg.top/login?redirect=/home')
-            console.log(encodeURIComponent('http://www.loxg.top/loginByCode/'))
-            console.log('http://www.loxg.top/loginByCode/')
+            // WwLogin({
+            //     id: 'wxLogin',
+            //     appid: 'wx6219dbfa9b86489e',
+            //     agentid: '1000054',
+            //     scope: 'snsapi_login',
+            //     redirect_uri:'https://secondclass.ticknet.hnust.cn',
+            //     state: '',
+            //     href: ''
+            // })
+            var wwLogin = new WwLogin({
+                    "id": "wxLogin",  
+                    "appid": "wx6219dbfa9b86489e",
+                    "agentid": "1000054",
+                    "redirect_uri": "https://secondclass.ticknet.hnust.cn",
+                    "state": "",
+                    "href": "",
+                    "lang": "zh",
+            });
         },
         watch: {
             $route: {
                 handler: function(route) {
                     this.redirect = route.query && route.query.redirect
                     const query = route.query
+                    // debugger
                     if (query) {
                         this.redirect = query.redirect
-                        let code = query.code
-                        console.log('code:', code)
+                        let code = querystring.parse(location.href)['https://secondclass.ticknet.hnust.cn/?code']
+                        console.log('code123:', code)
                         if (code) {
                             this.$store
                                 .dispatch('LoginByCode', code)
@@ -182,6 +185,10 @@
                                                 .catch(() => {})
                                         })
                                     })
+                                    // setTimeout(() => {
+                                        
+                                        window.location.href = 'http://secondclass.ticknet.hnust.cn'
+                                    // },5000)
                                 })
                                 .catch(() => {
                                     this.loading = false

@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-08-04 16:19:11
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-28 11:02:04
+ * @LastEditTime: 2021-10-02 14:03:05
  */
 // import { getUUID } from '@/utils/utils'
 import request from '@/utils/request.js'
@@ -82,13 +82,14 @@ export function upload(ossData, file, ossFileUrl) {
         // }).then(res => {
         // param.append('file', res)
     param.append('file', file.file)
-    debugger
+        // .post('http://localhost:8080/utils/imgSecCheck', param, {
+        //         headers: {
+        //             'Authorization': 'eyJhbGciOiJIUzUxMiJ9.eyJsb2dpbl91c2VyX2tleSI6ImExM2QxMmFkLTMzY2EtNGRmNS05YzE4LTJkNjQyNjdhMzZhYiJ9.0SfhI3qg4_fHRDUNZ5QLbJzsHZKo7DZEV4c3CnllJe75am70vD2SFIvcgIF8hpDmMLRiAUzPrKwYBla8xB42_g'
+        //         }
+        //     })
+        // debugger
     return axios
-        .post('http://localhost:8080/utils/imgSecCheck', param, {
-            headers: {
-                'Authorization': 'eyJhbGciOiJIUzUxMiJ9.eyJsb2dpbl91c2VyX2tleSI6ImExM2QxMmFkLTMzY2EtNGRmNS05YzE4LTJkNjQyNjdhMzZhYiJ9.0SfhI3qg4_fHRDUNZ5QLbJzsHZKo7DZEV4c3CnllJe75am70vD2SFIvcgIF8hpDmMLRiAUzPrKwYBla8xB42_g'
-            }
-        })
+        .post(host, param)
         .then(res => {
             console.error(res, '图片返回的信息')
             return Promise.resolve(res)
