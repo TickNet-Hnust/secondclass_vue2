@@ -115,7 +115,7 @@
                                 </template>
                             </el-table-column>
 
-                            <el-table-column label="发布内容" width="700">
+                            <el-table-column label="发布内容" min-width="100" show-overflow-tooltip>
                                 <template slot-scope="{ row }">
                                     {{ row.content }}
                                 </template>

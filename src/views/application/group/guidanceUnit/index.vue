@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 13:04:02
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-08-18 23:45:24
+ * @LastEditTime: 2021-09-24 12:35:26
 -->
 <template>
     <div class="app-container">
@@ -38,7 +38,7 @@
                         >
                     </el-col>
 
-                    <el-col :span="1" style="min-width:290px">
+                    <el-col :span="1" style="min-width:300px">
                         <el-form-item label="单位名称:">
                             <el-input
                                 size="mini"
@@ -63,30 +63,36 @@
             </el-form>
 
             <el-table :data="guidanceList">
+                
                 <el-table-column type="index"> </el-table-column>
 
                 <el-table-column
                     prop="deptName"
                     label="单位名称"
                     min-width="100"
+                    show-overflow-tooltip
                 >
                 </el-table-column>
 
                 <el-table-column
                     prop="type"
                     label="类别"
-                    min-width="100"
+                    min-width="70"
                     :formatter="formatType"
                 >
                 </el-table-column>
 
-                <el-table-column prop="deptId" label="单位号" min-width="100">
+                <el-table-column 
+                  prop="deptId" 
+                  label="单位号" 
+                  min-width="60"
+                >
                 </el-table-column>
 
                 <el-table-column
                     prop="orderNum"
                     label="同类排序"
-                    min-width="100"
+                    min-width="60"
                 >
                 </el-table-column>
 
@@ -94,13 +100,14 @@
                     prop="parentName"
                     label="所属学校"
                     min-width="100"
+                    show-overflow-tooltip=""
                 >
                 </el-table-column>
 
                 <el-table-column
                     prop="status"
                     label="状态"
-                    min-width="100"
+                    min-width="70"
                     :formatter="formatStatus"
                 >
                     <template slot-scope="scope">
@@ -117,14 +124,16 @@
                 <el-table-column
                     prop="createTime"
                     label="创建时间"
-                    min-width="150"
+                    min-width="70"
+                    show-overflow-tooltip=""
                 >
                 </el-table-column>
 
                 <el-table-column
                     prop="updateTime"
                     label="更新时间"
-                    min-width="150"
+                    min-width="70"
+                    show-overflow-tooltip=""
                 >
                 </el-table-column>
 

@@ -2,8 +2,8 @@
  * @Descripttion: 培养方案详情
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-01 18:37:58
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-09-24 16:55:19
 -->
 <template>
     <div class="app-container">
@@ -246,7 +246,7 @@
                                         </el-form-item>
                                     </el-col>
 
-                                    <el-col :span="1" style="min-width:270px">
+                                    <el-col :span="1" style="min-width:300px">
                                         <el-form-item label="状态">
                                             <el-select
                                                 v-model="queryList.status"
@@ -361,11 +361,14 @@
                             <el-table-column
                                 label="学号"
                                 prop="leaderUserName"
+                                min-width="105px"
+                                show-overflow-tooltip=""
                             ></el-table-column>
 
                             <el-table-column
                                 label="成员数"
                                 prop="memberNumber"
+                                min-width="80px"
                             ></el-table-column>
 
                             <el-table-column
@@ -388,12 +391,14 @@
                             <el-table-column
                                 label="更新时间"
                                 prop="updateTime"
-                                min-width="120"
+                                min-width="108"
+                                show-overflow-tooltip=""
                             ></el-table-column>
 
                             <el-table-column
                                 label="推荐群组"
                                 prop="recommend"
+                                show-overflow-tooltip=""
                                 :formatter="formatRecommend"
                             >
                                 <template slot-scope="scope">
@@ -1072,11 +1077,13 @@
     }
     .father {
         position: relative;
+        width: 180px;
     }
     .children {
         position: absolute;
         top: 0;
         right: 0;
+        margin-right: 15px;
     }
     .groupAddDialog >>> .el-dialog__body {
         max-height: 50vh;
