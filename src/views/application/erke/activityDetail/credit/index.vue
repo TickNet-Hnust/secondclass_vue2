@@ -38,8 +38,22 @@
                             </el-col>
                         </el-row>
 
+                         <el-row 
+                           v-if="maxLayer==0"
+                          :gutter="20" 
+                          class="ruleInput" >
+                            <el-col :span="1" style="min-width:90px">
+                                <span> 积分规则：</span>
+                            </el-col>
+
+                            <el-col :span="8" style="min-width:300px;margin-bottom:5px;" 
+                            >
+                            该活动无积分规则
+                            </el-col>
+                        </el-row>
+                        
                         <el-row 
-                           v-if="maxLayer==3"
+                           v-else-if="maxLayer==3"
                           :gutter="20" 
                           class="ruleInput" >
                             <el-col :span="1" style="min-width:90px">
@@ -866,6 +880,7 @@
             return {
                 count:0,
                 timer:0,
+                courseClassificationPath:'',
                 //积分规则数组:
                 integrationRule: [],
                 //单个认定报名会话框表单参数form
@@ -1348,7 +1363,10 @@
                     this.courseClassificationName =
                         value.data.courseClassificationName
                     this.integralScheme = value.data.integralScheme
-                    await this.getCourseClassificationList(88)
+                    this.courseClassificationPath = value.data.courseClassificationPath
+                    let currentCourseClassificationId = this.courseClassificationPath.split('、')[1]
+                    console.log(currentCourseClassificationId,'截取的活动分类id')
+                    await this.getCourseClassificationList(+currentCourseClassificationId)
                 })
             },
 
@@ -1421,23 +1439,33 @@
                 })
             },
             getCourseClassificationList(id) {
+                console.log(id,'传来的id')
                 let courseUpdateTime = localStorage.getItem('courseUpdateTime')
                 courseClassificationUpdateTime().then(value=>{
                     if(courseUpdateTime===value.data)
                     {
                         console.log('使用了local的缓存');
                         let courseList = JSON.parse(localStorage.getItem('courseList'))
+
+                        console.log(courseList,'存储的课程分类')
                         courseList.forEach((item)=>{
-                            if(item.id===id)
+                            if(item.id==id)
                             {
+                                console.log('1111111111111111111')
                                 this.currentCourseClassification = JSON.parse(JSON.stringify(item));
+                                console.log(item,'if内部当前积分分类,item')
+                                console.log(this.currentCourseClassification,'if内部当前积分分类,currentCourseClassification')
                             }
                         })
+                        
+                        console.log(this.currentCourseClassification,'当前积分分类')
+
                         this.filterCourseClassificationList =
                         filterCourseClassificationList2(courseList,this.currentCourseClassification,id);
+
                         console.log(this.filterCourseClassificationList,'过滤完的课程分类');
                         this.maxLayer = this.filterCourseClassificationList.maxLayer;
-
+                        console.log(this.maxLayer,'最大层级')
                         // 积分在第三层
                         if(this.maxLayer==3)
                         {
