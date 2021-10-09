@@ -49,6 +49,12 @@ module.exports = {
         externals: {
             'wxLogin': 'WwLogin'
         },
+        module: {
+            rules: [{
+                resourceQuery: /blockType=docs/,
+                loader: require.resolve('./docs-loader.js')
+            }]
+        },
         resolve: {
             alias: {
                 '@': resolve('src')
