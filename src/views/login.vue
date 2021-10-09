@@ -349,7 +349,3 @@
         height: 38px;
     }
 </style>
-
-<docs>
-This is the documentation for component B.
-</docs>
