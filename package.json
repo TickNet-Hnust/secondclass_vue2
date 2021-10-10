@@ -1,5 +1,5 @@
 {
-    "name": "ruoyi",
+    "name": "secondclass",
     "version": "3.5.0",
     "description": "第二课堂管理端",
     "author": "若依",
@@ -36,7 +36,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://gitee.com/y_project/RuoYi-Vue.git"
+        "url": "https://https://gitlab.com/mingyuefusu/second_class_front"
     },
     "dependencies": {
         "@riophae/vue-treeselect": "0.4.0",
