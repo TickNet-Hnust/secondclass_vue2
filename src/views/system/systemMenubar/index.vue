@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-24 17:39:29
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-07-24 17:51:07
+ * @LastEditTime: 2021-10-10 18:08:26
 -->
 <template>
     <div class="menubar">
@@ -20,35 +20,35 @@
             :default-active="$route.path"
             :router="true"
         >
-            <el-menu-item index="/system/user">
+            <el-menu-item index="/system/user" v-hasPermi="['system:user']">
                 <i class="el-icon-user"></i>
                 <template slot="title">用户管理</template>
             </el-menu-item>
-            <el-menu-item index="/system/role">
+            <el-menu-item index="/system/role" v-hasPermi="['system:role']">
                 <i class="el-icon-user"></i>
                 <template slot="title">角色管理</template>
             </el-menu-item>
-            <el-menu-item index="/system/menu">
+            <el-menu-item index="/system/menu" v-hasPermi="['system:menu']">
                 <i class="el-icon-user"></i>
                 <template slot="title">菜单管理</template>
             </el-menu-item>
-            <el-menu-item index="/system/dept">
+            <!-- <el-menu-item index="/system/dept">
                 <i class="el-icon-user"></i>
                 <template slot="title">部门管理</template>
-            </el-menu-item>
-            <el-menu-item index="/system/post">
+            </el-menu-item> -->
+            <el-menu-item index="/system/post" v-hasPermi="['system:post']">
                 <i class="el-icon-user"></i>
                 <template slot="title">岗位管理</template>
             </el-menu-item>
-            <el-menu-item index="/system/dict">
+            <el-menu-item index="/system/dict" v-hasPermi="['system:dict']">
                 <i class="el-icon-user"></i>
                 <template slot="title">字典管理</template>
             </el-menu-item>
-            <el-menu-item index="/system/config">
+            <el-menu-item index="/system/config" v-hasPermi="['system:user']">
                 <i class="el-icon-user"></i>
                 <template slot="title">参数管理</template>
             </el-menu-item>
-            <el-menu-item index="/system/notice">
+            <el-menu-item index="/system/notice" v-hasPermi="['system:notice']">
                 <i class="el-icon-user"></i>
                 <template slot="title">通知管理</template>
             </el-menu-item>
@@ -58,6 +58,7 @@
 
 <script>
     /*6.2lsh修改*/
+    import store from '@/store'
     export default {
         name: 'erkeMenubar',
         data() {
@@ -65,6 +66,9 @@
         },
         mounted() {
             // console.log(this.$router,this.$route)
+            const permissions = store.getters && store.getters.permissions
+            console.log(permissions,123)
+            
         }
     }
 </script>
