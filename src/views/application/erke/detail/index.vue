@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-05 16:18:09
+ * @LastEditTime: 2021-10-10 13:38:19
 -->
 <template>
     <div class="app-container">
@@ -951,7 +951,7 @@
                     headers: { Authorization: 'Bearer ' + getToken() },
                     // 上传的地址
                     url:
-                        'http://localhost:8080' + `/admins/secondClass/course/importData/${this.$route.params.tid}`
+                        process.env.VUE_APP_BASE_API + `/admins/secondClass/course/importData/${this.$route.params.tid}`
                 },
                 /** 课程列表 */
                 courseList: [],
