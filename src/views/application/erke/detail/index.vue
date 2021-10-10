@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-10 13:38:19
+ * @LastEditTime: 2021-10-10 19:28:25
 -->
 <template>
     <div class="app-container">
@@ -40,7 +40,7 @@
                                 </el-option>
                             </el-select>
 
-                            培养方案：<el-select
+                            <!-- 培养方案：<el-select
                                 v-model="trainingProgramList.value"
                                 @change="fuzzyQuery"
                                 placeholder="请选择"
@@ -53,7 +53,7 @@
                                     :value="item.id"
                                 >
                                 </el-option>
-                            </el-select>
+                            </el-select> -->
                         </div>
 
                         <div style="margin-bottom: 10px" class="noneInput">
@@ -92,7 +92,6 @@
 
                         <el-button
                             type="primary"
-                            :disabled="trainingProgramList.value == ''"
                             plain
                             icon="el-icon-plus"
                             size="mini"
@@ -1035,7 +1034,7 @@
                         id: null,
                         schoolYearId: 0,
                         schoolYearName: '',
-                        trainingProgramId: 8,
+                        trainingProgramId: this.$route.params.tid,
                         name: '',
                         classificationId: '',
                         classificationName: '',
@@ -1277,7 +1276,7 @@
                 this.addDetailDialog.open = true
 
                 this.addDetailDialog.config.schoolYearId = this.schoolYearList.value
-                this.addDetailDialog.config.trainingProgramId = this.trainingProgramList.value
+                this.trainingProgramList.value = this.$route.params.tid
                 this.addDetailDialog.config.schoolYearName = this.schoolYearIdMapName[
                     this.schoolYearList.value
                 ]
@@ -1411,6 +1410,8 @@
                     this.classificationList.value = ''
                 }
                 console.log(this.classificationList.value)
+                console.log(this.trainingProgramList.value)
+                
                 this.queryParams.pageNum = 1
                 this.queryParams.pageSize = 10
                 this.fuzzyQuery()
@@ -1449,7 +1450,7 @@
             getTrainingProgramList(option) {
                 trainingProgramList(option).then(value => {
                     this.trainingProgramList.rows = value.rows
-                    this.trainingProgramList.value = value.rows[0].id
+                    this.trainingProgramList.value = this.$route.params.tid
 
                     this.queryParams.totalCount = value.total
                     this.queryParams.totalPage =
@@ -1505,7 +1506,7 @@
             fuzzyQuery() {
                 let option = {
                     schoolYearId: this.schoolYearList.value,
-                    trainingProgramId: this.trainingProgramList.value,
+                    trainingProgramId: this.$route.params.tid,
                     classificationId: this.classificationList.value,
                     name: this.queryList.name,
                     departmentId: this.queryList.departmentId,

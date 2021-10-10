@@ -20,7 +20,8 @@
                         :expand-on-click-node="false"
                         :filter-node-method="filterNode"
                         ref="tree"
-                        default-expand-all
+                        node-key="id"
+                        :default-expanded-keys="[100]"
                         @node-click="handleNodeClick"
                     />
                 </div>
