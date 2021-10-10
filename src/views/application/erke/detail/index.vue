@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-10 19:28:25
+ * @LastEditTime: 2021-10-10 20:03:05
 -->
 <template>
     <div class="app-container">
@@ -517,7 +517,7 @@
         <el-dialog
             :title="upload.title"
             :visible.sync="upload.open"
-            width="400px"
+            width="432px"
             append-to-body
         >
             <el-upload
@@ -841,7 +841,7 @@
             </div>
         </el-dialog>
         <!-- 用户导入对话框 -->
-        <el-dialog
+        <!-- <el-dialog
             :title="upload.title"
             :visible.sync="upload.open"
             width="400px"
@@ -857,6 +857,7 @@
                 :on-progress="handleFileUploadProgress"
                 :on-success="handleFileSuccess"
                 :auto-upload="false"
+                :width="430"
                 drag
             >
                 <i class="el-icon-upload"></i>
@@ -885,7 +886,7 @@
                 >
                 <el-button @click="upload.open = false">取 消</el-button>
             </div>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 
@@ -1259,9 +1260,18 @@
             // 文件上传中处理
             handleFileUploadProgress(event, file, fileList) {
                 this.upload.isUploading = true
+
             },
             // 文件上传成功处理
-            handleFileSuccess(response, file, fileList) {},
+            handleFileSuccess(response, file, fileList) {
+                this.upload.open = false
+                this.upload.isUploading = false
+                this.$refs.upload.clearFiles()
+                this.$alert(response.msg, '导入结果', {
+                    dangerouslyUseHTMLString: true
+                })
+                this.getList()
+            },
             // 提交上传文件
             submitFileForm() {
                 this.$refs.upload.submit()

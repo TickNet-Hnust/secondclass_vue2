@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-14 11:32:32
+ * @LastEditTime: 2021-10-10 20:18:24
 -->
 <template>
     <div class="app-container">
@@ -43,11 +43,12 @@
                                         plain
                                         icon="el-icon-download"
                                         size="mini"
+                                        @click="kaifa"
                                         :loading="exportLoading"
-                                        @click="handleExport"
                                         v-hasPermi="['system:user:export']"
                                         >导出</el-button
                                     >
+                                        <!-- @click="handleExport" -->
                                 </el-col>
                                 <el-col :span="1.5">
                                     <el-input

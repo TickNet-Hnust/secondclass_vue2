@@ -140,7 +140,7 @@
                     <el-button size="small" type="primary" @click="handleImport"
                         >新增</el-button
                     >
-                    <el-button size="small" plain>导出</el-button>
+                    <el-button @click="kaifa" size="small" plain>导出</el-button>
                     <el-button @click="changeIsFullState" icon="el-icon-full-screen" circle></el-button>
                 </el-col>
                 <el-col :span="19">
@@ -234,12 +234,14 @@
                     prop="groupName"
                     label="活动主办方"
                     min-width="160"
+                    :formatter="formatGroup"
                 ></el-table-column>
 
                 <el-table-column
                     prop="maxAdmissionNumber"
-                    label="最大报名人数"
+                    label="最大录取人数"
                     min-width="100"
+                    :formatter="formatMaxAdmisstionWay"
                 ></el-table-column>
 
                 <el-table-column
@@ -289,7 +291,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column label="操作" fixed="right" min-width="320">
+                <el-table-column label="操作" fixed="right" min-width="200">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
@@ -516,11 +518,11 @@
                             <el-select
                                 :value="
                                     postData.enrollGrade
-                                        ? postData.enrollGrade.split(';')
+                                        ? postData.enrollGrade.split('，')
                                         : undefined
                                 "
                                 @change="
-                                    postData.enrollGrade = $event.join(';')
+                                    postData.enrollGrade = $event.join('，')
                                 "
                                 multiple
                                 filterable
@@ -1493,7 +1495,12 @@
             comfirmPlace() {
                 this.mapDialog.open = false
             },
-
+            formatGroup(_,__,cellValue) {
+                return cellValue ? cellValue : '无'
+            },
+            formatMaxAdmisstionWay(_,__,cellValue) {
+                return cellValue ? cellValue : '无限制'
+            },
             formatAdmissionWay(row, column, cellValue) {
                 return (
                     cellValue != null &&
