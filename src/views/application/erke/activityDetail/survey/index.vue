@@ -1541,7 +1541,7 @@
         border-radius: 5px;
         border: 1px solid #ddd;
         padding: 20px;
-        height: calc(100vh - 140px);
+        height: calc(100vh - 144px);
         overflow: auto;
     }
     .msgLeft {

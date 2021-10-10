@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-10-09 10:24:02
+ * @LastEditTime: 2021-10-10 16:09:48
  */
 /**
  * @description:
@@ -73,7 +73,7 @@ export function filterCourseClassificationList2(data, current, id) {
     let filter = (fahter, father_id) => {
                 let array = []
                 data.forEach(item => {
-                    if (item.pid === father_id) {
+                    if (item.pid == father_id) {
                         array.push(item)
                     }
                 })
