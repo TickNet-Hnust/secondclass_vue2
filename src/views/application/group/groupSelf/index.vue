@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-11 13:28:46
+ * @LastEditTime: 2021-10-11 13:32:37
 -->
 <template>
     <div class="app-container">
@@ -802,6 +802,8 @@
 
             typeChanged(id) {
                 this.queryList.type = id
+                this.queryParams.pageNum = 1
+                this.queryParams.pageSize = 10
                 this.fuzzyQuery()
             },
             parentChanged(id) {
