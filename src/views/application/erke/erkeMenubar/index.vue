@@ -3,8 +3,16 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:20:23
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-10 19:09:30
+ * @LastEditTime: 2021-10-11 21:21:07
 -->
+<docs>
+    Todo 🚀：
+        场地申请
+        成长记录认证
+        内容管理
+        待办管理    
+</docs>
+
 <template>
     <div class="menubar">
         <div class="menubar-title">
@@ -39,10 +47,10 @@
                 <el-menu-item index="/application/erke/activity" @click="jump('/application/erke/activity')"
                     >活动管理</el-menu-item
                 >
-                <el-menu-item index="1" @click="dev">场地申请</el-menu-item>
+                <!-- <el-menu-item index="1" @click="dev">场地申请</el-menu-item>
                 <el-menu-item index="2" @click="dev">成长记录认证</el-menu-item>
                 <el-menu-item index="3" @click="dev">内容管理</el-menu-item>
-                <el-menu-item index="4" @click="dev">待办管理</el-menu-item>
+                <el-menu-item index="4" @click="dev">待办管理</el-menu-item> -->
             </el-submenu>
         </el-menu>
     </div>

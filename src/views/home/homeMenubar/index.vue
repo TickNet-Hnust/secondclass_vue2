@@ -3,8 +3,15 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:22
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-09-01 19:17:48
+ * @LastEditTime: 2021-10-11 21:28:04
 -->
+<docs>
+    Todo:
+        🎮竞赛报名
+        📜电子证书
+        📓待办
+        消息
+</docs>
 <template>
     <div class="menubar">
         <div class="menubar-title">
@@ -65,21 +72,21 @@
                 <el-menu-item index="/application/group">
                     <template slot="title"> 群组管理 </template>
                 </el-menu-item>
-                <el-menu-item @click="dev">
+                <!-- <el-menu-item @click="dev">
                     <template slot="title"> 竞赛报名 </template>
                 </el-menu-item>
                 <el-menu-item @click="dev">
                     <template slot="title" > 电子证书 </template>
-                </el-menu-item>
+                </el-menu-item> -->
             </el-submenu>
-            <el-menu-item @click="dev">
+            <!-- <el-menu-item @click="dev">
                 <i class="el-icon-menu"></i>
                 <span slot="title">待办</span>
             </el-menu-item>
             <el-menu-item @click="dev">
                 <i class="el-icon-menu"></i>
                 <span slot="title">消息</span>
-            </el-menu-item>
+            </el-menu-item> -->
         </el-menu>
     </div>
 </template>
