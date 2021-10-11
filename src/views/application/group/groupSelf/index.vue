@@ -2,8 +2,8 @@
  * @Descripttion: 培养方案详情
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
- * @LastEditors: 张津瑞
- * @LastEditTime: 2021-09-24 16:55:19
+ * @LastEditors: 林舒恒
+ * @LastEditTime: 2021-10-11 13:28:46
 -->
 <template>
     <div class="app-container">
@@ -65,6 +65,7 @@
                             plain
                             icon="el-icon-download"
                             size="mini"
+                            @click="kaifa"
                             v-hasPermi="['system:user:export']"
                             >导入</el-button
                         >
@@ -73,6 +74,7 @@
                             plain
                             icon="el-icon-download"
                             size="mini"
+                            @click="kaifa"
                             v-hasPermi="['system:user:export']"
                             >导出</el-button
                         >
@@ -81,6 +83,7 @@
                             plain
                             icon="el-icon-sort"
                             size="mini"
+                            @click="kaifa"
                             v-hasPermi="['system:user:export']"
                             >排序</el-button
                         >
@@ -333,7 +336,7 @@
                                 label="ID"
                                 prop="deptId"
                             ></el-table-column>
-                            <el-table-column label="群组名称" prop="deptName">
+                            <el-table-column show-overflow-tooltip label="群组名称" prop="deptName" min-width="130px">
                                 <template slot-scope="scope">
                                     <router-link
                                         class="textBlue"
@@ -345,30 +348,36 @@
                                     >
                                 </template>
                             </el-table-column>
-                            <el-table-column label="指导单位" prop="parentName">
-                            </el-table-column>
+                            <el-table-column 
+                                label="指导单位"
+                                prop="parentName"
+                                show-overflow-tooltip
+                            ></el-table-column>
 
                             <el-table-column
                                 label="指导老师"
                                 prop="teacher"
+                                :formatter="formatnull"
                             ></el-table-column>
 
                             <el-table-column
                                 label="负责人"
+                                :formatter="formatnull"
                                 prop="leaderNickName"
                             ></el-table-column>
 
                             <el-table-column
                                 label="学号"
+                                :formatter="formatnull"
                                 prop="leaderUserName"
                                 min-width="105px"
-                                show-overflow-tooltip=""
+                                show-overflow-tooltip
                             ></el-table-column>
 
                             <el-table-column
                                 label="成员数"
                                 prop="memberNumber"
-                                min-width="80px"
+                                min-width="60px"
                             ></el-table-column>
 
                             <el-table-column
@@ -407,6 +416,13 @@
                                         v-if="
                                             scope.row.recommend != null &&
                                                 scope.row.recommend
+                                        "
+                                    ></i>
+                                    <i
+                                        class="el-icon-close textRed"
+                                        v-if="
+                                            scope.row.recommend == null ||
+                                            scope.row.recommend == 0
                                         "
                                     ></i>
                                 </template>
@@ -776,6 +792,9 @@
                         })
                     }
                 })
+            },
+            formatnull(_,__,cellValue) {
+                return cellValue ? cellValue : '无'
             },
             /**
              * @description: 根据分类改变了

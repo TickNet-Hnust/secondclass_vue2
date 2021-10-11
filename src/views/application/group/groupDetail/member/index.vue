@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-17 09:44:31
+ * @LastEditTime: 2021-10-11 13:23:15
 -->
 <template>
     <div class="app-container">
@@ -255,6 +255,7 @@
                             <el-table-column
                                 label="学号"
                                 prop="userName"
+                                min-width="120px"
                             ></el-table-column>
 
                             <el-table-column
@@ -265,6 +266,7 @@
                             <el-table-column
                                 label="所在学院"
                                 prop="deptName"
+                                show-overflow-tooltip
                             ></el-table-column>
 
                             <el-table-column

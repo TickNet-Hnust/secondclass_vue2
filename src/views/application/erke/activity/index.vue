@@ -250,7 +250,7 @@
                     min-width="80"
                 ></el-table-column>
 
-                <el-table-column prop="status" label="状态" min-width="90">
+                <el-table-column prop="status" label="状态" min-width="110">
                     <template slot-scope="scope">
                         <el-button
                             size="mini"
