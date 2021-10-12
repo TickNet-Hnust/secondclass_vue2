@@ -3,14 +3,14 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:22
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-11 21:28:04
+ * @LastEditTime: 2021-10-11 21:33:07
 -->
 <docs>
     Todo:
         🎮竞赛报名
         📜电子证书
         📓待办
-        消息
+        📧消息
 </docs>
 <template>
     <div class="menubar">

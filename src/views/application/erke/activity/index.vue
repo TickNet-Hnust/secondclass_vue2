@@ -1,5 +1,6 @@
 <docs>
     🚀Todo 导入导出暂时隐藏，如有需要可以添加
+            编辑活动
 </docs>
 
 <template>
@@ -297,14 +298,14 @@
 
                 <el-table-column label="操作" fixed="right" min-width="200">
                     <template slot-scope="scope">
-                        <el-button
+                        <!-- <el-button
                             type="text"
                             size="mini"
                             icon="el-icon-edit-outline"
                             @click="updateActivity(scope.row)"
                         >
                             编辑
-                        </el-button>
+                        </el-button> -->
                         <el-button
                             type="text"
                             size="mini"
@@ -402,7 +403,7 @@
                                 value-key="label"
                                 v-model="postFakeData.activityReleaserId"
                                 :fetch-suggestions="querySearchAsync"
-                                placeholder="请输入内容"
+                                placeholder="请输入发布人完整姓名"
                                 @select="handRelease"
                             ></el-autocomplete>
                         </el-form-item>
@@ -442,7 +443,7 @@
                                 value-key="label"
                                 v-model="postFakeData.guideTeacherId"
                                 :fetch-suggestions="querySearchAsync"
-                                placeholder="请输入内容"
+                                placeholder="请输入指导老师完整姓名"
                                 @select="handleTeacher"
                             ></el-autocomplete>
                         </el-form-item>
@@ -745,10 +746,9 @@
                             <el-link
                                 type="primary"
                                 @click="openMap"
-                                v-if="!mapDialog.lat"
                                 >点击打开地图</el-link
                             >
-                            <div v-else>
+                            <div v-if="mapDialog.lat">
                                 纬度：{{ this.mapDialog.lat }} ：经度{{
                                     this.mapDialog.lng
                                 }}
@@ -828,7 +828,7 @@
                                 value-key="label"
                                 v-model="postFakeData.activityManagerId"
                                 :fetch-suggestions="querySearchAsync"
-                                placeholder="请输入内容"
+                                placeholder="请输入负责人完整姓名"
                                 @select="handManager"
                             ></el-autocomplete>
                         </el-form-item>
@@ -838,7 +838,7 @@
                                 value-key="label"
                                 v-model="postFakeData.activityOrganizerId"
                                 :fetch-suggestions="querySearchAsync"
-                                placeholder="请输入内容"
+                                placeholder="请输入组织者完整姓名"
                                 @select="handOrganizer"
                             ></el-autocomplete>
                         </el-form-item>
@@ -862,7 +862,7 @@
                             </a-upload>
                         </el-form-item>
 
-                        <el-form-item label="相关附件：">
+                        <!-- <el-form-item label="相关附件：">
                             <el-upload
                                 class="upload-demo"
                                 drag
@@ -878,7 +878,7 @@
                                     只能上传文件，且不超过500kb
                                 </div>
                             </el-upload>
-                        </el-form-item>
+                        </el-form-item> -->
                         <el-form-item label="活动介绍：">
                             <wangEditor
                                 id="activityIntroduce"
@@ -1000,6 +1000,7 @@
                     courseId:'',
                     courseClassificationId: '', //课程分类
                     courseClassificationName: '', //关联的课程的课程分类完整名字
+                    courseClassificationPath: '',
                     integralScheme: '', //积分方案
                     activityStartTime: '', //活动开始时间
                     activityEndTime: '', //活动结束时间
@@ -1248,11 +1249,14 @@
              * @param {*} row
              */
             async updateActivity(row) {
+                
+                
                 await activityId({
                     id:row.id
                 }).then(value => {
                     row = value.data
                 })
+                
                 //发布人不能修改
                 //指导老师不能修改
                 Object.keys(this.postData).forEach(key => {
@@ -1260,6 +1264,7 @@
                 })
                 this.postData.id = row.id
                 console.log(this.postData,456)
+                // return
                 this.postFakeData.enrollTime = [new Date(row.enrollStartTime),new Date(row.enrollEndTime)]
                 this.postFakeData.enrollRange = row.enrollRange?.split(';').map(item => +item)
                 this.postFakeData.maxAdmissionNumber = row.maxAdmissionNumber?1:0
@@ -1476,10 +1481,12 @@
                             this.$forceUpdate()
                             return
                         }
-                        let status = confirm('您确定该地为活动地点吗？')
-                        console.log(e)
-
-                        if (status) {
+                        // let status = confirm('')
+                        this.$confirm('您确定该地为活动地点吗？','提示',{
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(_ => {
                             marker2 = new BMapGL.Marker(
                                 new BMapGL.Point(e.latlng.lng, e.latlng.lat),
                                 {
@@ -1492,7 +1499,7 @@
                             this.postData.activityPlace =
                                 e.latlng.lat + ',' + e.latlng.lng
                             this.$forceUpdate()
-                        }
+                        }).catch(() => {});
                     })
                 })
             },
