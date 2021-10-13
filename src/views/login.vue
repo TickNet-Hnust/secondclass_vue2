@@ -107,8 +107,8 @@
                 codeUrl: '',
                 cookiePassword: '',
                 loginForm: {
-                    username: 'admin',
-                    password: 'ticknet666',
+                    username: '',
+                    password: '',
                     rememberMe: false,
                     code: '',
                     uuid: ''
