@@ -36,6 +36,8 @@ const detail = resolve =>
 
 const activity = resolve =>
     require(['@/views/application/erke/activity/index.vue'], resolve)
+const creditWarning = resolve =>
+    require(['@/views/application/erke/creditWarning/index.vue'], resolve)
 const activityDetail = resolve =>
     require(['@/views/application/erke/activityDetail/index.vue'], resolve)
 const survey = resolve =>
@@ -182,6 +184,14 @@ export const constantRoutes = [{
                                 name: 'activity',
                                 meta: {
                                     title: '活动'
+                                }
+                            },
+                            {
+                                path: '/application/erke/creditWarning',
+                                component: creditWarning,
+                                name: 'creditWarning',
+                                meta: {
+                                    title: '预警'
                                 }
                             },
                             {
