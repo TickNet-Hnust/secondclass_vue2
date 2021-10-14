@@ -44,9 +44,12 @@
                     <i class="el-icon-setting"></i>
                     <span>活动</span>
                 </template>
-                <el-menu-item index="/application/erke/activity" @click="jump('/application/erke/activity')"
-                    >活动管理</el-menu-item
-                >
+                <el-menu-item index="/application/erke/activity" @click="jump('/application/erke/activity')">
+                    活动管理
+                </el-menu-item>
+                <el-menu-item index="/application/erke/creditWarning" @click="jump('/application/erke/creditWarning')">
+                    学分预警
+                </el-menu-item>
                 <!-- <el-menu-item index="1" @click="dev">场地申请</el-menu-item>
                 <el-menu-item index="2" @click="dev">成长记录认证</el-menu-item>
                 <el-menu-item index="3" @click="dev">内容管理</el-menu-item>

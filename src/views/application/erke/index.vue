@@ -9,7 +9,6 @@
     <div>
         <Menubar />
         <div
-            style=" ;"
             :class="{ hasTagsView: needTagsView }"
             class="main-container"
         >
