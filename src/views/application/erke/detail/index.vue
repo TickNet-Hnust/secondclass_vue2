@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-10 20:03:05
+ * @LastEditTime: 2021-10-14 13:38:25
 -->
 <template>
     <div class="app-container">
@@ -728,7 +728,10 @@
 
                 <el-row>
                     <el-col :span="3"> 积分下限要求： </el-col>
-                    <el-col :span="21">
+                    <el-col :span="21" v-if="showButton || addDetailDialog.lowestValueArray.length == 0">
+                        <el-button type="primary" @click="resetLowestValue" size="mini">重置</el-button>
+                    </el-col>
+                    <el-col :span="21" v-else>
                         <el-row
                             class="mb10"
                             v-for="(item,
@@ -920,6 +923,7 @@
         name: 'detail',
         data() {
             return {
+                showButton: false, //控制重置按钮显示
                 deptList: [],//指导单位列表
                 isFull: true, //是否全屏
                 /** 学年度列表 */
@@ -1065,10 +1069,10 @@
         watch:{
             'addDetailDialog.config.classificationId'(nval,oval) {
                 console.log(nval,oval)
-                this.addDetailDialog.config.classificationName = this.classificationList.rows.find(item => item.id == nval).name
+                this.addDetailDialog.config.classificationName = this.classificationList.rows.find(item => item.id == nval)?.name
             },
             'addDetailDialog.config.departmentId'(nval,oval) {
-                this.addDetailDialog.config.departmentName = this.deptList.find(item => item.deptId == nval).deptName
+                this.addDetailDialog.config.departmentName = this.deptList.find(item => item.deptId == nval)?.deptName
             }
         },
         computed: {
@@ -1162,13 +1166,16 @@
              */
 
             handleNodeChange(value) {
-                this.addDetailDialog.config.classificationId =
-                    value[value.length - 1]
-                this.addDetailDialog.config.classificationIdPath = value.join(
-                    ','
-                )
+                this.addDetailDialog.config.classificationId = value
                 this.addDetailDialog.config.layer = value.length
                 console.log(value)
+            },
+            /**
+             * @description: 重置积分下限要求
+             */            
+            resetLowestValue() {
+                this.showButton = false
+                this.addDetailDialog.lowestValueArray = [[1,1]]
             },
             /**
              * @description: 确定CSS类
@@ -1316,6 +1323,7 @@
              */
 
             renderState(row) {
+                console.log(row)
                 this.addDetailDialog.config = {
                     id: row.id,
                     schoolYearId: row.schoolYearId,
@@ -1323,20 +1331,27 @@
                     trainingProgramId: row.trainingProgramId,
                     name: row.name,
                     classificationId: row.classificationId,
-                    classificationIdPath: row.classificationIdPath,
                     joinType: row.joinType + '',
                     necessary: row.necessary,
                     type: row.type + '',
+                    departmentId: row.departmentId,
                     status: row.status,
                     // lowestValue:row.lowestValue,
                     remark: row.remark
                 }
+                console.log(this.addDetailDialog)
+                
                 //"2:3,3:4" => [[2,3],[3,4]]
-                this.addDetailDialog.lowestValueArray = row.lowestValue
-                    .split(',')
-                    .map(item => item?.split(':'))
-                    .map(item => [+item[0], +item[1]])
-
+                try {
+                    this.addDetailDialog.lowestValueArray = row.lowestValue
+                        .split(',')
+                        .map(item => item?.split(':'))
+                        .map(item => [+item[0], +item[1]])
+                } catch(e) {
+                    console.log('学期积分下限要求积分格式错误')
+                    this.addDetailDialog.lowestValueArray = []
+                    this.showButton = true   
+                }
                 this.addDetailDialog.open = true
             },
             /**

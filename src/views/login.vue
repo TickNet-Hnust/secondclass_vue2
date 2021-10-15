@@ -1,6 +1,6 @@
 <template>
     <div class="login">
-        <el-form
+        <!-- <el-form
             ref="loginForm"
             :model="loginForm"
             :rules="loginRules"
@@ -75,7 +75,7 @@
                     <span v-else>登 录 中...</span>
                 </el-button>
             </el-form-item>
-        </el-form>
+        </el-form> -->
         <!-- 微信登录 -->
         <div id="wxLogin"></div>
         <!--  底部  -->
