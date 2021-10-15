@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-24 17:39:29
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-10 18:08:26
+ * @LastEditTime: 2021-10-15 12:54:10
 -->
 <template>
     <div class="menubar">
@@ -44,7 +44,7 @@
                 <i class="el-icon-user"></i>
                 <template slot="title">字典管理</template>
             </el-menu-item>
-            <el-menu-item index="/system/config" v-hasPermi="['system:user']">
+            <el-menu-item index="/system/config" v-hasPermi="['system:config']">
                 <i class="el-icon-user"></i>
                 <template slot="title">参数管理</template>
             </el-menu-item>
