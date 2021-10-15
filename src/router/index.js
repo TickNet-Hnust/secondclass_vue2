@@ -142,7 +142,7 @@ export const constantRoutes = [{
                 path: '/application',
                 component: rightShow,
                 redirect: '/application/erke',
-                name: 'rightShow',
+                name: 'application',
                 meta: {
                     title: '应用'
                 },
@@ -277,7 +277,7 @@ export const constantRoutes = [{
                 children: [{
                     path: '/system',
                     component: system,
-                    name: 'erke',
+                    name: 'system',
                     redirect: '/system/user',
                     meta: {
                         title: '系统'
@@ -399,7 +399,7 @@ export const constantRoutes = [{
             path: 'type/data/:dictId(\\d+)',
             component: resolve =>
                 require(['@/views/system/dict/data'], resolve),
-            name: 'Data',
+            name: 'DataSon',
             meta: { title: '字典数据', icon: '' }
         }]
     },

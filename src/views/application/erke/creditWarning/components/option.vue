@@ -18,10 +18,9 @@
         <el-form-item label="预警时间" >
             <el-date-picker
             v-model="form.warnTime"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期时间"
-            default-time="00:00:00"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="选择日期"
             style="width: 200px;"
             >
             </el-date-picker>
@@ -29,10 +28,9 @@
         <el-form-item label="统计时间">
             <el-date-picker
             v-model="form.statisticsTime"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期时间"
-            default-time="23:59:59"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="选择日期"
             style="width: 200px"
             >
             </el-date-picker>
@@ -84,7 +82,6 @@ export default {
             for(let i in this.form) {
                 if(this.form[i] !== null)
                 {
-                    console.log('xxx')
                     if(i == 'warnStatus' || i == 'status') {
                         val[i] = this.form[i] ? 1 : 0
                     }

@@ -39,7 +39,7 @@ export default {
   methods: {
     search(form) {
       this.condition = form 
-      console.log(this.condition)
+      // console.log(this.condition)
       integralRequirementList(Object.assign({
       pageSize:this.currentPageSize,
       pageNum:1,
