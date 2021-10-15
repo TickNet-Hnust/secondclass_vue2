@@ -104,9 +104,9 @@
             }
         },
         mounted() {
-            getInfo().then(value => {
-                console.error(value)
-            })
+            // getInfo().then(value => {
+            //     console.error(value)
+            // })
         }
     }
 </script>
