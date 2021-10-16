@@ -51,6 +51,10 @@
       >
     </el-table-column>
     <el-table-column
+      prop="warnStatus"
+      label="预警状态">
+    </el-table-column>
+    <el-table-column
       prop="status"
       label="统计状态">
     </el-table-column>
@@ -67,17 +71,15 @@ export default {
         }
     },
     data() {
-        return {
-        }
+      return {
+        
+      }
     },
     methods: {
-        info(...args) {
-            console.log(args[0])
+        info(val) {
+            this.$emit('info',val)
         },
     },
-    mounted() {
-
-    }
 }
 </script>
 
