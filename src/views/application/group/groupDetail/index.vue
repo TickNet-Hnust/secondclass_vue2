@@ -2,8 +2,8 @@
     <div class="app-container">
         <div class="erke-top">
             <el-row type="flex" justify="space-between">
-                <el-col :span="1" class="erke-top-head" style="min-width:380px">
-                    <span> <i>✈</i>『百年征程，党史回眸』书法展览学习活动</span>
+                <el-col :span="1" class="erke-top-head" style="min-width:480px">
+                    <span>{{$route.params.name}}</span>
                 </el-col>
                 <el-col :span="1" style=";padding:10px 0;min-width:610px">
                     <el-radio-group
@@ -109,22 +109,15 @@
         background-color: #e8f4ff;
         font-weight: 700;
         height: 37px;
-        width: 370px;
+        /* width: 370px; */
+        padding: 0 20px;
         border-radius: 20px;
         text-align: center;
         line-height: 40px;
         color: #549eff;
-    }
-    .erke-top-head span i {
-        display: inline-block;
-        height: 24px;
-        width: 24px;
-        color: initial;
-        border-radius: 12px;
-        margin-left: -18px;
-        margin-right: 8px;
-        line-height: 28px;
-        background-color: #1890ff;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
     }
     .erke-bottom {
         background-color: #fff;

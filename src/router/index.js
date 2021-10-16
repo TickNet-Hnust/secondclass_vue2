@@ -255,7 +255,7 @@ export const constantRoutes = [{
                                 }
                             },
                             {
-                                path: '/application/group/groupDetail/:gid',
+                                path: '/application/group/groupDetail/:gid/:name',
                                 component: groupDetail,
                                 name: 'groupDetail',
                                 meta: {
