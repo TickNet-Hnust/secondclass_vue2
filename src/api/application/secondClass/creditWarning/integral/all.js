@@ -39,18 +39,17 @@ export function integralRequirementAdd(data) {
  * @param {object} params
  * @returns {promise}
  */
- export function integralRequirementDelete(params) {
+ export function integralRequirementDelete({id}) {
     return request({
-        url: '/admins/secondClass/growthRecord/integralRequirement/{ids}',
+        url: `/admins/secondClass/growthRecord/integralRequirement/${id}`,
         method: 'delete',
-        params
     })
 }
 
 
 /**
  * @description: 查看积分要求统计情况
- * @param {object} params
+ * @param {number} params
  * @returns {promise}
  */
  export function integralRequirementStatistics(params) {

@@ -15,27 +15,6 @@
             <el-option v-for="item in yearList" :label="item.name" :value="item.id"></el-option>
             </el-select>
         </el-form-item>
-        <br>
-        <el-form-item label="预警时间" >
-            <el-date-picker
-            v-model="form.warnTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择日期"
-            style="width: 200px;"
-            >
-            </el-date-picker>
-        </el-form-item>
-        <el-form-item label="统计时间">
-            <el-date-picker
-            v-model="form.statisticsTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择日期"
-            style="width: 200px"
-            >
-            </el-date-picker>
-        </el-form-item>
         <el-form-item label="积分类型" style="margin-right: 10px;" class=".check">
             <el-radio-group v-model="form.type">
             <el-radio label="1" style="margin-right: 5px;">各学分类型</el-radio>
@@ -47,7 +26,28 @@
             <el-checkbox label="已统计" v-model="form.status"></el-checkbox>
         </el-form-item>
         <br>
-        <el-form-item style="margin-left: 10px;">
+        <el-form-item label="预警时间" >
+            <el-date-picker
+            v-model="form.warnTime"
+            value-format="yyyy-MM-dd"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期">
+            </el-date-picker>
+        </el-form-item>
+        <el-form-item label="统计时间">
+            <el-date-picker
+            v-model="form.statisticsTime"
+            value-format="yyyy-MM-dd"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            >
+            </el-date-picker>
+        </el-form-item>
+        <el-form-item style="margin-left: 140px;">
             <el-button type="primary" @click="onSubmit">查询</el-button>
         </el-form-item>
         <el-form-item style="margin-left: 10px;">
@@ -132,7 +132,6 @@
                 <el-button type="primary" @click="create">确 定</el-button>
             </div>
         </el-dialog>
-
     </div>
 </template>
 
@@ -177,6 +176,14 @@ export default {
                 {
                     if(i == 'warnStatus' || i == 'status') {
                         val[i] = this.form[i] ? 1 : 0
+                    }
+                    else if(i == 'warnTime') {
+                        val['beginWarnTime'] = this.form[i][0]
+                        val['endWarnTime'] = this.form[i][1]
+                    }
+                    else if(i == 'statisticsTime') {
+                        val['beginStatisticsTime'] = this.form[i][0]
+                        val['endStatisticsTime'] = this.form[i][1]
                     }
                     else val[i] = this.form[i]
                 } 

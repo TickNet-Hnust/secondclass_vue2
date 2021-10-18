@@ -15,20 +15,25 @@
       :total="total">
     </el-pagination>
   </body>
+  <info-page :infoData="infoData" :dialogTableVisible="infoVisible" @deleteData="deleteData"/>
 </div>
 </template>
 
 <script>
 import list from './components/list.vue'
 import option from './components/option.vue'
+import info from './components/info.vue'
 import {
   integralRequirementList,
-  integralRequirementAdd
+  integralRequirementAdd,
+  integralRequirementDelete,
+  integralRequirementStatistics
 } from '@/api/application/secondClass/creditWarning/index'
 export default {
   components: {
     'list':list,
-    'form-option':option
+    'form-option':option,
+    'info-page':info
   },
   data() {
     return {
@@ -37,13 +42,17 @@ export default {
       currentPageSize:10,
       total:0,
       condition:{},
-      fcourseList:{}//学分类型表
+      fcourseList:{},//学分类型表
+      infoData:{},
+      infoVisible:false
     }
   },
   methods: {
+    /**
+     * 查询条件
+     */
     search(form) {
       this.condition = form 
-      // console.log(this.condition)
       integralRequirementList(Object.assign({
       pageSize:this.currentPageSize,
       pageNum:1,
@@ -74,10 +83,18 @@ export default {
     /**
      * 查询info
      */
-    getListinfo(val) {
-      if(val) {
-          console.log(val)
+    async getListinfo(val) {
+      let data = []
+      if(val.status === '已统计') {
+        const res = await integralRequirementStatistics({id:val['id']})
+        if(res.data) data = res.data
       }
+      this.infoData = {
+        id:val.id,
+        data
+      }
+      if(this.infoVisible === true) this.infoVisible = false
+      setTimeout(()=>{this.infoVisible = true},200)
     },
     /**
      * 新增条目
@@ -109,6 +126,18 @@ export default {
         return str
       })
       .join(";")
+    },
+    /**
+     * 删除数据
+     */
+    deleteData(id) {
+      integralRequirementDelete({id}).then(res => {
+        this.$message({
+            type: 'success',
+            message: '删除成功!'
+        });
+        this.infoVisible = false
+      })
     }
   },
   watch:{
@@ -120,8 +149,8 @@ export default {
         else val.setting = "无"
         if(val.type == 0) val.type = '达标总分类型 '
         else val.type = '各学分类型'
-        if(val.warnStatus == 1) val.warnStatus = '已统计'
-        else val.warnStatus = '未统计'
+        if(val.warnStatus == 1) val.warnStatus = '已预警'
+        else val.warnStatus = '未预警'
         if(val.status == 1) val.status = '已统计'
         else val.status = '未统计'
       });
@@ -151,14 +180,28 @@ export default {
   padding-right: 50px;
 }
 .header {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 2;
   box-sizing: border-box;
   background-color:white;
   padding: 10px;
   margin-bottom: 5px;
   border-radius: 5px;
+  position: -webkit-sticky;
 }
 .body {
   box-sizing: border-box;
   border-radius: 5px;
+  height: calc(100vh - 185px);
+  overflow: auto;
+}
+.infopage {
+  display: flex;
+  position: fixed;
+  top: 50px;
+  z-index: 7;
+  background-color: sandybrown;
 }
 </style>

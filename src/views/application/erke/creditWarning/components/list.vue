@@ -16,7 +16,7 @@
       label="名称">
     </el-table-column>
     <el-table-column
-      prop="deptId"
+      prop="deptName"
       label="学院名称">
     </el-table-column>
     <el-table-column
