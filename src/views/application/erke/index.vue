@@ -6,7 +6,7 @@
  * @LastEditTime: 2021-07-24 17:38:22
 -->
 <template>
-    <div>
+    <div class="body">
         <Menubar />
         <div
             :class="{ hasTagsView: needTagsView }"
@@ -70,6 +70,7 @@
         }
     }
 </script>
+
 
 <style lang="scss" scoped>
     @import '~@/assets/styles/mixin.scss';

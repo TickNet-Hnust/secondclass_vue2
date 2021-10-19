@@ -1,13 +1,14 @@
 <template>
     <div>
         <el-dialog title="预警详情" :visible.sync="visible">
-        <el-table :data="gridData">
-            <el-table-column property="date" label="日期" width="150"></el-table-column>
-            <el-table-column property="name" label="姓名" width="200"></el-table-column>
-            <el-table-column property="address" label="地址"></el-table-column>
+        <el-table :data="infoData.data" height="500px" size="mini">
+            <el-table-column property="id" label="ID" ></el-table-column>
+            <el-table-column property="deptName" label="学院名称" width="200px"></el-table-column>
+            <el-table-column property="studentNumber" label="在校生人数"></el-table-column>
+            <el-table-column property="reachStandardNumber" label="在校生人数"></el-table-column>
+            <el-table-column property="ratio" label="在校生人数"></el-table-column>
         </el-table>
         
-        {{infoData.data}}
 
         <div slot="footer" class="dialog-footer">
             <el-button type="warning" @click="deleteData">删 除</el-button>
@@ -19,6 +20,8 @@
 </template>
 
 <script>
+import {integralRequirementStatisticsExport} from '@/api/application/secondClass/creditWarning/index'
+
 export default {
     props:{
         infoData: {
@@ -32,8 +35,7 @@ export default {
     },
     data() {
       return {
-        gridData : [],
-        visible:false
+        visible:false,
       }
     },
     methods: {
@@ -46,10 +48,6 @@ export default {
                     type: 'warning'
                     }).then(() => {
                     this.$emit('deleteData',this.infoData['id'])
-                    // this.$message({
-                    //     type: 'success',
-                    //     message: '删除成功!'
-                    // });
                     }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -57,8 +55,24 @@ export default {
                     });          
                 });
         },
+        /**
+         * 导出
+         */
         dataExport() {
-            console.log('xxxx')
+            const that = this
+            this.$confirm('是否确认导出数据项?', "警告", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+                }).then(function() {
+                return integralRequirementStatisticsExport({
+                    id:that.infoData.id
+                })}).then(response => {
+                // console.log(response)
+                this.download(response.msg)
+                }).catch(err => {
+                    console.log(err)
+                })
         }
     },
     watch:{

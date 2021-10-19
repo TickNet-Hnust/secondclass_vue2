@@ -68,8 +68,7 @@ export function integralRequirementAdd(data) {
  */
  export function integralRequirementStatisticsExport(params) {
     return request({
-        url: '/admins/secondClass/growthRecord/integralRequirement/statistics/{id}/export',
+        url: `/admins/secondClass/growthRecord/integralRequirement/statistics/${params.id}/export`,
         method: 'get',
-        params
     })
 }
