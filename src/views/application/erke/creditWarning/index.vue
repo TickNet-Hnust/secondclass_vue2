@@ -3,7 +3,7 @@
   <header class="header">
     <form-option @getSearch="search" @create="addData"/>
   </header>
-  <body class="body">  
+  <main class="main">  
     <list :tableData="tableData" @info="getListinfo"/>
     <el-pagination
       @current-change="handleCurrentChange"
@@ -14,7 +14,7 @@
       layout="total,sizes,prev, pager, next"
       :total="total">
     </el-pagination>
-  </body>
+  </main>
   <info-page :infoData="infoData" :dialogTableVisible="infoVisible" @deleteData="deleteData"/>
 </div>
 </template>
@@ -191,7 +191,7 @@ export default {
   border-radius: 5px;
   position: -webkit-sticky;
 }
-.body {
+.main {
   box-sizing: border-box;
   border-radius: 5px;
   height: calc(100vh - 185px);
