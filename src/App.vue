@@ -20,6 +20,11 @@
     export default {
         name: 'App',
         mounted() {
+            let mockKeyboardEvent = new KeyboardEvent('keydown', { ctrlKey: true });
+            document.dispatchEvent(mockKeyboardEvent);
+
+            let mockClickEvent = new MouseEvent('click', );
+            document.dispatchEvent(mockClickEvent);
         }
     }
 </script>

@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:20:23
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-11 21:21:07
+ * @LastEditTime: 2021-10-21 20:40:07
 -->
 <docs>
     Todo 🚀：
@@ -47,9 +47,9 @@
                 <el-menu-item index="/application/erke/activity" @click="jump('/application/erke/activity')">
                     活动管理
                 </el-menu-item>
-                <el-menu-item index="/application/erke/creditWarning" @click="jump('/application/erke/creditWarning')">
+                <!-- <el-menu-item index="/application/erke/creditWarning" @click="jump('/application/erke/creditWarning')">
                     学分预警
-                </el-menu-item>
+                </el-menu-item> -->
                 <!-- <el-menu-item index="1" @click="dev">场地申请</el-menu-item>
                 <el-menu-item index="2" @click="dev">成长记录认证</el-menu-item>
                 <el-menu-item index="3" @click="dev">内容管理</el-menu-item>

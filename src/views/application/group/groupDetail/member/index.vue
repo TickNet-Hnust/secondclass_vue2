@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-16 21:07:47
+ * @LastEditTime: 2021-10-16 21:25:57
 -->
 <template>
     <div class="app-container">
@@ -94,7 +94,7 @@
                                     type="flex"
                                     justify="space-around"
                                 >
-                                    <el-col :span="1" style="min-width:170px">
+                                    <el-col :span="1" style="min-width:200px">
                                         <el-form-item label="姓名">
                                             <el-input
                                                 class="data-text"
@@ -102,7 +102,7 @@
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="1" style="min-width:180px">
+                                    <el-col :span="1" style="min-width:200px">
                                         <el-form-item label="学号">
                                             <el-input
                                                 class="data-text"
@@ -111,7 +111,7 @@
                                         </el-form-item>
                                     </el-col>
 
-                                    <el-col :span="1" style="min-width:180px">
+                                    <el-col :span="1" style="min-width:200px">
                                         <el-form-item label="性别">
                                             <el-select
                                                 v-model="queryList.sex"

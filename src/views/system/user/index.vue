@@ -901,4 +901,7 @@
     .userDialog >>> .el-dialog__body {
         height: 400px;
     }
+    .el-form .el-row {
+        all:unset
+    }
 </style>
