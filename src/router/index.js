@@ -65,7 +65,7 @@ const post = resolve => require(['@/views/system/post/index.vue'], resolve)
 const dict = resolve => require(['@/views/system/dict/index.vue'], resolve)
 const config = resolve => require(['@/views/system/config/index.vue'], resolve)
 const notice = resolve => require(['@/views/system/notice/index.vue'], resolve)
-
+const admins = resolve => require(['@/views/system/admins/index.vue'], resolve)
 /** dept群组 */
 const group = resolve =>
     require(['@/views/application/group/index.vue'], resolve)
@@ -255,7 +255,7 @@ export const constantRoutes = [{
                                 }
                             },
                             {
-                                path: '/application/group/groupDetail/:gid',
+                                path: '/application/group/groupDetail/:gid/:name',
                                 component: groupDetail,
                                 name: 'groupDetail',
                                 meta: {
@@ -344,6 +344,14 @@ export const constantRoutes = [{
                             name: 'notice',
                             meta: {
                                 title: '通知管理'
+                            }
+                        },
+                        {
+                            path: '/system/admins',
+                            component: admins,
+                            name: 'admins',
+                            meta: {
+                                title: '管理员管理'
                             }
                         },
                         {

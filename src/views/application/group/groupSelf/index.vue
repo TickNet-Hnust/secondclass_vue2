@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-11 13:32:37
+ * @LastEditTime: 2021-10-16 21:07:45
 -->
 <template>
     <div class="app-container">
@@ -342,7 +342,8 @@
                                         class="textBlue"
                                         :to="
                                             '/application/group/groupDetail/' +
-                                                scope.row.deptId
+                                                scope.row.deptId + '/' +
+                                                scope.row.deptName
                                         "
                                         >{{ scope.row.deptName }}</router-link
                                     >

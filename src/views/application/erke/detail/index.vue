@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-14 13:38:25
+ * @LastEditTime: 2021-10-21 20:58:48
 -->
 <template>
     <div class="app-container">
@@ -1472,8 +1472,8 @@
              *  @param pageSize 限制每页的条数
              */
 
-            getTrainingProgramList(option) {
-                trainingProgramList(option).then(value => {
+            async getTrainingProgramList(option) {
+                await trainingProgramList(option).then(value => {
                     this.trainingProgramList.rows = value.rows
                     this.trainingProgramList.value = this.$route.params.tid
 
@@ -1553,9 +1553,9 @@
              * @param integralType
              */
 
-            getCourseClassificationList() {
+            async getCourseClassificationList() {
                 let courseUpdateTime = localStorage.getItem('courseUpdateTime')
-                courseClassificationUpdateTime().then(value=>{
+                await courseClassificationUpdateTime().then(value=>{
                     if(value.data===courseUpdateTime)
                     {
                         console.log('使用了local的缓存');
@@ -1605,7 +1605,12 @@
         async created() {
             //初始化字典
             this.initDict()
-
+            //获得分类列表
+            await this.getCourseClassificationList() //todo 优化
+            /** 获得当前学年所有的培养方案列表 */
+            await this.getTrainingProgramList({ //todo 优化
+                schoolYearId: this.$route.params.sid
+            })
             /** 获得所有学年 */
             schoolYearList().then(value => {
                 value.rows.forEach(item => {
@@ -1618,18 +1623,14 @@
                 this.schoolYearList.rows = value.rows
             })
 
-            /** 获得当前学年所有的培养方案列表 */
-            this.getTrainingProgramList({
-                schoolYearId: this.$route.params.sid
-            })
+            
 
             /** 获得当前学年下 当前培养方案下 当前课程分类下 课程列表 */
             this.fuzzyQuery()
 
-            //获得分类列表
-            this.getCourseClassificationList()
+            
 
-            //
+            //部门
             utilListCollege().then(value => {
                 console.error(value)
                 this.deptList = value.data

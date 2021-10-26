@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 16:39:52
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-11 13:23:15
+ * @LastEditTime: 2021-10-16 21:25:57
 -->
 <template>
     <div class="app-container">
@@ -24,22 +24,22 @@
                             >新增</el-button
                         >
 
-                        <el-button
+                        <!-- <el-button
                             type="warning"
                             plain
                             icon="el-icon-download"
                             size="mini"
                             v-hasPermi="['system:user:export']"
                             >导出</el-button
-                        >
-                        <el-tooltip
+                        > -->
+                        <!-- <el-tooltip
                             effect="dark"
                             content="清空查询条件"
                             placement="right"
                         >
                             <el-button circle icon="el-icon-refresh">
                             </el-button>
-                        </el-tooltip>
+                        </el-tooltip> -->
                     </div>
                 </div>
 
@@ -94,7 +94,7 @@
                                     type="flex"
                                     justify="space-around"
                                 >
-                                    <el-col :span="1" style="min-width:160px">
+                                    <el-col :span="1" style="min-width:200px">
                                         <el-form-item label="姓名">
                                             <el-input
                                                 class="data-text"
@@ -102,7 +102,7 @@
                                             ></el-input>
                                         </el-form-item>
                                     </el-col>
-                                    <el-col :span="1" style="min-width:160px">
+                                    <el-col :span="1" style="min-width:200px">
                                         <el-form-item label="学号">
                                             <el-input
                                                 class="data-text"
@@ -111,7 +111,7 @@
                                         </el-form-item>
                                     </el-col>
 
-                                    <el-col :span="1" style="min-width:170px">
+                                    <el-col :span="1" style="min-width:200px">
                                         <el-form-item label="性别">
                                             <el-select
                                                 v-model="queryList.sex"
@@ -147,7 +147,7 @@
                                                     index) in deptList"
                                                     :key="index"
                                                     :label="item.deptName"
-                                                    :value="item.deptId"
+                                                    :value="item.deptName"
                                                 ></el-option>
                                             </el-select>
                                         </el-form-item>
@@ -340,6 +340,7 @@
                                         type="text"
                                         size="mini"
                                         icon="el-icon-delete"
+                                        @click="changeStatus(scope.row.id,5)"
                                         >清退</el-button
                                     >
                                     <el-button
@@ -347,6 +348,7 @@
                                         type="text"
                                         size="mini"
                                         icon="el-icon-refresh"
+                                        @click="changeStatus(scope.row.id,3)"
                                         >恢复</el-button
                                     >
                                     <el-button
@@ -354,6 +356,7 @@
                                         type="text"
                                         size="mini"
                                         icon="el-icon-edit-outline"
+                                        @click="changeStatus(scope.row.id,3)"
                                         >审核</el-button
                                     >
                                 </template>
@@ -426,7 +429,8 @@
         memberInfo,
         guidanceList,
         utilListByName,
-        memberPost
+        memberPost,
+        memberIdVerify
     } from '@/api/application/secondClass/index'
 
     import { transformDate } from '@/utils/gather.js'
@@ -527,6 +531,23 @@
                     this.msgSuccess('修改成功')
                     this.fuzzyQuery()
                     this.addDialog.open = false
+                        memberInfo({ groupId: this.$route.params.gid }).then(value => {
+                        this.tabbarList = new Map(Object.entries(value.data))
+                        this.queryParams.totalCount = this.tabbarList.get('全部')
+                        console.log(this.tabbarList)
+                    })
+                })
+               
+            },
+            changeStatus(id,status) {
+                memberIdVerify({id,status}).then(value => {
+                    this.$message.success('操作成功')
+                    this.fuzzyQuery()
+                    memberInfo({ groupId: this.$route.params.gid }).then(value => {
+                        this.tabbarList = new Map(Object.entries(value.data))
+                        this.queryParams.totalCount = this.tabbarList.get('全部')
+                        console.log(this.tabbarList)
+                    })
                 })
             },
             /**

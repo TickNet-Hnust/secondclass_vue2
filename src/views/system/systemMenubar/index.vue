@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-24 17:39:29
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-15 12:54:10
+ * @LastEditTime: 2021-10-17 14:43:28
 -->
 <template>
     <div class="menubar">
@@ -51,6 +51,10 @@
             <el-menu-item index="/system/notice" v-hasPermi="['system:notice']">
                 <i class="el-icon-user"></i>
                 <template slot="title">通知管理</template>
+            </el-menu-item>
+            <el-menu-item index="/system/admins" v-hasPermi="['system:admin']"> 
+                <i class="el-icon-user"></i>
+                <template slot="title">管理员管理</template>
             </el-menu-item>
         </el-menu>
     </div>

@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-06-03 14:51:27
  * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-11 21:23:19
+ * @LastEditTime: 2021-10-17 14:48:26
 -->
 <docs>
     Todo：
@@ -36,7 +36,6 @@
                                         icon="el-icon-plus"
                                         size="mini"
                                         @click="handleAdd"
-                                        v-hasPermi="['system:user:add']"
                                         >新增</el-button
                                     >
                                 </el-col>
