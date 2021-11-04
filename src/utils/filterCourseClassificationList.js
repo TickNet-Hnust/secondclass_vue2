@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:21
  * @LastEditors: 张津瑞
- * @LastEditTime: 2021-10-10 19:57:17
+ * @LastEditTime: 2021-11-04 20:11:26
  */
 /**
  * @description:
@@ -65,8 +65,6 @@ export function filterCourseClassificationList(data) {
 // }
 
 export function filterCourseClassificationList2(data, current, id) {
-    console.log(current, '传进来的课程分类')
-    console.log(id, '传进来的课程分类id')
     let currentBack = JSON.parse(JSON.stringify(current))
     let maxLayer = 0
     let count = 0
@@ -79,7 +77,8 @@ export function filterCourseClassificationList2(data, current, id) {
             })
             count++
             if (count == 1 && array.length == 0) {
-                return data
+                maxLayer = 1;
+                return '';
             } else {
                 array.forEach(item => {
                     let temp = filter(item, item.id)
