@@ -2,12 +2,13 @@
  * @Descripttion: 
  * @Author: 林舒恒
  * @Date: 2021-10-05 15:21:17
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-17 21:52:13
- */
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-11-04 19:02:45
+*/
 module.exports = {
   "projectName": "secondclass",
-  "privateKey": "C:\\Users\\Admin/.ssh/id_rsa",
+  // "privateKey": "C:\\Users\\86183\\.vscode\\extensions\\liximomo.sftp-1.12.9\\node_modules\\ssh2\\test\\fixtures\\id_rsa",
+  "privateKey": "C:\\Users\\86183\\.vscode\\extensions\\liximomo.sftp-1.12.9\\node_modules\\ssh2\\test\\fixtures\\id_rsa",
   "passphrase": "",
   "cluster": [],
   "prod": {
