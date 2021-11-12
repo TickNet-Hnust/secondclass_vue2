@@ -80,7 +80,7 @@
                             ></el-option>
                         </el-select>
                     </el-col>
-                    <el-col :span="1" style="min-width:320px">
+                    <!-- <el-col :span="1" style="min-width:320px">
                         发布时间:
                         <el-date-picker
                             style="max-width:230px"
@@ -92,8 +92,8 @@
                             align="right"
                         >
                         </el-date-picker>
-                    </el-col>
-                    <el-col :span="1" style="min-width:460px">
+                    </el-col> -->
+                    <!-- <el-col :span="1" style="min-width:460px">
                         课程分类：
                         <el-cascader
                             v-model="queryList.coursePath"
@@ -114,7 +114,7 @@
                                 :label="item.name"
                             ></el-option>
                         </el-select>
-                    </el-col>
+                    </el-col> -->
                     <el-col :span="1" style="min-width:215px">
                         是否为推荐活动：
                         <el-select
@@ -1793,8 +1793,8 @@
                     deptId: this.queryList.deptId,
                     admissionWay: this.queryList.admissionWay,
                     // createTime: this.queryList.createTime,
-                    courseClassificationId: this.queryList
-                        .courseClassificationId,
+                    // courseClassificationId: this.queryList
+                    //     .courseClassificationId,
                     recommend: this.queryList.recommend,
                     status: this.queryList.status,
                     pageNum: this.queryParams.pageNum,

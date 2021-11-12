@@ -292,7 +292,7 @@
                             <div class="lisRight-buttom">
                                 <el-row class="listRowTop">
                                     <el-col :span="3">序号</el-col>
-                                    <el-col :span="12">分党校</el-col>
+                                    <el-col :span="12">指导单位</el-col>
                                     <el-col :span="5">报名人数</el-col>
                                     <el-col :span="4">报名率</el-col>
                                 </el-row>
@@ -319,7 +319,7 @@
                             <div class="lisRight-buttom">
                                 <el-row class="listRowTop">
                                     <el-col :span="3">序号</el-col>
-                                    <el-col :span="12">分党校</el-col>
+                                    <el-col :span="12">指导单位</el-col>
                                     <el-col :span="5">请假人数</el-col>
                                     <el-col :span="4">请假率</el-col>
                                 </el-row>
@@ -346,7 +346,7 @@
                             <div class="lisRight-buttom">
                                 <el-row class="listRowTop">
                                     <el-col :span="3">序号</el-col>
-                                    <el-col :span="12">分党校</el-col>
+                                    <el-col :span="12">指导单位</el-col>
                                     <el-col :span="5">请假人数</el-col>
                                     <el-col :span="4">请假率</el-col>
                                 </el-row>
