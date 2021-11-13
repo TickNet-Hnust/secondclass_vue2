@@ -1365,7 +1365,6 @@
                     this.integralScheme = value.data.integralScheme
                     this.courseClassificationPath = value.data.courseClassificationPath
                     let currentCourseClassificationId = this.courseClassificationPath.split('、')[1]
-                    console.log(currentCourseClassificationId,'截取的活动分类id')
                     await this.getCourseClassificationList(+currentCourseClassificationId)
                 })
             },
@@ -1425,7 +1424,6 @@
                     getDict('sc_activity_integral_apply_way'),
                     getDict('sc_activity_integral')
                 ]).then(value => {
-                    console.log(value, 'initDict')
                     let tempArr = [
                         'dict_sc_train_program_rank',
                         'dict_sc_activity_integral_scheme',
@@ -1451,13 +1449,12 @@
                         courseList.forEach((item)=>{
                             if(item.id==id)
                             {
-                                console.log('1111111111111111111')
                                 this.currentCourseClassification = JSON.parse(JSON.stringify(item));
-                                console.log(item,'if内部当前积分分类,item')
                                 console.log(this.currentCourseClassification,'if内部当前积分分类,currentCourseClassification')
                             }
                         })
-                        
+                        let a = JSON.parse(JSON.stringify(this.currentCourseClassification));
+                        console.log(a,'深拷贝的积分分类')
                         console.log(this.currentCourseClassification,'当前积分分类')
 
                         this.filterCourseClassificationList =
@@ -1514,12 +1511,16 @@
                             this.reasonList.push(this.filterCourseClassificationList.name);
                             if(this.filterCourseClassificationList.children)
                             {
-                                this.filterCourseClassificationList.children.forEach((item)=>{
+                                console.log(this.filterCourseClassificationList.children,'111111111111')
+                                if(this.filterCourseClassificationList.children){
+                                   this.filterCourseClassificationList.children.forEach((item)=>{
                                     if(item.type==2&&item.integrationRange)
                                     {
                                         this.data.reasonList.push(item.name);
                                     }
-                            })
+                                    }) 
+                                }
+                                
                             }
                             
                         }
@@ -1646,6 +1647,9 @@
     }
     .ruleInput3 >>> .el-input__inner{
         width: 70px;
+    }
+    .ruleInput3 >>> .el-input-group__prepend{
+        padding: 0 3px;
     }
     .remark >>> .el-input__inner{
         visibility: hidden;

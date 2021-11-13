@@ -11,7 +11,7 @@
 
 <template>
     <div id="app">
-        <router-view />
+        <router-view/>
     </div>
 </template>
 
@@ -33,5 +33,8 @@
     #app { 
         overflow: auto; /** 防止缩小的时候背景显示不完全 */
     }
+</style>
+
+<style>
 </style>
 
