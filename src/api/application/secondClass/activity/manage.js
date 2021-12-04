@@ -123,3 +123,10 @@ export function ActivityNowYear() {
         method: 'get'
     })
 }
+
+export function ActivityExport() {
+    return request({
+        url: `/admins/secondClass/activity/export`,
+        method: 'get'
+    })
+}

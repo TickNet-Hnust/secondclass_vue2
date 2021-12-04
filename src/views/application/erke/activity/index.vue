@@ -145,7 +145,9 @@
                     <el-button size="small" type="primary" @click="handleImport"
                         >新增</el-button
                     >
-                    <!-- <el-button @click="kaifa" size="small" plain>导出</el-button> -->
+                    <el-button @click="handleExport"
+                        :load="exportLoading" size="small" plain>导出</el-button>
+                    
                     <el-button @click="changeIsFullState" icon="el-icon-full-screen" circle></el-button>
                 </el-col>
                 <el-col :span="19">
@@ -916,6 +918,7 @@
         activityPut,
         activityIdNextStatus,
         activityId,
+        ActivityExport,
         activityRecommendChange,
         ActivityTrainingProgramList,
         ActivityListByParentId,
@@ -949,6 +952,7 @@
         },
         data() {
             return {
+                exportLoading:  false,
                 isFull: true, //控制table是否放大
                 dialogImageUrl: '',
                 imageUrl:'',
@@ -1222,6 +1226,25 @@
             }
         },
         methods: {
+            handleExport() {
+                // this.exportDialog.open = true
+                const queryParams = this.queryList
+                
+                this.$confirm('是否确认导出所有活动数据项?', '警告', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.exportLoading = true
+                        return ActivityExport()
+                    })
+                    .then(response => {
+                        this.download(response.msg)
+                        this.exportLoading = false
+                    })
+                    .catch(() => {})
+            },
             changeIsFullState() {
                 console.log(this.$refs.erkeBottom.style)
                 const height = window.innerHeight
