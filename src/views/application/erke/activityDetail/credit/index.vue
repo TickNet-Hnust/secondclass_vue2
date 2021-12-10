@@ -302,7 +302,7 @@
                                                 ></el-option>
                                                 <el-option
                                                     v-for="(item,
-                                                    index) in dict_sc_activity_integral"
+                                                    index) in dict_sc_activity_integral_status"
                                                     :key="index"
                                                     :value="item.dictValue"
                                                     :label="item.dictLabel"
@@ -989,7 +989,7 @@
                 //积分申请方式字典
                 dict_sc_activity_integral_apply_way: [],
                 //活动认定状态
-                dict_sc_activity_integral: [],
+                dict_sc_activity_integral_status: [],
                 currentCourseClassification:[],
                 filterCourseClassificationList:[],
                 maxLayer:null,
@@ -1007,7 +1007,6 @@
                       userIds:[],
                     },
                 },
-                mutiCreditList:[],
                 mutiCreditDialogList:[],
                 handSelectList:[],
                 sortCreditDialog:{
@@ -1024,7 +1023,7 @@
         computed: {
             computedStatus() {
                 return value => {
-                    return this.dict_sc_activity_integral[value]?.dictLabel
+                    return this.dict_sc_activity_integral_status[value]?.dictLabel
                 }
             },
 
@@ -1172,7 +1171,7 @@
             formatStatus(row, column, cellValue) {
                 return (
                     cellValue != null &&
-                    this.dict_sc_activity_integral[cellValue]?.dictLabel
+                    this.dict_sc_activity_integral_status[cellValue]?.dictLabel
                 )
             },
             formatApplyWay(row, column, cellValue) {
@@ -1196,10 +1195,10 @@
                     return 'textgreen'
                 } else if (row.status == 2) {
                     //no
-                    return 'textyellow'
+                    return 'textRed'
                 } else {
                     //unpass
-                    return 'textRed'
+                    return 'textyellow'
                 }
             },
             sureClassApplyWay(row) {
@@ -1422,14 +1421,14 @@
                     getDict('sc_activity_integral_scheme'),
                     getDict('sc_integral_type'),
                     getDict('sc_activity_integral_apply_way'),
-                    getDict('sc_activity_integral')
+                    getDict('sc_activity_integral_status')
                 ]).then(value => {
                     let tempArr = [
                         'dict_sc_train_program_rank',
                         'dict_sc_activity_integral_scheme',
                         'dict_sc_integral_type',
                         'dict_sc_activity_integral_apply_way',
-                        'dict_sc_activity_integral'
+                        'dict_sc_activity_integral_status'
                     ]
                     tempArr.forEach((item, index) => {
                         this[item] = value[index].data
@@ -1673,7 +1672,7 @@
         color: #54d7b4;
     }
     .textyellow {
-        color: yellow;
+        color: rgba(255, 255, 0, 0.274);
     }
     .textPlain {
         color: #8b8b8b;
