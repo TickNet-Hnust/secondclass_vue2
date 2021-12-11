@@ -66,6 +66,7 @@ const dict = resolve => require(['@/views/system/dict/index.vue'], resolve)
 const config = resolve => require(['@/views/system/config/index.vue'], resolve)
 const notice = resolve => require(['@/views/system/notice/index.vue'], resolve)
 const admins = resolve => require(['@/views/system/admins/index.vue'], resolve)
+const job = resolve => require(['@/views/monitor/job/index.vue'], resolve)
 /** dept群组 */
 const group = resolve =>
     require(['@/views/application/group/index.vue'], resolve)
@@ -352,6 +353,14 @@ export const constantRoutes = [{
                             name: 'admins',
                             meta: {
                                 title: '管理员管理'
+                            }
+                        },
+                        {
+                            path: '/monitor/job',
+                            component: job,
+                            name: 'job',
+                            meta: {
+                                title: '定时任务'
                             }
                         },
                         {

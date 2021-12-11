@@ -662,3 +662,10 @@
         }
     }
 </script>
+
+<style scoped>
+.app-container {
+    background-color: #fff;
+    padding: 10px
+}
+</style>

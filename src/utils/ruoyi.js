@@ -2,10 +2,10 @@
  * 通用js方法封装处理
  * Copyright (c) 2019 ruoyi
  */
-
-const baseURL = process.env.VUE_APP_BASE_API
-
-// 日期格式化
+//TOdo: 暂时全部改为线上环境
+// const baseURL = process.env.VUE_APP_BASE_API
+const baseURL = 'https://admin.ticknet.hnust.cn'
+    // 日期格式化
 export function parseTime(time, pattern) {
     if (arguments.length === 0 || !time) {
         return null
@@ -36,7 +36,7 @@ export function parseTime(time, pattern) {
     }
     const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
         let value = formatObj[key]
-        // Note: getDay() returns 0 on Sunday
+            // Note: getDay() returns 0 on Sunday
         if (key === 'a') {
             return ['日', '一', '二', '三', '四', '五', '六'][value]
         }
