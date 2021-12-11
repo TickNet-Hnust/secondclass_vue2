@@ -1,3 +1,10 @@
+<!--
+ * @Descripttion: 
+ * @Author: Wang Dejiang(aei)
+ * @Date: 2021-12-10 20:47:01
+ * @LastEditors: Wang Dejiang(aei)
+ * @LastEditTime: 2021-12-10 21:02:29
+-->
 <template>
 <div>
   <header class="header">
@@ -125,7 +132,7 @@ export default {
         str += '分'
         return str
       })
-      .join(";")
+      .join("；")
     },
     /**
      * 删除数据
