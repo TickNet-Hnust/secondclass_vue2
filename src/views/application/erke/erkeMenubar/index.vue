@@ -50,8 +50,11 @@
                 <el-menu-item index="/application/erke/creditWarning" @click="jump('/application/erke/creditWarning')">
                     学分预警
                 </el-menu-item>
+                <el-menu-item index="/application/erke/growthRecord" @click="jump('/application/erke/growthRecord')">
+                    成长记录认证
+                </el-menu-item>
                 <!-- <el-menu-item index="1" @click="dev">场地申请</el-menu-item>
-                <el-menu-item index="2" @click="dev">成长记录认证</el-menu-item>
+                
                 <el-menu-item index="3" @click="dev">内容管理</el-menu-item>
                 <el-menu-item index="4" @click="dev">待办管理</el-menu-item> -->
             </el-submenu>

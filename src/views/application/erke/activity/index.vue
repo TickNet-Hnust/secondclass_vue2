@@ -1714,9 +1714,9 @@
                         console.log('使用了local的缓存');
                         let courseList = JSON.parse(localStorage.getItem('courseList'))
                         courseList = courseList.map(item => ({
-                        ...item,
-                        value: item.id,
-                        label: item.name
+                            ...item,
+                            value: item.id,
+                            label: item.name
                         }))
                         //挂载算法
                         this.datadata = filterTwoLayer(courseList)
