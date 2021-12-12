@@ -33,7 +33,7 @@
                                     value-format="yyyy-MM-dd"
                                 ></el-date-picker>
                             </el-col>
-                            <el-col class="line" :span="2">-</el-col>
+                            <el-col class="line" :span="2">  ——  </el-col>
                             <el-col :span="11">
                                 <el-date-picker 
                                     type="date" 
@@ -50,6 +50,7 @@
                                     v-for="(item,index) in dict_sc_train_program_rank"
                                     :label="item.dictLabel" 
                                     :value="item.dictValue"
+                                    :key="index.dictValue"
                                 ></el-option>
                             </el-select>
                         </el-form-item>
@@ -59,6 +60,7 @@
                                     v-for="(item,index) in datadata"
                                     :label="item.name" 
                                     :value="item.id"
+                                    :key="index.dictValue"
                                 ></el-option>
                             </el-select>
                         </el-form-item>
@@ -68,6 +70,7 @@
                                     v-for="(item,index) in datadataTwo"
                                     :label="item.name" 
                                     :value="item.id"
+                                    :key="index.dictValue"
                                 ></el-option>
                             </el-select>
                         </el-form-item>
@@ -96,19 +99,49 @@
                 :data="recordList"
             >
                 <el-table-column
-                    prop="userId"
-                    label="用户学号"
-                    min-width="180">
+                    prop="id"
+                    label="Id"
+                    min-width="80">
                 </el-table-column>
                 <el-table-column
-                    prop="beginTime"
+                    prop="studentName"
+                    label="学生姓名"
+                    min-width="120">
+                </el-table-column>
+                <el-table-column
+                    prop="studentId"
+                    label="学号"
+                    min-width="120">
+                </el-table-column>
+                <el-table-column
+                    prop="collegeName"
+                    label="学院"
+                    min-width="120">
+                </el-table-column>
+                <el-table-column
+                    prop="startTime"
                     label="参与开始时间"
-                    min-width="180">
+                    min-width="150">
                 </el-table-column>
                 <el-table-column
                     prop="endTime"
                     label="参与结束时间"
-                    min-width="180">
+                    min-width="150">
+                </el-table-column>
+                <el-table-column
+                    prop="classfication"
+                    label="classfication"
+                    min-width="150">
+                </el-table-column>
+                <el-table-column
+                    prop="rankType"
+                    label="活动级别"
+                    min-width="150">
+                </el-table-column>
+                <el-table-column
+                    prop="createTime"
+                    label="创建时间"
+                    min-width="150">
                 </el-table-column>
                 <el-table-column
                     prop="content"
@@ -126,7 +159,7 @@
                     min-width="180">
                 </el-table-column>
                 <el-table-column label="操作" fixed="right" min-width="200">
-                    <template slot-scope="scope">
+                    <template slot-scope="{}">;
                         <el-button
                             size="mini"
                             icon="el-icon-check"
@@ -137,7 +170,7 @@
                         <el-button
                             size="mini"
                             icon="el-icon-check"
-                            
+                            @click="updateIntegral"
                         >
                             修改积分
                         </el-button>
@@ -161,7 +194,9 @@
 <script>
     import {
         integralPatchAddOne,
-        integralPatchShowList
+        integralPatchShowList,
+        withdrawRecord,
+        updateIntegral,
     } from '@/api/application/secondClass/index'
 
     import {
@@ -217,10 +252,7 @@
             },
             postNewData() {
                 this.postData.courseClassificationPath = this.postData.courseClassificationIdOne + '、' + this.postData.courseClassificationId
-                integralPatchAddOne({
-                    id: xxx,
-                    integral: xxx
-                }).then(value => {
+                integralPatchAddOne(this.postData).then(value => {
                     console.log('post result:', value)
                 })
                 console.log(this.postData)
@@ -248,10 +280,13 @@
                     this.recordList = value.rows
                 })
             },
+
             withdrawRecord() {
-                
-            }
-        },
+                integralPatchAlert().then(value => {
+                   
+                })
+            },
+            },
         created() {
             getDict('sc_train_program_rank').then(value => {
                 //console.log('rank:', value)

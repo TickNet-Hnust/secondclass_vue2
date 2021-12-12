@@ -22,3 +22,17 @@ export function integralPatchIds({ id }) {
         method: 'delete'
     })
 }
+export function withdrawRecord({ id }) {
+    return request({
+        url : `/secondClass/integralPatch/${id}`,
+        method: 'delete'
+    })
+}
+export function updateIntegral(params) {
+    return request({
+        url : `/secondClass/integralPatch/alert`,
+        method: 'put',
+        params
+    })
+    
+}
