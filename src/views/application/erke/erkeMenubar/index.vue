@@ -47,16 +47,32 @@
                 <el-menu-item index="/application/erke/activity" @click="jump('/application/erke/activity')">
                     活动管理
                 </el-menu-item>
+                
+                <!-- <el-menu-item index="1" @click="dev">场地申请</el-menu-item>
+                
+                <el-menu-item index="3" @click="dev">内容管理</el-menu-item>
+                <el-menu-item index="4" @click="dev">待办管理</el-menu-item> -->
+            </el-submenu>
+            <el-submenu index="3">
+                <template slot="title">
+                    <i class="el-icon-search"></i>
+                    <span>查询管理</span>
+                </template>
                 <el-menu-item index="/application/erke/creditWarning" @click="jump('/application/erke/creditWarning')">
                     学分预警
                 </el-menu-item>
                 <el-menu-item index="/application/erke/growthRecord" @click="jump('/application/erke/growthRecord')">
                     成长记录认证
                 </el-menu-item>
-                <!-- <el-menu-item index="1" @click="dev">场地申请</el-menu-item>
-                
-                <el-menu-item index="3" @click="dev">内容管理</el-menu-item>
-                <el-menu-item index="4" @click="dev">待办管理</el-menu-item> -->
+                <el-menu-item index="/application/erke/creditFind" @click="jump('/application/erke/creditFind')">
+                    学分查询
+                </el-menu-item>
+                <el-menu-item index="/application/erke/creditDetail" @click="jump('/application/erke/creditDetail')">
+                    学分明细
+                </el-menu-item>
+                <el-menu-item index="/application/erke/creditVerify" @click="jump('/application/erke/creditVerify')">
+                    积分审核
+                </el-menu-item>
             </el-submenu>
         </el-menu>
     </div>

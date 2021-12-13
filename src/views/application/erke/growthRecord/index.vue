@@ -8,90 +8,126 @@
         <div class="erke-top">
             <div class="erke-top-foot">
                 <el-row style="margin-bottom:10px">
-                <el-col class="operation" :span="5">
+                    <el-col class="operation">
+                        <el-button size="small" 
+                            type="primary"
+                            @click="openAddDialog"
+                        >成长记录补录</el-button>
+                        
+                    </el-col>
+                    <el-dialog 
+                        title="成长记录补录" 
+                        :visible.sync="addDialog.visible"
+                        class="groupRecordAddDialog"
+                    >
+                        <el-form ref="form" label-width="120px">
+                            <el-form-item label="发放对象姓名">
+                                <!-- <el-input v-model="postData.userId"></el-input> -->
+                                <el-autocomplete
+                                    value-key="label"
+                                    v-model="userId"
+                                    :fetch-suggestions="querySearchAsync"
+                                    placeholder="请输入发布人完整姓名"
+                                    @select="handRelease"
+                                ></el-autocomplete>
+                            </el-form-item>
+                            <el-form-item label="参与时间">
+                                <el-col :span="11">
+                                    <el-date-picker
+                                        type="date" 
+                                        placeholder="开始时间" 
+                                        v-model="postData.beginTime" 
+                                        style="width: 100%;"
+                                        value-format="yyyy-MM-dd"
+                                    ></el-date-picker>
+                                </el-col>
+                                <el-col class="line" :span="2">  ——  </el-col>
+                                <el-col :span="11">
+                                    <el-date-picker 
+                                        type="date" 
+                                        placeholder="结束时间" 
+                                        v-model="postData.endTime" 
+                                        style="width: 100%;"
+                                        value-format="yyyy-MM-dd"
+                                    ></el-date-picker>
+                                </el-col>
+                            </el-form-item>
+                            <el-form-item label="活动级别">
+                                <el-select v-model="postData.rank">
+                                    <el-option 
+                                        v-for="(item,index) in dict_sc_train_program_rank"
+                                        :label="item.dictLabel" 
+                                        :value="item.dictValue"
+                                        :key="index.dictValue"
+                                    ></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="活动一级分类">
+                                <el-select v-model="courseClassificationIdOne" @change="idOneChange">
+                                    <el-option 
+                                        v-for="(item,index) in datadata"
+                                        :label="item.name" 
+                                        :value="item.id"
+                                        :key="index.dictValue"
+                                    ></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="活动二级分类">
+                                <el-select v-model="postData.courseClassificationId">
+                                    <el-option 
+                                        v-for="(item,index) in datadataTwo"
+                                        :label="item.name" 
+                                        :value="item.id"
+                                        :key="index.dictValue"
+                                    ></el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="记录内容">
+                                <el-input v-model="postData.content"></el-input>
+                            </el-form-item>
+                            <el-form-item label="奖项">
+                                <el-input v-model="postData.prize"></el-input>
+                            </el-form-item>
+                            <el-form-item label="学分">
+                                <el-input v-model="postData.integral"></el-input>
+                            </el-form-item>
+                        </el-form>    
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="closeAddDialog">关闭</el-button>
+                            <el-button type="primary" @click="postNewData"
+                                >确 定</el-button
+                            >
+                        </div>
+                    </el-dialog>
+                </el-row>
+                    <el-form
+                        label-position="right"
+                        label-width="100px"
+                        class="formDetail"
+                        :inline="true"
+                    >
+                        <el-form-item label="活动级别：">
+                            <el-switch 
+                                v-model="form.rank"
+                                active-value="1"
+                                inactive-value="0"
+                                active-text="院级"
+                                inactive-text="校级"
+                            ></el-switch>
+                        </el-form-item>
+                        <el-form-item label="学生姓名：">
+                            <el-input v-model="form.studentName"></el-input>
+                        </el-form-item>
+                        <el-form-item label="学生学号：">
+                            <el-input v-model="form.studentId"></el-input>
+                        </el-form-item>
+                    </el-form>
+                <el-row>
                     <el-button size="small" 
                         type="primary"
-                        @click="openAddDialog"
-                    >成长记录补录</el-button>
-                </el-col>
-                <el-dialog 
-                    title="成长记录补录" 
-                    :visible.sync="addDialog.visible"
-                    class="groupRecordAddDialog"
-                >
-                    <el-form ref="form" label-width="120px">
-                        <el-form-item label="发放用户学号">
-                            <el-input v-model="postData.userId"></el-input>
-                        </el-form-item>
-                         <el-form-item label="参与时间">
-                            <el-col :span="11">
-                                <el-date-picker
-                                    type="date" 
-                                    placeholder="开始时间" 
-                                    v-model="postData.beginTime" 
-                                    style="width: 100%;"
-                                    value-format="yyyy-MM-dd"
-                                ></el-date-picker>
-                            </el-col>
-                            <el-col class="line" :span="2">  ——  </el-col>
-                            <el-col :span="11">
-                                <el-date-picker 
-                                    type="date" 
-                                    placeholder="结束时间" 
-                                    v-model="postData.endTime" 
-                                    style="width: 100%;"
-                                    value-format="yyyy-MM-dd"
-                                ></el-date-picker>
-                            </el-col>
-                        </el-form-item>
-                        <el-form-item label="活动级别">
-                            <el-select v-model="postData.rank">
-                                <el-option 
-                                    v-for="(item,index) in dict_sc_train_program_rank"
-                                    :label="item.dictLabel" 
-                                    :value="item.dictValue"
-                                    :key="index.dictValue"
-                                ></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="活动一级分类">
-                            <el-select v-model="postData.courseClassificationIdOne" @change="idOneChange">
-                                <el-option 
-                                    v-for="(item,index) in datadata"
-                                    :label="item.name" 
-                                    :value="item.id"
-                                    :key="index.dictValue"
-                                ></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="活动二级分类">
-                            <el-select v-model="postData.courseClassificationId">
-                                <el-option 
-                                    v-for="(item,index) in datadataTwo"
-                                    :label="item.name" 
-                                    :value="item.id"
-                                    :key="index.dictValue"
-                                ></el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item label="记录内容">
-                            <el-input v-model="postData.content"></el-input>
-                        </el-form-item>
-                        <el-form-item label="奖项">
-                            <el-input v-model="postData.prize"></el-input>
-                        </el-form-item>
-                        <el-form-item label="学分">
-                            <el-input v-model="postData.integral"></el-input>
-                        </el-form-item>
-                    </el-form>    
-                    <div slot="footer" class="dialog-footer">
-                        <el-button>关闭</el-button>
-                        <el-button type="primary" @click="postNewData"
-                            >确 定</el-button
-                        >
-                    </div>
-                </el-dialog>
-            </el-row>
+                        @click="getGrwthRecordList"
+                    >查询</el-button>
+                </el-row>
             </div>
         </div>
         <div class="erke-bottom" ref="erkeBottom">
@@ -128,11 +164,11 @@
                     label="参与结束时间"
                     min-width="150">
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                     prop="classfication"
                     label="classfication"
                     min-width="150">
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column
                     prop="rankType"
                     label="活动级别"
@@ -148,29 +184,23 @@
                     label="记录内容"
                     min-width="180">
                 </el-table-column>
-                <el-table-column
-                    prop="prize"
-                    label="奖项"
-                    min-width="180">
-                </el-table-column>
-                <el-table-column
-                    prop="integral"
-                    label="积分"
-                    min-width="180">
-                </el-table-column>
-                <el-table-column label="操作" fixed="right" min-width="200">
-                    <template slot-scope="{}">;
+                <el-table-column label="操作" fixed="right" min-width="300">
+                    <template slot-scope="scope">
                         <el-button
                             size="mini"
-                            icon="el-icon-check"
-                            @click="withdrawRecord"
+                            @click="withdrawRecord(scope)"
                         >
                             撤回记录
                         </el-button>
                         <el-button
                             size="mini"
-                            icon="el-icon-check"
-                            @click="updateIntegral"
+                            @click="lookDetail(scope)"
+                        >
+                            查看详情
+                        </el-button>
+                        <el-button
+                            size="mini"
+                            @click="modifyIntegral(scope)"
                         >
                             修改积分
                         </el-button>
@@ -195,8 +225,10 @@
     import {
         integralPatchAddOne,
         integralPatchShowList,
-        withdrawRecord,
-        updateIntegral,
+        integralPatchIds,
+        integralPatchAlert,
+        utilListByName,
+        integralPatchQueryDetail
     } from '@/api/application/secondClass/index'
 
     import {
@@ -224,6 +256,8 @@
                 datadataTwo: [],
                 recordList: [],
                 dict_sc_train_program_rank: [],
+                userId:'',
+                courseClassificationIdOne:null,
                 postData: {
                     userId: null,
                     beginTime: null,
@@ -232,11 +266,13 @@
                     content: null,
                     prize: null,
                     integral: null,
-                    courseClassificationIdOne:null,
                     courseClassificationId:null,
                     courseClassificationPath: null,
-                    createTime: null,
-                    createUserId: null,
+                },
+                form: {
+                    rank: 0,
+                    studentName: undefined,
+                    studentId: undefined,
                 },
                 queryParams: {
                     totalCount: 10,
@@ -250,10 +286,21 @@
             openAddDialog() {
                 this.addDialog.visible = true
             },
+            closeAddDialog() {
+                this.addDialog.visible = false
+            },
             postNewData() {
-                this.postData.courseClassificationPath = this.postData.courseClassificationIdOne + '、' + this.postData.courseClassificationId
+                this.postData.courseClassificationPath = this.courseClassificationIdOne + '、' + this.postData.courseClassificationId
+                
                 integralPatchAddOne(this.postData).then(value => {
                     console.log('post result:', value)
+                    if(value.code == 200) {
+                        this.msgSuccess('添加成功')
+                        this.getGrwthRecordList()
+                    } else {
+                        this.msgError('添加失败')
+                    }
+                    this.closeAddDialog()
                 })
                 console.log(this.postData)
             },
@@ -275,26 +322,103 @@
                 console.log(value, index)
                 this.datadataTwo = this.datadata[index].children
             },
+            filterObj(obj) {
+                for(let key in obj) {
+                    if(typeof obj[key] == 'string' && obj[key] == '') {
+                        obj[key] = undefined
+                    }
+                }
+            },
             getGrwthRecordList() {
-                integralPatchShowList().then(value => {
+                const queryList = {
+                    rank: this.form.rank,
+                    studentName: this.form.studentName,
+                    studentId: this.form.studentId
+                }
+                this.filterObj(queryList)
+                console.log(queryList)
+                integralPatchShowList(queryList).then(value => {
                     this.recordList = value.rows
                 })
             },
-
-            withdrawRecord() {
-                integralPatchAlert().then(value => {
-                   
+            querySearchAsync(queryString,cb) {
+                if(queryString) {
+                    utilListByName({name:queryString}).then(value => {
+                        console.log(value)
+                        cb(value.data.map(item =>({
+                            label: `${item.userName}-${item.nickName}`,
+                            value: item.userId
+                        })))
+                    })
+                } 
+            },
+            handRelease(item) {
+                this.postData.userId = item.value
+            },
+            withdrawRecord(scope) {
+                console.log(scope.row.id)
+                this.alertDialog('删除',{
+                    confirm: () => {
+                        integralPatchIds({
+                            id: scope.row.id
+                        }).then(value => {
+                            console.log(value)
+                            if(value.code == 200) {
+                                this.msgSuccess('撤回成功')
+                                this.getGrwthRecordList()
+                            } else {
+                                this.msgError('撤回失败')
+                            }
+                        })
+                    },
+                    cancel: ()=> {
+                        this.msgInfo('取消删除')
+                    }
                 })
             },
+            //查看详情
+            lookDetail(scope) {
+                console.log(scope)
+                integralPatchQueryDetail({
+                    id: scope.row.id
+                }).then(value => {
+                    console.log(value)
+                })
             },
+            modifyIntegral(scope) {
+                this.$prompt('请输入新的积分', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消'
+                }).then(({ value }) => {
+                    console.log({
+                        id: scope.row.id,
+                        integral: value
+                    })
+                    return integralPatchAlert({
+                        Id: scope.row.id,
+                        integral: value
+                    })
+                }).then(value => {
+                    console.log(value)
+                    if(value) {
+                        this.msgSuccess('修改成功')
+                        this.getGrwthRecordList()
+                    } else {
+                        this.msgError('修改失败')
+                    }
+                })
+            }
+        },
         created() {
             getDict('sc_train_program_rank').then(value => {
                 //console.log('rank:', value)
                 this.dict_sc_train_program_rank = value.data
             })
             this.getCourseList()
+        },
+        mounted() {    
             this.getGrwthRecordList()
-        }
+        },
     }
 </script>
 

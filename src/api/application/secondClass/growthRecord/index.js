@@ -1,16 +1,24 @@
 import request from '@/utils/request.js'
 
-export function integralPatchAddOne(data) {
+export function integralPatchAddOne(params) {
     return request({
         url: '/secondClass/integralPatch/addOne',
         method: 'post',
-        data
+        params
     })
 }
 
 export function integralPatchShowList(params) {
     return request({
         url: '/secondClass/integralPatch/showList',
+        method: 'get',
+        params
+    })
+}
+
+export function integralPatchQueryDetail(params) {
+    return request({
+        url: '/secondClass/integralPatch/queryDetail',
         method: 'get',
         params
     })
@@ -24,15 +32,15 @@ export function integralPatchIds({ id }) {
 }
 export function withdrawRecord({ id }) {
     return request({
-        url : `/secondClass/integralPatch/${id}`,
+        url: `/secondClass/integralPatch/${id}`,
         method: 'delete'
     })
 }
-export function updateIntegral(params) {
+export function integralPatchAlert(params) {
     return request({
-        url : `/secondClass/integralPatch/alert`,
+        url: `/secondClass/integralPatch/alert`,
         method: 'put',
         params
     })
-    
+
 }
