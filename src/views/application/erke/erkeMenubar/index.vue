@@ -53,7 +53,7 @@
                 <el-menu-item index="3" @click="dev">内容管理</el-menu-item>
                 <el-menu-item index="4" @click="dev">待办管理</el-menu-item> -->
             </el-submenu>
-            <el-submenu index="3">
+            <!-- <el-submenu index="3">
                 <template slot="title">
                     <i class="el-icon-search"></i>
                     <span>查询管理</span>
@@ -73,7 +73,7 @@
                 <el-menu-item index="/application/erke/creditVerify" @click="jump('/application/erke/creditVerify')">
                     积分审核
                 </el-menu-item>
-            </el-submenu>
+            </el-submenu> -->
         </el-menu>
     </div>
 </template>
