@@ -36,7 +36,7 @@ export function activityIntegralList(params) {
  * @description: 活动花絮列表
  * @param {*} params
  */
- export function activityIntegralExport(query) {
+export function activityIntegralExport(query) {
     return request({
         url: '/admins/secondClass/activity/integral/export',
         method: 'get',

@@ -7,3 +7,11 @@ export function integralAllList(params) {
         params
     })
 }
+
+export function integralVerifyAll(data) {
+    return request({
+        url: `/admins/secondClass/activity/integral/verify/all`,
+        method: 'put',
+        data
+    })
+}

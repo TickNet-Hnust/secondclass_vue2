@@ -50,6 +50,11 @@
                 min-width="180">
             </el-table-column>
             <el-table-column
+                prop="idValid"
+                label="是否有效"
+                min-width="180">
+            </el-table-column>
+            <el-table-column
                 prop="senderName"
                 label="发放者"
                 min-width="180">
@@ -108,6 +113,8 @@
                     this.grade = value.grade
                     this.integralSum = value.integralSum
                     this.integralList = value.integralQueryDetailVoList.rows
+                }).catch((e) => {
+                    console.log(e)
                 })
             }
         },

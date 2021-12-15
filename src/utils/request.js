@@ -7,8 +7,9 @@ import errorCode from '@/utils/errorCode'
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 
 // const baseURL = process.env.VUE_APP_BASE_API
-const baseURL = 'https://admin.ticknet.hnust.cn'
-    // const baseURL = 'http://localhost:8080'
+// const baseURL = 'https://admin.ticknet.hnust.cn'
+// const baseURL = 'http://49.123.0.28:8080'
+const baseURL = 'http://localhost:8080'
     // 创建axios实例
 const service = axios.create({
     // axios中请求配置有baseURL选项，表示请求URL公共部分

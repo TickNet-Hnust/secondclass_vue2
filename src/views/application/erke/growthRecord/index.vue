@@ -21,13 +21,13 @@
                         class="groupRecordAddDialog"
                     >
                         <el-form ref="form" label-width="120px">
-                            <el-form-item label="发放对象姓名">
+                            <el-form-item label="发放对象">
                                 <!-- <el-input v-model="postData.userId"></el-input> -->
                                 <el-autocomplete
                                     value-key="label"
                                     v-model="userId"
                                     :fetch-suggestions="querySearchAsync"
-                                    placeholder="请输入发布人完整姓名"
+                                    placeholder="请输入发放对象完整姓名"
                                     @select="handRelease"
                                 ></el-autocomplete>
                             </el-form-item>
@@ -41,7 +41,7 @@
                                         value-format="yyyy-MM-dd"
                                     ></el-date-picker>
                                 </el-col>
-                                <el-col class="line" :span="2">  ——  </el-col>
+                                <el-col class="line" :span="1">——</el-col>
                                 <el-col :span="11">
                                     <el-date-picker 
                                         type="date" 
@@ -88,7 +88,7 @@
                             <el-form-item label="奖项">
                                 <el-input v-model="postData.prize"></el-input>
                             </el-form-item>
-                            <el-form-item label="学分">
+                            <el-form-item label="积分">
                                 <el-input v-model="postData.integral"></el-input>
                             </el-form-item>
                         </el-form>    
@@ -113,6 +113,8 @@
                                 inactive-value="0"
                                 active-text="院级"
                                 inactive-text="校级"
+                                active-color="#13ce66"
+                                inactive-color="#1890ff"
                             ></el-switch>
                         </el-form-item>
                         <el-form-item label="学生姓名：">
@@ -145,6 +147,11 @@
                     min-width="120">
                 </el-table-column>
                 <el-table-column
+                    prop="integral"
+                    label="积分"
+                    min-width="120">
+                </el-table-column>
+                <el-table-column
                     prop="studentId"
                     label="学号"
                     min-width="120">
@@ -172,6 +179,7 @@
                 <el-table-column
                     prop="rankType"
                     label="活动级别"
+                    :formatter="formatRank"
                     min-width="150">
                 </el-table-column>
                 <el-table-column
@@ -191,12 +199,6 @@
                             @click="withdrawRecord(scope)"
                         >
                             撤回记录
-                        </el-button>
-                        <el-button
-                            size="mini"
-                            @click="lookDetail(scope)"
-                        >
-                            查看详情
                         </el-button>
                         <el-button
                             size="mini"
@@ -283,6 +285,9 @@
             }
         },
         methods: {
+            formatRank(row,column,index = 0) {
+                return this.dict_sc_train_program_rank[index].dictLabel
+            },
             openAddDialog() {
                 this.addDialog.visible = true
             },
@@ -376,15 +381,6 @@
                     }
                 })
             },
-            //查看详情
-            lookDetail(scope) {
-                console.log(scope)
-                integralPatchQueryDetail({
-                    id: scope.row.id
-                }).then(value => {
-                    console.log(value)
-                })
-            },
             modifyIntegral(scope) {
                 this.$prompt('请输入新的积分', '提示', {
                     confirmButtonText: '确定',
@@ -395,7 +391,7 @@
                         integral: value
                     })
                     return integralPatchAlert({
-                        Id: scope.row.id,
+                        id: scope.row.id,
                         integral: value
                     })
                 }).then(value => {
