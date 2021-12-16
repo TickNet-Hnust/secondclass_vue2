@@ -5,66 +5,83 @@
 
 <template>
     <div class="app-container">
-        <el-form label-width="80px">
-            <el-form-item label="学号">
-                <el-input v-model="userName"></el-input>
-                <el-button @click="findUserCredit" style="marginLeft: 20px">
-                    查询
-                </el-button>
-            </el-form-item>
-        </el-form>
-        <el-descriptions v-if="nickName" title="用户信息">
-            <el-descriptions-item label="用户姓名">
-                {{nickName}}
-            </el-descriptions-item>
-            <el-descriptions-item label="学校">
-                {{schoolName}}
-            </el-descriptions-item>
-            <el-descriptions-item label="所在学院">
-                {{collegeName}}
-            </el-descriptions-item>
-            <el-descriptions-item label="年级">
-                {{grade}}
-            </el-descriptions-item>
-            <el-descriptions-item label="积分总数">
-                {{integralSum}}
-            </el-descriptions-item>
-        </el-descriptions>
-        <el-table
-            :data="integralList"
-            style="width: 100%"
-        >
-            <el-table-column
-                prop="integralType"
-                label="积分类型"
-                min-width="180">
-            </el-table-column>
-            <el-table-column
-                prop="num"
-                label="积分数"
-                min-width="180">
-            </el-table-column>
-            <el-table-column
-                prop="reason"
-                label="获得原因"
-                min-width="180">
-            </el-table-column>
-            <el-table-column
-                prop="idValid"
-                label="是否有效"
-                min-width="180">
-            </el-table-column>
-            <el-table-column
-                prop="senderName"
-                label="发放者"
-                min-width="180">
-            </el-table-column>
-            <el-table-column
-                prop="getTime"
-                label="获得时间"
-                min-width="180">
-            </el-table-column>
-        </el-table>
+        <div class="erke-top">
+            <el-form label-width="80px">
+                <el-form-item label="学号">
+                    <el-input v-model="userName"></el-input>
+                    <el-button @click="findUserCredit" style="marginLeft: 20px">
+                        查询
+                    </el-button>
+                    <el-button @click="clear" style="marginLeft: 20px">
+                        清空
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div class="erke-bottom">
+            <transition name="el-fade-in-linear">
+                <el-empty class="empty" v-if="!nickName" description="左上角输入用户学号查询"></el-empty>
+            </transition>
+            <transition name="el-zoom-in-top">
+                <el-descriptions v-if="nickName" title="用户信息">
+                    <el-descriptions-item label="用户姓名">
+                        {{nickName}}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="学校">
+                        {{schoolName}}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="所在学院">
+                        {{collegeName}}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="年级">
+                        {{grade}}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="积分总数">
+                        {{integralSum}}
+                    </el-descriptions-item>
+                </el-descriptions>
+            </transition>
+            <transition name="el-zoom-in-bottom">
+                <el-row class="bottom" v-if="nickName">
+                    <el-table
+                    :data="integralList"
+                    style="width: 100%"
+                >
+                    <el-table-column
+                        prop="integralType"
+                        label="积分类型"
+                        min-width="180">
+                    </el-table-column>
+                    <el-table-column
+                        prop="num"
+                        label="积分数"
+                        min-width="180">
+                    </el-table-column>
+                    <el-table-column
+                        prop="reason"
+                        label="获得原因"
+                        min-width="180">
+                    </el-table-column>
+                    <el-table-column
+                        prop="idValid"
+                        label="是否有效"
+                        :formatter="formatValid"
+                        min-width="180">
+                    </el-table-column>
+                    <el-table-column
+                        prop="senderName"
+                        label="发放者"
+                        min-width="180">
+                    </el-table-column>
+                    <el-table-column
+                        prop="getTime"
+                        label="获得时间"
+                        min-width="180">
+                    </el-table-column>
+                    </el-table>
+                </el-row>
+            </transition>
+        </div>
     </div>
 </template>
 
@@ -101,6 +118,13 @@
             }
         },
         methods: {
+            formatValid(row,column,cellValue) {
+                return cellValue == 0 ? '无效' : '有效'
+            },
+            clear() {
+                this.userName = ''
+                this.nickName = ''
+            },
             findUserCredit() {
                 
                 queryIntegralUserName({
@@ -126,7 +150,7 @@
 <style scoped>
     .erke-top {
         margin-right: 10px;
-        height: 170px;
+        height: 70px;
         padding: 15px;
         margin: 0 0 10px 0;
         background-color: #fff;
@@ -158,9 +182,10 @@
         background-color: #1890ff;
     }
     .erke-bottom {
+        position: relative;
         transition: all .5s;
         background-color: #fff;
-        height: calc(100vh - 230px);
+        height: calc(100vh - 130px);
         border: 1px solid #ddd;
         padding: 15px;
         overflow: auto;
@@ -174,8 +199,19 @@
         overflow: hidden;
     }
     .app-container {
-        background-color: #fff;
-        padding: 10px;
-        height: calc(100vh - 50px);
+        /* background-color: #fff; */
+        /* padding: 10px; */
+        /* height: calc(100vh - 50px); */
+    }
+    .bottom {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        height: calc(100vh - 280px);
+        overflow: auto;
+    }
+    .empty {
+        position:absolute;
+        left: 50%;
+        transform: translateX(-50%);
     }
 </style>

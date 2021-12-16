@@ -176,7 +176,7 @@
                                             <!-- dict_sc_activity_status[item.progress].dictLabel:undefined}} -->
                                         </template>
 
-                                        <span slot="subTitle">
+                                        <!-- <span slot="subTitle">
                                             <a-dropdown :trigger="['click']">
                                                 <a
                                                     class="ant-dropdown-link"
@@ -195,7 +195,7 @@
                                                     </a-menu-item>
                                                 </a-menu>
                                             </a-dropdown>
-                                        </span>
+                                        </span> -->
                                         <span slot="description">
                                             {{ item.completeTime }}
                                         </span>
@@ -269,6 +269,7 @@
                                     <el-col :span="5">报名人数</el-col>
                                     <el-col :span="4">报名率</el-col>
                                 </el-row>
+                                <el-empty v-if="!deptEnrollStatisticsVoList.length" description="暂时还没有报名情况"></el-empty>
                                 <el-row
                                     v-for="(item,
                                     index) in deptEnrollStatisticsVoList"
@@ -293,9 +294,10 @@
                                 <el-row class="listRowTop">
                                     <el-col :span="3">序号</el-col>
                                     <el-col :span="12">指导单位</el-col>
-                                    <el-col :span="5">请假人数</el-col>
-                                    <el-col :span="4">请假率</el-col>
+                                    <el-col :span="5">签到人数</el-col>
+                                    <el-col :span="4">签到率</el-col>
                                 </el-row>
+                                <el-empty v-if="!deptRegisteStatisticsVoList.length" description="暂时还没有签到情况"></el-empty>
                                 <el-row
                                     v-for="(item,
                                     index) in deptRegisteStatisticsVoList"
@@ -323,6 +325,7 @@
                                     <el-col :span="5">请假人数</el-col>
                                     <el-col :span="4">请假率</el-col>
                                 </el-row>
+                                <el-empty v-if="!deptLeaveStatisticsVoList.length" description="暂时还没有请假情况"></el-empty>
                                 <el-row
                                     v-for="(item,
                                     index) in deptLeaveStatisticsVoList"
@@ -331,7 +334,7 @@
                                 >
                                     <el-col :span="3">{{ index + 1 }}</el-col>
                                     <el-col :span="12"
-                                        >#&nbsp;{{ item.deptName }}</el-col
+                                        >&nbsp;{{ item.deptName }}</el-col
                                     >
                                     <el-col :span="5">
                                         {{ item.leaveNumber }}</el-col
@@ -1570,6 +1573,7 @@
     .lisRight {
         border-radius: 20px;
         overflow: hidden;
+        height: 100%;
         background-color: #f9f9fb;
     }
     .lisRight >>> .el-tabs__nav {
@@ -1584,7 +1588,7 @@
     }
     .lisRight-top {
         padding-top: 10px;
-        height: calc(100vh - 180px);
+        /* height: calc(100vh - 180px); */
         position: relative;
     }
     .title {
@@ -1629,11 +1633,6 @@
         }
         .groupRateRow {
             height: 20%;
-        }
-
-        .lisRight-buttom {
-            height: calc(100vh - 280px) !important;
-            /* background-color: red; */
         }
         .listRowButtom {
             height: 3.3%;
