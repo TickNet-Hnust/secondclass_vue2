@@ -24,9 +24,15 @@
                 <el-form-item label="活动Id">
                     <el-input v-model="form.activityId"></el-input>
                 </el-form-item>
+                <el-form-item label="活动名称">
+                    <el-input v-model="form.activityName"></el-input>
+                </el-form-item>
                 <el-form-item label="">
                     <el-button @click="getIntegralList" style="marginLeft: 20px">
                         查询
+                    </el-button>
+                    <el-button @click="clearForm" style="marginLeft: 20px">
+                        清空
                     </el-button>
                 </el-form-item>
             </el-form>
@@ -54,6 +60,7 @@
                 <el-table-column
                     prop="activityName"
                     label="活动名称"
+                    show-overflow-tooltip
                     min-width="200">
                 </el-table-column>
                 <el-table-column
@@ -190,7 +197,8 @@
                 selectCreditList: [],
                 form:{
                     status: undefined,
-                    activityId: undefined
+                    activityId: undefined,
+                    activityName: undefined
                 },
                 dict_sc_activity_integral_status:[],
                 queryParams: {
@@ -202,6 +210,14 @@
             }
         },
         methods: {
+            clearForm() {
+                this.form = {
+                    status: undefined,
+                    activityId: undefined,
+                    activityName: undefined
+                }
+                this.getIntegralList()
+            },
             showImg(img) {
                 this.$viewerApi({
                     images: [img],
@@ -214,9 +230,11 @@
             },
             pass(scope) {
                 console.log(scope)
-                this.$prompt('请输入认定的积分', '提示', {
+                this.$prompt('请输入认定的积分数', '提示', {
                     confirmButtonText: '确定',
-                    cancelButtonText: '取消'
+                    cancelButtonText: '取消',
+                    inputPattern: /^[0-9]*$/,
+                    inputErrorMessage: '只能填数字'
                 }).then(({ value }) => {
                     return activityIntegralVerify({
                         activityId: scope.row.activityId,
@@ -261,7 +279,8 @@
                     pageNum: this.queryParams.pageNum,
                     pageSize: this.queryParams.pageSize,
                     status: this.form.status,
-                    activityId: this.form.activityId
+                    activityId: this.form.activityId,
+                    activityName: this.form.activityName
                 }
                 integralAllList(queryList).then(value => {
                     console.log(value)
@@ -282,7 +301,7 @@
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     inputPattern: /^[0-9]*$/,
-                    inputErrorMessage: '邮箱格式不正确'
+                    inputErrorMessage: '只能填数字'
                 }).then(({ value }) => {
                     const userIds = this.selectCreditList.map(item => item.userId)
                     const idIntegral = {}
