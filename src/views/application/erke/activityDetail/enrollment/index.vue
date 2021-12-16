@@ -1183,6 +1183,9 @@
         width: 260px;
         float: left;
         padding: 16px;
+        /* overflow: auto; */
+        overflow-y: auto;
+        overflow-x: hidden;
         height: calc(100vh - 315px);
         background-color: #fff;
         border: 1px solid #ddd;
@@ -1217,7 +1220,7 @@
     }
     .erke-buttom-left .numbers {
         position: absolute;
-        right: -190px;
+        right: -170px;
         width: 20px;
         text-align: center;
         top: 0;
