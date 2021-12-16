@@ -28,7 +28,7 @@
                     <el-input v-model="form.activityName"></el-input>
                 </el-form-item>
                 <el-form-item label="">
-                    <el-button @click="getIntegralList" style="marginLeft: 20px">
+                    <el-button @click="findResult" style="marginLeft: 20px">
                         查询
                     </el-button>
                     <el-button @click="clearForm" style="marginLeft: 20px">
@@ -95,7 +95,7 @@
                 <el-table-column
                     prop="className"
                     label="班级"
-                    min-width="180">
+                    min-width="100">
                 </el-table-column>
                 <el-table-column
                     prop="collegeName"
@@ -104,8 +104,8 @@
                 </el-table-column>
                 <el-table-column
                     prop="reason"
-                    label="获奖原因"
-                    min-width="80">
+                    label="申报原因"
+                    min-width="120">
                 </el-table-column>
                 <el-table-column
                     prop="applyIntegral"
@@ -210,13 +210,17 @@
             }
         },
         methods: {
+            findResult() {
+                this.queryParams.pageNum = 1
+                this.getIntegralList()
+            },
             clearForm() {
                 this.form = {
                     status: undefined,
                     activityId: undefined,
                     activityName: undefined
                 }
-                this.getIntegralList()
+                this.findResult()
             },
             showImg(img) {
                 this.$viewerApi({
