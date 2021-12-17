@@ -895,7 +895,7 @@
                     this.postData.status = 2 //待审核
                 } else {
                 }
-                console.log(this.postData)
+                console.log(this.postData,123)
                 state(this.postData).then(value => {
                     console.log(value)
                     this.msgSuccess('操作成功')

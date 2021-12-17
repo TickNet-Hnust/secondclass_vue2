@@ -6,7 +6,7 @@
 <template>
     <div class="app-container">
         <div class="erke-top">
-            <el-form :inline="true" label-width="80px">
+            <el-form :model="form" :inline="true" label-width="80px" :rules="rules">
                 <el-form-item label="状态">
                     <el-select v-model="form.status" placeholder="请选择">
                         <el-option
@@ -21,8 +21,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="活动Id">
-                    <el-input v-model="form.activityId"></el-input>
+                <el-form-item label="活动Id" prop="activityId">
+                    <el-input v-model.number="form.activityId"></el-input>
                 </el-form-item>
                 <el-form-item label="活动名称">
                     <el-input v-model="form.activityName"></el-input>
@@ -199,6 +199,11 @@
                     status: undefined,
                     activityId: undefined,
                     activityName: undefined
+                },
+                rules: {
+                    activityId: [
+                        { type: 'number', message: '活动Id必须为数字值'}
+                    ]
                 },
                 dict_sc_activity_integral_status:[],
                 queryParams: {
