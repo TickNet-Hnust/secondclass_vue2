@@ -539,17 +539,12 @@
                             placeholder="排序字段"
                             style="width:120px"
                         >
-                            <el-option value="id" label="ID"></el-option>
                             <el-option
-                                value="userName"
-                                label="学号"
-                            ></el-option>
-                            <el-option
-                                value="createTime"
+                                value="create_time"
                                 label="报名时间"
                             ></el-option>
                             <el-option
-                                value="cancelTime"
+                                value="cancel_time"
                                 label="取消报名时间"
                             ></el-option>
                         </el-select>

@@ -2,12 +2,14 @@
  * @Descripttion: 
  * @Author: 林舒恒
  * @Date: 2021-10-05 15:21:17
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-26 21:27:18
+ * @LastEditors: 张津瑞
+ * @LastEditTime: 2021-12-10 14:29:22
  */
+// zjr的密钥:C:\\Users\\86183\\.vscode\\extensions\\liximomo.sftp-1.12.9\\node_modules\\ssh2\\test\\fixtures\\id_rsa
+//lsh的密钥:C:\\Users\\Admin/.ssh/id_rsa
 module.exports = {
     "projectName": "secondclass",
-    "privateKey": "C:\\Users\\Admin/.ssh/id_rsa",
+    "privateKey": "C:\\Users\\86183\\.vscode\\extensions\\liximomo.sftp-1.12.9\\node_modules\\ssh2\\test\\fixtures\\id_rsa",
     "passphrase": "",
     "cluster": [],
     "prod": {
