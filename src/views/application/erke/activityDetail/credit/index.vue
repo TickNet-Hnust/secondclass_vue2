@@ -222,6 +222,14 @@
                                                         >
                                                     </a-menu-item>
 
+                                                    <!-- <a-menu-item>
+                                                        <a
+                                                            href="javascript:;"
+                                                            @click="adminAdd"
+                                                            >管理员增补</a
+                                                        >
+                                                    </a-menu-item> -->
+
                                                     <a-menu-item>
                                                         <a href="javascript:;"
                                                         @click="sortCredit"
@@ -514,7 +522,7 @@
                         <pagination
                             v-show="queryParams.totalPage > 0"
                             :total="queryParams.totalCount"
-                            :page.sync="queryParams.pageCount"
+                            :page.sync="queryParams.pageNum"
                             :limit.sync="queryParams.pageSize"
                             @pagination="getList($event)"
                         />
@@ -633,35 +641,35 @@
                 <el-table-column
                     prop="id"
                     label="ID"
-                    min-width="50"
+                    min-width="70"
                 >
                 </el-table-column>
 
                 <el-table-column
                     prop="nickName"
                     label="姓名"
-                    min-width="80"
+                    min-width="50"
                 >
                 </el-table-column>
 
                 <el-table-column
                     prop="userName"
                     label="学号"
-                    min-width="100"
+                    min-width="70"
                 >
                 </el-table-column>
 
                 <el-table-column
                     prop="reason"
                     label="申报理由"
-                    min-width="100"
+                    min-width="120"
                 >
                 </el-table-column>
 
                 <el-table-column
                     prop="status"
                     label="认定状态"
-                    min-width="80"
+                    min-width="70"
                     :formatter="formatStatus"
                 >
                 </el-table-column>
@@ -670,7 +678,7 @@
                     prop="applyWay"
                     label="申请方式"
                     :formatter="formatApplyWay"
-                    min-width="80"
+                    min-width="60"
                 >
                 </el-table-column>
 
@@ -762,10 +770,6 @@
                 placeholder="排序字段"
                 style="width:120px"
              >
-               <el-option
-                    value="id"
-                    label="ID"
-                ></el-option>
                 <el-option
                     value="userName"
                     label="学号"
@@ -812,6 +816,98 @@
         </div>
         </el-dialog>
 
+        <!-- 管理员增补会话框 -->
+         <el-dialog
+            :title="adminAddDialog.title"
+            :visible.sync="adminAddDialog.open"
+            width="915px"
+            append-to-body
+        >
+            <el-form ref="form" :model="form" label-width="300px">
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="6">
+                        姓名：
+                    </el-col>
+                    <el-col :span="18">
+                        <el-autocomplete
+                            value-key="label"
+                            v-model="adminAddDialog.post.label"
+                            :fetch-suggestions="querySearchAsync"
+                            :placeholder="adminAddDialog.post.nickName||('请手动输入完整姓名')"
+                            style="width: 200px;"
+                            @select="handUserId"
+                        ></el-autocomplete>
+                    </el-col>
+                </el-row>
+
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="6">
+                        学号：
+                    </el-col>
+                    <el-col :span="18">
+                        <el-input
+                            v-model="adminAddDialog.post.userName"
+                            style="width: 200px;"
+                        ></el-input>
+                    </el-col>
+                </el-row>
+
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="6">
+                        所在学院：
+                    </el-col>
+                    <el-col :span="18">
+                        <el-select
+                            v-model="adminAddDialog.post.college"
+                            class="shoutInput"
+                        >
+                            <el-option
+                                v-for="(item, index) in collegeList"
+                                :key="index"
+                                :label="item.deptName"
+                                :value="item.deptId"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
+
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="6">
+                        申报理由：
+                    </el-col>
+                    <el-col :span="18">
+                        <el-select
+                            v-model="adminAddDialog.post.reason"
+                            class="shoutInput"
+                        >
+                            <el-option
+                                v-for="(item,index) in reasonList"
+                                :key="index"
+                                :value="item"
+                                :label="item"
+                            ></el-option>
+                        </el-select>
+                    </el-col>
+                </el-row>
+
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="6">
+                        认定积分：
+                    </el-col>
+                    <el-col :span="18">
+                        <el-input
+                            v-model="adminAddDialog.post.integral"
+                            style="width: 200px;"
+                        ></el-input>
+                    </el-col>
+                </el-row>
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="addAddDialogCancel"> 关闭 </el-button>
+                <el-button type="primary" @click="addAddDialogSave" >保存</el-button>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -822,6 +918,8 @@
         activityIntegralList,
         activityIntegralVerify,
         activityIntegralExport,
+        utilListByName,
+        utilListCollege,
     } from '@/api/application/secondClass/index'
 
     import {
@@ -854,9 +952,6 @@
         courseDelete
     } from '@/api/application/secondClass/course'
     import { getDict } from '@/api/application/secondClass/dict/type.js'
-
-    import horwheel from 'horwheel'
-
     import {
         listUser,
         getUser,
@@ -869,7 +964,6 @@
         importTemplate
     } from '@/api/system/user'
     import { getToken } from '@/utils/auth'
-    import { treeselect } from '@/api/system/dept'
     import Treeselect from '@riophae/vue-treeselect'
     import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
@@ -921,8 +1015,8 @@
                 queryParams: {
                     totalCount: 0,
                     totalPage: 50,
-                    pageCount: 1,
-                    pageSize: 4,
+                    pageNum: 1,
+                    pageSize: 10,
                     currPage: 1
                 },
                 //下拉操作
@@ -1007,6 +1101,23 @@
                       userIds:[],
                     },
                 },
+                //管理员增补会话框
+                adminAddDialog:{
+                    title:'管理员积分增补',
+                    open:false,
+                    post:{
+                        activityId:this.$route.params.aid,
+                        status:1, 
+                        userId:'',   
+                        nickName:'',
+                        userName:'',
+                        college:'',
+                        reason:'',
+                        integral:'',
+                        label:'',
+                    },
+                },
+                collegeList:[],
                 mutiCreditDialogList:[],
                 handSelectList:[],
                 sortCreditDialog:{
@@ -1071,6 +1182,31 @@
         },
 
         methods:{
+            getCollege(){
+                utilListCollege().then((res)=>{
+                    this.collegeList = res.data.slice(1);
+                    console.log(this.collegeList,'学院信息');
+                })
+            },
+            handUserId(item){
+                console.log(item,'handUserId传来的参数')
+                this.adminAddDialog.post.label = item.label
+                this.adminAddDialog.post.userId = item.value
+                this.adminAddDialog.post.userName = item.label.split('-')[0]
+                this.adminAddDialog.post.nickName = item.label.split('-')[1]
+            },
+            querySearchAsync(queryString,cb) {
+                if(queryString) {
+                    utilListByName({name:queryString}).then(value => {
+                        console.log(value,'utilListByName传来的value')
+                        cb(value.data.map(item =>({
+                            label: `${item.userName}-${item.nickName}`,
+                            value: item.userId
+                        })))
+                        // cb(value.data)
+                    })
+                } 
+            },
             handleExport() {
             const queryParams = this.queryParams;
             this.$confirm('是否确认导出所有积分列表?', "警告", {
@@ -1153,6 +1289,15 @@
             mutiCredit(){
                 this.mutiExamCreditDialog.open = true;
             },
+            adminAdd(){
+                this.adminAddDialog.open = true
+            },
+            addAddDialogCancel(){
+                this.adminAddDialog.open = false;
+            },
+            addAddDialogSave(){
+                console.log(this.adminAddDialog,'点击保存之后的数据');
+            },
             //模糊查询防抖
             debounceFuzzyQuery(func,delayTime){
                     clearTimeout(this.timer);
@@ -1218,7 +1363,7 @@
             },
             //操作分页触发的事件
             getList(option) {
-                this.queryParams.pageNum = option.page
+                this.queryParams.pageNum= option.page
                 this.queryParams.pageSize = option.limit
                 this.fuzzyQuery()
             },
@@ -1406,11 +1551,16 @@
                     // this.queryParams.pageSize = value.data.pageSize
                     // this.queryParams.totalPage = value.data.totalPage
                     // this.queryParams.currPage = value.data.currPage
-                    this.queryParams.pageCount = Math.ceil(
+                    this.queryParams.totalPage = Math.ceil(
                         this.queryParams.totalCount / this.queryParams.pageSize
                     )
                     this.integralList = value.rows
                     console.log(this.integralList, '传来的数据')
+                    this.integralList.forEach((item)=>{
+                        if(item.status==0){
+                            this.mutiCreditDialogList.push(item);
+                        }
+                    })
                     this.loading = false
                 })
             },
@@ -1608,13 +1758,14 @@
 
         async created() {
             //初始化字典
-            this.initDict()
+            this.initDict();
             /** 通过活动id获取当前活动报名信息，aid代码活动id*/
             this.getActivityIntegral({
                 activityId: this.$route.params.aid
-            })
+            });
             /** 获得当前情况下的报名管理列表 */
-            this.fuzzyQuery()
+            this.fuzzyQuery();
+            this.getCollege();
         }
     }
 </script>
