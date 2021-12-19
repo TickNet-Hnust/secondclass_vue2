@@ -172,6 +172,7 @@
 <script>
     import {
         integralAllList,
+        activityIntegralVerify,
         integralVerifyAll
     } from '@/api/application/secondClass/index'
 

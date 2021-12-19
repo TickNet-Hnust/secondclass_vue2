@@ -35,7 +35,7 @@ export function activityRegisteList(params) {
  * @description: 导出活动签到信息列表
  * @param {*} params
  */
- export function activityRegisteExport(query) {
+export function activityRegisteExport(query) {
     return request({
         url: '/admins/secondClass/activity/registe/export',
         method: 'get',

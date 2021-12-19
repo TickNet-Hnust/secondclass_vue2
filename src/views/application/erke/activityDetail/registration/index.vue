@@ -504,11 +504,13 @@
                 cancelButtonText: "取消",
                 type: "warning"
                 }).then(() => {
-                this.exportLoading = true;
-                return activityRegisteExport();
+                    this.exportLoading = true;
+                    return activityRegisteExport({
+                        activityId: this.$route.params.aid
+                    });
                 }).then(response => {
-                this.download(response.msg);
-                this.exportLoading = false;
+                    this.download(response.msg);
+                    this.exportLoading = false;
                 }).catch(() => {});
             },
             //模糊查询防抖

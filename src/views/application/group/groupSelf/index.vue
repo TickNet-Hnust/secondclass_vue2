@@ -866,9 +866,10 @@
             async editDialog(row) {
                 await groupId({ id: row.deptId }).then(value => {
                     console.log(value)
-                    Object.keys(this.postData).forEach(item => {
-                        this.postData[item] = value.data?.[item]
-                    })
+                    // Object.keys(this.postData).forEach(item => {
+                    //     this.postData[item] = value.data?.[item]
+                    // })
+                    Object.assign(this.postData,value.data)
                     console.log(this.postData)
                 })
                 // console.log(row)
@@ -894,6 +895,7 @@
                     this.postData.ancestors = 0 + ',' + this.postData.parentId
                     this.postData.status = 2 //待审核
                 } else {
+                    
                 }
                 console.log(this.postData,123)
                 state(this.postData).then(value => {
