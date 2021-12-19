@@ -147,7 +147,7 @@
                                                 <a-menu slot="overlay">                                            
                                                     <a-menu-item>
                                                         <a href="javascript:;"
-                                                        @click="handleExport"
+                                                        @click="openExport"
                                                             >导出</a
                                                         >
                                                     </a-menu-item>
@@ -155,7 +155,46 @@
                                             </a-dropdown>
                                         </el-form-item>
                                     </el-col>
-
+                                    <el-dialog
+                                        title="导出"
+                                        :visible.sync="exportDialog.visible"
+                                        width="30%"
+                                    >
+                                        <el-form-item label="签到状态:">
+                                            <el-select
+                                                v-model="exportDialog.status"
+                                                placeholder="签到状态:不限"
+                                                style="width:120px"
+                                            >
+                                                <el-option
+                                                    :value="undefined"
+                                                    label="全部"
+                                                ></el-option>
+                                                <el-option
+                                                    v-for="(item,
+                                                    index) in dict_sc_activity_registe_status"
+                                                    :key="index"
+                                                    :value="item.dictValue"
+                                                    :label="item.dictLabel"
+                                                ></el-option>
+                                            </el-select>
+                                        </el-form-item>
+                                        <el-form-item label="所属学院:">
+                                            <el-select v-model="exportDialog.deptId">
+                                            <el-option :value="undefined" label="全部"></el-option>
+                                            <el-option
+                                                v-for="(item, index) in deptList"
+                                                :key="index"
+                                                :value="item.deptId"
+                                                :label="item.deptName"
+                                            ></el-option>
+                                        </el-select>
+                                        </el-form-item>
+                                        <span slot="footer" class="dialog-footer">
+                                            <el-button @click="exportDialog.visible = false">取 消</el-button>
+                                            <el-button type="primary" @click="handleExport">确 定</el-button>
+                                        </span>
+                                        </el-dialog>
                                     <el-col :span="1" style="min-width:165px">
                                         <el-form-item label="学号:">
                                             <el-input
@@ -385,7 +424,8 @@
         activityRegiste,
         activityRegisteList,
         activityRegisteVerify,
-        activityRegisteExport
+        activityRegisteExport,
+        utilListCollege
     } from '@/api/application/secondClass/index'
     import {
         getDept,
@@ -401,6 +441,12 @@
         name: 'regiter',
         data() {
             return {
+                deptList: [],
+                exportDialog: {
+                    status: undefined,
+                    deptId: undefined,
+                    visible: false
+                },
                 timer:0,
                 count:0,
                 loading: false,
@@ -497,7 +543,11 @@
             }
         },
         methods: {
+            openExport() {
+                this.exportDialog.visible = true
+            },
             handleExport() {
+                this.exportDialog.visible = false
             const queryParams = this.queryParams;
             this.$confirm('是否确认导出所有签到列表?', "警告", {
                 confirmButtonText: "确定",
@@ -506,7 +556,9 @@
                 }).then(() => {
                     this.exportLoading = true;
                     return activityRegisteExport({
-                        activityId: this.$route.params.aid
+                        activityId: this.$route.params.aid,
+                        status: this.exportDialog.status,
+                        deptId: this.exportDialog.deptId
                     });
                 }).then(response => {
                     this.download(response.msg);
@@ -724,7 +776,10 @@
             })
             /** 获得当前情况下的报名管理列表 */
             this.fuzzyQuery()
-
+            utilListCollege().then(value => {
+                this.deptList = value.data
+                console.log(value, 'deptlist')
+            })
         }
     }
 </script>
