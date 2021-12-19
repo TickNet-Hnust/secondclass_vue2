@@ -1,3 +1,10 @@
+<!--
+ * @Descripttion: 
+ * @Author: Wang Dejiang(aei)
+ * @Date: 2021-12-10 20:47:01
+ * @LastEditors: Wang Dejiang(aei)
+ * @LastEditTime: 2021-12-10 21:02:13
+-->
 <template>
     <div>
         <el-dialog title="预警详情" :visible.sync="visible">
@@ -5,8 +12,8 @@
             <el-table-column property="id" label="ID" ></el-table-column>
             <el-table-column property="deptName" label="学院名称" width="200px"></el-table-column>
             <el-table-column property="studentNumber" label="在校生人数"></el-table-column>
-            <el-table-column property="reachStandardNumber" label="在校生人数"></el-table-column>
-            <el-table-column property="ratio" label="在校生人数"></el-table-column>
+            <el-table-column property="reachStandardNumber" label="达标人数"></el-table-column>
+            <el-table-column property="ratio" label="达标比率"></el-table-column>
         </el-table>
         
 

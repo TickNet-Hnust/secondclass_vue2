@@ -238,7 +238,7 @@
                             <el-table-column
                                 prop="createTime"
                                 label="请假时间"
-                                min-width="120"
+                                min-width="130"
                             >
                             </el-table-column>
 
@@ -956,6 +956,7 @@
     .erke-buttom-right {
         background-color: #fff;
         margin-left: 305px;
+        overflow: auto;
         height: calc(100vh - 140px);
         padding: 16px;
         border: 1px solid #ddd;

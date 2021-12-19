@@ -769,16 +769,19 @@
             //报名表导出
             handleExport() {
             const queryParams = this.queryParams;
-            this.$confirm('是否确认导出所有报名分类项?', "警告", {
+            this.$confirm('是否确认导出所有报名数据?', "警告", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 type: "warning"
                 }).then(() => {
-                this.exportLoading = true;
-                return activityEnrollExport();
+                    this.exportLoading = true;
+                    return activityEnrollExport({
+                        activityId: this.$route.params.aid
+                    });
                 }).then(response => {
-                this.download(response.msg);
-                this.exportLoading = false;
+                    console.log(this.$route.params.aid,response,777)
+                    this.download(response.msg);
+                    this.exportLoading = false;
                 }).catch(() => {});
             },
             //排序对话框点击取消事件
@@ -1175,6 +1178,9 @@
         width: 260px;
         float: left;
         padding: 16px;
+        /* overflow: auto; */
+        overflow-y: auto;
+        overflow-x: hidden;
         height: calc(100vh - 315px);
         background-color: #fff;
         border: 1px solid #ddd;
@@ -1209,7 +1215,7 @@
     }
     .erke-buttom-left .numbers {
         position: absolute;
-        right: -190px;
+        right: -170px;
         width: 20px;
         text-align: center;
         top: 0;

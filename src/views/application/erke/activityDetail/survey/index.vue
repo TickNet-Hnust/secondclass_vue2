@@ -176,7 +176,7 @@
                                             <!-- dict_sc_activity_status[item.progress].dictLabel:undefined}} -->
                                         </template>
 
-                                        <span slot="subTitle">
+                                        <!-- <span slot="subTitle">
                                             <a-dropdown :trigger="['click']">
                                                 <a
                                                     class="ant-dropdown-link"
@@ -195,7 +195,7 @@
                                                     </a-menu-item>
                                                 </a-menu>
                                             </a-dropdown>
-                                        </span>
+                                        </span> -->
                                         <span slot="description">
                                             {{ item.completeTime }}
                                         </span>
@@ -212,7 +212,7 @@
                 
                 <div class="msgGraph">
                     <el-row>
-                        <el-tooltip class="item" effect="dark" content="暂无数据，统计图还在开发中" placement="top">
+                        
                         <el-col :span="17">
                             <div class="graphTitle">
                                 <el-radio-group
@@ -220,7 +220,7 @@
                                     v-model="range"
                                     @change="rangeChange"
                                 >
-                                    <el-radio-button label="1"
+                                    <!-- <el-radio-button label="1"
                                         >全年</el-radio-button
                                     >
                                     <el-radio-button label="2"
@@ -228,7 +228,7 @@
                                     >
                                     <el-radio-button label="3"
                                         >本周</el-radio-button
-                                    >
+                                    > -->
                                     <el-radio-button label="4"
                                         >今天</el-radio-button
                                     >
@@ -236,51 +236,24 @@
                             </div>
                             <div class="graph" ref="graph"></div>
                         </el-col>
-                        </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="暂无数据，排行榜还在开发中" placement="right">
                         <el-col :span="7" class="rank">
                             <el-date-picker disabled style="float:right">
                             </el-date-picker>
                             <div class="Ratetitle">
                                 群组报名率（ 报名人数 / 群组人数 ）
                             </div>
-                            <el-row class="groupRateRow">
+                            <el-row 
+                                class="groupRateRow"  
+                                v-for="(item,index) in getFrontFive" 
+                                :key="index"
+                            >
                                 <el-col :span="3"
-                                    ><span class="circleBlack">1</span></el-col
+                                    ><span class="circleBlack">{{index + 1}}</span></el-col
                                 >
-                                <el-col :span="18">商学院</el-col>
-                                <el-col :span="3">95.42%</el-col>
-                            </el-row>
-                            <el-row class="groupRateRow">
-                                <el-col :span="3"
-                                    ><span class="circleBlack">2</span></el-col
-                                >
-                                <el-col :span="18">人文学院</el-col>
-                                <el-col :span="3">95.42%</el-col>
-                            </el-row>
-                            <el-row class="groupRateRow">
-                                <el-col :span="3"
-                                    ><span class="circleBlack">3</span></el-col
-                                >
-                                <el-col :span="18">计算机科学与工程学院</el-col>
-                                <el-col :span="3">95.42%</el-col>
-                            </el-row>
-                            <el-row class="groupRateRow">
-                                <el-col :span="3"
-                                    ><span class="circleWrite">4</span></el-col
-                                >
-                                <el-col :span="18">机械工程学院</el-col>
-                                <el-col :span="3">95.42%</el-col>
-                            </el-row>
-                            <el-row class="groupRateRow">
-                                <el-col :span="3"
-                                    ><span class="circleWrite">5</span></el-col
-                                >
-                                <el-col :span="18">土木工程学院</el-col>
-                                <el-col :span="3">95.42%</el-col>
+                                <el-col :span="18">{{item.deptName}}</el-col>
+                                <el-col :span="3">{{(item.enrollRate * 100).toFixed(2) + '%'}}</el-col>
                             </el-row>
                         </el-col>
-                        </el-tooltip>
                     </el-row>
                 </div>
             </el-col>
@@ -296,6 +269,7 @@
                                     <el-col :span="5">报名人数</el-col>
                                     <el-col :span="4">报名率</el-col>
                                 </el-row>
+                                <el-empty v-if="!deptEnrollStatisticsVoList.length" description="暂时还没有报名情况"></el-empty>
                                 <el-row
                                     v-for="(item,
                                     index) in deptEnrollStatisticsVoList"
@@ -320,9 +294,10 @@
                                 <el-row class="listRowTop">
                                     <el-col :span="3">序号</el-col>
                                     <el-col :span="12">指导单位</el-col>
-                                    <el-col :span="5">请假人数</el-col>
-                                    <el-col :span="4">请假率</el-col>
+                                    <el-col :span="5">签到人数</el-col>
+                                    <el-col :span="4">签到率</el-col>
                                 </el-row>
+                                <el-empty v-if="!deptRegisteStatisticsVoList.length" description="暂时还没有签到情况"></el-empty>
                                 <el-row
                                     v-for="(item,
                                     index) in deptRegisteStatisticsVoList"
@@ -350,6 +325,7 @@
                                     <el-col :span="5">请假人数</el-col>
                                     <el-col :span="4">请假率</el-col>
                                 </el-row>
+                                <el-empty v-if="!deptLeaveStatisticsVoList.length" description="暂时还没有请假情况"></el-empty>
                                 <el-row
                                     v-for="(item,
                                     index) in deptLeaveStatisticsVoList"
@@ -358,7 +334,7 @@
                                 >
                                     <el-col :span="3">{{ index + 1 }}</el-col>
                                     <el-col :span="12"
-                                        >#&nbsp;{{ item.deptName }}</el-col
+                                        >&nbsp;{{ item.deptName }}</el-col
                                     >
                                     <el-col :span="5">
                                         {{ item.leaveNumber }}</el-col
@@ -456,7 +432,7 @@
                     },
                     calculable: true,
                     legend: {
-                        data: ['Growth', 'Budget 2012'],
+                        data: ['Growth', '报名人数'],
                         itemGap: 5
                     },
                     grid: {
@@ -512,7 +488,7 @@
                     ],
                     series: [
                         {
-                            name: 'Budget 2011',
+                            name: '报名人数',
                             type: 'bar',
                             data: '' //需要修改this.data.nums
                         }
@@ -551,7 +527,10 @@
                         })
                         .join('、')
                 }
-            }
+            },
+            getFrontFive() {
+                return [...this.deptEnrollStatisticsVoList].sort((a,b) => b.enrollRate - a.enrollRate).filter((_,index) => index <=4)
+            },
         },
         methods: {
             rangeChange(value) {
@@ -1493,27 +1472,28 @@
                 id: this.$route.params.aid
             }).then(value => {
                 console.log(value, 12)
-                this.yearEnrollList.names = value.data.yearEnrollList.map(
-                    item => item[0]
-                )
-                this.yearEnrollList.nums = value.data.yearEnrollList.map(
-                    item => item[1]
-                )
+                // this.yearEnrollList.names = value.data.yearEnrollList.map(
+                //     item => item[0]
+                // )
+                // this.yearEnrollList.nums = value.data.yearEnrollList.map(
+                //     item => item[1]
+                // )
 
-                this.dayEnrollList.names = value.data.dayEnrollList.map(
-                    item => item[0]
+                //Todo: 后端接口需要完善
+                this.dayEnrollList.names = value.data.yearEnrollList.map(
+                    item => item.name
                 )
-                this.dayEnrollList.nums = value.data.dayEnrollList.map(
-                    item => item[1]
+                this.dayEnrollList.nums = value.data.yearEnrollList.map(
+                    item => item.number
                 )
 
                 console.log(this.dayEnrollList, this.yearEnrollList)
 
                 //mock Data of four
-                this.yearEnrollList.names = this.data.names
-                this.yearEnrollList.nums = this.data.nums
-                this.dayEnrollList.names = this.today.names
-                this.dayEnrollList.nums = this.today.nums
+                // this.yearEnrollList.names = this.data.names
+                // this.yearEnrollList.nums = this.data.nums
+                // this.dayEnrollList.names = this.today.names
+                // this.dayEnrollList.nums = this.today.nums
 
                 this.defalutOption.xAxis[0].data = this.dayEnrollList.names
                 this.defalutOption.series[0].data = this.dayEnrollList.nums
@@ -1593,6 +1573,7 @@
     .lisRight {
         border-radius: 20px;
         overflow: hidden;
+        height: 100%;
         background-color: #f9f9fb;
     }
     .lisRight >>> .el-tabs__nav {
@@ -1607,7 +1588,7 @@
     }
     .lisRight-top {
         padding-top: 10px;
-        height: calc(100vh - 180px);
+        /* height: calc(100vh - 180px); */
         position: relative;
     }
     .title {
@@ -1652,11 +1633,6 @@
         }
         .groupRateRow {
             height: 20%;
-        }
-
-        .lisRight-buttom {
-            height: calc(100vh - 280px) !important;
-            /* background-color: red; */
         }
         .listRowButtom {
             height: 3.3%;

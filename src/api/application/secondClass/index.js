@@ -8,6 +8,10 @@
 
 export * from './activity/index'
 export * from './creditWarning/index'
+export * from './growthRecord/index'
+export * from './creditFind/index'
+export * from './creditDetail/index'
+export * from './creditVerify/index'
 export * from './course'
 export * from './courseClassification'
 export * from './schoolYear'

@@ -38,6 +38,14 @@ const activity = resolve =>
     require(['@/views/application/erke/activity/index.vue'], resolve)
 const creditWarning = resolve =>
     require(['@/views/application/erke/creditWarning/index.vue'], resolve)
+const growthRecord = resolve =>
+    require(['@/views/application/erke/growthRecord/index.vue'], resolve)
+const creditFind = resolve =>
+    require(['@/views/application/erke/creditFind/index.vue'], resolve)
+const creditDetail = resolve =>
+    require(['@/views/application/erke/creditDetail/index.vue'], resolve)
+const creditVerify = resolve =>
+    require(['@/views/application/erke/creditVerify/index.vue'], resolve)
 const activityDetail = resolve =>
     require(['@/views/application/erke/activityDetail/index.vue'], resolve)
 const survey = resolve =>
@@ -66,7 +74,8 @@ const dict = resolve => require(['@/views/system/dict/index.vue'], resolve)
 const config = resolve => require(['@/views/system/config/index.vue'], resolve)
 const notice = resolve => require(['@/views/system/notice/index.vue'], resolve)
 const admins = resolve => require(['@/views/system/admins/index.vue'], resolve)
-/** dept群组 */
+const job = resolve => require(['@/views/monitor/job/index.vue'], resolve)
+    /** dept群组 */
 const group = resolve =>
     require(['@/views/application/group/index.vue'], resolve)
 const guidance = resolve =>
@@ -191,7 +200,39 @@ export const constantRoutes = [{
                                 component: creditWarning,
                                 name: 'creditWarning',
                                 meta: {
-                                    title: '预警'
+                                    title: '学分预警'
+                                }
+                            },
+                            {
+                                path: '/application/erke/growthRecord',
+                                component: growthRecord,
+                                name: 'growthRecord',
+                                meta: {
+                                    title: '成长记录认证'
+                                }
+                            },
+                            {
+                                path: '/application/erke/creditFind',
+                                component: creditFind,
+                                name: 'creditFind',
+                                meta: {
+                                    title: '学分查询'
+                                }
+                            },
+                            {
+                                path: '/application/erke/creditDetail',
+                                component: creditDetail,
+                                name: 'creditDetail',
+                                meta: {
+                                    title: '学分明细'
+                                }
+                            },
+                            {
+                                path: '/application/erke/creditVerify',
+                                component: creditVerify,
+                                name: 'creditVerify',
+                                meta: {
+                                    title: '积分审核'
                                 }
                             },
                             {
@@ -352,6 +393,14 @@ export const constantRoutes = [{
                             name: 'admins',
                             meta: {
                                 title: '管理员管理'
+                            }
+                        },
+                        {
+                            path: '/monitor/job',
+                            component: job,
+                            name: 'job',
+                            meta: {
+                                title: '定时任务'
                             }
                         },
                         {

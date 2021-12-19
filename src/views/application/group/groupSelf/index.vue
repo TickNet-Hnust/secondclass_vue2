@@ -151,7 +151,7 @@
                                     </el-menu-item> -->
                                 </el-menu>
                             </el-tab-pane>
-                            <el-tab-pane label="根据指导单位">
+                            <el-tab-pane label="根据指导单位" style="overflow: auto">
                                 <el-menu
                                     default-activt=""
                                     @select="parentChanged"
@@ -866,9 +866,10 @@
             async editDialog(row) {
                 await groupId({ id: row.deptId }).then(value => {
                     console.log(value)
-                    Object.keys(this.postData).forEach(item => {
-                        this.postData[item] = value.data?.[item]
-                    })
+                    // Object.keys(this.postData).forEach(item => {
+                    //     this.postData[item] = value.data?.[item]
+                    // })
+                    Object.assign(this.postData,value.data)
                     console.log(this.postData)
                 })
                 // console.log(row)
@@ -894,8 +895,9 @@
                     this.postData.ancestors = 0 + ',' + this.postData.parentId
                     this.postData.status = 2 //待审核
                 } else {
+                    
                 }
-                console.log(this.postData)
+                console.log(this.postData,123)
                 state(this.postData).then(value => {
                     console.log(value)
                     this.msgSuccess('操作成功')
@@ -1048,9 +1050,10 @@
         background-color: #1890ff;
     }
     .erke-buttom-left {
-        width: 220px;
+        width: 250px;
         float: left;
         padding: 16px;
+        overflow-y: auto;
         height: calc(100vh - 220px);
         background-color: #fff;
         border: 1px solid #ddd;
@@ -1058,7 +1061,7 @@
     }
     .erke-buttom-right {
         background-color: #fff;
-        margin-left: 225px;
+        margin-left: 255px;
         height: calc(100vh - 220px);
         padding: 16px;
         border: 1px solid #ddd;
@@ -1099,13 +1102,13 @@
     }
     .father {
         position: relative;
-        width: 180px;
+        width: 200px;
     }
     .children {
         position: absolute;
         top: 0;
-        right: 0;
-        margin-right: 15px;
+        right: 0px;
+        /* margin-right: 15px; */
     }
     .groupAddDialog >>> .el-dialog__body {
         max-height: 50vh;

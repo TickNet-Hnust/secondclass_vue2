@@ -35,11 +35,11 @@ export function activityEnrollList(params) {
  * @description: 导出活动报名列表
  * @param {*} params
  */
- export function activityEnrollExport(query) {
+export function activityEnrollExport(params) {
     return request({
         url: '/admins/secondClass/activity/enroll/export',
         method: 'get',
-        params: query
+        params
     })
 }
 

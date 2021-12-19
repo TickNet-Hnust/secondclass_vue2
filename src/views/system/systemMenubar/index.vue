@@ -56,6 +56,10 @@
                 <i class="el-icon-user"></i>
                 <template slot="title">管理员管理</template>
             </el-menu-item>
+            <el-menu-item index="/monitor/job" v-hasPermi="['monitor:job']"> 
+                <i class="el-icon-user"></i>
+                <template slot="title">定时任务</template>
+            </el-menu-item>
         </el-menu>
     </div>
 </template>

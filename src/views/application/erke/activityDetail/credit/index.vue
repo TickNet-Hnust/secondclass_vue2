@@ -1014,10 +1014,9 @@
                 //分页请求参数
                 queryParams: {
                     totalCount: 0,
-                    totalPage: 50,
-                    pageNum: 1,
+                    totalPage: 0,
+                    pageCount: 1,
                     pageSize: 10,
-                    currPage: 1
                 },
                 //下拉操作
                 action: '',
@@ -1128,7 +1127,8 @@
                         isAsc:'',
                     }
                 },
-                reasonList:[]
+                reasonList:[],
+                loading: false
             }
         },
         computed: {
@@ -1544,6 +1544,7 @@
             },
 
             getIntegralList(option) {
+                
                 this.loading = true
                 activityIntegralList(option).then(value => {
                     /** 总共多少条，总共多少页 */
@@ -1886,7 +1887,7 @@
     }
     .erke-buttom-right {
         background-color: #fff;
-        height: calc(100vh - 315px);
+        height: calc(100vh - 415px);
         padding: 16px;
         border: 1px solid #ddd;
         border-radius: 5px;
