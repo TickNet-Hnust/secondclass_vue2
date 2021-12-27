@@ -36,6 +36,8 @@ const detail = resolve =>
 
 const activity = resolve =>
     require(['@/views/application/erke/activity/index.vue'], resolve)
+const activityRotation = resolve =>
+    require(['@/views/application/erke/activityRotation/index.vue'], resolve)
 const creditWarning = resolve =>
     require(['@/views/application/erke/creditWarning/index.vue'], resolve)
 const growthRecord = resolve =>
@@ -193,6 +195,14 @@ export const constantRoutes = [{
                                 name: 'activity',
                                 meta: {
                                     title: '活动'
+                                }
+                            },
+                            {
+                                path: '/application/erke/activityRotation',
+                                component: activityRotation,
+                                name: 'activityRotation',
+                                meta: {
+                                    title: '小程序轮播图'
                                 }
                             },
                             {

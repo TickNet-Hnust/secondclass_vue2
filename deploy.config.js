@@ -9,7 +9,7 @@
 //lsh的密钥:C:\\Users\\Admin/.ssh/id_rsa
 module.exports = {
     "projectName": "secondclass",
-    "privateKey": "C:\\Users\\86183\\.vscode\\extensions\\liximomo.sftp-1.12.9\\node_modules\\ssh2\\test\\fixtures\\id_rsa",
+    "privateKey": "C:\\Users\\Admin/.ssh/id_rsa",
     "passphrase": "",
     "cluster": [],
     "prod": {

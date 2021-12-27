@@ -1210,15 +1210,17 @@
             handleExport() {
             const queryParams = this.queryParams;
             this.$confirm('是否确认导出所有积分列表?', "警告", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning"
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning"
                 }).then(() => {
-                this.exportLoading = true;
-                return activityIntegralExport();
+                    this.exportLoading = true;
+                    return activityIntegralExport({
+                        activityId: this.$route.params.aid
+                    });
                 }).then(response => {
-                this.download(response.msg);
-                this.exportLoading = false;
+                    this.download(response.msg);
+                    this.exportLoading = false;
                 }).catch(() => {});
             },
             show(material) {
