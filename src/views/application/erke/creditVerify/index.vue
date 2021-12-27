@@ -240,7 +240,7 @@
             },
             pass(scope) {
                 console.log(scope)
-                this.$prompt('请输入认定的积分数', '提示', {
+                this.$prompt(`请输入认定用户"${scope.row.nickName}"的积分数`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     inputPattern: /^[0-9]*$/,
@@ -264,7 +264,7 @@
                 })
             },
             fail(scope) {
-                this.alertDialog('取消认定',{
+                this.alertDialog(`取消用户"${scope.row.nickName}"的积分认定`,{
                     confirm: () => {
                         activityIntegralVerify({
                             activityId: scope.row.activityId,
@@ -307,7 +307,11 @@
                 this.$refs.multipleTable.toggleAllSelection();
             },
             selectVerify() {
-                this.$prompt('请输入认定的积分数', '提示', {
+                if(this.selectCreditList == 0) {
+                    this.$message.info('请至少选中一条数据再认定')
+                    return
+                }
+                this.$prompt(`您选中数据共${this.selectCreditList.length}条，请输入为其认定的积分数`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     inputPattern: /^[0-9]*$/,

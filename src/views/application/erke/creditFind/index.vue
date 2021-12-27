@@ -126,7 +126,10 @@
                 this.nickName = ''
             },
             findUserCredit() {
-                
+                if(!this.userName) {
+                    this.$message.info('请先输入学号')
+                    return
+                }
                 queryIntegralUserName({
                     userName: this.userName
                 }).then(value => {
@@ -138,7 +141,7 @@
                     this.integralSum = value.integralSum
                     this.integralList = value.integralQueryDetailVoList.rows
                 }).catch((e) => {
-                    console.log(e)
+                    this.$message.error('该用户不存在')
                 })
             }
         },
