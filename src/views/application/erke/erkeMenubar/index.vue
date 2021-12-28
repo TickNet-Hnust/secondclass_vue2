@@ -47,9 +47,9 @@
                 <el-menu-item index="/application/erke/activity" @click="jump('/application/erke/activity')">
                     活动管理
                 </el-menu-item>
-                <el-menu-item index="/application/erke/activityRotation" @click="jump('/application/erke/activityRotation')">
+                <!-- <el-menu-item index="/application/erke/activityRotation" @click="jump('/application/erke/activityRotation')">
                     小程序轮播图
-                </el-menu-item>
+                </el-menu-item> -->
                 <!-- <el-menu-item index="1" @click="dev">场地申请</el-menu-item>
                 
                 <el-menu-item index="3" @click="dev">内容管理</el-menu-item>
