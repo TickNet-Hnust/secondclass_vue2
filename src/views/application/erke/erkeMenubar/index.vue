@@ -2,8 +2,8 @@
  * @Descripttion: 
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:20:23
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-21 20:40:07
+ * @LastEditors: peterroe
+ * @LastEditTime: 2022-01-02 12:06:33
 -->
 <docs>
     Todo 🚀：
@@ -47,9 +47,13 @@
                 <el-menu-item index="/application/erke/activity" @click="jump('/application/erke/activity')">
                     活动管理
                 </el-menu-item>
-                <!-- <el-menu-item index="/application/erke/activityRotation" @click="jump('/application/erke/activityRotation')">
+                <el-menu-item 
+                    index="/application/erke/activityRotation" 
+                    @click="jump('/application/erke/activityRotation')"
+                    v-hasPermi="['secondClass:activity/hot']"
+                >
                     小程序轮播图
-                </el-menu-item> -->
+                </el-menu-item>
                 <!-- <el-menu-item index="1" @click="dev">场地申请</el-menu-item>
                 
                 <el-menu-item index="3" @click="dev">内容管理</el-menu-item>

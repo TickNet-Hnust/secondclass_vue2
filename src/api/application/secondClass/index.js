@@ -2,8 +2,8 @@
  * @Descripttion: 第二课堂所有接口
  * @Author: 林舒恒
  * @Date: 2021-08-05 14:29:14
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-08-16 13:28:07
+ * @LastEditors: peterroe
+ * @LastEditTime: 2021-12-28 13:47:44
  */
 
 export * from './activity/index'
@@ -12,6 +12,7 @@ export * from './growthRecord/index'
 export * from './creditFind/index'
 export * from './creditDetail/index'
 export * from './creditVerify/index'
+export * from './rotation/index'
 export * from './course'
 export * from './courseClassification'
 export * from './schoolYear'

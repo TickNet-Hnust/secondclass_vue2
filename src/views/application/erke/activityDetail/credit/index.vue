@@ -1,3 +1,6 @@
+<docs>
+    有时间完善排序
+</docs>
 <template>
     <div class="app-container credit">
         <el-row :gutter="20">
@@ -16,15 +19,6 @@
                                 <span class="labelSpan"> 积分方案：</span>
                                 <span class="textSpan">{{
                                     computedScheme(integralScheme)
-                                }}</span>
-                            </el-col>
-                        </el-row>
-
-                        <el-row style="margin-bottom: 15px">
-                            <el-col :span="10" style="min-width:900px">
-                                <span class="labelSpan"> 活动分类：</span>
-                                <span class="textSpan">{{
-                                    courseClassificationName
                                 }}</span>
                             </el-col>
                         </el-row>
@@ -229,13 +223,13 @@
                                                             >管理员增补</a
                                                         >
                                                     </a-menu-item> -->
-
-                                                    <a-menu-item>
+                                                    <!-- 有时间完善排序 -->
+                                                    <!-- <a-menu-item>
                                                         <a href="javascript:;"
                                                         @click="sortCredit"
                                                             >排序</a
                                                         >
-                                                    </a-menu-item>
+                                                    </a-menu-item> -->
 
 
                                                     <a-menu-item>
@@ -1811,11 +1805,11 @@
         background-color: #d2d97a;
         border-right:1px
     }
-    .el-row >>> .explain{
+    /* .el-row >>> .explain{
         background-color:#549eff;
         height: 30px;
         line-height: 30px;
-    }
+    } */
     .adviceText {
         margin: 10px 0px;
     }
@@ -1889,7 +1883,7 @@
     }
     .erke-buttom-right {
         background-color: #fff;
-        height: calc(100vh - 415px);
+        height: calc(100vh - 400px);
         padding: 16px;
         border: 1px solid #ddd;
         border-radius: 5px;

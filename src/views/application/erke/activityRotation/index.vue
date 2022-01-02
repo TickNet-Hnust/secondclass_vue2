@@ -1,93 +1,131 @@
-<docs>
-    🚀Todo 导入导出暂时隐藏，如有需要可以添加
-            编辑活动
-</docs>
+
 
 <template>
     <div class="app-container">
         <div class="erke-top">
-            <el-form label-width="80px">
-                <el-form-item label="学号">
-                    <el-input v-model="userName"></el-input>
-                    <el-button @click="findUserCredit" style="marginLeft: 20px">
-                        查询
-                    </el-button>
-                    <el-button @click="clear" style="marginLeft: 20px">
-                        清空
-                    </el-button>
-                </el-form-item>
-            </el-form>
+            <el-button 
+                @click="addRotation" 
+                v-hasPermi="['secondClass:activity/hot:add']"
+            >
+                新增
+            </el-button>
         </div>
         <div class="erke-bottom">
-            <transition name="el-fade-in-linear">
-                <el-empty class="empty" v-if="!nickName" description="左上角输入用户学号查询"></el-empty>
-            </transition>
-            <transition name="el-zoom-in-top">
-                <el-descriptions v-if="nickName" title="用户信息">
-                    <el-descriptions-item label="用户姓名">
-                        {{nickName}}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="学校">
-                        {{schoolName}}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="所在学院">
-                        {{collegeName}}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="年级">
-                        {{grade}}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="积分总数">
-                        {{integralSum}}
-                    </el-descriptions-item>
-                </el-descriptions>
-            </transition>
-            <transition name="el-zoom-in-bottom">
-                <el-row class="bottom" v-if="nickName">
-                    <el-table
-                    :data="integralList"
-                    style="width: 100%"
+            <el-table
+                :data="imgList"
+            >
+                <el-table-column
+                    prop="id"
+                    label="Id"
+                    width="80"
+                ></el-table-column>
+                <el-table-column
+                    prop="activityId"
+                    label="活动Id"
+                ></el-table-column>
+                <el-table-column
+                    prop="activityImage"
+                    label="活动轮播图"
                 >
-                    <el-table-column
-                        prop="integralType"
-                        label="积分类型"
-                        min-width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="num"
-                        label="积分数"
-                        min-width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="reason"
-                        label="获得原因"
-                        min-width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="idValid"
-                        label="是否有效"
-                        :formatter="formatValid"
-                        min-width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="senderName"
-                        label="发放者"
-                        min-width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="getTime"
-                        label="获得时间"
-                        min-width="180">
-                    </el-table-column>
-                    </el-table>
-                </el-row>
-            </transition>
+                    <template slot-scope="scope">
+                        <img 
+                            :src="scope.row.activityImage" 
+                            class="activityImage"
+                            @click="showImg(scope.row.activityImage)"
+                        >
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="activityName"
+                    label="活动名称"
+                ></el-table-column>
+                <el-table-column
+                    prop="createTime"
+                    label="创建时间"
+                ></el-table-column>
+                <el-table-column
+                    prop="updateTime"
+                    label="最后更新时间"
+                ></el-table-column>
+                <el-table-column
+                    prop="userId"
+                    label="操作者Id"
+                ></el-table-column>
+                <el-table-column
+                    label="操作"
+                    fixed="right"
+                    align="center"
+                >
+                    <template slot-scope="scope">
+                        <el-button 
+                            size="mini" 
+                            type="primary"
+                            @click="deleteRotation(scope.row.id)"
+                            v-hasPermi="['secondClass:activity/hot:remove']"
+                        >
+                            删除
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
         </div>
+        <el-dialog
+		    title="上传轮播图"
+		    :visible.sync="dialogVisible"
+        >
+		    <span>
+		        <el-row>
+                    <el-col :span="12">
+                        <el-upload
+                        class="upload-demo"
+                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                        :http-request="httpRequest"
+                        :file-list="fileList"
+                        :limit="1">
+                        <el-button size="small" type="primary"  style="margin-bottom:10px">点击上传</el-button>
+                    </el-upload>
+                    </el-col>
+		        </el-row>
+		        <el-row>
+		            <el-col :span="24">
+		                <!-- 裁剪 -->
+		                <vueCropper
+		                style="width:100%;height:300px"
+		                ref="cropper"
+		                :img="attach.customaryUrl"
+		                :autoCrop="options.autoCrop"
+		                :fixedBox="options.fixedBox"
+		                :canMoveBox="options.canMoveBox"
+		                :autoCropWidth="options.autoCropWidth"
+		                :autoCropHeight="options.autoCropHeight"
+		                :centerBox="options.centerBox"
+		                @realTime="realTime">
+		                </vueCropper>
+		            </el-col>
+		        </el-row>
+                <el-row>
+                    <h2 align="center">图片预览</h2>
+		                    <div class="show-preview">
+		                        <div  class="preview">
+		                            <img :src="previews.url" :style="previews.img">
+		                        </div>
+		                    </div>
+                </el-row>
+		        <el-row class="footerBtn" align="center">
+		            <el-button type="primary" size="small" round="" @click="upload">确认</el-button>
+		            <el-button type="primary" size="small" round="" @click="handleClose">取消</el-button>
+		        </el-row>
+		    </span>
+		</el-dialog>
     </div>
 </template>
 
 <script>
+    import { VueCropper }  from "vue-cropper";
     import {
-        queryIntegralUserName
+        activityHotGet,
+        activityHotDelete,
+        activityHotPost
     } from '@/api/application/secondClass/index'
 
     import {
@@ -95,54 +133,131 @@
         filterTwoLayer,
         filterCourseClassificationList
     } from '@/utils/gather'
-    import { getDict } from '@/api/application/secondClass/dict/type.js'
-
-    import Editor from '@/components/Editor'
-    import wangEditor from '@/components/WangEditor'
+    import IMGURL_MIXINS from '@/mixins/upload.js'
     export default {
-        name: 'activity',
-        mixins: [],
+        name: 'activityRotation',
         components: {
-            Editor,
-            wangEditor
+            VueCropper
         },
+        mixins: [IMGURL_MIXINS],
         data() {
             return {
-                userName: '',
-                integralList: [],
-                nickName: '',
-                schoolName: '',
-                collegeName:'',
-                grade: '',
-                integralSum: ''
+                fileList: [], //图片列表
+                imgList: [],
+                postData: {
+                    activityImage: ''
+                },
+                dialogVisible: false,
+                options:{
+                    autoCrop:true,  //默认生成截图框
+                    fixedBox:true,  //固定截图框大小
+                    canMoveBox:false,    //截图框不能拖动
+                    autoCropWidth:350,  //截图框宽度
+                    autoCropHeight:100, //截图框高度
+                    centerBox:false,    //截图框被限制在图片里面
+                },
+                previews:{}, //实时预览图数据
+                attach:{ //后端附件表
+                    customaryUrl:'', //原图片路径
+                },
+                fileName:'',//本机文件地址
             }
         },
         methods: {
-            formatValid(row,column,cellValue) {
-                return cellValue == 0 ? '无效' : '有效'
+            addRotation() {
+                this.dialogVisible = true
             },
-            clear() {
-                this.userName = ''
-                this.nickName = ''
+            handleClose(){
+				this.dialogVisible=false
+                this.clearAll()
+			},
+			//实时预览
+			realTime(data){
+				this.previews = data
+			},
+            uploadImg(e){
+                console.log(e)
+				this.getImgUrl(e.target).then(value => {
+                    console.log(value,'图片路径')
+                })
+			},
+            httpRequest(file) {
+                console.log(file)
+                this.fileName = file.file.name
+                this.getImgUrl(file).then(value => {
+                    this.attach.customaryUrl = value
+                })
             },
-            findUserCredit() {
-                
-                queryIntegralUserName({
-                    userName: this.userName
-                }).then(value => {
+            clearAll() {
+                this.attach.customaryUrl = ''
+                this.fileList = []
+                this.previews = {}
+            },
+            upload() {
+                if(this.attach.customaryUrl == '') {
+                    this.msgInfo('请先点击上传图片')
+                    return 
+                }
+                this.$prompt(`请输入点击图片跳转的活动Id`, '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    inputPattern: /^[0-9]*$/,
+                    inputErrorMessage: '只能填数字'
+                }).then(({ value: activityId }) => {
+                    this.$refs.cropper.getCropBlob(data => {
+                        //将Blob转成file对象再上传
+                        let fileObj = new File([data], this.fileName)
+                        
+                        this.getImgUrl({  //统一格式，得加一层
+                            file: fileObj
+                        }).then(value => {
+                            console.log(value,'图片路径')
+                            this.postData.activityImage = value
+                            this.postData.activityId = activityId
+                            
+                            return activityHotPost(this.postData)
+                        }).then(value => {
+                            
+                            if(value.code == 200) {
+                                this.dialogVisible = false
+                                this.getImgList()
+                                this.clearAll()
+                                this.$message.success('添加成功')
+                            }
+                        })
+                    })
+                })
+            },
+            getImgList() {
+                activityHotGet().then(value => {
                     console.log(value)
-                    this.nickName = value.nickName
-                    this.schoolName = value.schoolName
-                    this.collegeName = value.collegeName
-                    this.grade = value.grade
-                    this.integralSum = value.integralSum
-                    this.integralList = value.integralQueryDetailVoList.rows
-                }).catch((e) => {
-                    console.log(e)
+                    this.imgList = value.rows
+                })
+            },
+            showImg(img) {
+                this.$viewerApi({
+                    images: [img],
+                })
+            },
+            deleteRotation(id) {
+                this.alertDialog(`删除该条数据`,{
+                    confirm: () => {
+                        activityHotDelete({
+                            id
+                        }).then(value => {
+                            if(value.code == 200) {
+                                this.msgSuccess('删除成功')
+                                this.getImgList()
+                            } else {
+                                this.msgError('删除失败')
+                            }
+                        })
+                    }
                 })
             }
         },
         created() {
+            this.getImgList()
         }
     }
 </script>
@@ -157,30 +272,7 @@
         border: 1px solid #ddd;
         border-radius: 5px;
     }
-    .erke-top-head {
-        height: 50px;
-        line-height: 50px;
-    }
-    .erke-top-head span {
-        display: inline-block;
-        background-color: #e8f4ff;
-        font-weight: 700;
-        height: 37px;
-        width: 136px;
-        border-radius: 20px;
-        text-align: center;
-        line-height: 40px;
-    }
-    .erke-top-head span i {
-        display: inline-block;
-        height: 24px;
-        width: 24px;
-        border-radius: 12px;
-        margin-left: -18px;
-        margin-right: 8px;
-        line-height: 28px;
-        background-color: #1890ff;
-    }
+   
     .erke-bottom {
         position: relative;
         transition: all .5s;
@@ -190,28 +282,27 @@
         padding: 15px;
         overflow: auto;
     }
-    .el-input {
-        width: 200px;
-    }
+    .show-preview{
+	    display: flex;  
+	    justify-content: center;
+        margin-left: 20px;
+	}
+	
+	.preview{
+        width: 350px;
+        height: 100px;
+	    overflow: hidden;
+	    border:1px solid #cccccc;
+	    background: #cccccc;
+	}
+    .footerBtn{
+	    display: flex;
+	    justify-content: center;
+	    margin-top: 15px;
+	}
 
-    .el-dialog {
-        /* height: 475px !important; */
-        overflow: hidden;
-    }
-    .app-container {
-        /* background-color: #fff; */
-        /* padding: 10px; */
-        /* height: calc(100vh - 50px); */
-    }
-    .bottom {
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        height: calc(100vh - 280px);
-        overflow: auto;
-    }
-    .empty {
-        position:absolute;
-        left: 50%;
-        transform: translateX(-50%);
+    .activityImage {
+        width: 50px;
+        height: 50px;
     }
 </style>
