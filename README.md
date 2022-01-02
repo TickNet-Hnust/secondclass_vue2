@@ -2,7 +2,7 @@
 
 ```bash
 # 克隆项目
-git clone https://gitlab.com/mingyuefusu/second_class_front.git
+git clone -b master https://gitlab.com/mingyuefusu/second_class_front.git
 
 # 进入项目目录
 cd second_class_front
@@ -19,12 +19,6 @@ npm run dev
 
 浏览器访问 http://localhost:80
 
-## 发布
+## 文档
 
-```bash
-# 构建测试环境
-npm run build:stage
-
-# 构建生产环境
-npm run build:prod
-```
+[https://61d17e23add95e5b4446c2ee--compassionate-heisenberg-d02485.netlify.app/](https://61d17e23add95e5b4446c2ee--compassionate-heisenberg-d02485.netlify.app/)

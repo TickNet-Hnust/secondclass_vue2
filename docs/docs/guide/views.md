@@ -3,7 +3,7 @@
  * @Author: peterroe
  * @Date: 2022-01-02 16:39:35
  * @LastEditors: peterroe
- * @LastEditTime: 2022-01-02 17:02:08
+ * @LastEditTime: 2022-01-02 19:10:03
 -->
 :::info
 views中存放着所有的视图页面，打感叹号的都值得你注意一下
@@ -80,3 +80,85 @@ views中存放着所有的视图页面，打感叹号的都值得你注意一下
 对应的页面：
 
 ![img](https://img-blog.csdnimg.cn/47c31e01dd5145b99183defe3dac3553.png)
+
+## 系统管理
+
+页面在 src/views/system/index.vue里面，结构和上面类似
+
+![img](https://img-blog.csdnimg.cn/f1ff24f71923410f9420accd433316a3.png)
+
+目录结构
+
+```shell
+├─ monitor         
+│  └─ job           # 定时任务页面
+├─ system         
+│  ├─ admins        # 管理员管理页面
+│  ├─ config        # 参数管理页面，实际上没用到
+│  ├─ dept          # 部门管理页面
+│  ├─ dict          # 字典管理页面
+│  ├─ menu          # 菜单管理页面
+│  ├─ notice        # 通知管理页面
+│  ├─ post          # 岗位管理页面
+│  ├─ role          # 用户管理页面
+│  ├─ systemMenubar # 侧边栏
+│  ├─ user          # 用户管理页面
+│  └─ index.vue     # 主页面
+```
+
+## 第二课堂成绩单(核心)
+
+**核心功能页面**
+
+页面在 src/views/application/erke/index.vue里面，结构和上面类似
+
+![img](https://img-blog.csdnimg.cn/eafdfa5eddaa44da82c59af467e86eb3.png)
+
+目录结构
+
+```shell
+├─ activity         
+│  ├─ activityDetail    # 活动详情
+│     ├─ credit             # 学分管理页面
+│     ├─ enrollment         # 报名管理页面
+│     ├─ evaluation         # 评论管理页面
+│     ├─ flocculus          # 花絮管理页面
+│     ├─ leave              # 请假管理页面
+│     ├─ prize              # 奖项管理页面
+│     ├─ registration       # 签到管理页面
+│     ├─ survey             # 概况页面
+│     └─ index.vue
+│  ├─ activityRotation  # 小程序轮播图页面
+│  ├─ creditDetail      # 学分明细页面
+│  ├─ creditFind        # 积分查询页面
+│  ├─ creditVerify      # 积分审核页面
+│  ├─ creditWarning     # 积分预警页面
+│  ├─ detail            # 培养方案详情
+│  ├─ erkeMenubar       # 侧边栏
+│  ├─ erkePlan          # 培养方案页面
+│  ├─ erkeStardard      # 积分标准页面
+│  ├─ growthRecord      # 成长记录管理页面
+│  └─ profile           # 个人信息，没用到
+```
+
+## 群组管理
+
+**核心功能页面**
+
+页面在 src/views/application/group/index.vue里面，结构和上面类似
+
+![img](https://img-blog.csdnimg.cn/d3264e9dffde47d6a2b085404bc0383e.png)
+
+目录结构
+
+```shell
+├─ group
+│  ├─ groupClasify  # 分类页面
+│  ├─ groupDetail   # 群组详情页面
+│     ├─ change         # 管理变更页面
+│     ├─ list           # 活动列表页面
+│     └─ member         # 成员页面
+│  ├─ groupSelf     # 群组页面
+│  ├─ guidanceUnit  # 指导单位页面
+│  └─ index.vue         
+```

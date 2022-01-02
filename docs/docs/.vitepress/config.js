@@ -3,7 +3,7 @@
  * @Author: peterroe
  * @Date: 2022-01-02 15:08:30
  * @LastEditors: peterroe
- * @LastEditTime: 2022-01-02 16:39:46
+ * @LastEditTime: 2022-01-02 19:50:24
  */
 export default {
     title: '第二课堂管理端文档',
@@ -11,13 +11,8 @@ export default {
         nav: [
             { text: 'Guide', link: '/', activeMatch: '^/$|^/guide/' },
             {
-                text: 'Config Reference',
-                link: '/config/basics',
-                activeMatch: '^/config/'
-            },
-            {
                 text: 'Address',
-                link: 'https://github.com/vuejs/vitepress/releases'
+                link: 'https://github.com/peterroe/secondClass_vue2'
             }
 
         ],
@@ -33,6 +28,7 @@ export default {
                 children: [
                     { text: 'src', link: '/guide/src' },
                     { text: 'src/views', link: '/guide/views' },
+                    { text: 'src/api', link: '/guide/api' },
                 ]
             }, ]
         }

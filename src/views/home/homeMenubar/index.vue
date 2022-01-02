@@ -2,8 +2,8 @@
  * @Descripttion: 
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:03:22
- * @LastEditors: 林舒恒
- * @LastEditTime: 2021-10-11 21:33:07
+ * @LastEditors: peterroe
+ * @LastEditTime: 2022-01-02 16:52:05
 -->
 <docs>
     Todo:
@@ -29,36 +29,12 @@
                 <i class="el-icon-menu"></i>
                 <span slot="title">首页</span>
             </el-menu-item>
-
+    
             <el-menu-item index="/systemManage">
                 <template slot="title">
                     <i class="el-icon-menu"></i>
                     <span slot="title">系统管理</span>
                 </template>
-                <!-- <el-menu-item index="/system/user">
-                    <template slot="title">用户管理</template>
-                </el-menu-item>
-                <el-menu-item index="/system/role">
-                    <template slot="title">角色管理</template>
-                </el-menu-item>
-                <el-menu-item index="/system/menu">
-                    <template slot="title">菜单管理</template>
-                </el-menu-item>
-                <el-menu-item index="/system/dept">
-                    <template slot="title">部门管理</template>
-                </el-menu-item>
-                <el-menu-item index="/system/post">
-                    <template slot="title">岗位管理</template>
-                </el-menu-item>
-                <el-menu-item index="/system/dict">
-                    <template slot="title">字典管理</template>
-                </el-menu-item>
-                <el-menu-item index="/system/config">
-                    <template slot="title">参数管理</template>
-                </el-menu-item>
-                <el-menu-item index="/system/notice">
-                    <template slot="title">通知管理</template>
-                </el-menu-item> -->
             </el-menu-item>
 
             <el-submenu index="/application">
@@ -72,21 +48,7 @@
                 <el-menu-item index="/application/group">
                     <template slot="title"> 群组管理 </template>
                 </el-menu-item>
-                <!-- <el-menu-item @click="dev">
-                    <template slot="title"> 竞赛报名 </template>
-                </el-menu-item>
-                <el-menu-item @click="dev">
-                    <template slot="title" > 电子证书 </template>
-                </el-menu-item> -->
             </el-submenu>
-            <!-- <el-menu-item @click="dev">
-                <i class="el-icon-menu"></i>
-                <span slot="title">待办</span>
-            </el-menu-item>
-            <el-menu-item @click="dev">
-                <i class="el-icon-menu"></i>
-                <span slot="title">消息</span>
-            </el-menu-item> -->
         </el-menu>
     </div>
 </template>
