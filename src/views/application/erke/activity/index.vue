@@ -2049,5 +2049,6 @@
     .activityImage {
         width: 50px;
         height: 50px;
+        object-fit: cover;
     }
 </style>
