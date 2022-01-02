@@ -3,7 +3,7 @@
  * @Author: peterroe
  * @Date: 2022-01-02 15:08:30
  * @LastEditors: peterroe
- * @LastEditTime: 2022-01-02 15:18:59
+ * @LastEditTime: 2022-01-02 16:39:46
  */
 export default {
     title: '第二课堂管理端文档',
@@ -25,24 +25,14 @@ export default {
             '/': [{
                 text: '引导',
                 children: [
-                    { text: 'What is VitePress?', link: '/guide/dir' },
-                    { text: 'Getting Started', link: '/guide/getting-started' },
-                    { text: 'Configuration', link: '/guide/configuration' },
-                    { text: 'Asset Handling', link: '/guide/assets' },
-                    { text: 'Markdown Extensions', link: '/guide/markdown' },
-                    { text: 'Using Vue in Markdown', link: '/guide/using-vue' },
-                    { text: 'Deploying', link: '/guide/deploy' }
+                    { text: '安装与启动', link: '/guide/dir' },
+                    { text: '本地开发', link: '/guide/dev' }
                 ]
             }, {
-                text: 'Introdudction',
+                text: '目录结构',
                 children: [
-                    { text: 'What is VitePress?', link: '/' },
-                    { text: 'Getting Started', link: '/guide/getting-started' },
-                    { text: 'Configuration', link: '/guide/configuration' },
-                    { text: 'Asset Handling', link: '/guide/assets' },
-                    { text: 'Markdown Extensions', link: '/guide/markdown' },
-                    { text: 'Using Vue in Markdown', link: '/guide/using-vue' },
-                    { text: 'Deploying', link: '/guide/deploy' }
+                    { text: 'src', link: '/guide/src' },
+                    { text: 'src/views', link: '/guide/views' },
                 ]
             }, ]
         }
