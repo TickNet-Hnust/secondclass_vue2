@@ -4,9 +4,9 @@
  */
 //TOdo: 暂时全部改为线上环境
 // const baseURL = process.env.VUE_APP_BASE_API
-const baseURL = 'http://localhost:8080'
-    // const baseURL = 'http://49.123.0.28:8080'
-    // const baseURL = 'https://admin.ticknet.hnust.cn'
+// const baseURL = 'http://localhost:8080'
+// const baseURL = 'http://49.123.0.28:8080'
+const baseURL = 'https://admin.ticknet.hnust.cn'
     // 日期格式化
 export function parseTime(time, pattern) {
     if (arguments.length === 0 || !time) {
