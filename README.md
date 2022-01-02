@@ -21,4 +21,4 @@ npm run dev
 
 ## 文档
 
-[https://61d17e23add95e5b4446c2ee--compassionate-heisenberg-d02485.netlify.app/](https://61d17e23add95e5b4446c2ee--compassionate-heisenberg-d02485.netlify.app/)
+[https://61d193689a1becf12341da9a--compassionate-heisenberg-d02485.netlify.app/](https://61d193689a1becf12341da9a--compassionate-heisenberg-d02485.netlify.app/)
