@@ -82,11 +82,11 @@
                                     ></el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="记录内容">
+                            <el-form-item label="活动名称">
                                 <el-input v-model="postData.content"></el-input>
                             </el-form-item>
                             <el-form-item label="奖项">
-                                <el-input v-model="postData.prize"></el-input>
+                                <el-input placeholder="选填" v-model="postData.prize"></el-input>
                             </el-form-item>
                             <el-form-item label="积分">
                                 <el-input v-model="postData.integral"></el-input>
@@ -127,8 +127,12 @@
                 <el-row>
                     <el-button size="small" 
                         type="primary"
-                        @click="getGrwthRecordList"
+                        @click="findForm"
                     >查询</el-button>
+                    <el-button size="small" 
+                        type="primary"
+                        @click="clearForm"
+                    >清空</el-button>
                 </el-row>
             </div>
         </div>
@@ -139,17 +143,17 @@
                 <el-table-column
                     prop="id"
                     label="Id"
-                    min-width="80">
+                    min-width="100">
                 </el-table-column>
                 <el-table-column
                     prop="studentName"
                     label="学生姓名"
-                    min-width="120">
+                    min-width="100">
                 </el-table-column>
                 <el-table-column
                     prop="integral"
                     label="积分"
-                    min-width="120">
+                    min-width="60">
                 </el-table-column>
                 <el-table-column
                     prop="studentId"
@@ -159,6 +163,7 @@
                 <el-table-column
                     prop="collegeName"
                     label="学院"
+                    show-overflow-tooltip
                     min-width="120">
                 </el-table-column>
                 <el-table-column
@@ -180,7 +185,7 @@
                     prop="rankType"
                     label="活动级别"
                     :formatter="formatRank"
-                    min-width="150">
+                    min-width="80">
                 </el-table-column>
                 <el-table-column
                     prop="createTime"
@@ -189,8 +194,9 @@
                 </el-table-column>
                 <el-table-column
                     prop="content"
-                    label="记录内容"
-                    min-width="180">
+                    label="活动名称"
+                    show-overflow-tooltip
+                    min-width="220">
                 </el-table-column>
                 <el-table-column label="操作" fixed="right" min-width="300">
                     <template slot-scope="scope">
@@ -261,7 +267,7 @@
                 userId:'',
                 courseClassificationIdOne:null,
                 postData: {
-                    userId: null,
+                    studentId: null,
                     beginTime: null,
                     endTime: null,
                     rank: null,
@@ -296,7 +302,7 @@
             },
             postNewData() {
                 this.postData.courseClassificationPath = this.courseClassificationIdOne + '、' + this.postData.courseClassificationId
-                
+                console.log(this.postData,'postdata')
                 integralPatchAddOne(this.postData).then(value => {
                     console.log('post result:', value)
                     if(value.code == 200) {
@@ -320,6 +326,11 @@
                 this.datadata = filterTwoLayer(courseList)
                 console.log(this.datadata)
             },
+            getList(option) {
+                this.queryParams.pageNum = option.page
+                this.queryParams.pageSize = option.limit
+                this.getGrwthRecordList()
+            },
             idOneChange(value) {
                 let index = this.datadata.findIndex(item => {
                     return item.id == value
@@ -337,14 +348,31 @@
             getGrwthRecordList() {
                 const queryList = {
                     rank: this.form.rank,
-                    studentName: this.form.studentName,
-                    studentId: this.form.studentId
+                    nickName: this.form.studentName,
+                    userName: this.form.studentId,
+                    pageNum: this.queryParams.pageNum,
+                    pageSize: this.queryParams.pageSize
                 }
                 this.filterObj(queryList)
                 console.log(queryList)
                 integralPatchShowList(queryList).then(value => {
+                    console.log(value)
+                    this.queryParams.totalCount = value.total
+                    this.queryParams.totalPage = Math.ceil(value.total / this.queryParams.pageSize)
                     this.recordList = value.rows
                 })
+            },
+            findForm() {
+                this.queryParams.pageNum = 1
+                this.getGrwthRecordList()
+            },
+            clearForm() {
+                this.form =  {
+                    rank: 0,
+                    studentName: undefined,
+                    studentId: undefined,
+                }
+                this.getGrwthRecordList()
             },
             querySearchAsync(queryString,cb) {
                 if(queryString) {
@@ -352,13 +380,13 @@
                         console.log(value)
                         cb(value.data.map(item =>({
                             label: `${item.userName}-${item.nickName}`,
-                            value: item.userId
+                            value: item.userName
                         })))
                     })
                 } 
             },
             handRelease(item) {
-                this.postData.userId = item.value
+                this.postData.studentId = item.value
             },
             withdrawRecord(scope) {
                 console.log(scope.row.id)
