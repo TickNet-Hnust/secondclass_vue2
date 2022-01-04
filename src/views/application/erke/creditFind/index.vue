@@ -63,6 +63,11 @@
                         min-width="180">
                     </el-table-column>
                     <el-table-column
+                        prop="name"
+                        label="活动名称"
+                        min-width="180">
+                    </el-table-column>
+                    <el-table-column
                         prop="idValid"
                         label="是否有效"
                         :formatter="formatValid"

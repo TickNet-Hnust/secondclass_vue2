@@ -82,7 +82,7 @@
                                     ></el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="活动名称">
+                            <el-form-item label="获得原因">
                                 <el-input v-model="postData.content"></el-input>
                             </el-form-item>
                             <el-form-item label="奖项">
@@ -292,7 +292,7 @@
         },
         methods: {
             formatRank(row,column,index = 0) {
-                return this.dict_sc_train_program_rank[index].dictLabel
+                return this.dict_sc_train_program_rank[index]?.dictLabel
             },
             openAddDialog() {
                 this.addDialog.visible = true
