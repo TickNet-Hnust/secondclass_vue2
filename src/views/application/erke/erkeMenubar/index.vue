@@ -3,7 +3,7 @@
  * @Author: 林舒恒
  * @Date: 2021-07-18 16:20:23
  * @LastEditors: peterroe
- * @LastEditTime: 2022-01-02 14:52:01
+ * @LastEditTime: 2022-01-05 18:50:56
 -->
 <docs>
     Todo 🚀：
@@ -67,7 +67,11 @@
                 <!-- <el-menu-item index="/application/erke/creditWarning" @click="jump('/application/erke/creditWarning')">
                     学分预警
                 </el-menu-item> -->
-                <el-menu-item index="/application/erke/growthRecord" @click="jump('/application/erke/growthRecord')">
+                <el-menu-item 
+                    index="/application/erke/growthRecord" 
+                    @click="jump('/application/erke/growthRecord')"
+                    v-hasPermi="['secondClass:integralPatch:showList']"
+                >
                     成长记录认证
                 </el-menu-item>
                 <el-menu-item index="/application/erke/creditFind" @click="jump('/application/erke/creditFind')">

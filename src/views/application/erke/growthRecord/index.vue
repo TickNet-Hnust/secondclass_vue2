@@ -12,6 +12,7 @@
                         <el-button size="small" 
                             type="primary"
                             @click="openAddDialog"
+                            v-hasPermi="['secondClass:integralPatch:addOne']"
                         >成长记录补录</el-button>
                         
                     </el-col>
@@ -115,6 +116,7 @@
                                 inactive-text="校级"
                                 active-color="#13ce66"
                                 inactive-color="#1890ff"
+                                @change="findForm"
                             ></el-switch>
                         </el-form-item>
                         <el-form-item label="学生姓名：">
@@ -203,12 +205,14 @@
                         <el-button
                             size="mini"
                             @click="withdrawRecord(scope)"
+                            v-hasPermi="['secondClass:integralPatch:remove']"
                         >
                             撤回记录
                         </el-button>
                         <el-button
                             size="mini"
                             @click="modifyIntegral(scope)"
+                            v-hasPermi="['secondClass:integralPatch:alert']"
                         >
                             修改积分
                         </el-button>
