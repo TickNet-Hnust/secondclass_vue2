@@ -35,10 +35,10 @@
                     v-show="showSearch"
                     label-width="68px"
                 >
-                    <el-form-item label="用户名称" prop="userName">
+                    <el-form-item label="用户学号" prop="userName">
                         <el-input
                             v-model="queryParams.userName"
-                            placeholder="请输入用户名称"
+                            placeholder="请输入用户学号"
                             clearable
                             size="small"
                             style="width: 240px"
