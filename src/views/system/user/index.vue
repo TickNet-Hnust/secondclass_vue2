@@ -184,7 +184,7 @@
                         v-if="columns[0].visible"
                     />
                     <el-table-column
-                        label="用户名称"
+                        label="用户学号"
                         align="center"
                         key="userName"
                         prop="userName"
