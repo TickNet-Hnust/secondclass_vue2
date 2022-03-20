@@ -2727,8 +2727,8 @@ commander@2.17.x:
 
 commander@^6.2.0:
   version "6.2.1"
-  resolved "https://registry.nlark.com/commander/download/commander-6.2.1.tgz?cache=0&sync_timestamp=1622954303803&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fcommander%2Fdownload%2Fcommander-6.2.1.tgz"
-  integrity sha1-B5LraC37wyWZm7K4T93duhEKxzw=
+  resolved "https://registry.npmjs.org/commander/-/commander-6.2.1.tgz"
+  integrity sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==
 
 commander@~2.19.0:
   version "2.19.0"
@@ -2961,9 +2961,9 @@ cosmiconfig@^5.0.0:
     parse-json "^4.0.0"
 
 cosmiconfig@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.npm.taobao.org/cosmiconfig/download/cosmiconfig-7.0.0.tgz?cache=0&sync_timestamp=1596311018884&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcosmiconfig%2Fdownload%2Fcosmiconfig-7.0.0.tgz"
-  integrity sha1-75tE13OVnK5j3ezRIt4jhTtg+NM=
+  version "7.0.1"
+  resolved "https://registry.npmjs.org/cosmiconfig/-/cosmiconfig-7.0.1.tgz"
+  integrity sha512-a1YWNUV2HwGimB7dU2s1wUMurNKjpx60HxBB6xUM8Re+2s1g1IIfJvFR0/iCF+XHdE0GMTKTuLR32UQff4TEyQ==
   dependencies:
     "@types/parse-json" "^4.0.0"
     import-fresh "^3.2.1"
@@ -3999,8 +3999,8 @@ execa@^3.3.0:
 
 execa@^4.1.0:
   version "4.1.0"
-  resolved "https://registry.nlark.com/execa/download/execa-4.1.0.tgz"
-  integrity sha1-TlSRrRVy8vF6d9OIxshXE1sihHo=
+  resolved "https://registry.npmjs.org/execa/-/execa-4.1.0.tgz"
+  integrity sha512-j5W0//W7f8UxAn8hXVnwG8tLwdiUy4FJLcSupCg6maBYZDpyBvTApK7KyuI4bKj8KOh1r2YH+6ucuYtJv1bTZA==
   dependencies:
     cross-spawn "^7.0.0"
     get-stream "^5.0.0"
@@ -5677,10 +5677,10 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.npm.taobao.org/lines-and-columns/download/lines-and-columns-1.1.6.tgz"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-lint-staged@10.5.3:
-  version "10.5.3"
-  resolved "https://registry.nlark.com/lint-staged/download/lint-staged-10.5.3.tgz?cache=0&sync_timestamp=1620405799150&other_urls=https%3A%2F%2Fregistry.nlark.com%2Flint-staged%2Fdownload%2Flint-staged-10.5.3.tgz"
-  integrity sha1-xoKDiz6t1Mhk0QItoF2qCRL7HaU=
+lint-staged@10.5.4:
+  version "10.5.4"
+  resolved "https://registry.npmjs.org/lint-staged/-/lint-staged-10.5.4.tgz"
+  integrity sha512-EechC3DdFic/TdOPgj/RB3FicqE6932LTHCUm0Y2fsD9KGlLB+RwJl2q1IYBIvEsKzDOgn0D4gll+YxG5RsrKg==
   dependencies:
     chalk "^4.1.0"
     cli-truncate "^2.1.0"
@@ -5831,8 +5831,8 @@ log-symbols@^2.2.0:
 
 log-symbols@^4.0.0:
   version "4.1.0"
-  resolved "https://registry.npm.taobao.org/log-symbols/download/log-symbols-4.1.0.tgz"
-  integrity sha1-P727lbRoOsn8eFER55LlWNSr1QM=
+  resolved "https://registry.npmjs.org/log-symbols/-/log-symbols-4.1.0.tgz"
+  integrity sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==
   dependencies:
     chalk "^4.1.0"
     is-unicode-supported "^0.1.0"
@@ -6045,8 +6045,8 @@ micromatch@^3.1.10, micromatch@^3.1.4:
 
 micromatch@^4.0.2:
   version "4.0.4"
-  resolved "https://registry.npm.taobao.org/micromatch/download/micromatch-4.0.4.tgz?cache=0&sync_timestamp=1618054842871&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fmicromatch%2Fdownload%2Fmicromatch-4.0.4.tgz"
-  integrity sha1-iW1Rnf6dsl/OlM63pQCRm/iB6/k=
+  resolved "https://registry.npmjs.org/micromatch/-/micromatch-4.0.4.tgz"
+  integrity sha512-pRmzw/XUcwXGpD9aI9q/0XOwLNygjETJ8y0ao0wdqprrzDa4YnxLcz7fQRZr8voh8V10kGhABbNcHVk5wHgWwg==
   dependencies:
     braces "^3.0.1"
     picomatch "^2.2.3"
@@ -6907,8 +6907,8 @@ path-type@^3.0.0:
 
 path-type@^4.0.0:
   version "4.0.0"
-  resolved "https://registry.npm.taobao.org/path-type/download/path-type-4.0.0.tgz?cache=0&sync_timestamp=1611752015315&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fpath-type%2Fdownload%2Fpath-type-4.0.0.tgz"
-  integrity sha1-hO0BwKe6OAr+CdkKjBgNzZ0DBDs=
+  resolved "https://registry.npmjs.org/path-type/-/path-type-4.0.0.tgz"
+  integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
 
 pbkdf2@^3.0.3:
   version "3.1.2"
