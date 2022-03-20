@@ -49,7 +49,7 @@
         "core-js": "3.8.1",
         "echarts": "4.9.0",
         "element-ui": "2.15.6",
-        "file-saver": "2.0.4",
+        "file-saver": "2.0.5",
         "fuse.js": "6.4.3",
         "highlight.js": "9.18.5",
         "horwheel": "1.0.1",
